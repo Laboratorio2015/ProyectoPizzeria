@@ -4,9 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import modelo.Pedidos;
-
+import java.util.List;
 import dto.ItemDTO;
 
 
@@ -14,7 +12,7 @@ public class PedidoDTO
 {
 	public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
 	private Integer idpedido;
-	//private String observaciones;
+	private ArrayList<ItemDTO> items;
 	private Date fecha;
 	private Time hora;
 	private Integer total;
@@ -22,14 +20,14 @@ public class PedidoDTO
 	private Integer ticket;
 	private Integer comanda;
 	private ClienteDTO cliente;
-	public ArrayList<ItemDTO> productos;
+	private Boolean llevaDelivery;
 	
 	
-	
-	public PedidoDTO(Integer pedido, String observacion, Date fecha, Time hora, String estado, Integer total,
-			Integer ticket, Integer comanda, ClienteDTO cliente, ArrayList<ItemDTO> productos) 
+	public PedidoDTO(Integer pedido,ArrayList<ItemDTO> items , Date fecha, Time hora, String estado, Integer total,
+			Integer ticket, Integer comanda, ClienteDTO cliente, Boolean llevaDelivery) 
 	{
 		this.idpedido=pedido;
+		this.items=items;
 		this.fecha=fecha;
 		this.hora=hora;
 		this.estado=estado;
@@ -37,7 +35,8 @@ public class PedidoDTO
 		this.ticket=ticket;
 		this.comanda=comanda;
 		this.cliente=cliente;
-		this.productos=productos;
+		this.llevaDelivery=llevaDelivery;
+		
 	}
 	public PedidoDTO()
 	{
@@ -45,13 +44,15 @@ public class PedidoDTO
 	}
 
 	
-	public ArrayList<ItemDTO> getProductos() {
-		return productos;
+	public ArrayList<ItemDTO> getProductos()
+	{
+		return items;
 	}
 
 
-	public void setProductos(ArrayList<ItemDTO> productos) {
-		this.productos = productos;
+	public void setProductos(ArrayList<ItemDTO> productos) 
+	{
+		this.items = productos;
 	}
 
 
@@ -98,27 +99,10 @@ public class PedidoDTO
 	{
 		this.total = total;
 	}
-	/*
-	public TicketDTO getTicket() 
-	{
-		return ticket;
-	}
-	public void setTicket(TicketDTO ticket) 
-	{
-		this.ticket = ticket;
-	}
 	
-	public ComandaDTO getComanda() 
-	{
-		return comanda;
-	}
-	public void setComanda(ComandaDTO comanda) 
-	{
-		this.comanda = comanda;
-	}*/
 	public ClienteDTO getCliente() 
 	{
-		return cliente;
+		return this.cliente;
 	}
 	public void setCliente(ClienteDTO cliente) 
 	{
@@ -149,7 +133,9 @@ public class PedidoDTO
 		this.comanda = _comanda;
 	}
 	
-	public static PedidoDTO buscarPedido(Integer num, ArrayList<PedidoDTO> pedidos) 
+	
+	/*
+	public static PedidoDTO buscarPedido(Integer num, List<PedidoDTO> pedidos) 
 	{
 		Iterator<PedidoDTO> Iterador = pedidos.iterator();
 		while(Iterador.hasNext())
@@ -159,6 +145,26 @@ public class PedidoDTO
 				return elemento;
 		}
 		return null;
+	}
+	*/
+	
+	public Boolean getLlevaDelivery() {
+		return llevaDelivery;
+	}
+	public void setLlevaDelivery(Boolean llevaDelivery) {
+		this.llevaDelivery = llevaDelivery;
+	}
+	//esta funcion verifica si el pedido para no cargarlo dos veces
+	public static boolean estaPedido(List<PedidoDTO> pedidos, Integer num)
+	{
+		Iterator<PedidoDTO> Iterador = pedidos.iterator();
+		while(Iterador.hasNext())
+		{
+			PedidoDTO elemento = Iterador.next();
+			if(elemento.getIdpedido()==num)
+				return true;
+		}
+		return false;
 	}
 
 	@Override
