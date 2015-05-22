@@ -5,13 +5,17 @@ import java.util.Iterator;
 
 public class ItemDTO
 {
-	ProductoDTO producto;
-	Integer cantidad;
-	
-	public ItemDTO(ProductoDTO producto, Integer cantidad)
+	private Integer iditem;
+	private ProductoDTO producto;
+	private Integer cantidad;
+	private String comentario;
+
+	public ItemDTO(Integer iditem,ProductoDTO producto, Integer cantidad, String comentario)
 	{
+		this.iditem=iditem;
 		this.producto=producto;
 		this.cantidad=cantidad;
+		this.comentario=comentario;
 	}
 
 	public ProductoDTO getProducto() {
@@ -31,6 +35,22 @@ public class ItemDTO
 		this.cantidad = cantidad;
 	}
 	
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+	
+	public Integer getIditem() {
+		return iditem;
+	}
+
+	public void setIditem(Integer iditem) {
+		this.iditem = iditem;
+	}
+
 	public ItemDTO buscarItem(ArrayList<ItemDTO> listaItem)
 	{
 		Iterator<ItemDTO> Iterador = listaItem.iterator();
