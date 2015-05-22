@@ -14,7 +14,7 @@ public class PedidoDTO
 {
 	public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
 	private Integer idpedido;
-	private String observaciones;
+	//private String observaciones;
 	private Date fecha;
 	private Time hora;
 	private Integer total;
@@ -30,7 +30,6 @@ public class PedidoDTO
 			Integer ticket, Integer comanda, ClienteDTO cliente, ArrayList<ItemDTO> productos) 
 	{
 		this.idpedido=pedido;
-		this.observaciones=observacion;
 		this.fecha=fecha;
 		this.hora=hora;
 		this.estado=estado;
@@ -64,14 +63,7 @@ public class PedidoDTO
 	{
 		this.idpedido = idpedido;
 	}
-	public String getObservaciones() 
-	{
-		return observaciones;
-	}
-	public void setObservaciones(String observaciones) 
-	{
-		this.observaciones = observaciones;
-	}
+	
 	public Date getFecha() 
 	{
 		return fecha;
@@ -172,7 +164,7 @@ public class PedidoDTO
 	@Override
 	public String toString()
 	{
-		return (this.idpedido+"  "+ this.estado+"  "+  this.observaciones+"  "+ this.comanda+"  "+ 
+		return (this.idpedido+"  "+ this.estado+"  "+ this.comanda+"  "+ 
 	this.cliente+"     total: "+ this.total+"  "+ this.ticket);
 	}
 }

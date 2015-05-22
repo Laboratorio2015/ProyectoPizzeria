@@ -54,6 +54,18 @@ public class ProductoDTO
 		}
 		return Nombres;
 	}
+	
+	public static ProductoDTO buscarProducto(ArrayList<ProductoDTO> listaProductos, String nombre)
+	{
+		Iterator<ProductoDTO> Iterador = listaProductos.iterator();
+		while(Iterador.hasNext())
+		{
+			ProductoDTO elemento = Iterador.next();
+			if(elemento.getNombre().equals(nombre))
+				return elemento;
+		}
+		return null;
+	}
 
 	// sobreescribir metodo equals
     public boolean equals (Object obj) {
