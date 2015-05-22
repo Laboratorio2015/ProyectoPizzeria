@@ -1,31 +1,25 @@
 package presentacion.vista;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
-
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.TextField;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import presentacion.controlador.Controlador;
-
+import Monitor.Cocina.PadreMonitor;
 import main.Main;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class VentanaPrincipal {
+public class VentanaPrincipal 
+{
 
 	private JFrame frame;
 	private VentanaPrincipal _this;
 	private JButton btnPedidosPendientes;
+	private PadreMonitor monitorCocina;
 
 	
 	public VentanaPrincipal() 

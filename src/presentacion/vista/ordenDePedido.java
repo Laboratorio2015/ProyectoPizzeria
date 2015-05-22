@@ -58,7 +58,6 @@ public class ordenDePedido extends JDialog {
 	public JTextField tfAgregarEmpanada;
 	public JTextField tfAgregarPizza;
 	public JTextField tfAgregarOtroProducto;
-	public JTextField tfBorrarItem;
 	public JTextField tfPrecioUniEmpanada;
 	public JTextField tfUnidadEmpanada;
 	public JTextField tfSubTotalEmpanada;
@@ -68,7 +67,6 @@ public class ordenDePedido extends JDialog {
 	public JTextField tfPrecioUniOtro;
 	public JTextField tfUnidadOtro;
 	public JTextField tfSubTotalOtro;
-	public JTextField tfSubTotalQuitar;
 	private JTextField tfTotal;
 	private ProductoDTO producto;
 	private Integer cantidad;
@@ -92,8 +90,8 @@ public class ordenDePedido extends JDialog {
 		padre=_padre;
 		_this=this;
 		this.control=control;
-		setMinimumSize(new Dimension(700, 800));
-		setBounds(300, -100, 716, 800);
+		setMinimumSize(new Dimension(700, 700));
+		setBounds(300, 0, 716, 740);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -109,7 +107,7 @@ public class ordenDePedido extends JDialog {
 		});
 	
 		
-		tfAgregarEmpanada.setBounds(171, 141, 254, 22);
+		tfAgregarEmpanada.setBounds(170, 161, 254, 22);
 		contentPanel.add(tfAgregarEmpanada);
 		tfAgregarEmpanada.setColumns(10);
 		
@@ -124,7 +122,7 @@ public class ordenDePedido extends JDialog {
 				}
 			});
 			tfAgregarPizza.setColumns(10);
-			tfAgregarPizza.setBounds(168, 284, 254, 25);
+			tfAgregarPizza.setBounds(168, 305, 254, 25);
 			contentPanel.add(tfAgregarPizza);
 		}
 		{
@@ -138,35 +136,14 @@ public class ordenDePedido extends JDialog {
 				}
 			});
 			tfAgregarOtroProducto.setColumns(10);
-			tfAgregarOtroProducto.setBounds(171, 420, 254, 25);
+			tfAgregarOtroProducto.setBounds(169, 440, 254, 25);
 			contentPanel.add(tfAgregarOtroProducto);
-		}
-		{
-			tfBorrarItem = new JTextField();
-			tfBorrarItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e)
-				{
-					producto=new ProductoDTO(tfBorrarItem.getText(),ProductoDTO.buscarPrecio(Main.nuevo, tfBorrarItem.getText()));
-					int filas=model.getRowCount();
-					for(int i=0; i<filas;i++)
-					{
-						if(tfBorrarItem.getText().equals(model.getValueAt(i, 0)))
-							tfSubTotalQuitar.setText((String) model.getValueAt(i, 2));
-						else
-							tfSubTotalQuitar.setText(Integer.toString(1));
-					}
-					
-				}
-			});
-			tfBorrarItem.setColumns(10);
-			tfBorrarItem.setBounds(113, 538, 254, 25);
-			contentPanel.add(tfBorrarItem);
 		}
 		{
 			tfPrecioUniEmpanada = new JTextField();
 			tfPrecioUniEmpanada.setEditable(false);
 			tfPrecioUniEmpanada.setColumns(10);
-			tfPrecioUniEmpanada.setBounds(435, 141, 50, 22);
+			tfPrecioUniEmpanada.setBounds(433, 161, 50, 22);
 			contentPanel.add(tfPrecioUniEmpanada);
 		}
 		{
@@ -179,21 +156,21 @@ public class ordenDePedido extends JDialog {
 				}
 			});
 			tfUnidadEmpanada.setColumns(10);
-			tfUnidadEmpanada.setBounds(490, 140, 49, 24);
+			tfUnidadEmpanada.setBounds(491, 161, 49, 24);
 			contentPanel.add(tfUnidadEmpanada);
 		}
 		{
 			tfSubTotalEmpanada = new JTextField();
 			tfSubTotalEmpanada.setEditable(false);
 			tfSubTotalEmpanada.setColumns(10);
-			tfSubTotalEmpanada.setBounds(555, 140, 57, 23);
+			tfSubTotalEmpanada.setBounds(555, 161, 57, 23);
 			contentPanel.add(tfSubTotalEmpanada);
 		}
 		{
 			tfPrecioUniPizza = new JTextField();
 			tfPrecioUniPizza.setEditable(false);
 			tfPrecioUniPizza.setColumns(10);
-			tfPrecioUniPizza.setBounds(432, 285, 48, 22);
+			tfPrecioUniPizza.setBounds(433, 305, 48, 22);
 			contentPanel.add(tfPrecioUniPizza);
 		}
 		{
@@ -207,21 +184,21 @@ public class ordenDePedido extends JDialog {
 				}
 			});
 			tfUnidadPizza.setColumns(10);
-			tfUnidadPizza.setBounds(488, 285, 47, 22);
+			tfUnidadPizza.setBounds(488, 305, 47, 22);
 			contentPanel.add(tfUnidadPizza);
 		}
 		{
 			tfSubTotalPizza = new JTextField();
 			tfSubTotalPizza.setEditable(false);
 			tfSubTotalPizza.setColumns(10);
-			tfSubTotalPizza.setBounds(553, 285, 56, 22);
+			tfSubTotalPizza.setBounds(553, 305, 56, 22);
 			contentPanel.add(tfSubTotalPizza);
 		}
 		{
 			tfPrecioUniOtro = new JTextField();
 			tfPrecioUniOtro.setEditable(false);
 			tfPrecioUniOtro.setColumns(10);
-			tfPrecioUniOtro.setBounds(435, 421, 48, 22);
+			tfPrecioUniOtro.setBounds(435, 441, 48, 22);
 			contentPanel.add(tfPrecioUniOtro);
 		}
 		{
@@ -235,29 +212,22 @@ public class ordenDePedido extends JDialog {
 				}
 			});
 			tfUnidadOtro.setColumns(10);
-			tfUnidadOtro.setBounds(490, 421, 48, 22);
+			tfUnidadOtro.setBounds(491, 441, 48, 22);
 			contentPanel.add(tfUnidadOtro);
 		}
 		{
 			tfSubTotalOtro = new JTextField();
 			tfSubTotalOtro.setEditable(false);
 			tfSubTotalOtro.setColumns(10);
-			tfSubTotalOtro.setBounds(555, 421, 57, 22);
+			tfSubTotalOtro.setBounds(555, 441, 57, 22);
 			contentPanel.add(tfSubTotalOtro);
-		}
-		{
-			tfSubTotalQuitar = new JTextField();
-			tfSubTotalQuitar.setEditable(false);
-			tfSubTotalQuitar.setColumns(10);
-			tfSubTotalQuitar.setBounds(378, 539, 49, 22);
-			contentPanel.add(tfSubTotalQuitar);
 		}
 		{
 			tfTotal = new JTextField();
 			tfTotal.setEditable(false);
 			tfTotal.setBorder(null);
 			tfTotal.setBackground(new Color(153, 0, 0));
-			tfTotal.setBounds(560, 705, 75, 25);
+			tfTotal.setBounds(561, 652, 75, 25);
 			contentPanel.add(tfTotal);
 			tfTotal.setColumns(10);
 		}
@@ -267,7 +237,7 @@ public class ordenDePedido extends JDialog {
 		model.addColumn("Precio");
 		{
 			scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(130, 619, 370, 71);
+			scrollPane_1.setBounds(99, 533, 421, 101);
 			contentPanel.add(scrollPane_1);
 			
 			tablaItems = new JTable();
@@ -278,7 +248,7 @@ public class ordenDePedido extends JDialog {
 			JLabel label = new JLabel("");
 			label.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 			label.setIcon(new ImageIcon(ordenDePedido.class.getResource("/prototipos/orden de pedido.png")));
-			label.setBounds(0, 0, 700, 761);
+			label.setBounds(0, 0, 700, 700);
 			contentPanel.add(label);
 		}
 		
@@ -315,18 +285,22 @@ public class ordenDePedido extends JDialog {
 					int total=0;
 					for(int i=0; i<filas;i++)
 					{
-						total=total+(Integer.parseInt((String) model.getValueAt(i,2)));
-						
+						total=total+(Integer.parseInt((String) model.getValueAt(i,2)));	
 					}
 					tfTotal.setText(Integer.toString(total));
 					listaItem.add(item);
 					
+					tfAgregarEmpanada.setText("");
+					tfPrecioUniEmpanada.setText("");
+					tfSubTotalEmpanada.setText("");
+					tfUnidadEmpanada.setText("");
+					
 				}
 			});
-			btnAgregarEmpanada.setBounds(642, 140, 36, 35);
+			btnAgregarEmpanada.setBounds(642, 158, 36, 35);
 			contentPanel.add(btnAgregarEmpanada);
 			btnOrdenar.setOpaque(false);
-			btnOrdenar.setBounds(113, 705, 164, 34);
+			btnOrdenar.setBounds(114, 653, 163, 34);
 			contentPanel.add(btnOrdenar);
 			btnOrdenar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnOrdenar);
@@ -341,7 +315,7 @@ public class ordenDePedido extends JDialog {
 					dispose();
 				}
 			});
-			btnCancelar.setBounds(328, 705, 164, 34);
+			btnCancelar.setBounds(329, 652, 163, 34);
 			contentPanel.add(btnCancelar);
 			btnCancelar.setActionCommand("Cancel");
 		}
@@ -351,22 +325,16 @@ public class ordenDePedido extends JDialog {
 				{
 					@Override
 					public void mouseClicked(MouseEvent e) 
-					{
-						int filas=model.getRowCount();
-						int filaEliminar=0;
-						for(int i=0; i<filas;i++)
-						{
-							if(tfBorrarItem.getText().equals(model.getValueAt(i, 0)))
-							{
-								filaEliminar=filaEliminar+i;
-								tfTotal.setText(Integer.toString((Integer.parseInt(tfTotal.getText())-Integer.parseInt((String)model.getValueAt(i, 2)))));
-							}
-						}
-						model.removeRow(filaEliminar);
+					{											
+						int numFilaSeleccionada=tablaItems.getSelectedRow();
+						tfTotal.setText(Integer.toString((Integer.parseInt(tfTotal.getText())-Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 2)))));
+						ItemDTO item=new ItemDTO(ProductoDTO.buscarProducto(Main.nuevo, (String)model.getValueAt(numFilaSeleccionada, 0)),Integer.parseInt((String) model.getValueAt(numFilaSeleccionada, 1)));
+						model.removeRow(numFilaSeleccionada);
+						ItemDTO.borrarItem(listaItem, item);	
 					}
 				});
 				btnQuitar.setOpaque(false);
-				btnQuitar.setBounds(459, 533, 36, 35);
+				btnQuitar.setBounds(44, 565, 36, 35);
 				contentPanel.add(btnQuitar);
 				
 				JButton btnAgregarOtro = new JButton("New button");
@@ -386,11 +354,16 @@ public class ordenDePedido extends JDialog {
 						}
 						tfTotal.setText(Integer.toString(total));
 						listaItem.add(item);
+						
+						tfAgregarOtroProducto.setText("");
+						tfPrecioUniOtro.setText("");
+						tfSubTotalOtro.setText("");
+						tfUnidadOtro.setText("");
 					}
 				});
 				
 				btnAgregarOtro.setOpaque(false);
-				btnAgregarOtro.setBounds(642, 421, 36, 35);
+				btnAgregarOtro.setBounds(642, 435, 36, 35);
 				contentPanel.add(btnAgregarOtro);
 				
 				JButton btnAgregarPizza = new JButton("New button");
@@ -411,10 +384,15 @@ public class ordenDePedido extends JDialog {
 						}
 						tfTotal.setText(Integer.toString(total));
 						listaItem.add(item);
+						
+						tfAgregarPizza.setText("");
+						tfPrecioUniPizza.setText("");
+						tfSubTotalPizza.setText("");
+						tfUnidadPizza.setText("");
 					}
 				});
 				btnAgregarPizza.setOpaque(false);
-				btnAgregarPizza.setBounds(640, 284, 36, 35);
+				btnAgregarPizza.setBounds(642, 300, 36, 35);
 				contentPanel.add(btnAgregarPizza);
 				
 				TextAutoCompleter AutoCompletar = new TextAutoCompleter(tfAgregarEmpanada);
@@ -440,27 +418,7 @@ public class ordenDePedido extends JDialog {
 				autoCompletar3.addItem("sprite 1.5 lts");
 				autoCompletar3.addItem("seven-up 1.5 lts");
 				autoCompletar3.addItem("mirinda 1.5 lts");
-				
-				TextAutoCompleter autoCompletar4=new TextAutoCompleter(tfBorrarItem);
-				autoCompletar4.setCaseSensitive(false);
-				autoCompletar4.addItem("carne");
-				autoCompletar4.addItem("verdura");
-				autoCompletar4.addItem("pollo");
-				autoCompletar4.addItem("humita");
-				autoCompletar4.addItem("muzzarella");
-				autoCompletar4.addItem("jamon y morrones");
-				autoCompletar4.addItem("mixta");
-				autoCompletar4.addItem("fugazzeta");
-				autoCompletar4.addItem("faena");
-				autoCompletar4.addItem("con salchicas");
-				autoCompletar4.addItem("coca-cola 1.5 lts");
-				autoCompletar4.addItem("pepsi 1.5 lts");
-				autoCompletar4.addItem("sprite 1.5 lts");
-				autoCompletar4.addItem("seven-up 1.5 lts");
-				autoCompletar4.addItem("mirinda 1.5 lts");
-				
-				
-	}
+		}
 
 
 	public JButton getBtnOrdenar()

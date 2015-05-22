@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Dimension;
@@ -76,8 +77,7 @@ public class registrarCobroDePedido extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent e) 
 				{
-					//_padre.getModel().setValueAt("cobrado", _padre.getNumFilaSeleccionada(), 2);
-					//PedidoDTO pedid=PedidoDTO.buscarPedido(Integer.parseInt((String)_padre.getModel().getValueAt(_padre.getNumFilaSeleccionada(), 0)), Main.listaPedidos.pedidos);
+					
 					Pedidos.buscarPedido(Main.listaPedidos, pedid).set_estado("cobrado");
 					_padre.vaciarTabla();
 					_padre.llenarTabla();

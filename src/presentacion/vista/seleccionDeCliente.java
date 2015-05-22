@@ -3,6 +3,7 @@ package presentacion.vista;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
@@ -24,6 +25,8 @@ import dto.PedidoDTO;
 import javax.swing.border.MatteBorder;
 
 import presentacion.controlador.Controlador;
+import reportes.Comanda;
+import reportes.Ticket;
 
 import java.awt.Color;
 
@@ -39,7 +42,8 @@ public class seleccionDeCliente extends JDialog {
 	private JTextField tfDireccionTelefono;
 	private JButton btnSeleccionar;
 	private Controlador control;
-	public seleccionDeCliente(ordenDePedido padre, final PedidoDTO pedido)
+	private Comanda comanda=new Comanda();
+	public seleccionDeCliente(ordenDePedido padre, PedidoDTO pedido)
 	{
 		setModal(true);
 		padre=_padre;
@@ -98,11 +102,12 @@ public class seleccionDeCliente extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent arg0)
 				{
-					pedido.setCliente(cliente);
-					//System.out.println(cliente.toString());
-					System.out.println(pedido.toString());
-					Main.listaPedidos.pedidos.add(pedido);
-					System.out.println(Main.listaPedidos.pedidos.size());
+					seleccionDeCliente.this.pedido.setCliente(cliente);
+					Main.listaPedidos.pedidos.add(seleccionDeCliente.this.pedido);
+					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
+					Main.monitorCocina.nuevoPedido(seleccionDeCliente.this.pedido);
+					new Ticket().generarTicket(seleccionDeCliente.this.pedido);
+					new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					dispose();
 				}
 			});

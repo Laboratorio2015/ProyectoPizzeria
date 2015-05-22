@@ -27,6 +27,7 @@ import dto.PedidoDTO;
 import dto.ProductoDTO;
 
 import main.Main;
+import modelo.Pedidos;
 
 public class pedidosPendientes extends JDialog {
 
@@ -135,8 +136,9 @@ public class pedidosPendientes extends JDialog {
 						registrarCobroDePedido cobroPedido= new registrarCobroDePedido(_pedPendiente,PedidoDTO.buscarPedido(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)), Main.listaPedidos.pedidos));
 						cobroPedido.setVisible(true);
 					}
-					else{
-						JOptionPane.showMessageDialog(null, "Error, el estado del pedidodebe ser Preparado");
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Error, el estado del pedido debe ser Preparado");
 					}
 				}
 			});
@@ -170,10 +172,8 @@ public class pedidosPendientes extends JDialog {
 					if(model.getValueAt(numFilaSeleccionada, 2).toString()=="solicitado")
 						model.setValueAt("preparado", numFilaSeleccionada, 2);
 					pedido=PedidoDTO.buscarPedido(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)), Main.listaPedidos.pedidos);
-					Main.listaPedidos.pedidos.get(0).set_estado("preparado");
-					
-					//System.out.println(numFilaSeleccionada);
-					
+					Pedidos.buscarPedido(Main.listaPedidos, pedido).set_estado("preparado");
+					Main.monitorCocina.quitarPedido(pedido);
 				}
 			});
 			btnMarcarComoPreparado.setOpaque(false);
