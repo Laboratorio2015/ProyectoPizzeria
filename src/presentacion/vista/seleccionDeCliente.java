@@ -29,6 +29,8 @@ import reportes.Comanda;
 import reportes.Ticket;
 
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class seleccionDeCliente extends JDialog {
 
@@ -43,12 +45,12 @@ public class seleccionDeCliente extends JDialog {
 	private JButton btnSeleccionar;
 	private Controlador control;
 	private Comanda comanda=new Comanda();
-	public seleccionDeCliente(ordenDePedido padre, PedidoDTO pedido)
+	public seleccionDeCliente(final Controlador control, PedidoDTO pedido)
 	{
 		setModal(true);
-		padre=_padre;
 		this.pedido=pedido;
 		_this=this;
+		this.control=control;
 		setMinimumSize(new Dimension(700, 600));
 		setBounds(500, 100, 700, 611);
 		getContentPane().setLayout(new BorderLayout());
@@ -56,11 +58,19 @@ public class seleccionDeCliente extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		tfAgregarDNI = new JTextField();
+		tfAgregarDNI.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyTyped(KeyEvent arg0)
+			{
+				validarNumerosDNI(arg0, tfAgregarDNI);
+			}
+		});
 		tfAgregarDNI.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				cliente=Main.clientes.buscarCliente(Main.clientes, Integer.parseInt((tfAgregarDNI.getText())));
+				cliente=control.getCliente().buscarCliente(Integer.parseInt(tfAgregarDNI.getText()));
 				tfNombrApellido.setText("Apellido y Nombre: "+cliente.getApellido()+"  "+ cliente.getNombre());
 				tfDireccionTelefono.setText("Direccion: "+cliente.getDireccion()+"  Tel: "+cliente.getTelefono());
 			}
@@ -103,9 +113,10 @@ public class seleccionDeCliente extends JDialog {
 				public void mouseClicked(MouseEvent arg0)
 				{
 					seleccionDeCliente.this.pedido.setCliente(cliente);
-					Main.listaPedidos.pedidos.add(seleccionDeCliente.this.pedido);
+					seleccionDeCliente.this.pedido.setLlevaDelivery(false);
+					control.getListaPedidos().add(seleccionDeCliente.this.pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
-					Main.monitorCocina.nuevoPedido(seleccionDeCliente.this.pedido);
+					control.getMonitorCocina().nuevoPedido(seleccionDeCliente.this.pedido);
 					new Ticket().generarTicket(seleccionDeCliente.this.pedido);
 					new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					dispose();
@@ -163,7 +174,7 @@ public class seleccionDeCliente extends JDialog {
 			contentPanel.add(btnEditarCliente);
 		}
 		autoCompletar.setCaseSensitive(false);
-		autoCompletar.addItems(Main.clientes.listaNombres(Main.clientes));
+		autoCompletar.addItems(control.getCliente().dniClientes());
 	}
 
 	
@@ -226,6 +237,10 @@ public class seleccionDeCliente extends JDialog {
 		return btnSeleccionar;
 	}
 
-
-
+	private void validarNumerosDNI(KeyEvent evt, JTextField a)
+	{
+		char car = evt.getKeyChar();
+		if(a.getText().length()>=8) evt.consume();
+		if((car<'0' || car>'9')) evt.consume();
+	}
 }

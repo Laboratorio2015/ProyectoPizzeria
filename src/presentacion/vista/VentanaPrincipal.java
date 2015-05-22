@@ -6,12 +6,13 @@ import javax.swing.UIManager;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import presentacion.controlador.Controlador;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import Monitor.Cocina.PadreMonitor;
-import main.Main;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+
 
 public class VentanaPrincipal 
 {
@@ -19,7 +20,7 @@ public class VentanaPrincipal
 	private JFrame frame;
 	private VentanaPrincipal _this;
 	private JButton btnPedidosPendientes;
-	private PadreMonitor monitorCocina;
+	private JButton btnIngresarPedido;
 
 	
 	public VentanaPrincipal() 
@@ -49,32 +50,14 @@ public class VentanaPrincipal
 		lblNewLabel.setBounds(0, 0, 1000, 650);
 		frame.getContentPane().add(lblNewLabel);
 		
-		JButton btnIngresarPedido = new JButton("");
-		btnIngresarPedido.addMouseListener(new MouseAdapter() 
-		{
-			@Override
-			public void mouseClicked(MouseEvent arg0) 
-			{
-				ordenDePedido pedido=new ordenDePedido(_this, null);
-				pedido.setVisible(true);
-			}
-		});
+		btnIngresarPedido= new JButton("");
 		btnIngresarPedido.setOpaque(false);
 		btnIngresarPedido.setToolTipText("Ingresar un Nuevo Pedido");
 		btnIngresarPedido.setBounds(58, 216, 117, 156);
 		frame.getContentPane().add(btnIngresarPedido);
 		
 		btnPedidosPendientes = new JButton("New button");
-		btnPedidosPendientes.addMouseListener(new MouseAdapter() 
-		{
-			@Override
-			public void mouseClicked(MouseEvent arg0) 
-			{
-				pedidosPendientes pedidoPendiente=new pedidosPendientes(_this);
-				pedidoPendiente.llenarTabla();
-				pedidoPendiente.setVisible(true);
-			}
-		});
+		btnPedidosPendientes.setToolTipText("verifica el estado de los pedidos realizados");
 		btnPedidosPendientes.setOpaque(false);
 		btnPedidosPendientes.setBounds(403, 237, 174, 135);
 		
@@ -83,6 +66,7 @@ public class VentanaPrincipal
 		frame.getContentPane().add(btnPedidosPendientes);
 		
 		JButton btnPedMatPrima = new JButton("New button");
+		btnPedMatPrima.setToolTipText("generar una orden de materia prima");
 		btnPedMatPrima.addMouseListener(new MouseAdapter() 
 		{
 			@Override
@@ -102,13 +86,22 @@ public class VentanaPrincipal
 		this.frame.setVisible(true);
 	}
 
-	public void actualizarPedidoPend() 
-	{
-		//tfPedidosEnCurso.setText(Integer.toString(Main.listaPedidos.pedidos.size()));
-	}
 	
 	public JButton getBtnPedidosPendientes() 
 	{
 		return btnPedidosPendientes;
 	}
+
+
+	public JButton getBtnIngresarPedido()
+	{
+		return btnIngresarPedido;
+	}
+
+	public void setBtnIngresarPedido(JButton btnIngresarPedido)
+	{
+		this.btnIngresarPedido = btnIngresarPedido;
+	}
+	
+	
 }

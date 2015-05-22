@@ -18,6 +18,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 
+import presentacion.controlador.Controlador;
+
 import main.Main;
 import modelo.Pedidos;
 
@@ -31,7 +33,7 @@ public class registrarCobroDePedido extends JDialog {
 	private JTextField tfRepartidor;
 	private JTextField tfMontoPedido;
 
-	public registrarCobroDePedido(pedidosPendientes padre, PedidoDTO pedido) 
+	public registrarCobroDePedido(pedidosPendientes padre, PedidoDTO pedido, Controlador control) 
 	{
 		setModal(true);
 		_padre=padre;
@@ -78,7 +80,7 @@ public class registrarCobroDePedido extends JDialog {
 				public void mouseClicked(MouseEvent e) 
 				{
 					
-					Pedidos.buscarPedido(Main.listaPedidos, pedid).set_estado("cobrado");
+					pedid.set_estado("cobrado");
 					_padre.vaciarTabla();
 					_padre.llenarTabla();
 					dispose();
