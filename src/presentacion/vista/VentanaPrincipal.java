@@ -21,6 +21,9 @@ public class VentanaPrincipal
 	private VentanaPrincipal _this;
 	private JButton btnPedidosPendientes;
 	private JButton btnIngresarPedido;
+	private JButton btnReportes;
+	private JButton btnConfiguraciones;
+	private JButton btnPedMatPrima;
 
 	
 	public VentanaPrincipal() 
@@ -65,20 +68,21 @@ public class VentanaPrincipal
 		
 		frame.getContentPane().add(btnPedidosPendientes);
 		
-		JButton btnPedMatPrima = new JButton("New button");
+		btnPedMatPrima= new JButton("New button");
 		btnPedMatPrima.setToolTipText("generar una orden de materia prima");
-		btnPedMatPrima.addMouseListener(new MouseAdapter() 
-		{
-			@Override
-			public void mouseClicked(MouseEvent e) 
-			{
-				ordenarMatPrima matPrima= new ordenarMatPrima(_this);
-				matPrima.setVisible(true);
-			}
-		});
 		btnPedMatPrima.setOpaque(false);
 		btnPedMatPrima.setBounds(792, 237, 141, 165);
 		frame.getContentPane().add(btnPedMatPrima);
+		
+		btnReportes = new JButton("New button");
+		btnReportes.setOpaque(false);
+		btnReportes.setBounds(219, 360, 89, 117);
+		frame.getContentPane().add(btnReportes);
+		
+		btnConfiguraciones = new JButton("New button");
+		btnConfiguraciones.setOpaque(false);
+		btnConfiguraciones.setBounds(585, 399, 102, 86);
+		frame.getContentPane().add(btnConfiguraciones);
 	}
 	
 	public void show()
@@ -101,6 +105,39 @@ public class VentanaPrincipal
 	public void setBtnIngresarPedido(JButton btnIngresarPedido)
 	{
 		this.btnIngresarPedido = btnIngresarPedido;
+	}
+
+
+	public JButton getBtnReportes() {
+		return btnReportes;
+	}
+
+
+	public void setBtnReportes(JButton btnReportes) {
+		this.btnReportes = btnReportes;
+	}
+
+
+	public JButton getBtnConfiguraciones() {
+		return btnConfiguraciones;
+	}
+
+	public void setBtnConfiguraciones(JButton btnConfiguraciones) {
+		this.btnConfiguraciones = btnConfiguraciones;
+	}
+
+	public void setBtnPedidosPendientes(JButton btnPedidosPendientes) {
+		this.btnPedidosPendientes = btnPedidosPendientes;
+	}
+
+
+	public JButton getBtnPedMatPrima() {
+		return btnPedMatPrima;
+	}
+
+
+	public void setBtnPedMatPrima(JButton btnPedMatPrima) {
+		this.btnPedMatPrima = btnPedMatPrima;
 	}
 	
 	

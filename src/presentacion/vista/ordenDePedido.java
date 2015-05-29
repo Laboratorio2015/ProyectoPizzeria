@@ -1,6 +1,8 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -28,6 +30,11 @@ import java.awt.event.KeyEvent;
 import javax.swing.JScrollPane;
 import presentacion.controlador.Controlador;
 import javax.swing.JCheckBox;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import javax.swing.ListSelectionModel;
+
+import org.eclipse.swt.widgets.TableItem;
 
 @SuppressWarnings("serial")
 public class ordenDePedido extends JDialog {
@@ -57,7 +64,15 @@ public class ordenDePedido extends JDialog {
 	private JButton btnOrdenar ;
 	private JButton btnOrdenar1;
 	private PedidoDTO pedidoCambiar;
+	private JButton btnVerOtros;
+	private JButton btnVerEmpanadas;
+	private JButton btnVerPizzas ;
+	private JButton btnVerPromociones;
+	private JButton btnAgregarComentario;
+	private JButton btnEditar;
+	private JCheckBox checkBoxDelivery;
 	private ArrayList<ItemDTO> listaItem=new ArrayList<>();
+	
 	
 	
 	
@@ -91,17 +106,14 @@ public class ordenDePedido extends JDialog {
 			{
 				validarTexto(evt,tfAgregarEmpanada);
 			}
-		});
-		tfAgregarEmpanada.addActionListener(new ActionListener() {
-			
-
-			public void actionPerformed(ActionEvent arg0) 
+			@Override
+			public void keyReleased(KeyEvent e) 
 			{
 				producto=control.getProducto().buscarProductoPorNombre(tfAgregarEmpanada.getText());
-				tfPrecioUniEmpanada.setText(Integer.toString(producto.getPrecio()));
+				if(tfAgregarEmpanada.getText().length()>4)
+					tfPrecioUniEmpanada.setText(Integer.toString(producto.getPrecio()));
 			}
-		});
-	
+			});	
 		
 		tfAgregarEmpanada.setBounds(168, 81, 254, 25);
 		contentPanel.add(tfAgregarEmpanada);
@@ -116,15 +128,17 @@ public class ordenDePedido extends JDialog {
 				{
 					validarTexto(evt, tfAgregarPizza);
 				}
-			});
-			tfAgregarPizza.addActionListener(new ActionListener()
+			
+			@Override
+			public void keyReleased(KeyEvent e) 
 			{
-				public void actionPerformed(ActionEvent arg0)
-				{
-					producto=control.getProducto().buscarProductoPorNombre(tfAgregarPizza.getText());
-					tfPrecioUniPizza.setText(Integer.toString(producto.getPrecio()));
-				}
+				producto=control.getProducto().buscarProductoPorNombre(tfAgregarPizza.getText());
+				if(tfAgregarPizza.getText().length()>4)
+				tfPrecioUniPizza.setText(Integer.toString(producto.getPrecio()));
+			}
 			});
+					
+			
 			tfAgregarPizza.setColumns(10);
 			tfAgregarPizza.setBounds(166, 225, 254, 25);
 			contentPanel.add(tfAgregarPizza);
@@ -138,15 +152,23 @@ public class ordenDePedido extends JDialog {
 				{
 					validarTexto(evt,tfAgregarOtroProducto);
 				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) 
+				{
+					producto=control.getProducto().buscarProductoPorNombre(tfAgregarOtroProducto.getText());
+					if(tfAgregarOtroProducto.getText().length()>4)
+					tfPrecioUniOtro.setText(Integer.toString(producto.getPrecio()));
+				}
 			});
-			tfAgregarOtroProducto.addActionListener(new ActionListener() 
+			/*tfAgregarOtroProducto.addActionListener(new ActionListener() 
 			{
 				public void actionPerformed(ActionEvent arg0) 
 				{
 					producto=control.getProducto().buscarProductoPorNombre(tfAgregarOtroProducto.getText());
 					tfPrecioUniOtro.setText(Integer.toString(producto.getPrecio()));
 				}
-			});
+			});*/
 			tfAgregarOtroProducto.setColumns(10);
 			tfAgregarOtroProducto.setBounds(168, 361, 254, 25);
 			contentPanel.add(tfAgregarOtroProducto);
@@ -269,7 +291,7 @@ public class ordenDePedido extends JDialog {
 		
 		model=crearModelo();
 		
-		JCheckBox checkBoxDelivery = new JCheckBox("");
+		checkBoxDelivery= new JCheckBox("");
 		checkBoxDelivery.setBackground(new Color(204, 204, 0));
 		checkBoxDelivery.setBounds(620, 600, 27, 33);
 		contentPanel.add(checkBoxDelivery);
@@ -277,12 +299,57 @@ public class ordenDePedido extends JDialog {
 			scrollPane_1 = new JScrollPane();
 			scrollPane_1.setBounds(114, 556, 421, 101);
 			contentPanel.add(scrollPane_1);
+			tablaItems = new JTable()
+			{
+			    public boolean isCellEditable(int rowIndex, int colIndex) {
+			    	if (colIndex==1 || colIndex==3) {
+			            return true;  //La columna 1 y 3 son editables.
+			        }
+			        return false;  //El resto de celdas no son editables.
+			    }
+			};
+			tablaItems.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) 
+				{
+					if(e.getKeyCode() == KeyEvent.VK_ENTER)
+						actualizarPrecio();
+				}
+			});
+			 
 			
-			tablaItems = new JTable();
-			tablaItems.setEnabled(false);
+			tablaItems.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 			scrollPane_1.setViewportView(tablaItems);
 		}
+		{
+			btnEditar = new JButton("editar");
+			btnEditar.addActionListener(new ActionListener() 
+			{
+				public void actionPerformed(ActionEvent arg0)
+				{
+					tablaItems.editCellAt(tablaItems.getSelectedRow(),1);
+				    Component aComp=tablaItems.getEditorComponent();
+				    aComp.requestFocus();
+					tablaItems.isCellEditable(tablaItems.getSelectedRow(), 1);
+				}
+			});
+			btnEditar.setBounds(552, 553, 124, 23);
+			contentPanel.add(btnEditar);
+		}
+		
+		btnAgregarComentario = new JButton("agregar coment");
+		btnAgregarComentario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				tablaItems.editCellAt(tablaItems.getSelectedRow(),3);
+			    Component aComp=tablaItems.getEditorComponent();
+			    aComp.requestFocus();
+				tablaItems.isCellEditable(tablaItems.getSelectedRow(), 3);
+			}
+		});
+		btnAgregarComentario.setBounds(552, 576, 124, 23);
+		contentPanel.add(btnAgregarComentario);
 		{
 			JLabel label = new JLabel("");
 			label.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
@@ -394,7 +461,27 @@ public class ordenDePedido extends JDialog {
 				
 				TextAutoCompleter autoCompletar3=new TextAutoCompleter(tfAgregarOtroProducto);
 				autoCompletar3.setCaseSensitive(false);
-				autoCompletar3.addItems(control.getProducto().buscaNombresProductos("gaseosa"));
+				autoCompletar3.addItems(control.getProducto().buscaNombresProductos("otros"));
+				
+				btnVerPromociones= new JButton("");
+				btnVerPromociones.setOpaque(false);
+				btnVerPromociones.setBounds(32, 472, 60, 23);
+				contentPanel.add(btnVerPromociones);
+				
+				btnVerPizzas= new JButton("");
+				btnVerPizzas.setOpaque(false);
+				btnVerPizzas.setBounds(44, 224, 48, 23);
+				contentPanel.add(btnVerPizzas);
+				
+				btnVerEmpanadas= new JButton("");
+				btnVerEmpanadas.setOpaque(false);
+				btnVerEmpanadas.setBounds(32, 82, 48, 23);
+				contentPanel.add(btnVerEmpanadas);
+				
+				btnVerOtros = new JButton("");
+				btnVerOtros.setOpaque(false);
+				btnVerOtros.setBounds(37, 362, 68, 23);
+				contentPanel.add(btnVerOtros);
 		}
 	
 	//se agrega el siguiente constructor para la modificacion de pedidos
@@ -600,11 +687,11 @@ public class ordenDePedido extends JDialog {
 			scrollPane_1 = new JScrollPane();
 			scrollPane_1.setBounds(99, 533, 421, 101);
 			contentPanel.add(scrollPane_1);
-			
 			tablaItems = new JTable();
-		
 			scrollPane_1.setViewportView(tablaItems);
+			
 		}
+		
 		{
 			JLabel label = new JLabel("");
 			label.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
@@ -731,7 +818,23 @@ public class ordenDePedido extends JDialog {
 				
 				TextAutoCompleter autoCompletar3=new TextAutoCompleter(tfAgregarOtroProducto);
 				autoCompletar3.setCaseSensitive(false);
-				autoCompletar3.addItems(control.getProducto().buscaNombresProductos("gaseosa"));
+				autoCompletar3.addItems(control.getProducto().buscaNombresProductos("otros"));
+				
+				btnVerPromociones= new JButton("");
+				btnVerPromociones.setBounds(29, 362, 89, 23);
+				contentPanel.add(btnVerPromociones);
+				
+				btnVerPizzas= new JButton("");
+				btnVerPizzas.setBounds(44, 224, 48, 23);
+				contentPanel.add(btnVerPizzas);
+				
+				btnVerEmpanadas= new JButton("");
+				btnVerEmpanadas.setBounds(32, 82, 48, 23);
+				contentPanel.add(btnVerEmpanadas);
+				
+				btnVerOtros = new JButton("");
+				btnVerOtros.setBounds(37, 362, 68, 23);
+				contentPanel.add(btnVerOtros);
 		}
 
 
@@ -911,6 +1014,49 @@ public class ordenDePedido extends JDialog {
 		this.tfTotal = tfTotal;
 	}
 
+	public JButton getBtnVerOtros()	{
+		return btnVerOtros;
+	}
+
+
+	public void setBtnVerOtros(JButton btnVerOtros) {
+		this.btnVerOtros = btnVerOtros;
+	}
+
+
+	public JButton getBtnVerEmpanadas() {
+		return btnVerEmpanadas;
+	}
+
+
+	public void setBtnVerEmpanadas(JButton btnVerEmpanadas) {
+		this.btnVerEmpanadas = btnVerEmpanadas;
+	}
+
+
+	public JButton getBtnVerPizzas() {
+		return btnVerPizzas;
+	}
+
+
+	public void setBtnVerPizzas(JButton btnVerPizzas) {
+		this.btnVerPizzas = btnVerPizzas;
+	}
+
+	public JCheckBox getCheckBoxDelivery() {
+		return checkBoxDelivery;
+	}
+
+
+	public JButton getBtnVerPromociones() {
+		return btnVerPromociones;
+	}
+
+
+	public void setBtnVerPromociones(JButton btnVerPromociones) {
+		this.btnVerPromociones = btnVerPromociones;
+	}
+
 
 	public void validarTexto(KeyEvent evt, JTextField a)
 	{
@@ -967,5 +1113,29 @@ public class ordenDePedido extends JDialog {
 			control.getItem().agregarItem(aux);
 		}
 		return listaAux;
+	}
+	
+	public boolean isCellEditable(int rowIndex, int colIndex)
+	{
+		if (colIndex==1) 
+		{
+            return true;  //La columna 4 es editable.
+        }
+        return false;  //El resto de celdas no son editables.
+	}
+	
+	public void actualizarPrecio()
+	{
+		producto=control.getProducto().buscarProductoPorNombre(model.getValueAt(tablaItems.getSelectedRow(), 0).toString());
+		int cantidad=Integer.parseInt(model.getValueAt(tablaItems.getSelectedRow(), 1).toString());
+		model.setValueAt(cantidad*producto.getPrecio(), tablaItems.getSelectedRow(), 2);
+		
+		Integer total=0;
+		for(int a=0; a<tablaItems.getRowCount(); a++) //recorro las columnas
+		   {
+		    total=total+ Integer.parseInt(model.getValueAt(a ,2).toString()); 
+		   }
+		tfTotal.setText(total.toString());
+		   
 	}
 }

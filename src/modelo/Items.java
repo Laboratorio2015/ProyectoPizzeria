@@ -18,9 +18,10 @@ public class Items
 		item=new ItemDAO();
 	}
 	
-	public void agregarItem(ItemDTO agregarItem)
+	public Boolean agregarItem(ItemDTO agregarItem)
 	{
-		this.item.insert(agregarItem);
+		return this.item.insert(agregarItem);
+		
 	}
 	
 	public void quitarItem(ItemDTO quitarItem)

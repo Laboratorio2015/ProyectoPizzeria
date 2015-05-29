@@ -4,12 +4,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import modelo.MatPrimas;
+
+import dto.ItemDTO;
+import dto.MateriaPrimaDTO;
+import dto.PedidoDTO;
 import dto.ProveedorDTO;
 import persistencia.conexion.Conexion;
 
 public class ProveedorDAO {
-	private static final String insert = "INSERT INTO proveedores(idproveedor, nombre,telefono, direccion) VALUES(?, ?, ?, ?)";
+	private static final String insert = "INSERT INTO proveedores(idproveedor, nombre,categoria,telefono, direccion,email) VALUES(?,?,?, ?, ?, ?)";
 	private static final String delete = "DELETE FROM proveedores WHERE idproveedor = ?";
 	private static final String readall = "SELECT * FROM proveedores";
 	private static final Conexion conexion = Conexion.getConexion();
@@ -19,19 +26,25 @@ public class ProveedorDAO {
 		PreparedStatement statement;
 		try 
 		{
+			MatPrimas matAux=new MatPrimas();
+			ArrayList<Integer> idMateriasPri= matAux.idmatprimas(proveedor);
+			Iterator<Integer> Iterador = idMateriasPri.iterator();
 			statement = conexion.getSQLConexion().prepareStatement(insert);
-			statement.setInt(1, proveedor.getId());
-			statement.setString(2, proveedor.getNombre());
-			statement.setString(3,proveedor.getTelefono());
-			statement.setString(4, proveedor.getDireccion());
-
-
-			
-			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
+			while(Iterador.hasNext())
 			{
-				System.out.println("inserccion exitosa de proveedor");
-				return true;
+				Integer elemento = Iterador.next();
+				statement.setInt(1, proveedor.getId());
+				statement.setString(2, proveedor.getNombre());
+				statement.setString(3, proveedor.getCategoria());
+				statement.setString(4,proveedor.getTelefono());
+				statement.setString(5, proveedor.getDireccion());
+				statement.setString(6, proveedor.getEmail());
+				statement.setInt(7, elemento);
+				statement.executeUpdate();
 			}
+			System.out.println("inserccion exitosa de proveedor");
+			return true;
+			
 		} 
 		catch (SQLException e) 
 		{
@@ -84,8 +97,29 @@ public class ProveedorDAO {
 			
 			while(resultSet.next())
 			{
-				proveedores.add(new ProveedorDTO(resultSet.getInt("id"), resultSet.getString("nombre"),
-				resultSet.getString("telefono"),resultSet.getString("direccion")));
+				String y= resultSet.getString("categoria");
+				String categoria="";
+				for (int i=0; i<y.length(); i++)
+				{
+					  if (y.charAt(i) != ' ')
+					    categoria += y.charAt(i);
+				}
+				String t= resultSet.getString("nombre");
+				String nombre="";
+				for (int i=0; i<t.length(); i++)
+				{
+					  if (t.charAt(i) != ' ' || (t.charAt(i)==' ' && t.charAt(i+1)!=' '))
+					    nombre += t.charAt(i);
+					  else if(t.charAt(i)==' ' && t.charAt(i+1)==' ')
+						  break;
+				}
+				
+				MatPrimas matAux=new MatPrimas();
+				ProveedorDTO aux=new ProveedorDTO(resultSet.getInt("idproveedor"),nombre,
+						categoria,resultSet.getString("telefono"),
+						resultSet.getString("email"),resultSet.getString("direccion"),(ArrayList<MateriaPrimaDTO>)matAux.obtenerMatPrimas(resultSet.getInt("idproveedor")));
+				if(!ProveedorDTO.estaProveedor(proveedores, aux.getId()))
+					proveedores.add(aux);
 			}
 		} 
 		catch (SQLException e) 

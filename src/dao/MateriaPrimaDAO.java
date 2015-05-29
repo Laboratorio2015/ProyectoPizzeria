@@ -6,8 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import modelo.Productos;
+
 import persistencia.conexion.Conexion;
+import dto.ItemDTO;
 import dto.MateriaPrimaDTO;
+import dto.ProductoDTO;
 import dto.RepartidorDTO;
 
 public class MateriaPrimaDAO 
@@ -15,6 +19,7 @@ public class MateriaPrimaDAO
 	private static final String insert = "INSERT INTO matprimas(idmatprima,nombre) VALUES(?, ?)";
 	private static final String delete = "DELETE FROM matprimas WHERE idmatprima = ?";
 	private static final String readall = "SELECT * FROM matprimas";
+	private static final String obtenerlistamatprimas="select idmatprima,i.nombre from proveedores P join matprimas I on p.matprima=i.idmatprima and p.idproveedor= ?;";
 	private static final Conexion conexion = Conexion.getConexion();
 	
 	
@@ -99,5 +104,31 @@ public class MateriaPrimaDAO
 		return materiaPrima;
 	}
 
+	public ArrayList<MateriaPrimaDTO> obtenerListaMatPrima(Integer numProveedor)
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<MateriaPrimaDTO> matprimas = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(obtenerlistamatprimas);
+			statement.setInt(1,numProveedor);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				matprimas.add(new MateriaPrimaDTO(resultSet.getInt("idmatprima"),resultSet.getString("nombre")));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return matprimas;
+	}
 
 }

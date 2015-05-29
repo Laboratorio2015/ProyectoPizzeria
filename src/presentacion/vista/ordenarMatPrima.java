@@ -10,6 +10,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
+
+import presentacion.controlador.Controlador;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -20,7 +23,7 @@ public class ordenarMatPrima extends JDialog {
 	private ordenarMatPrima _matPrima;
 
 
-	public ordenarMatPrima(VentanaPrincipal padre) {
+	public ordenarMatPrima(VentanaPrincipal padre, final Controlador control) {
 		setModal(true);
 		padre=_padre;
 		_matPrima=this;

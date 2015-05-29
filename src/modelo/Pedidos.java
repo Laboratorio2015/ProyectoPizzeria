@@ -19,9 +19,6 @@ public class Pedidos
 	public Pedidos()
 	{
 		this.pedido=new PedidoDAO();
-		//Clientes cl=new Clientes();
-		//Productos p=new Productos();
-		//PedidoDTO p1=new PedidoDTO(1, "sin aceitunas", 2015-06-06, 20:15, "solicitado", 230, 1, 1, cl.seleccionarCliente(1), Productos)
 	}
 	/*
 	public void agregarPedido(PedidoDTO nuevoPedido, ArrayList<Productos> producto)

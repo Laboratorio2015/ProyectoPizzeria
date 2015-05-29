@@ -65,14 +65,15 @@ public class seleccionDeCliente extends JDialog {
 			{
 				validarNumerosDNI(arg0, tfAgregarDNI);
 			}
-		});
-		tfAgregarDNI.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent arg0)
+			@Override
+			public void keyReleased(KeyEvent e) 
 			{
+				if(tfAgregarDNI.getText().length()>7)
+				{
 				cliente=control.getCliente().buscarCliente(Integer.parseInt(tfAgregarDNI.getText()));
 				tfNombrApellido.setText("Apellido y Nombre: "+cliente.getApellido()+"  "+ cliente.getNombre());
 				tfDireccionTelefono.setText("Direccion: "+cliente.getDireccion()+"  Tel: "+cliente.getTelefono());
+				}
 			}
 		});
 		tfAgregarDNI.setBounds(91, 165, 174, 23);
@@ -113,12 +114,11 @@ public class seleccionDeCliente extends JDialog {
 				public void mouseClicked(MouseEvent arg0)
 				{
 					seleccionDeCliente.this.pedido.setCliente(cliente);
-					seleccionDeCliente.this.pedido.setLlevaDelivery(false);
 					control.getListaPedidos().add(seleccionDeCliente.this.pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
 					control.getMonitorCocina().nuevoPedido(seleccionDeCliente.this.pedido);
-					new Ticket().generarTicket(seleccionDeCliente.this.pedido);
-					new Comanda().generarComanda(seleccionDeCliente.this.pedido);
+					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
+					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					dispose();
 				}
 			});

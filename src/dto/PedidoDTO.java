@@ -10,7 +10,7 @@ import dto.ItemDTO;
 
 public class PedidoDTO 
 {
-	public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
+	//public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
 	private Integer idpedido;
 	private ArrayList<ItemDTO> items;
 	private Date fecha;
@@ -81,16 +81,7 @@ public class PedidoDTO
 	{
 		this.hora = hora;
 	}
-	/*
-	public estadosPedido getEstado() 
-	{
-		return estado;
-	}
-	public void setEstado(estadosPedido estado) 
-	{
-		this.estado = estado;
-	}
-	*/
+
 	public Integer getTotal() 
 	{
 		return total;
@@ -133,28 +124,14 @@ public class PedidoDTO
 		this.comanda = _comanda;
 	}
 	
-	
-	/*
-	public static PedidoDTO buscarPedido(Integer num, List<PedidoDTO> pedidos) 
-	{
-		Iterator<PedidoDTO> Iterador = pedidos.iterator();
-		while(Iterador.hasNext())
-		{
-			PedidoDTO elemento = Iterador.next();
-			if(elemento.getIdpedido()==num)
-				return elemento;
-		}
-		return null;
-	}
-	*/
-	
 	public Boolean getLlevaDelivery() {
 		return llevaDelivery;
 	}
 	public void setLlevaDelivery(Boolean llevaDelivery) {
 		this.llevaDelivery = llevaDelivery;
 	}
-	//esta funcion verifica si el pedido para no cargarlo dos veces
+	
+	//esta funcion verifica al pedido para no cargarlo dos veces
 	public static boolean estaPedido(List<PedidoDTO> pedidos, Integer num)
 	{
 		Iterator<PedidoDTO> Iterador = pedidos.iterator();

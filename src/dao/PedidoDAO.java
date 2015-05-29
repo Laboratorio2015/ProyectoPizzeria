@@ -120,11 +120,10 @@ public class PedidoDAO
 				resultSet.getDate("fecha"),resultSet.getTime("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
 				resultSet.getInt("comanda"),ClienteDTO.buscarCliente(cli.obtenerClientes(),(Integer)resultSet.getInt("cliente")),resultSet.getBoolean("delivery"));
+				
 				if(!PedidoDTO.estaPedido(pedidos, aux.getIdpedido()))
 					pedidos.add(aux);
-				
-				//clienteAux.buscarCliente(resultSet.getInt("cliente")
-				//itemAux.obtenerListaItems(resultSet.getInt("idpedido"))
+
 			}
 		} 
 		catch (SQLException e) 
