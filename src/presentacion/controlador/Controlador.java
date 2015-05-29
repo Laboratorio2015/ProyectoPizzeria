@@ -30,6 +30,7 @@ import presentacion.vista.registrarCobroDePedido;
 import presentacion.vista.registrarCobroManualmente;
 import presentacion.vista.registroDeCliente;
 import presentacion.vista.repartidorAlta;
+import presentacion.vista.repartidorBajaModificacion;
 import presentacion.vista.seleccionDeCliente;
 import presentacion.vista.seleccionarRepartidor;
 
@@ -47,6 +48,7 @@ public class Controlador implements ActionListener
 	private proveedorAlta ventanaAgregarProveedor;
 	private proveedorBajaModificacion ventanaEditarProveedor;
 	private repartidorAlta ventanaAgregarRepartidor;
+	private repartidorBajaModificacion ventanaEditarRepartidor;
 	private registrarCobroDePedido ventanaRegCobroPedido;
 	private registrarCobroManualmente ventanaRegCobroManual;
 	private seleccionarRepartidor ventanaSeleccionRepartidor;
@@ -203,6 +205,11 @@ public class Controlador implements ActionListener
 			ventanaEditarProveedor=new proveedorBajaModificacion(this);
 			llenarTablaProveedor();
 			ventanaEditarProveedor.setVisible(true);
+		}
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarRepartidor())
+		{
+			ventanaEditarRepartidor=new repartidorBajaModificacion();
+			ventanaEditarRepartidor.setVisible(true);
 		}
 	}
 	

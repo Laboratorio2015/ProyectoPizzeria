@@ -49,7 +49,7 @@ public class repartidorBajaModificacion extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(20, 154, 247, 362);
+			scrollPane.setBounds(67, 188, 200, 254);
 			contentPanel.add(scrollPane);
 			{
 				table = new JTable();
@@ -58,28 +58,28 @@ public class repartidorBajaModificacion extends JDialog {
 		}
 		
 		tfdni = new JTextField();
-		tfdni.setBounds(464, 188, 200, 22);
+		tfdni.setBounds(464, 172, 200, 22);
 		contentPanel.add(tfdni);
 		tfdni.setColumns(10);
 		
 		tfNombre = new JTextField();
 		tfNombre.setColumns(10);
-		tfNombre.setBounds(464, 224, 200, 22);
+		tfNombre.setBounds(464, 210, 200, 22);
 		contentPanel.add(tfNombre);
 		
 		tfApellido = new JTextField();
 		tfApellido.setColumns(10);
-		tfApellido.setBounds(464, 260, 200, 22);
+		tfApellido.setBounds(464, 250, 200, 22);
 		contentPanel.add(tfApellido);
 		
 		tfCelular = new JTextField();
 		tfCelular.setColumns(10);
-		tfCelular.setBounds(464, 301, 200, 22);
+		tfCelular.setBounds(464, 288, 200, 22);
 		contentPanel.add(tfCelular);
 		
 		tfFechaNacimiento = new JTextField();
 		tfFechaNacimiento.setColumns(10);
-		tfFechaNacimiento.setBounds(464, 340, 200, 22);
+		tfFechaNacimiento.setBounds(464, 329, 200, 22);
 		contentPanel.add(tfFechaNacimiento);
 		{
 			JLabel label = new JLabel("");
@@ -90,7 +90,7 @@ public class repartidorBajaModificacion extends JDialog {
 		{
 			JButton okButton = new JButton("OK");
 			okButton.setOpaque(false);
-			okButton.setBounds(395, 415, 61, 46);
+			okButton.setBounds(395, 406, 61, 46);
 			contentPanel.add(okButton);
 			okButton.setActionCommand("OK");
 			getRootPane().setDefaultButton(okButton);
@@ -102,7 +102,7 @@ public class repartidorBajaModificacion extends JDialog {
 				public void actionPerformed(ActionEvent arg0) {
 				}
 			});
-			cancelButton.setBounds(553, 415, 52, 46);
+			cancelButton.setBounds(40, 478, 52, 46);
 			contentPanel.add(cancelButton);
 			cancelButton.setActionCommand("Cancel");
 		}
@@ -110,7 +110,7 @@ public class repartidorBajaModificacion extends JDialog {
 			JButton button = new JButton("OK");
 			button.setOpaque(false);
 			button.setActionCommand("OK");
-			button.setBounds(299, 540, 150, 36);
+			button.setBounds(475, 534, 150, 36);
 			contentPanel.add(button);
 		}
 	}
