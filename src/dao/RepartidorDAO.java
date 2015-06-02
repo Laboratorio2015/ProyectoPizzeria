@@ -1,4 +1,4 @@
-package persistencia.dao;
+package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import dto.ProveedorDTO;
 import dto.RepartidorDTO;
-import persistencia.conexion.Conexion;
+import conexion.Conexion;
 
 public class RepartidorDAO 
 {

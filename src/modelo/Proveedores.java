@@ -6,7 +6,7 @@ import java.util.List;
 import dto.ClienteDTO;
 import dto.PedidoDTO;
 import dto.ProveedorDTO;
-import persistencia.dao.ProveedorDAO;
+import dao.ProveedorDAO;
 
 public class Proveedores 
 {

@@ -1,4 +1,4 @@
-package Monitor.Cocina;
+package Cocina;
 
 import java.awt.Frame;
 import java.util.ArrayList;

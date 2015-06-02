@@ -1,4 +1,4 @@
-package persistencia.dao;
+package dao;
 
 
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import modelo.Pedidos;
 import dto.ClienteDTO;
 import dto.ItemDTO;
 import dto.PedidoDTO;
-import persistencia.conexion.Conexion;
+import conexion.Conexion;
 
 
 public class PedidoDAO 

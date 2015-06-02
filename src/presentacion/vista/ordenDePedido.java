@@ -2,7 +2,6 @@ package presentacion.vista;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -33,8 +32,6 @@ import javax.swing.JCheckBox;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.ListSelectionModel;
-
-import org.eclipse.swt.widgets.TableItem;
 
 @SuppressWarnings("serial")
 public class ordenDePedido extends JDialog {

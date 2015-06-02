@@ -1,4 +1,4 @@
-package persistencia.dao;
+package dao;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import dto.ClienteDTO;
 import dto.PedidoDTO;
-import persistencia.conexion.Conexion;
+import conexion.Conexion;
 
 public class ClienteDAO 
 {

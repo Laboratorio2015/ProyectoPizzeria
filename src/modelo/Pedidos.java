@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import persistencia.dao.PedidoDAO;
+import dao.PedidoDAO;
 import dto.ClienteDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;

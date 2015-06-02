@@ -3,10 +3,7 @@ package modelo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.itextpdf.text.pdf.CompareTool;
-
-import persistencia.dao.ProductoDAO;
+import dao.ProductoDAO;
 import dto.ProductoDTO;
 
 

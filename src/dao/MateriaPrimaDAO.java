@@ -1,4 +1,4 @@
-package persistencia.dao;
+package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import modelo.Productos;
 
-import persistencia.conexion.Conexion;
+import conexion.Conexion;
 import dto.ItemDTO;
 import dto.MateriaPrimaDTO;
 import dto.ProductoDTO;

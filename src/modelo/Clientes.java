@@ -3,7 +3,7 @@ package modelo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import persistencia.dao.ClienteDAO;
+import dao.ClienteDAO;
 import dto.ClienteDTO;
 import dto.ProductoDTO;
 

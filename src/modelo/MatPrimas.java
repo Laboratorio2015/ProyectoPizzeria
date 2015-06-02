@@ -8,7 +8,7 @@ import dto.ItemDTO;
 import dto.MateriaPrimaDTO;
 import dto.PedidoDTO;
 import dto.ProveedorDTO;
-import persistencia.dao.MateriaPrimaDAO;
+import dao.MateriaPrimaDAO;
 
 public class MatPrimas {
 	private MateriaPrimaDAO matPrima;

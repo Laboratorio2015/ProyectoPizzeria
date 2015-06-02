@@ -1,4 +1,4 @@
-package persistencia.dao;
+package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +13,7 @@ import dto.ItemDTO;
 import dto.MateriaPrimaDTO;
 import dto.PedidoDTO;
 import dto.ProveedorDTO;
-import persistencia.conexion.Conexion;
+import conexion.Conexion;
 
 public class ProveedorDAO {
 	private static final String insert = "INSERT INTO proveedores(idproveedor, nombre,categoria,telefono, direccion,email) VALUES(?,?,?, ?, ?, ?)";

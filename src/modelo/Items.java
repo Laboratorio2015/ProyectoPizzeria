@@ -7,7 +7,7 @@ import dto.ItemDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;
 
-import persistencia.dao.ItemDAO;
+import dao.ItemDAO;
 
 public class Items 
 {
