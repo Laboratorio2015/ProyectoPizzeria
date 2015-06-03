@@ -90,8 +90,26 @@ public class RepartidorDAO
 				
 				while(resultSet.next())
 				{
-					repartidores.add(new RepartidorDTO(resultSet.getInt("id"), resultSet.getInt("dni"), resultSet.getString("nombre"),
-					resultSet.getString("apellido"), resultSet.getString("fecha de nacimiento"), resultSet.getString("telefono"),resultSet.getString("estado")));
+					String t= resultSet.getString("nombre");
+					String nombre="";
+					for (int i=0; i<t.length(); i++)
+					{
+						  if (t.charAt(i) != ' ' || (t.charAt(i)==' ' && t.charAt(i+1)!=' '))
+						    nombre += t.charAt(i);
+						  else if(t.charAt(i)==' ' && t.charAt(i+1)==' ')
+							  break;
+					}					
+					String e= resultSet.getString("apellido");
+					String apellido="";
+					for (int i=0; i<e.length(); i++)
+					{
+						  if (e.charAt(i) != ' ' || (e.charAt(i)==' ' && e.charAt(i+1)!=' '))
+						    apellido += e.charAt(i);
+						  else if(e.charAt(i)==' ' && e.charAt(i+1)==' ')
+							  break;
+					}
+					repartidores.add(new RepartidorDTO(resultSet.getInt("idrepartidor"), resultSet.getInt("dni"),nombre,
+					apellido, resultSet.getString("fechanacimiento"), resultSet.getString("telefono"),resultSet.getString("estado")));
 				}
 			} 
 			catch (SQLException e) 

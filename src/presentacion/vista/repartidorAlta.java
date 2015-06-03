@@ -2,6 +2,7 @@ package presentacion.vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -10,95 +11,145 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class repartidorAlta extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField tfDni;
+	private JTextField tfNombre;
+	private JTextField tfApellido;
 	private JTextField tfCelular;
 	private JTextField tfFechaNacimiento;
+	private JButton btnRegistrar;
+	private JButton btnCalendario;
+	
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			repartidorAlta dialog = new repartidorAlta();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
 	public repartidorAlta() {
-		setBounds(100, 100, 746, 537);
+		setBounds(100, 100, 715, 436);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			textField = new JTextField();
-			textField.setBounds(154, 218, 173, 22);
-			contentPanel.add(textField);
-			textField.setColumns(10);
+			tfDni = new JTextField();
+			tfDni.setBounds(145, 179, 174, 22);
+			contentPanel.add(tfDni);
+			tfDni.setColumns(10);
 		}
 		{
-			textField_1 = new JTextField();
-			textField_1.setColumns(10);
-			textField_1.setBounds(153, 254, 173, 22);
-			contentPanel.add(textField_1);
+			tfNombre = new JTextField();
+			tfNombre.setColumns(10);
+			tfNombre.setBounds(145, 215, 173, 22);
+			contentPanel.add(tfNombre);
 		}
 		{
-			textField_2 = new JTextField();
-			textField_2.setColumns(10);
-			textField_2.setBounds(153, 290, 173, 22);
-			contentPanel.add(textField_2);
+			tfApellido = new JTextField();
+			tfApellido.setColumns(10);
+			tfApellido.setBounds(145, 251, 173, 22);
+			contentPanel.add(tfApellido);
 		}
 		{
 			tfCelular = new JTextField();
 			tfCelular.setColumns(10);
-			tfCelular.setBounds(486, 218, 173, 22);
+			tfCelular.setBounds(474, 179, 177, 22);
 			contentPanel.add(tfCelular);
 		}
 		{
 			tfFechaNacimiento = new JTextField();
 			tfFechaNacimiento.setEditable(false);
 			tfFechaNacimiento.setColumns(10);
-			tfFechaNacimiento.setBounds(486, 255, 117, 22);
+			tfFechaNacimiento.setBounds(478, 215, 117, 22);
 			contentPanel.add(tfFechaNacimiento);
 		}
 		{
-			JButton btnCalendario = new JButton("");
-			btnCalendario.setBounds(619, 252, 40, 34);
+			btnCalendario= new JButton("");
+			btnCalendario.setIcon(new ImageIcon(repartidorAlta.class.getResource("/prototipos/Botones/calendario.gif")));
+			btnCalendario.setBounds(605, 209, 40, 34);
 			contentPanel.add(btnCalendario);
 		}
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(repartidorAlta.class.getResource("/prototipos/registro de repartidor.png")));
-			label.setBounds(0, 0, 730, 500);
+			label.setBounds(0, 0, 730, 399);
 			contentPanel.add(label);
 		}
 		{
-			JButton cancelButton = new JButton("Cancel");
-			cancelButton.setOpaque(false);
-			cancelButton.setBounds(401, 421, 164, 34);
-			contentPanel.add(cancelButton);
-			cancelButton.setActionCommand("Cancel");
+			JButton btnCancelar = new JButton("Cancel");
+			btnCancelar.setOpaque(false);
+			btnCancelar.setBounds(382, 329, 164, 34);
+			contentPanel.add(btnCancelar);
+			btnCancelar.setActionCommand("Cancel");
 		}
 		{
-			JButton okButton = new JButton("OK");
-			okButton.setOpaque(false);
-			okButton.setBounds(168, 420, 164, 34);
-			contentPanel.add(okButton);
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
+			btnRegistrar= new JButton("OK");
+			btnRegistrar.setOpaque(false);
+			btnRegistrar.setBounds(187, 329, 164, 34);
+			contentPanel.add(btnRegistrar);
+			btnRegistrar.setActionCommand("OK");
+			getRootPane().setDefaultButton(btnRegistrar);
 		}
 	}
 
+	public JTextField getTfDni() {
+		return tfDni;
+	}
+
+	public void setTfDni(JTextField tfDni) {
+		this.tfDni = tfDni;
+	}
+
+	public JTextField getTfNombre() {
+		return tfNombre;
+	}
+
+	public void setTfNombre(JTextField tfNombre) {
+		this.tfNombre = tfNombre;
+	}
+
+	public JTextField getTfApellido() {
+		return tfApellido;
+	}
+
+	public void setTfApellido(JTextField tfApellido) {
+		this.tfApellido = tfApellido;
+	}
+
+	public JTextField getTfCelular() {
+		return tfCelular;
+	}
+
+	public void setTfCelular(JTextField tfCelular) {
+		this.tfCelular = tfCelular;
+	}
+
+	public JTextField getTfFechaNacimiento() {
+		return tfFechaNacimiento;
+	}
+
+	public void setTfFechaNacimiento(JTextField tfFechaNacimiento) {
+		this.tfFechaNacimiento = tfFechaNacimiento;
+	}
+	
+	public void escribirFech(Date a) 
+	{
+		tfFechaNacimiento.setText(a.getDate()+"-"+(a.getMonth()+1)+"-"+(a.getYear()+1900));
+	}
+
+	public JButton getBtnRegistrar() {
+		return btnRegistrar;
+	}
+
+	public void setBtnRegistrar(JButton btnRegistrar) {
+		this.btnRegistrar = btnRegistrar;
+	}
+
+	public JButton getBtnCalendario() {
+		return btnCalendario;
+	}
+
+	public void setBtnCalendario(JButton btnCalendario) {
+		this.btnCalendario = btnCalendario;
+	}
 }

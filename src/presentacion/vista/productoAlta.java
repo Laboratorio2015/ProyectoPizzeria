@@ -22,46 +22,30 @@ public class productoAlta extends JDialog {
 	private JTextField tfPrecio;
 	private JTable tableProductos;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			productoAlta dialog = new productoAlta();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
 	public productoAlta() {
-		setBounds(100, 100, 746, 587);
+		setBounds(100, 100, 664, 536);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		JComboBox cbTipo = new JComboBox();
-		cbTipo.setModel(new DefaultComboBoxModel(new String[] {"(elija un tipo)", "empanada", "pizza", "otros"}));
-		cbTipo.setBounds(175, 193, 174, 22);
+		cbTipo.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione un tipo de Producto)", "empanada", "pizza", "otros"}));
+		cbTipo.setBounds(175, 200, 180, 22);
 		contentPanel.add(cbTipo);
 		
 		tfDenominacion = new JTextField();
-		tfDenominacion.setBounds(175, 155, 174, 22);
+		tfDenominacion.setBounds(175, 164, 180, 22);
 		contentPanel.add(tfDenominacion);
 		tfDenominacion.setColumns(10);
 		
 		tfPrecio = new JTextField();
 		tfPrecio.setColumns(10);
-		tfPrecio.setBounds(175, 227, 91, 22);
+		tfPrecio.setBounds(175, 237, 91, 22);
 		contentPanel.add(tfPrecio);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(447, 145, 241, 294);
+		scrollPane.setBounds(384, 153, 180, 246);
 		contentPanel.add(scrollPane);
 		
 		tableProductos = new JTable();
@@ -69,7 +53,7 @@ public class productoAlta extends JDialog {
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(productoAlta.class.getResource("/prototipos/Alta de Producto.png")));
-			label.setBounds(0, 0, 730, 550);
+			label.setBounds(0, 0, 730, 500);
 			contentPanel.add(label);
 		}
 		{
@@ -83,7 +67,7 @@ public class productoAlta extends JDialog {
 		{
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setOpaque(false);
-			cancelButton.setBounds(299, 478, 150, 34);
+			cancelButton.setBounds(239, 434, 150, 34);
 			contentPanel.add(cancelButton);
 			cancelButton.setActionCommand("Cancel");
 		}

@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class proveedorAlta extends JDialog {
 
@@ -21,62 +23,76 @@ public class proveedorAlta extends JDialog {
 	private JTextField tfTelefono;
 	private JTextField tfEmail;
 	private JTextField tfDireccion;
+	private JButton btnCancelar;
 
 
 	public proveedorAlta() {
-		setBounds(100, 100, 743, 638);
+		setBounds(100, 100, 563, 536);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
 			tfDenominacion = new JTextField();
-			tfDenominacion.setBounds(157, 192, 174, 22);
+			tfDenominacion.setBounds(189, 201, 304, 22);
 			contentPanel.add(tfDenominacion);
 			tfDenominacion.setColumns(10);
 		}
 		{
 			tfCategoria = new JTextField();
 			tfCategoria.setColumns(10);
-			tfCategoria.setBounds(156, 227, 174, 22);
+			tfCategoria.setBounds(189, 237, 304, 22);
 			contentPanel.add(tfCategoria);
 		}
 		{
 			tfTelefono = new JTextField();
 			tfTelefono.setColumns(10);
-			tfTelefono.setBounds(156, 263, 174, 22);
+			tfTelefono.setBounds(189, 274, 304, 22);
 			contentPanel.add(tfTelefono);
 		}
 		{
 			tfEmail = new JTextField();
 			tfEmail.setColumns(10);
-			tfEmail.setBounds(156, 302, 174, 22);
+			tfEmail.setBounds(189, 311, 304, 22);
 			contentPanel.add(tfEmail);
 		}
 		
 		tfDireccion = new JTextField();
-		tfDireccion.setBounds(157, 335, 174, 20);
+		tfDireccion.setBounds(189, 342, 304, 20);
 		contentPanel.add(tfDireccion);
 		tfDireccion.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Direccion");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setBounds(45, 338, 93, 14);
+		lblNewLabel.setBounds(75, 343, 93, 14);
 		contentPanel.add(lblNewLabel);
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(proveedorAlta.class.getResource("/prototipos/alta de Proveedor.png")));
-			label.setBounds(0, 0, 730, 600);
+			label.setBounds(0, 0, 550, 500);
 			contentPanel.add(label);
 		}
 		{
-			JButton okButton = new JButton("OK");
-			okButton.setOpaque(false);
-			okButton.setBounds(299, 541, 149, 35);
-			contentPanel.add(okButton);
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
+			JButton btnRegistrar = new JButton("OK");
+			btnRegistrar.setOpaque(false);
+			btnRegistrar.setBounds(98, 409, 165, 35);
+			contentPanel.add(btnRegistrar);
+			btnRegistrar.setActionCommand("OK");
+			getRootPane().setDefaultButton(btnRegistrar);
+		}
+		{
+			btnCancelar = new JButton("OK");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0)
+				{
+					dispose();
+				}
+			});
+			btnCancelar.setOpaque(false);
+			btnCancelar.setActionCommand("OK");
+			btnCancelar.setBounds(328, 409, 108, 35);
+			contentPanel.add(btnCancelar);
 		}
 	}
 }

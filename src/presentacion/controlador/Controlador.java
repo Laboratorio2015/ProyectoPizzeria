@@ -11,12 +11,17 @@ import modelo.Items;
 import modelo.Pedidos;
 import modelo.Productos;
 import modelo.Proveedores;
+import modelo.Repartidores;
 import dto.ClienteDTO;
 import dto.ItemDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;
 import dto.ProveedorDTO;
+import dto.RepartidorDTO;
 import presentacion.vista.VentanaPrincipal;
+import presentacion.vista.calendario;
+import presentacion.vista.matPrimaAlta;
+import presentacion.vista.matPrimaBajaModificacion;
 import presentacion.vista.opcionesDeConfiguracion;
 import presentacion.vista.ordenDePedido;
 import presentacion.vista.ordenarMatPrima;
@@ -49,12 +54,15 @@ public class Controlador implements ActionListener
 	private proveedorBajaModificacion ventanaEditarProveedor;
 	private repartidorAlta ventanaAgregarRepartidor;
 	private repartidorBajaModificacion ventanaEditarRepartidor;
+	private matPrimaAlta ventanaAgregarMatPrima;
+	private matPrimaBajaModificacion ventanaEditarMatPrima;
+	private calendario ventanaCalendario;
 	private registrarCobroDePedido ventanaRegCobroPedido;
 	private registrarCobroManualmente ventanaRegCobroManual;
 	private seleccionarRepartidor ventanaSeleccionRepartidor;
 	private registroDeCliente ventanaRegCliente;
 	private PadreMonitor monitorCocina;
-	private pedidoMenu menu;
+	private pedidoMenu ventanamenu;
 	
 	//dto
 	private List<PedidoDTO> listaPedidos;
@@ -68,9 +76,10 @@ public class Controlador implements ActionListener
 	private Pedidos pedido;
 	private Clientes cliente;
 	private Items item;
+	private Repartidores repartidor;
 	
 	
-	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor) 
+	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor, Repartidores repartidor) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -78,6 +87,7 @@ public class Controlador implements ActionListener
 		this.item=item;
 		this.producto=producto;
 		this.proveedor=proveedor;
+		this.repartidor=repartidor;
 		
 		this.listaClientes=this.cliente.obtenerClientes();
 		this.listaProductos=this.producto.obtenerProducto();
@@ -133,7 +143,10 @@ public class Controlador implements ActionListener
 			ventanaConfiguraciones.getBtnEditarProducto().addActionListener(this);
 			ventanaConfiguraciones.getBtnEditarProveedor().addActionListener(this);
 			ventanaConfiguraciones.getBtnEditarRepartidor().addActionListener(this);
+			ventanaConfiguraciones.getBtnAgregarMatPrima().addActionListener(this);
+			ventanaConfiguraciones.getBtnEditarMatPrima().addActionListener(this);
 		}
+		//al ordenar crea un pedido
 		else if(this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnOrdenar())
 		{
 			PedidoDTO nuevoPedido=new PedidoDTO();
@@ -154,27 +167,71 @@ public class Controlador implements ActionListener
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerEmpanadas())
 		{
-			menu=new pedidoMenu();
+			ventanamenu=new pedidoMenu(this,ventanaPedido);
+			ventanamenu.setTitle("empanada");
+			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("empanada");
-			menu.setVisible(true);
+			ventanamenu.setVisible(true);
+			
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerPizzas())
 		{
-			menu=new pedidoMenu();
+			ventanamenu=new pedidoMenu(this,ventanaPedido);
+			ventanamenu.setTitle("pizza");
+			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("pizza");
-			menu.setVisible(true);
+			ventanamenu.setVisible(true);
+			
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerOtros())
 		{
-			menu=new pedidoMenu();
+			ventanamenu=new pedidoMenu(this,ventanaPedido);
+			ventanamenu.setTitle("otros");
+			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("otros");
-			menu.setVisible(true);
+			ventanamenu.setVisible(true);
+			
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerPromociones())
 		{
-			menu=new pedidoMenu();
+			ventanamenu=new pedidoMenu(this,ventanaPedido);
+			ventanamenu.setTitle("promocion");
+			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("promocion");
-			menu.setVisible(true);
+			ventanamenu.setVisible(true);
+			
+		}
+		else if (this.ventanamenu!= null && e.getSource()==this.ventanamenu.getBtnSeleccionar())
+		{
+			System.out.println("entro");
+			switch(ventanamenu.getTitle())
+			{
+			case("empanada"):
+			{
+				ventanaPedido.getTfAgregarEmpanada().setText(ventanamenu.getTable().getValueAt(ventanamenu.getTable().getSelectedRow(), 0).toString());
+				ventanaPedido.getTfPrecioUniEmpanada().setText(ventanamenu.getTable().getValueAt(ventanamenu.getTable().getSelectedRow(), 1).toString());
+				break;
+			}
+			case("pizza"):
+			{
+				ventanaPedido.getTfAgregarPizza().setText(ventanamenu.getTable().getValueAt(ventanamenu.getTable().getSelectedRow(), 0).toString());
+				ventanaPedido.getTfPrecioUniPizza().setText(ventanamenu.getTable().getValueAt(ventanamenu.getTable().getSelectedRow(), 1).toString());
+				break;
+			}
+			case("otros"):
+			{
+				ventanaPedido.getTfAgregarOtroProducto().setText(ventanamenu.getTable().getValueAt(ventanamenu.getTable().getSelectedRow(), 0).toString());
+				ventanaPedido.getTfPrecioUniOtro().setText(ventanamenu.getTable().getValueAt(ventanamenu.getTable().getSelectedRow(), 1).toString());
+				break;
+			}
+			case("promocion"):
+			{
+				ventanaPedido.getTfAgregarPromocion().setText(ventanamenu.getTable().getValueAt(ventanamenu.getTable().getSelectedRow(), 0).toString());
+				ventanaPedido.getTfPrecioUniPromocion().setText(ventanamenu.getTable().getValueAt(ventanamenu.getTable().getSelectedRow(), 1).toString());
+				break;
+			}
+			}
+			ventanamenu.dispose();
 		}
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarOferta())
 		{
@@ -193,6 +250,8 @@ public class Controlador implements ActionListener
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarRepartidor())
 		{
 			ventanaAgregarRepartidor=new repartidorAlta();
+			ventanaAgregarRepartidor.getBtnCalendario().addActionListener(this);
+			ventanaAgregarRepartidor.getBtnRegistrar().addActionListener(this);
 			ventanaAgregarRepartidor.setVisible(true);
 		}
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarProducto())
@@ -206,10 +265,43 @@ public class Controlador implements ActionListener
 			llenarTablaProveedor();
 			ventanaEditarProveedor.setVisible(true);
 		}
+		//acciones relacionadas a la baja modificacion de repartidores
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarRepartidor())
 		{
-			ventanaEditarRepartidor=new repartidorBajaModificacion();
+			ventanaEditarRepartidor=new repartidorBajaModificacion(this);
+			llenarTablaRepartidor();
 			ventanaEditarRepartidor.setVisible(true);
+		}
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarMatPrima())
+		{
+			ventanaAgregarMatPrima=new matPrimaAlta();
+			ventanaAgregarMatPrima.setVisible(true);
+		}
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarMatPrima())
+		{
+			ventanaEditarMatPrima=new matPrimaBajaModificacion();
+			ventanaEditarMatPrima.setVisible(true);
+		}
+		
+		//acciones asociadas el alta de repartidores
+		else if (this.ventanaAgregarRepartidor!= null && e.getSource()==this.ventanaAgregarRepartidor.getBtnCalendario())
+		{
+			ventanaCalendario=new calendario(ventanaAgregarRepartidor);
+			ventanaCalendario.setVisible(true);
+		}
+		//registra un repartidor nuevo
+		else if (this.ventanaAgregarRepartidor!= null && e.getSource()==this.ventanaAgregarRepartidor.getBtnRegistrar())
+		{
+			RepartidorDTO rep= new RepartidorDTO();
+			rep.setId(repartidor.obtenerRepartidores().size()+1);
+			rep.setNombre(ventanaAgregarRepartidor.getTfNombre().getText().toString());
+			rep.setDni(Integer.parseInt((ventanaAgregarRepartidor.getTfDni().getText().toString())));
+			rep.setApellido(ventanaAgregarRepartidor.getTfApellido().getText().toString());
+			rep.setFechaNacimiento(ventanaAgregarRepartidor.getTfFechaNacimiento().getText().toString());
+			rep.setTelefono(ventanaAgregarRepartidor.getTfCelular().getText().toString());
+			rep.setEstado(null);
+			repartidor.agregarRepartidor(rep);
+			ventanaAgregarRepartidor.dispose();
 		}
 	}
 	
@@ -228,6 +320,14 @@ public class Controlador implements ActionListener
 
 	public void setListaProductos(List<ProductoDTO> listaProductos) {
 		this.listaProductos = listaProductos;
+	}
+	
+	public Repartidores getRepartidor() {
+		return repartidor;
+	}
+
+	public void setRepartidor(Repartidores repartidor) {
+		this.repartidor = repartidor;
 	}
 
 	public List<ClienteDTO> getListaClientes() {
@@ -345,9 +445,9 @@ public class Controlador implements ActionListener
 	
 	private void llenarTablaMenu(String tipo) 
 	{
-		this.menu.getModel().setRowCount(0); //Para vaciar la tabla
-		this.menu.getModel().setColumnCount(0);
-		this.menu.getModel().setColumnIdentifiers(this.menu.getNombreColumnas());
+		this.ventanamenu.getModel().setRowCount(0); //Para vaciar la tabla
+		this.ventanamenu.getModel().setColumnCount(0);
+		this.ventanamenu.getModel().setColumnIdentifiers(this.ventanamenu.getNombreColumnas());
 		
 	 	Iterator<ProductoDTO> Iterador = this.producto.obtenerProducto().iterator();
 		while(Iterador.hasNext())
@@ -356,7 +456,7 @@ public class Controlador implements ActionListener
 			if(elemento.getTipo().compareTo(tipo)==0)
 			{
 				Object[] fila = {elemento.getNombre(), elemento.getPrecio()};
-				this.menu.getModel().addRow(fila);			
+				this.ventanamenu.getModel().addRow(fila);			
 			}
 		}
 	}
@@ -365,13 +465,26 @@ public class Controlador implements ActionListener
 		this.ventanaEditarProveedor.getModel().setRowCount(0);
 		this.ventanaEditarProveedor.getModel().setColumnCount(0);
 		this.ventanaEditarProveedor.getModel().setColumnIdentifiers(this.ventanaEditarProveedor.getNombreColumnasProveedor());
-		//System.out.println(proveedor.obtenerProveedor().toString());
 		Iterator<ProveedorDTO> Iterador = this.proveedor.obtenerProveedor().iterator();
 		while(Iterador.hasNext())
 		{
 			ProveedorDTO elemento = Iterador.next();
 			Object[] fila = {elemento.getNombre()};
 			this.ventanaEditarProveedor.getModel().addRow(fila);			
+		}
+	}
+	
+	private void llenarTablaRepartidor()
+	{
+		this.ventanaEditarRepartidor.getModel().setRowCount(0);
+		this.ventanaEditarRepartidor.getModel().setColumnCount(0);
+		this.ventanaEditarRepartidor.getModel().setColumnIdentifiers(this.ventanaEditarRepartidor.getNombreColumnasRepartidor());
+		Iterator<RepartidorDTO> Iterador = this.repartidor.obtenerRepartidores().iterator();
+		while(Iterador.hasNext())
+		{
+			RepartidorDTO elemento = Iterador.next();
+			Object[] fila = {elemento.getDni(), elemento.getNombre(), elemento.getApellido()};
+			this.ventanaEditarRepartidor.getModel().addRow(fila);			
 		}
 	}
 }

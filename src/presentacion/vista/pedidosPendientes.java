@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -33,6 +34,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class pedidosPendientes extends JDialog {
 
@@ -74,13 +77,14 @@ public class pedidosPendientes extends JDialog {
 		contentPanel.add(scrollPane);
 
 		
-		table = new JTable();
-		//evento para mostrar los botones resaltados en verde
-		/*table.addMouseListener(new MouseAdapter() {
+		table = new JTable(){
+		 public boolean isCellEditable(int rowIndex, int colIndex) {
+	        return false;
+	    }};
+		table.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println(numFilaSeleccionada);
-				System.out.println(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
+			public void mousePressed(MouseEvent e) {
+				numFilaSeleccionada=table.getSelectedRow();
 				PedidoDTO pedido=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
 				if (pedido.get_estado().compareTo("solicitado")==0)
 				{
@@ -90,6 +94,7 @@ public class pedidosPendientes extends JDialog {
 					lAsignarRepartidor.setVisible(false);
 					lCobroACliente.setVisible(false);
 					lCobroADelivery.setVisible(false);
+					
 				}
 				else if (pedido.get_estado().compareTo("preparado")==0)
 				{
@@ -100,7 +105,7 @@ public class pedidosPendientes extends JDialog {
 					if(pedido.getLlevaDelivery())
 					{
 						lAsignarRepartidor.setVisible(true);
-						lCobroADelivery.setVisible(true);
+						lCobroADelivery.setVisible(true);	
 						
 					}
 					else
@@ -119,10 +124,8 @@ public class pedidosPendientes extends JDialog {
 					lCobroACliente.setVisible(false);
 					lCobroADelivery.setVisible(false);
 				}
-				else 
-					System.out.println("no funca");
 			}
-		});*/
+		});
 		scrollPane.setRowHeaderView(table);
 		scrollPane.setViewportView(table);
 		
@@ -180,7 +183,7 @@ public class pedidosPendientes extends JDialog {
 				}
 			});
 			btnCancelar.setOpaque(false);
-			btnCancelar.setBounds(229, 535, 221, 34);
+			btnCancelar.setBounds(255, 530, 152, 34);
 			contentPanel.add(btnCancelar);
 			btnCancelar.setActionCommand("Cancel");
 		}
@@ -212,7 +215,7 @@ public class pedidosPendientes extends JDialog {
 				}
 			});
 			btnModificarPedido.setOpaque(false);
-			btnModificarPedido.setBounds(335, 388, 328, 40);
+			btnModificarPedido.setBounds(345, 384, 318, 40);
 			contentPanel.add(btnModificarPedido);
 		}
 		{
@@ -230,7 +233,7 @@ public class pedidosPendientes extends JDialog {
 				}
 			});
 			btnRegistrarCobroManual.setOpaque(false);
-			btnRegistrarCobroManual.setBounds(335, 450, 328, 40);
+			btnRegistrarCobroManual.setBounds(335, 448, 328, 40);
 			contentPanel.add(btnRegistrarCobroManual);
 		}
 		{
@@ -249,7 +252,7 @@ public class pedidosPendientes extends JDialog {
 			});
 			
 			btnRechazarPedido.setOpaque(false);
-			btnRechazarPedido.setBounds(335, 322, 328, 40);
+			btnRechazarPedido.setBounds(335, 324, 328, 40);
 			contentPanel.add(btnRechazarPedido);
 		}
 		{
@@ -274,7 +277,7 @@ public class pedidosPendientes extends JDialog {
 				}
 			});
 			btnRegistrarCobroPedido.setOpaque(false);
-			btnRegistrarCobroPedido.setBounds(335, 258, 328, 40);
+			btnRegistrarCobroPedido.setBounds(335, 254, 328, 40);
 			contentPanel.add(btnRegistrarCobroPedido);
 		}
 		{
@@ -289,7 +292,7 @@ public class pedidosPendientes extends JDialog {
 				}
 			});
 			btnAsignarRepartidor.setOpaque(false);
-			btnAsignarRepartidor.setBounds(335, 192, 328, 40);
+			btnAsignarRepartidor.setBounds(339, 188, 326, 40);
 			contentPanel.add(btnAsignarRepartidor);
 		}
 		{
@@ -316,7 +319,7 @@ public class pedidosPendientes extends JDialog {
 				}
 			});
 			btnMarcarComoPreparado.setOpaque(false);
-			btnMarcarComoPreparado.setBounds(335, 126, 328, 40);
+			btnMarcarComoPreparado.setBounds(335, 129, 328, 40);
 			contentPanel.add(btnMarcarComoPreparado);
 		}
 		

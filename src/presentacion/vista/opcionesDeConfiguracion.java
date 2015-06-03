@@ -21,6 +21,8 @@ public class opcionesDeConfiguracion extends JDialog {
 	private JButton btnAgregarOferta;
 	private JButton btnAgregarProveedor;
 	private JButton btnEditarProveedor;
+	private JButton btnAgregarMatPrima;
+	private JButton btnEditarMatPrima;
 
 
 	public opcionesDeConfiguracion() {
@@ -30,6 +32,14 @@ public class opcionesDeConfiguracion extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		
+		btnAgregarMatPrima = new JButton("agregarMatPrima");
+		btnAgregarMatPrima.setBounds(697, 359, 114, 23);
+		contentPanel.add(btnAgregarMatPrima);
+		
+		btnEditarMatPrima = new JButton("EditarMatPrima");
+		btnEditarMatPrima.setBounds(697, 392, 114, 23);
+		contentPanel.add(btnEditarMatPrima);
 		{
 			JLabel label = new JLabel("");
 			label.setMinimumSize(new Dimension(1000, 650));
@@ -159,5 +169,26 @@ public class opcionesDeConfiguracion extends JDialog {
 	public void setBtnEditarProveedor(JButton btnEditarProveedor) {
 		this.btnEditarProveedor = btnEditarProveedor;
 	}
+
+
+	public JButton getBtnAgregarMatPrima() {
+		return btnAgregarMatPrima;
+	}
+
+
+	public void setBtnAgregarMatPrima(JButton btnAgregarMatPrima) {
+		this.btnAgregarMatPrima = btnAgregarMatPrima;
+	}
+
+
+	public JButton getBtnEditarMatPrima() {
+		return btnEditarMatPrima;
+	}
+
+
+	public void setBtnEditarMatPrima(JButton btnEditarMatPrima) {
+		this.btnEditarMatPrima = btnEditarMatPrima;
+	}
+	
 	
 }

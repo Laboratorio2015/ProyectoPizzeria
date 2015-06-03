@@ -47,7 +47,7 @@ public class PadreMonitor {
 		Iterator<PedidoDTO> iteradorPedidos = listadoDePedidos.pedido.pedidosPendientes().iterator();
 		while(iteradorPedidos.hasNext()){
 			PedidoDTO elemento = iteradorPedidos.next();
-			System.out.print("Numero de pedido> " + elemento.getIdpedido() + "\n");
+			//System.out.print("Numero de pedido> " + elemento.getIdpedido() + "\n");
 			
 			//RECORRO AHORA EL LISTADO DE PRODUCTOS DENTRO DEL PRIMER PEDIDO
 			Iterator<ItemDTO> iteradorItem = elemento.getProductos().iterator();

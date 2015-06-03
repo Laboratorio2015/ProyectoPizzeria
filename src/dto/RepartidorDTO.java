@@ -21,6 +21,11 @@ public class RepartidorDTO
 		this.estado = estado;
 	}
 	
+	public RepartidorDTO()
+	{
+		
+	}
+	
 	public Integer getId() {
 		return id;
 	}

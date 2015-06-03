@@ -37,7 +37,6 @@ public class proveedorBajaModificacion extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable tableProveedor;
-	private JTable tableMateriaPrima;
 	private JTextField tfDenominacion;
 	private JTextField tfCategoria;
 	private JTextField tfTelefono;
@@ -57,7 +56,7 @@ public class proveedorBajaModificacion extends JDialog {
 		contentPanel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(31, 173, 203, 343);
+		scrollPane.setBounds(69, 211, 185, 244);
 		contentPanel.add(scrollPane);
 		this.control=control;
 		model = new DefaultTableModel(null,nombreColumnasProveedor);
@@ -74,69 +73,58 @@ public class proveedorBajaModificacion extends JDialog {
 			{
 				ProveedorDTO auxi=control.getProveedor().buscarProveedor(model.getValueAt(tableProveedor.getSelectedRow(), 0).toString());
 				agregarDatos(auxi);
-				llenarTablaMatPrimas(auxi);
 			}
 		});
 	    		
 		scrollPane.setViewportView(tableProveedor);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(663, 173, 260, 309);
-		contentPanel.add(scrollPane_1);
-		
-		tableMateriaPrima = new JTable(model1)
-		{public boolean isCellEditable(int rowIndex, int colIndex) {
-	        return false; //desabilita la edicion de las celdas
-	    }};
-		scrollPane_1.setViewportView(tableMateriaPrima);
-		
 		tfDenominacion = new JTextField();
-		tfDenominacion.setBounds(461, 205, 174, 22);
+		tfDenominacion.setBounds(468, 233, 174, 22);
 		contentPanel.add(tfDenominacion);
 		tfDenominacion.setColumns(10);
 		
 		tfCategoria = new JTextField();
 		tfCategoria.setColumns(10);
-		tfCategoria.setBounds(460, 240, 174, 22);
+		tfCategoria.setBounds(468, 269, 174, 22);
 		contentPanel.add(tfCategoria);
 		
 		tfTelefono = new JTextField();
 		tfTelefono.setColumns(10);
-		tfTelefono.setBounds(460, 276, 174, 22);
+		tfTelefono.setBounds(468, 306, 174, 22);
 		contentPanel.add(tfTelefono);
 		
 		tfEmail = new JTextField();
 		tfEmail.setColumns(10);
-		tfEmail.setBounds(460, 315, 174, 22);
+		tfEmail.setBounds(468, 343, 174, 22);
 		contentPanel.add(tfEmail);
 		
 		tfDireccion = new JTextField();
 		tfDireccion.setColumns(10);
-		tfDireccion.setBounds(461, 353, 174, 20);
+		tfDireccion.setBounds(468, 381, 174, 20);
 		contentPanel.add(tfDireccion);
 		
 		JLabel label_1 = new JLabel("Direccion");
 		label_1.setForeground(Color.WHITE);
 		label_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		label_1.setBounds(349, 356, 93, 14);
+		label_1.setBounds(353, 382, 93, 14);
 		contentPanel.add(label_1);
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(proveedorBajaModificacion.class.getResource("/prototipos/baja-modif de Proveedor.png")));
-		label.setBounds(10, 11, 950, 600);
+		label.setBounds(0, 0, 960, 599);
 		contentPanel.add(label);
 		{
-			JButton okButton = new JButton("OK");
-			okButton.setOpaque(false);
-			okButton.setBounds(466, 547, 151, 36);
-			contentPanel.add(okButton);
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
+			JButton btnFinalizar = new JButton("OK");
+			btnFinalizar.setOpaque(false);
+			btnFinalizar.setBounds(442, 525, 151, 36);
+			contentPanel.add(btnFinalizar);
+			btnFinalizar.setActionCommand("OK");
+			getRootPane().setDefaultButton(btnFinalizar);
 		}
 		{
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setOpaque(false);
-			cancelButton.setBounds(662, 547, 151, 35);
+			cancelButton.setBounds(36, 482, 53, 49);
 			contentPanel.add(cancelButton);
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
@@ -147,7 +135,7 @@ public class proveedorBajaModificacion extends JDialog {
 		
 		JButton btnNewButton = new JButton("New button");
 		btnNewButton.setOpaque(false);
-		btnNewButton.setBounds(244, 264, 53, 49);
+		btnNewButton.setBounds(382, 420, 64, 49);
 		contentPanel.add(btnNewButton);
 	}
 
@@ -159,13 +147,6 @@ public class proveedorBajaModificacion extends JDialog {
 		this.tableProveedor = tableProveedor;
 	}
 
-	public JTable getTableMateriaPrima() {
-		return tableMateriaPrima;
-	}
-
-	public void setTableMateriaPrima(JTable tableMateriaPrima) {
-		this.tableMateriaPrima = tableMateriaPrima;
-	}
 
 	public JTextField getTfDenominacion() {
 		return tfDenominacion;
@@ -249,21 +230,5 @@ public class proveedorBajaModificacion extends JDialog {
 		tfEmail.setText(aux.getEmail());
 		tfTelefono.setText(aux.getTelefono());
 	}
-	private void llenarTablaMatPrimas(ProveedorDTO aux) 
-	{
-		System.out.println(aux.getMateriasProvistas().toString());
-		model1.setRowCount(0); //Para vaciar la tabla
-		model1.setColumnCount(0);
-		model1.setColumnIdentifiers(nombreColumnasMatPrimas);
-		
-	 	Iterator<MateriaPrimaDTO> Iterador = aux.getMateriasProvistas().iterator();
-		while(Iterador.hasNext())
-		{
-			MateriaPrimaDTO elemento = Iterador.next();
-			Object[] fila = {elemento.getNombre()};
-			model1.addRow(fila);	
-		}
-		
-		tableMateriaPrima=new JTable(model1);
-	}
+	
 }

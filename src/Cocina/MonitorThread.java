@@ -82,7 +82,6 @@ public class MonitorThread extends Thread {
 			while(iteradorItem.hasNext())
 			{										 //// RECORRO LOS items
 				ItemDTO elementoItem = iteradorItem.next(); /////
-				System.out.println(elementoItem);
 				visor1.setText(visor1.getText() + elementoItem.getProducto().getNombre() + " Cantidad: " + elementoItem.getCantidad() + "\n");
 			}
 		}

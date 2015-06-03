@@ -11,6 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import presentacion.controlador.Controlador;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -21,20 +24,25 @@ public class pedidoMenu extends JDialog {
 	private JTable table;
 	private DefaultTableModel model;
 	private  String[] nombreColumnas = {"Nombre","Precio"};
+	private JButton btnSeleccionar;
+	private Controlador control;
+	private ordenDePedido padre;
 
-	public pedidoMenu()
+	public pedidoMenu(Controlador control, ordenDePedido padre)
 	{
 		setModal(true);
-		setMinimumSize(new Dimension(500, 500));
-		setBounds(100, 100, 517, 500);
+		setMinimumSize(new Dimension(200, 200));
+		setBounds(100, 100, 347, 540);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setMinimumSize(new Dimension(500, 500));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		this.control=control;
+		this.padre=padre;
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 76, 481, 328);
+		scrollPane.setBounds(47, 102, 244, 302);
 		contentPanel.add(scrollPane);
 		
 		model = new DefaultTableModel(null,nombreColumnas);
@@ -47,20 +55,14 @@ public class pedidoMenu extends JDialog {
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		lblNewLabel.setIcon(new ImageIcon(pedidoMenu.class.getResource("/prototipos/verMenu.png")));
-		lblNewLabel.setBounds(0, 0, 501, 461);
+		lblNewLabel.setBounds(0, 0, 333, 501);
 		contentPanel.add(lblNewLabel);
 		{
-			JButton cancelButton = new JButton("Cancel");
-			cancelButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0)
-				{
-					dispose();
-				}
-			});
-			cancelButton.setOpaque(false);
-			cancelButton.setBounds(151, 415, 173, 35);
-			contentPanel.add(cancelButton);
-			cancelButton.setActionCommand("Cancel");
+			btnSeleccionar= new JButton("Cancel");
+			btnSeleccionar.setOpaque(false);
+			btnSeleccionar.setBounds(96, 431, 143, 23);
+			contentPanel.add(btnSeleccionar);
+			btnSeleccionar.setActionCommand("Cancel");
 		}
 	}
 	
@@ -75,4 +77,13 @@ public class pedidoMenu extends JDialog {
 	public DefaultTableModel getModel() {
 		return model;
 	}
+
+	public JButton getBtnSeleccionar() {
+		return btnSeleccionar;
+	}
+
+	public void setBtnSeleccionar(JButton btnSeleccionar) {
+		this.btnSeleccionar = btnSeleccionar;
+	}
+	
 }
