@@ -75,18 +75,8 @@ public class ordenDePedido extends JDialog {
 	private JTextField tfSubTotalPromocion;
 	private JTextField tfPrecioUniPromocion;
 	
-	
-	
-	
-	public VentanaPrincipal get_padre() 
-	{
-		return _padre;
-	}
 
 
-	/**
-	 * @wbp.parser.constructor
-	 */
 	public ordenDePedido(VentanaPrincipal padre,final Controlador control) 
 	{
 		setModal(true);
@@ -523,7 +513,10 @@ public class ordenDePedido extends JDialog {
 				btnVerOtros.setBounds(17, 333, 40, 23);
 				contentPanel.add(btnVerOtros);
 		}
-	
+	public VentanaPrincipal get_padre() 
+	{
+		return _padre;
+	}
 	//se agrega el siguiente constructor para la modificacion de pedidos
 	public ordenDePedido(VentanaPrincipal padre,final PedidoDTO pedidoCambiar,final Controlador control) 
 	{
