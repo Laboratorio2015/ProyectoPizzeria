@@ -65,7 +65,7 @@ public class repartidorAlta extends JDialog {
 		}
 		{
 			btnCalendario= new JButton("");
-			btnCalendario.setIcon(new ImageIcon(repartidorAlta.class.getResource("/prototipos/Botones/calendario.gif")));
+			btnCalendario.setIcon(new ImageIcon(repartidorAlta.class.getResource("/Botones/calendario.gif")));
 			btnCalendario.setBounds(605, 209, 40, 34);
 			contentPanel.add(btnCalendario);
 		}
