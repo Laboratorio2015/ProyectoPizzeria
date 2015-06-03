@@ -13,7 +13,7 @@ import conexion.Conexion;
 
 public class ClienteDAO 
 {
-	private static final String insert = "INSERT INTO clientes(dni, nombre,apellido, direccion, telefono,piso,departamento) VALUES(?, ?, ?, ?, ?,?,?)";
+	private static final String insert = "INSERT INTO clientes(dni, nombre,apellido, calle, numeracion,entrecalle1,entrecalle2,codpostal,email) VALUES(?,?,?, ?, ?, ?, ?,?,?)";
 	private static final String delete = "DELETE FROM clientes WHERE dni = ?";
 	private static final String readall = "SELECT * FROM clientes";
 	private static final Conexion conexion = Conexion.getConexion();
@@ -27,10 +27,12 @@ public class ClienteDAO
 			statement.setInt(1, cliente.getDni());
 			statement.setString(2, cliente.getNombre());
 			statement.setString(3, cliente.getApellido());
-			statement.setString(4, cliente.getDireccion());
-			statement.setString(5,cliente.getTelefono());
-			statement.setString(6, cliente.getPiso());
-			statement.setString(7, cliente.getDepto());
+			statement.setString(4, cliente.getCalle());
+			statement.setString(5,cliente.getNumeracion());
+			statement.setString(6, cliente.getEntrecalle1());
+			statement.setString(7, cliente.getEntrecalle2());
+			statement.setString(8, cliente.getCodPostal());
+			statement.setString(9, cliente.getEmail());
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
 			{
@@ -90,8 +92,8 @@ public class ClienteDAO
 			while(resultSet.next())
 			{
 				clientes.add(new ClienteDTO(resultSet.getInt("dni"), resultSet.getString("nombre"),
-				resultSet.getString("apellido"),resultSet.getString("direccion"),resultSet.getString("telefono"),
-				resultSet.getString("piso"), resultSet.getString("departamento")));
+				resultSet.getString("apellido"),resultSet.getString("calle"),resultSet.getString("numeracion"),
+				resultSet.getString("entrecalle1"), resultSet.getString("entrecalle2"), resultSet.getString("codpostal"), resultSet.getString("email")));
 			}
 		} 
 		catch (SQLException e) 

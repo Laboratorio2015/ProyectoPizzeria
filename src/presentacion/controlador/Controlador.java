@@ -63,6 +63,7 @@ public class Controlador implements ActionListener
 	private registroDeCliente ventanaRegCliente;
 	private PadreMonitor monitorCocina;
 	private pedidoMenu ventanamenu;
+	private registroDeCliente ventanaRegistrarCliente;
 	
 	//dto
 	private List<PedidoDTO> listaPedidos;
@@ -302,6 +303,31 @@ public class Controlador implements ActionListener
 			rep.setEstado(null);
 			repartidor.agregarRepartidor(rep);
 			ventanaAgregarRepartidor.dispose();
+		}
+		
+		//dar de alta a cliente
+		else if (this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnAgregarCliente())
+		{
+			ventanaRegistrarCliente=new registroDeCliente(ventanaCliente, this);
+			ventanaRegistrarCliente.setVisible(true);
+		}
+		
+		//editar cliente
+		else if(this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnEditarCliente())
+		{
+			if(ventanaCliente.getTfAgregarDNI().getText()!= " ")
+			ventanaRegistrarCliente=new registroDeCliente(ventanaCliente, this);
+			ClienteDTO aux=cliente.buscarCliente(Integer.parseInt(ventanaCliente.getTfAgregarDNI().getText().toString()));
+			ventanaRegistrarCliente.getTfdni().setText(aux.getDni().toString());
+			ventanaRegistrarCliente.getTfNombre().setText(aux.getNombre());
+			ventanaRegistrarCliente.getTfApellido().setText(aux.getApellido());
+			ventanaRegistrarCliente.getTfCalle().setText(aux.getCalle());
+			ventanaRegistrarCliente.getTfNumeracion().setText(aux.getNumeracion());
+			ventanaRegistrarCliente.getTfEntreCalle1().setText(aux.getEntrecalle1());
+			ventanaRegistrarCliente.getTfEntreCalle2().setText(aux.getEntrecalle2());
+			ventanaRegistrarCliente.getTfCodPostal().setText(aux.getCodPostal());
+			ventanaRegistrarCliente.getTfEmail().setText(aux.getEmail());
+			ventanaRegistrarCliente.setVisible(true);
 		}
 	}
 	

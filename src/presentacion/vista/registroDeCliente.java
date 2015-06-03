@@ -14,6 +14,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 
+import presentacion.controlador.Controlador;
+
 public class registroDeCliente extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -23,15 +25,19 @@ public class registroDeCliente extends JDialog {
 	private JTextField tfNombre;
 	private JTextField tfApellido;
 	private JTextField tfCalle;
-	private JTextField tfPiso;
-	private JTextField tfDepartamento;
+	private JTextField tfEntreCalle1;
+	private JTextField tfEntreCalle2;
 	private JTextField tfNumeracion;
-	private JTextField tfTelefono;
+	private JTextField tfCodPostal;
+	private Controlador control;
+	private JTextField tfEmail;
+	private JButton btnRegistrar;
 	
-	public registroDeCliente(seleccionDeCliente padre)
+	public registroDeCliente(seleccionDeCliente padre, Controlador control)
 	{
 		setModal(true);
 		padre=_padre;
+		this.control=control;
 		_this=this;
 		setMinimumSize(new Dimension(700, 600));
 		setBounds(100, 100, 450, 300);
@@ -57,28 +63,33 @@ public class registroDeCliente extends JDialog {
 		
 		tfCalle = new JTextField();
 		tfCalle.setColumns(10);
-		tfCalle.setBounds(152, 347, 173, 22);
+		tfCalle.setBounds(152, 344, 173, 22);
 		contentPanel.add(tfCalle);
 		
-		tfPiso = new JTextField();
-		tfPiso.setColumns(10);
-		tfPiso.setBounds(153, 387, 173, 22);
-		contentPanel.add(tfPiso);
+		tfEntreCalle1 = new JTextField();
+		tfEntreCalle1.setColumns(10);
+		tfEntreCalle1.setBounds(151, 380, 173, 22);
+		contentPanel.add(tfEntreCalle1);
 		
-		tfDepartamento = new JTextField();
-		tfDepartamento.setColumns(10);
-		tfDepartamento.setBounds(154, 426, 173, 22);
-		contentPanel.add(tfDepartamento);
+		tfEntreCalle2 = new JTextField();
+		tfEntreCalle2.setColumns(10);
+		tfEntreCalle2.setBounds(151, 416, 173, 22);
+		contentPanel.add(tfEntreCalle2);
 		
 		tfNumeracion = new JTextField();
 		tfNumeracion.setColumns(10);
-		tfNumeracion.setBounds(470, 346, 173, 22);
+		tfNumeracion.setBounds(464, 343, 173, 22);
 		contentPanel.add(tfNumeracion);
 		
-		tfTelefono = new JTextField();
-		tfTelefono.setColumns(10);
-		tfTelefono.setBounds(472, 388, 173, 22);
-		contentPanel.add(tfTelefono);
+		tfCodPostal = new JTextField();
+		tfCodPostal.setColumns(10);
+		tfCodPostal.setBounds(463, 379, 173, 22);
+		contentPanel.add(tfCodPostal);
+		
+		tfEmail = new JTextField();
+		tfEmail.setColumns(10);
+		tfEmail.setBounds(463, 415, 173, 22);
+		contentPanel.add(tfEmail);
 		{
 			JLabel label = new JLabel("");
 			label.setBounds(0, 0, 684, 600);
@@ -86,15 +97,7 @@ public class registroDeCliente extends JDialog {
 			label.setIcon(new ImageIcon(registroDeCliente.class.getResource("/prototipos/registro de cliente.png")));
 		}
 		{
-			JButton btnRegistrar = new JButton("Registrar");
-			btnRegistrar.addMouseListener(new MouseAdapter() 
-			{
-				@Override
-				public void mouseClicked(MouseEvent arg0) 
-				{
-					dispose();
-				}
-			});
+			btnRegistrar= new JButton("Registrar");
 			btnRegistrar.setOpaque(false);
 			btnRegistrar.setBounds(181, 520, 198, 34);
 			contentPanel.add(btnRegistrar);
@@ -117,4 +120,77 @@ public class registroDeCliente extends JDialog {
 			btnCancelar.setActionCommand("Cancel");
 		}
 	}
+
+	public JTextField getTfdni() {
+		return tfdni;
+	}
+
+	public void setTfdni(JTextField tfdni) {
+		this.tfdni = tfdni;
+	}
+
+	public JTextField getTfNombre() {
+		return tfNombre;
+	}
+
+	public void setTfNombre(JTextField tfNombre) {
+		this.tfNombre = tfNombre;
+	}
+
+	public JTextField getTfApellido() {
+		return tfApellido;
+	}
+
+	public void setTfApellido(JTextField tfApellido) {
+		this.tfApellido = tfApellido;
+	}
+
+	public JTextField getTfCalle() {
+		return tfCalle;
+	}
+
+	public void setTfCalle(JTextField tfCalle) {
+		this.tfCalle = tfCalle;
+	}
+
+	public JTextField getTfEntreCalle1() {
+		return tfEntreCalle1;
+	}
+
+	public void setTfEntreCalle1(JTextField tfEntreCalle1) {
+		this.tfEntreCalle1 = tfEntreCalle1;
+	}
+
+	public JTextField getTfEntreCalle2() {
+		return tfEntreCalle2;
+	}
+
+	public void setTfEntreCalle2(JTextField tfEntreCalle2) {
+		this.tfEntreCalle2 = tfEntreCalle2;
+	}
+
+	public JTextField getTfNumeracion() {
+		return tfNumeracion;
+	}
+
+	public void setTfNumeracion(JTextField tfNumeracion) {
+		this.tfNumeracion = tfNumeracion;
+	}
+
+	public JTextField getTfCodPostal() {
+		return tfCodPostal;
+	}
+
+	public void setTfCodPostal(JTextField tfCodPostal) {
+		this.tfCodPostal = tfCodPostal;
+	}
+
+	public JTextField getTfEmail() {
+		return tfEmail;
+	}
+
+	public void setTfEmail(JTextField tfEmail) {
+		this.tfEmail = tfEmail;
+	}
+	
 }

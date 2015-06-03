@@ -8,36 +8,39 @@ public class ClienteDTO
 	private Integer dni;
 	private String nombre;
 	private String apellido;
-	private String direccion;
-	private String telefono;
-	private String piso;
-	private String depto;
+	private String calle;
+	private String numeracion;
+	private String entrecalle1;
+	private String entrecalle2;
+	private String codPostal;
+	private String email;
 	
-	public ClienteDTO(Integer documento, String nombr, String apellid, String direccio, String telefon, String piso, String depto)
+	public ClienteDTO(Integer documento, String nombr, String apellid, String direccio, String numeracion, String entrecalle1, String entrecalle2, String codPostal, String email)
 	{
 		dni=documento;
 		nombre=nombr;
 		apellido=apellid;
-		direccion=direccio;
-		telefono=telefon;
-		this.piso=piso;
-		this.depto=depto;
+		calle=direccio;
+		this.numeracion=numeracion;
+		this.entrecalle1=entrecalle1;
+		this.codPostal=codPostal;
+		this.email=email;
 	}
 	
 	public String getPiso() {
-		return piso;
+		return entrecalle1;
 	}
 
 	public void setPiso(String piso) {
-		this.piso = piso;
+		this.entrecalle1 = piso;
 	}
 
 	public String getDepto() {
-		return depto;
+		return entrecalle2;
 	}
 
 	public void setDepto(String depto) {
-		this.depto = depto;
+		this.entrecalle2 = depto;
 	}
 
 	public Integer getDni() {
@@ -65,25 +68,74 @@ public class ClienteDTO
 	}
 	public String getDireccion() 
 	{
-		return direccion;
+		return calle;
 	}
 	public void setDireccion(String direccion) 
 	{
-		this.direccion = direccion;
+		this.calle = direccion;
 	}
 	public String getTelefono() 
 	{
-		return telefono;
+		return numeracion;
 	}
 	public void setTelefono(String telefono)
 	{
-		this.telefono = telefono;
+		this.numeracion = telefono;
 	}
 	
+	
+	public String getCalle() {
+		return calle;
+	}
+
+	public void setCalle(String calle) {
+		this.calle = calle;
+	}
+
+	public String getNumeracion() {
+		return numeracion;
+	}
+
+	public void setNumeracion(String numeracion) {
+		this.numeracion = numeracion;
+	}
+
+	public String getEntrecalle1() {
+		return entrecalle1;
+	}
+
+	public void setEntrecalle1(String entrecalle1) {
+		this.entrecalle1 = entrecalle1;
+	}
+
+	public String getEntrecalle2() {
+		return entrecalle2;
+	}
+
+	public void setEntrecalle2(String entrecalle2) {
+		this.entrecalle2 = entrecalle2;
+	}
+
+	public String getCodPostal() {
+		return codPostal;
+	}
+
+	public void setCodPostal(String codPostal) {
+		this.codPostal = codPostal;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString()
 	{
-		return (this.nombre+"  "+ this.apellido+"  "+  this.direccion+"  "+ this.telefono);
+		return (this.nombre+"  "+ this.apellido+"  "+  this.calle+"  "+ this.numeracion);
 	}
 
 	public static ClienteDTO buscarCliente(List<ClienteDTO> listaClientes, Integer dni)

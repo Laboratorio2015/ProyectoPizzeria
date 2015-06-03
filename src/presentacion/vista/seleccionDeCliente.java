@@ -43,6 +43,8 @@ public class seleccionDeCliente extends JDialog {
 	private JTextField tfNombrApellido;
 	private JTextField tfDireccionTelefono;
 	private JButton btnSeleccionar;
+	private JButton btnEditarCliente;
+	private JButton btnAgregarCliente;
 	private Controlador control;
 	private Comanda comanda=new Comanda();
 	public seleccionDeCliente(final Controlador control, PedidoDTO pedido)
@@ -143,32 +145,13 @@ public class seleccionDeCliente extends JDialog {
 			btnCancelar.setActionCommand("Cancel");
 		}
 		{
-			JButton btnAgregarCliente = new JButton("New button");
-			btnAgregarCliente.addMouseListener(new MouseAdapter() 
-			{
-				@Override
-				public void mouseClicked(MouseEvent arg0) 
-				{
-					registroDeCliente registrarCliente=new registroDeCliente(_this);
-					registrarCliente.setVisible(true);
-					
-				}
-			});
+			btnAgregarCliente= new JButton("New button");
 			btnAgregarCliente.setOpaque(false);
 			btnAgregarCliente.setBounds(287, 330, 82, 85);
 			contentPanel.add(btnAgregarCliente);
 		}
 		{
-			JButton btnEditarCliente = new JButton("New button");
-			btnEditarCliente.addMouseListener(new MouseAdapter() 
-			{
-				@Override
-				public void mouseClicked(MouseEvent arg0) 
-				{
-					registroDeCliente registrarCliente=new registroDeCliente(_this);
-					registrarCliente.setVisible(true);
-				}
-			});
+			btnEditarCliente= new JButton("New button");
 			btnEditarCliente.setOpaque(false);
 			btnEditarCliente.setBounds(571, 114, 78, 29);
 			contentPanel.add(btnEditarCliente);
@@ -183,13 +166,47 @@ public class seleccionDeCliente extends JDialog {
 		return contentPanel;
 	}
 
-
-
 	public ordenDePedido get_padre() {
 		return _padre;
 	}
 
+	public JButton getBtnEditarCliente() {
+		return btnEditarCliente;
+	}
 
+	public void setBtnEditarCliente(JButton btnEditarCliente) {
+		this.btnEditarCliente = btnEditarCliente;
+	}
+
+	public JButton getBtnAgregarCliente() {
+		return btnAgregarCliente;
+	}
+
+
+
+	public void setBtnAgregarCliente(JButton btnAgregarCliente) {
+		this.btnAgregarCliente = btnAgregarCliente;
+	}
+
+
+
+	public void setTfAgregarDNI(JTextField tfAgregarDNI) {
+		this.tfAgregarDNI = tfAgregarDNI;
+	}
+
+
+
+	public void setTfNombrApellido(JTextField tfNombrApellido) {
+		this.tfNombrApellido = tfNombrApellido;
+	}
+
+	public void setTfDireccionTelefono(JTextField tfDireccionTelefono) {
+		this.tfDireccionTelefono = tfDireccionTelefono;
+	}
+
+	public void setBtnSeleccionar(JButton btnSeleccionar) {
+		this.btnSeleccionar = btnSeleccionar;
+	}
 
 	public PedidoDTO getPedido() {
 		return pedido;
