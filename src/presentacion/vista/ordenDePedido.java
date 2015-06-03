@@ -77,6 +77,9 @@ public class ordenDePedido extends JDialog {
 	
 
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ordenDePedido(VentanaPrincipal padre,final Controlador control) 
 	{
 		setModal(true);

@@ -20,6 +20,7 @@ import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JComboBox;
 
 public class ordenarMatPrima extends JDialog {
 
@@ -29,7 +30,6 @@ public class ordenarMatPrima extends JDialog {
 	private JTextField txFieldBuscarProveedor;
 	private JTextField textFieldBusquedaMatPrima;
 	private JTextField textFieldCantMatPrima;
-	private JTextField textField_1;
 	private JTextField txtFieldCategProveed;
 	private JTextField textFieldTelProveed;
 	private JTextField textFieldDireccProveed;
@@ -61,22 +61,17 @@ public class ordenarMatPrima extends JDialog {
 		
 		textFieldBusquedaMatPrima = new JTextField();
 		textFieldBusquedaMatPrima.setBackground(Color.LIGHT_GRAY);
-		textFieldBusquedaMatPrima.setBounds(120, 278, 299, 25);
+		textFieldBusquedaMatPrima.setBounds(100, 319, 311, 25);
 		contentPanel.add(textFieldBusquedaMatPrima);
 		textFieldBusquedaMatPrima.setColumns(10);
 		
 		textFieldCantMatPrima = new JTextField();
-		textFieldCantMatPrima.setBounds(506, 278, 46, 25);
+		textFieldCantMatPrima.setBounds(427, 319, 55, 25);
 		contentPanel.add(textFieldCantMatPrima);
 		textFieldCantMatPrima.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(506, 283, 46, 20);
-		contentPanel.add(textField_1);
-		textField_1.setColumns(10);
-		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(109, 392, 526, 126);
+		scrollPane.setBounds(120, 405, 526, 114);
 		contentPanel.add(scrollPane);
 		
 		tablaListaMatPrima = new JTable();
@@ -99,11 +94,15 @@ public class ordenarMatPrima extends JDialog {
 		tablaListaMatPrima.setModel(modeloMatPrima);
 		scrollPane.setViewportView(tablaListaMatPrima);
 		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(100, 272, 301, 25);
+		contentPanel.add(comboBox);
+		
 		JLabel label = new JLabel("");
 		label.setOpaque(true);
 		label.setBounds(0, 0, 684, 600);
 		contentPanel.add(label);
-		label.setIcon(new ImageIcon(ordenarMatPrima.class.getResource("/prototipos/orden de materia prima.png")));
+		label.setIcon(new ImageIcon("C:\\Users\\Yanina\\Documents\\Elab de constr de Soft\\tp pizzeria\\Gui\\Recursos\\Editados\\Ventanas\\orden de materia prima.png"));
 		{
 			JButton okButton = new JButton("OK");
 			okButton.setOpaque(false);
@@ -161,11 +160,11 @@ public class ordenarMatPrima extends JDialog {
 		contentPanel.add(buttonGuardarOrden);
 		
 		buttonSeleccProveed = new JButton("");
-		buttonSeleccProveed.setBounds(595, 136, 33, 38);
+		buttonSeleccProveed.setBounds(624, 135, 33, 38);
 		contentPanel.add(buttonSeleccProveed);
 		
 		buttonAgregarMatPrima = new JButton("");
-		buttonAgregarMatPrima.setBounds(595, 274, 33, 38);
+		buttonAgregarMatPrima.setBounds(555, 295, 33, 38);
 		contentPanel.add(buttonAgregarMatPrima);
 		
 		buttonQuitarMatPrimaSeleccionada = new JButton("");
