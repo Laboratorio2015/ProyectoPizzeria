@@ -192,5 +192,13 @@ public class registroDeCliente extends JDialog {
 	public void setTfEmail(JTextField tfEmail) {
 		this.tfEmail = tfEmail;
 	}
+
+	public JButton getBtnRegistrar() {
+		return btnRegistrar;
+	}
+
+	public void setBtnRegistrar(JButton btnRegistrar) {
+		this.btnRegistrar = btnRegistrar;
+	}
 	
 }

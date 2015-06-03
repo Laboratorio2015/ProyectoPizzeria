@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import Cocina.PadreMonitor;
 import modelo.Clientes;
 import modelo.Items;
@@ -60,7 +63,6 @@ public class Controlador implements ActionListener
 	private registrarCobroDePedido ventanaRegCobroPedido;
 	private registrarCobroManualmente ventanaRegCobroManual;
 	private seleccionarRepartidor ventanaSeleccionRepartidor;
-	private registroDeCliente ventanaRegCliente;
 	private PadreMonitor monitorCocina;
 	private pedidoMenu ventanamenu;
 	private registroDeCliente ventanaRegistrarCliente;
@@ -162,6 +164,8 @@ public class Controlador implements ActionListener
 			nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 			nuevoPedido.setProductos(generarListaItems());
 			this.ventanaCliente=new seleccionDeCliente(this,nuevoPedido);
+			this.ventanaCliente.getBtnAgregarCliente().addActionListener(this);
+			this.ventanaCliente.getBtnEditarCliente().addActionListener(this);
 			this.ventanaCliente.setVisible(true);
 			vaciarFormulario();
 			this.ventanaPedido.dispose();
@@ -305,29 +309,53 @@ public class Controlador implements ActionListener
 			ventanaAgregarRepartidor.dispose();
 		}
 		
-		//dar de alta a cliente
+		//generar ventana para dar de alta a cliente
 		else if (this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnAgregarCliente())
 		{
-			ventanaRegistrarCliente=new registroDeCliente(ventanaCliente, this);
+			ventanaRegistrarCliente= new registroDeCliente(ventanaCliente, this);
+			ventanaRegistrarCliente.getBtnRegistrar().addActionListener(this);
 			ventanaRegistrarCliente.setVisible(true);
 		}
+		//dar de alta a cliente
+				else if (this.ventanaRegistrarCliente!= null && e.getSource()==this.ventanaRegistrarCliente.getBtnRegistrar())
+				{
+					ClienteDTO nuevo= new ClienteDTO();
+					nuevo.setDni(Integer.parseInt(ventanaRegistrarCliente.getTfdni().getText().toString()));
+					nuevo.setApellido(ventanaRegistrarCliente.getTfApellido().toString());
+					nuevo.setNombre(ventanaRegistrarCliente.getTfNombre().toString());
+					nuevo.setCalle(ventanaRegistrarCliente.getTfCalle().toString());
+					nuevo.setNumeracion(ventanaRegistrarCliente.getTfNumeracion().toString());
+					nuevo.setEntrecalle1(ventanaRegistrarCliente.getTfEntreCalle1().toString());
+					nuevo.setEntrecalle2(ventanaRegistrarCliente.getTfEntreCalle2().toString());
+					nuevo.setCodPostal(ventanaRegistrarCliente.getTfCodPostal().toString());
+					nuevo.setEmail(ventanaRegistrarCliente.getTfEmail().toString());
+					cliente.agregarCliente(nuevo);
+					ventanaCliente.getTfAgregarDNI().setText(nuevo.getDni().toString());
+					ventanaCliente.getTfDireccionTelefono().setText(nuevo.getCalle()+" "+nuevo.getNumeracion());
+					ventanaCliente.getTfNombrApellido().setText(nuevo.getNombre()+" "+ nuevo.getApellido());
+					ventanaRegistrarCliente.dispose();
+				}
 		
 		//editar cliente
 		else if(this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnEditarCliente())
 		{
-			if(ventanaCliente.getTfAgregarDNI().getText()!= " ")
-			ventanaRegistrarCliente=new registroDeCliente(ventanaCliente, this);
-			ClienteDTO aux=cliente.buscarCliente(Integer.parseInt(ventanaCliente.getTfAgregarDNI().getText().toString()));
-			ventanaRegistrarCliente.getTfdni().setText(aux.getDni().toString());
-			ventanaRegistrarCliente.getTfNombre().setText(aux.getNombre());
-			ventanaRegistrarCliente.getTfApellido().setText(aux.getApellido());
-			ventanaRegistrarCliente.getTfCalle().setText(aux.getCalle());
-			ventanaRegistrarCliente.getTfNumeracion().setText(aux.getNumeracion());
-			ventanaRegistrarCliente.getTfEntreCalle1().setText(aux.getEntrecalle1());
-			ventanaRegistrarCliente.getTfEntreCalle2().setText(aux.getEntrecalle2());
-			ventanaRegistrarCliente.getTfCodPostal().setText(aux.getCodPostal());
-			ventanaRegistrarCliente.getTfEmail().setText(aux.getEmail());
-			ventanaRegistrarCliente.setVisible(true);
+			if(ventanaCliente.getTfAgregarDNI().getText().length()>7)
+			{
+				ventanaRegistrarCliente=new registroDeCliente(ventanaCliente, this);
+				ClienteDTO aux=cliente.buscarCliente(Integer.parseInt(ventanaCliente.getTfAgregarDNI().getText().toString()));
+				ventanaRegistrarCliente.getTfdni().setText(aux.getDni().toString());
+				ventanaRegistrarCliente.getTfNombre().setText(aux.getNombre());
+				ventanaRegistrarCliente.getTfApellido().setText(aux.getApellido());
+				ventanaRegistrarCliente.getTfCalle().setText(aux.getCalle());
+				ventanaRegistrarCliente.getTfNumeracion().setText(aux.getNumeracion());
+				ventanaRegistrarCliente.getTfEntreCalle1().setText(aux.getEntrecalle1());
+				ventanaRegistrarCliente.getTfEntreCalle2().setText(aux.getEntrecalle2());
+				ventanaRegistrarCliente.getTfCodPostal().setText(aux.getCodPostal());
+				ventanaRegistrarCliente.getTfEmail().setText(aux.getEmail());
+				ventanaRegistrarCliente.setVisible(true);
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Error el debe haber un dni registrado para poder editarlo");
 		}
 	}
 	
