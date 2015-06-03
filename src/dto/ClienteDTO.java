@@ -27,6 +27,11 @@ public class ClienteDTO
 		this.email=email;
 	}
 	
+	public ClienteDTO()
+	{
+		
+	}
+	
 	public String getPiso() {
 		return entrecalle1;
 	}
