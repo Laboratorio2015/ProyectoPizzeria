@@ -111,7 +111,7 @@ public class pedidosPendientes extends JDialog {
 					else
 					{
 						lAsignarRepartidor.setVisible(false);
-						lCobroADelivery.setVisible(true);
+						lCobroADelivery.setVisible(false);
 						
 					}
 				}
@@ -130,32 +130,32 @@ public class pedidosPendientes extends JDialog {
 		scrollPane.setViewportView(table);
 		
 		lMarcarComoPreparado= new JLabel("");
-		lMarcarComoPreparado.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/prototipos/Botones/btnMarcarPreparadoHab.png")));
+		lMarcarComoPreparado.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/Botones/btnMarcarPreparadoHab.png")));
 		lMarcarComoPreparado.setBounds(329, 124, 345, 48);
 		contentPanel.add(lMarcarComoPreparado);
 		
 		lAsignarRepartidor= new JLabel("");
-		lAsignarRepartidor.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/prototipos/Botones/btnAsignarRepartidor.png")));
+		lAsignarRepartidor.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/Botones/btnAsignarRepartidor.png")));
 		lAsignarRepartidor.setBounds(329, 184, 345, 48);
 		contentPanel.add(lAsignarRepartidor);
 		
 		lCobroACliente= new JLabel("");
-		lCobroACliente.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/prototipos/Botones/btnRecibirCobro.png")));
+		lCobroACliente.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/Botones/btnRecibirCobro.png")));
 		lCobroACliente.setBounds(318, 250, 356, 48);
 		contentPanel.add(lCobroACliente);
 		
 		lRechazarPedido= new JLabel("");
-		lRechazarPedido.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/prototipos/Botones/btnRechazarPedido.png")));
+		lRechazarPedido.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/Botones/btnRechazarPedido.png")));
 		lRechazarPedido.setBounds(296, 319, 366, 48);
 		contentPanel.add(lRechazarPedido);
 		
 		lModificarPedido= new JLabel("");
-		lModificarPedido.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/prototipos/Botones/btnModificarPedidos.png")));
+		lModificarPedido.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/Botones/btnModificarPedidos.png")));
 		lModificarPedido.setBounds(335, 380, 345, 48);
 		contentPanel.add(lModificarPedido);
 		
 		lCobroADelivery= new JLabel("");
-		lCobroADelivery.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/prototipos/Botones/cobroDelivery.png")));
+		lCobroADelivery.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/Botones/cobroDelivery.png")));
 		lCobroADelivery.setBounds(335, 442, 345, 48);
 		contentPanel.add(lCobroADelivery);
 		

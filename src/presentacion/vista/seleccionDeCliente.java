@@ -73,8 +73,8 @@ public class seleccionDeCliente extends JDialog {
 				if(tfAgregarDNI.getText().length()>7)
 				{
 				cliente=control.getCliente().buscarCliente(Integer.parseInt(tfAgregarDNI.getText()));
-				tfNombrApellido.setText("Apellido y Nombre: "+cliente.getApellido()+"  "+ cliente.getNombre());
-				tfDireccionTelefono.setText("Direccion: "+cliente.getDireccion()+"  Tel: "+cliente.getTelefono());
+				tfNombrApellido.setText("Apellido y Nombre: "+cliente.getApellido()+""+ cliente.getNombre());
+				tfDireccionTelefono.setText("Direccion: "+cliente.getDireccion()+""+cliente.getNumeracion());
 				}
 			}
 		});

@@ -208,7 +208,6 @@ public class Controlador implements ActionListener
 		}
 		else if (this.ventanamenu!= null && e.getSource()==this.ventanamenu.getBtnSeleccionar())
 		{
-			System.out.println("entro");
 			switch(ventanamenu.getTitle())
 			{
 			case("empanada"):
@@ -321,18 +320,18 @@ public class Controlador implements ActionListener
 				{
 					ClienteDTO nuevo= new ClienteDTO();
 					nuevo.setDni(Integer.parseInt(ventanaRegistrarCliente.getTfdni().getText().toString()));
-					nuevo.setApellido(ventanaRegistrarCliente.getTfApellido().toString());
-					nuevo.setNombre(ventanaRegistrarCliente.getTfNombre().toString());
-					nuevo.setCalle(ventanaRegistrarCliente.getTfCalle().toString());
-					nuevo.setNumeracion(ventanaRegistrarCliente.getTfNumeracion().toString());
-					nuevo.setEntrecalle1(ventanaRegistrarCliente.getTfEntreCalle1().toString());
-					nuevo.setEntrecalle2(ventanaRegistrarCliente.getTfEntreCalle2().toString());
-					nuevo.setCodPostal(ventanaRegistrarCliente.getTfCodPostal().toString());
-					nuevo.setEmail(ventanaRegistrarCliente.getTfEmail().toString());
+					nuevo.setApellido(ventanaRegistrarCliente.getTfApellido().getText().toString());
+					nuevo.setNombre(ventanaRegistrarCliente.getTfNombre().getText().toString());
+					nuevo.setCalle(ventanaRegistrarCliente.getTfCalle().getText().toString());
+					nuevo.setNumeracion(ventanaRegistrarCliente.getTfNumeracion().getText().toString());
+					nuevo.setEntrecalle1(ventanaRegistrarCliente.getTfEntreCalle1().getText().toString());
+					nuevo.setEntrecalle2(ventanaRegistrarCliente.getTfEntreCalle2().getText().toString());
+					nuevo.setCodPostal(ventanaRegistrarCliente.getTfCodPostal().getText().toString());
+					nuevo.setEmail(ventanaRegistrarCliente.getTfEmail().getText().toString());
 					cliente.agregarCliente(nuevo);
 					ventanaCliente.getTfAgregarDNI().setText(nuevo.getDni().toString());
-					ventanaCliente.getTfDireccionTelefono().setText(nuevo.getCalle()+" "+nuevo.getNumeracion());
-					ventanaCliente.getTfNombrApellido().setText(nuevo.getNombre()+" "+ nuevo.getApellido());
+					ventanaCliente.getTfNombrApellido().setText("Apellido y Nombre: "+nuevo.getNombre()+" "+ nuevo.getApellido());
+					ventanaCliente.getTfDireccionTelefono().setText("Direccion: "+nuevo.getCalle()+" "+nuevo.getNumeracion());
 					ventanaRegistrarCliente.dispose();
 				}
 		
