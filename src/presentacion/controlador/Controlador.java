@@ -153,7 +153,7 @@ public class Controlador implements ActionListener
 		else if(this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnOrdenar())
 		{
 			PedidoDTO nuevoPedido=new PedidoDTO();
-			nuevoPedido.setIdpedido(this.getListaPedidos().size()+1);
+			nuevoPedido.setIdpedido(this.pedido.obtenerPedidos().size()+1);
 			nuevoPedido.set_estado("solicitado");
 			nuevoPedido.setTotal(Integer.parseInt(this.ventanaPedido.getTfTotal().getText()));
 			if(ventanaPedido.getCheckBoxDelivery().isSelected())
