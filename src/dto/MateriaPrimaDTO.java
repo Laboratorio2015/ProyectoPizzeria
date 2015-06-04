@@ -36,4 +36,8 @@ public class MateriaPrimaDTO
 		return (this.id+ "  " + this.nombre);
 	}
 
+	public String getCategoria() {
+		return "categoriaEjemplo";
+	}
+
 }

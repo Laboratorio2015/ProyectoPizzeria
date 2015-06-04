@@ -12,8 +12,11 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 
 import presentacion.controlador.Controlador;
-import dao.ProveedorDAO;
-import dto.ProveedorDTO;
+import dao.*;
+import dto.*;
+
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
@@ -25,11 +28,14 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 
+import modelo.MatPrimas;
+
+// poner funcionalidad al boton seleccionar proveedor, actualmente, se cargaria automaticamente al seleccionar el prov desde el combo box.
 public class ordenarMatPrima extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private VentanaPrincipal _padre;
-	private ordenarMatPrima _matPrima;
+
 	private JTextField txFieldBuscarProveedor;
 	private JTextField textFieldBusquedaMatPrima;
 	private JTextField textFieldCantMatPrima;
@@ -41,11 +47,18 @@ public class ordenarMatPrima extends JDialog {
 	private JButton buttonSeleccProveed;
 	private JButton buttonAgregarMatPrima;
 	private JButton buttonQuitarMatPrimaSeleccionada;
-	private JComboBox<ProveedorDTO> comboBoxProveedores;
+	private JComboBox<String> comboBoxProveedores;
+	private JComboBox<String> comboBoxCategorias;
+	private ProveedorDTO provSeleccionado;
 	private DefaultTableModel modeloMatPrima;
 	
 	private ProveedorDAO conexionProveedor;
 	private ArrayList<ProveedorDTO> listadoProveedores;
+	private ArrayList<MateriaPrimaDTO> materiasPrimasFiltradas;
+
+	private ordenarMatPrima _matPrima;
+	private MateriaPrimaDAO conexionMatPrima;
+	private ArrayList<MateriaPrimaDTO> listadoMatPrimas;
 
 
 	@SuppressWarnings("serial")
@@ -53,12 +66,34 @@ public class ordenarMatPrima extends JDialog {
 		setModal(true);
 		padre=_padre;
 		_matPrima=this;
+		materiasPrimasFiltradas = new ArrayList<MateriaPrimaDTO>();
 		setMinimumSize(new Dimension(700, 600));
 		setBounds(300, 50, 700, 641);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		
+		comboBoxProveedores = new JComboBox<String>();
+		comboBoxProveedores.setBounds(120, 135, 253, 25);
+		comboBoxProveedores.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				try {
+					provSeleccionado = getProveedorSeleccionado();
+					cargarDatosProveedor(provSeleccionado);
+					cargarCategorias();
+					cargarMatPrimaXcategoria();
+				} catch (Exception e) {
+					System.out.println("El proveedor recibido es nulo o no se puede encontrar.");
+					e.printStackTrace();
+				}
+			}
+		});
+		contentPanel.add(comboBoxProveedores);
+		
+		comboBoxCategorias = new JComboBox();
+		comboBoxCategorias.setBounds(100, 272, 300, 23);
+		contentPanel.add(comboBoxCategorias);
 		
 		txFieldBuscarProveedor = new JTextField();
 		txFieldBuscarProveedor.setBackground(Color.LIGHT_GRAY);
@@ -101,11 +136,17 @@ public class ordenarMatPrima extends JDialog {
 		tablaListaMatPrima.setModel(modeloMatPrima);
 		scrollPane.setViewportView(tablaListaMatPrima);
 		
-		comboBoxProveedores = new JComboBox<ProveedorDTO>();
-		comboBoxProveedores.setBounds(100, 272, 301, 25);
-		contentPanel.add(comboBoxProveedores);
-		
 		JLabel label = new JLabel("");
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				/**Tomar el nombre cargado en el txt field de mat prima, buscar el objeto MateriaPrima con ese nombre y guardarlo.
+				 * Creo un nuevo objeto que se llama itemMatPrima(MatPrima, Cantidad). Y lo uso para almacenar el item guardado con la cantidad
+				 *ingresada por el usuario.
+				 * */
+				
+			}
+		});
 		label.setOpaque(true);
 		label.setBounds(0, 0, 684, 600);
 		contentPanel.add(label);
@@ -171,6 +212,13 @@ public class ordenarMatPrima extends JDialog {
 		contentPanel.add(buttonSeleccProveed);
 		
 		buttonAgregarMatPrima = new JButton("");
+		buttonAgregarMatPrima.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				ItemMateriaPrimaDTO itemSolicitado = new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(), Integer.getInteger(textFieldCantMatPrima.getText()));
+				modeloMatPrima.addColumn(new Object[] {itemSolicitado.getItemMatPrima().getNombre(), itemSolicitado.getCantidad()});
+			}
+		});
 		buttonAgregarMatPrima.setBounds(555, 295, 33, 38);
 		contentPanel.add(buttonAgregarMatPrima);
 		
@@ -194,17 +242,71 @@ public class ordenarMatPrima extends JDialog {
 		contentPanel.add(textFieldDireccProveed);
 		
 		listadoProveedores = (ArrayList<ProveedorDTO>) conexionProveedor.readAll(); //ArrayList Con todos los proveedores.
+		listadoMatPrimas = (ArrayList<MateriaPrimaDTO>) conexionMatPrima.readAll();
+		cargarProveedores();
 	}
 	
-	private void cargarComboProveedores() throws Exception{
-		if (listadoProveedores != null){
-			for (int i = 0; i < listadoProveedores.size();i++){
-				comboBoxProveedores.addItem(listadoProveedores.get(i));
-
+	protected MateriaPrimaDTO getMatPrimaSeleccionada() {
+		String nomMatPrimaSeleccionada = textFieldBusquedaMatPrima.getText();
+		for (int  i= 0; i < materiasPrimasFiltradas.size();i++){
+			if ( nomMatPrimaSeleccionada.compareTo(materiasPrimasFiltradas.get(i).getNombre())==0 ){
+				return materiasPrimasFiltradas.get(i);
 			}
 		}
-		else{
-			throw new Exception("El listado de proveedores esta vacio");
+		return null;
+	}
+
+	protected void cargarMatPrimaXcategoria() {
+		/** Tomo cada elemento q compone el comboBox categorias, con nada nombre de categoria pregunto por cada item*/
+		materiasPrimasFiltradas = new ArrayList<MateriaPrimaDTO>();
+		for (int i = 0; i < listadoMatPrimas.size();i++){
+			if ( contieneCategoria(listadoMatPrimas.get(i).getCategoria())){
+				materiasPrimasFiltradas.add(listadoMatPrimas.get(i));
+			}
 		}
+	}
+
+	private boolean contieneCategoria(String nomCategoria) {
+		for (int  i= 0; i < comboBoxCategorias.getComponentCount();i++){
+			if (comboBoxCategorias.getItemAt(i).compareTo(nomCategoria)== 0){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected void cargarCategorias() {
+		//Cuando el prov tenga un arraylist de Categorias, activo esta funcion>
+		/**
+		 for (int i = 0; i < proSeleccionado.getCategorias().size();i++){
+		  		comboBoxCategorias.addItem(provSeleccionado.get(i));
+		 *  */	
+		comboBoxCategorias.addItem(provSeleccionado.getCategoria());
+	}
+
+	protected void cargarDatosProveedor(ProveedorDTO provSeleccionado) {
+		textFieldDireccProveed.setText(provSeleccionado.getDireccion());
+		textFieldTelProveed.setText(provSeleccionado.getTelefono());
+		//FALTA CARGAR CATEGORIAS ASOCIADAS
+	}
+
+	public void cargarProveedores(){
+		for (int i=0; i< listadoProveedores.size();i++){
+			comboBoxProveedores.addItem(listadoProveedores.get(i).getNombre());
+		}
+	}
+	
+	public ProveedorDTO getProveedorSeleccionado() throws Exception{
+		String nomProveedor = (String) comboBoxProveedores.getSelectedItem();
+		return getProveedor(nomProveedor);
+	}
+	
+	public ProveedorDTO getProveedor(String nomProveedor){
+		for (int i= 0; i < listadoProveedores.size();i++){
+			if (nomProveedor.compareTo(listadoProveedores.get(i).getNombre()) == 0){
+				return listadoProveedores.get(i);
+			}
+		}
+		return null;
 	}
 }

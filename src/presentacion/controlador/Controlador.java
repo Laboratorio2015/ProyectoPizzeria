@@ -92,10 +92,10 @@ public class Controlador implements ActionListener
 		this.proveedor=proveedor;
 		this.repartidor=repartidor;
 		
-		this.listaClientes=this.cliente.obtenerClientes();
-		this.listaProductos=this.producto.obtenerProducto();
-		this.listaItems=this.item.obtenerItems();
-		this.listaPedidos=this.pedido.obtenerPedidos();
+//		this.listaClientes=this.cliente.obtenerClientes();
+//		this.listaProductos=this.producto.obtenerProducto();
+//		this.listaItems=this.item.obtenerItems();
+//		this.listaPedidos=this.pedido.obtenerPedidos();
 		
 		this.ventana.getBtnIngresarPedido().addActionListener(this);
 		this.ventana.getBtnPedidosPendientes().addActionListener(this);
@@ -132,7 +132,7 @@ public class Controlador implements ActionListener
 		}
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
-			ventanaMatPrima= new ordenarMatPrima(ventana, this);
+			ventanaMatPrima= new ordenarMatPrima(ventana, null);
 			ventanaMatPrima.setVisible(true);
 		}
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
