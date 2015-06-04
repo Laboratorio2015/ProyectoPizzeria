@@ -163,6 +163,7 @@ public class Controlador implements ActionListener
 			nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 			nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 			nuevoPedido.setProductos(generarListaItems());
+			
 			this.ventanaCliente=new seleccionDeCliente(this,nuevoPedido);
 			this.ventanaCliente.getBtnAgregarCliente().addActionListener(this);
 			this.ventanaCliente.getBtnEditarCliente().addActionListener(this);

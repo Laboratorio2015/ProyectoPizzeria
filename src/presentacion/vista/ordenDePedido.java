@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Dimension;
@@ -377,41 +378,43 @@ public class ordenDePedido extends JDialog {
 		
 		{
 			btnOrdenar= new JButton("OK");
-			{
-				btnEditar = new JButton("editar");
-				btnEditar.setOpaque(false);
-				btnEditar.addActionListener(new ActionListener() 
-				{
-					public void actionPerformed(ActionEvent arg0)
-					{
-						tablaItems.editCellAt(tablaItems.getSelectedRow(),1);
-					    Component aComp=tablaItems.getEditorComponent();
-					    aComp.requestFocus();
-						tablaItems.isCellEditable(tablaItems.getSelectedRow(), 1);
-					}
-				});
-				
-				btnAgregarComentario = new JButton("agregar coment");
-				btnAgregarComentario.setOpaque(false);
-				btnAgregarComentario.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) 
-					{
-						tablaItems.editCellAt(tablaItems.getSelectedRow(),3);
-					    Component aComp=tablaItems.getEditorComponent();
-					    aComp.requestFocus();
-						tablaItems.isCellEditable(tablaItems.getSelectedRow(), 3);
-					}
-				});
-				btnAgregarComentario.setBounds(34, 551, 40, 33);
-				contentPanel.add(btnAgregarComentario);
-				btnEditar.setBounds(42, 470, 27, 29);
-				contentPanel.add(btnEditar);
-			}
 			btnOrdenar.setOpaque(false);
 			btnOrdenar.setBounds(245, 618, 163, 34);
 			contentPanel.add(btnOrdenar);
 			btnOrdenar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnOrdenar);
+			
+		{
+			btnEditar = new JButton("editar");
+			btnEditar.setOpaque(false);
+			btnEditar.addActionListener(new ActionListener() 
+			{
+				public void actionPerformed(ActionEvent arg0)
+				{
+					tablaItems.editCellAt(tablaItems.getSelectedRow(),1);
+				    Component aComp=tablaItems.getEditorComponent();
+				    aComp.requestFocus();
+					tablaItems.isCellEditable(tablaItems.getSelectedRow(), 1);
+				}
+			});
+			
+			btnAgregarComentario = new JButton("agregar coment");
+			btnAgregarComentario.setOpaque(false);
+			btnAgregarComentario.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) 
+				{
+					tablaItems.editCellAt(tablaItems.getSelectedRow(),3);
+				    Component aComp=tablaItems.getEditorComponent();
+				    aComp.requestFocus();
+					tablaItems.isCellEditable(tablaItems.getSelectedRow(), 3);
+				}
+			});
+			btnAgregarComentario.setBounds(34, 551, 40, 33);
+			contentPanel.add(btnAgregarComentario);
+			btnEditar.setBounds(42, 470, 27, 29);
+			contentPanel.add(btnEditar);
+		}
+			
 		}
 		{
 			JButton btnCancelar = new JButton("Cancel");
@@ -448,12 +451,16 @@ public class ordenDePedido extends JDialog {
 				btnAgregarOtro.addActionListener(new ActionListener() 
 				{
 					public void actionPerformed(ActionEvent e) 
-					{					
+					{ if(tfSubTotalOtro.getText()!=" ")
+					{
 						Integer subtotal=Integer.parseInt(tfPrecioUniOtro.getText())* Integer.parseInt(tfUnidadOtro.getText());
 						model.addRow(new String[] {tfAgregarOtroProducto.getText(),""+tfUnidadOtro.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalOtro,"suma"));
 						vaciarFormulario();
+					}
+					else
+						JOptionPane.showMessageDialog(null, "Error, presione ENTER para que se genere el subtotal");
 					}
 				});
 				
@@ -465,11 +472,16 @@ public class ordenDePedido extends JDialog {
 					@Override
 					public void mouseClicked(MouseEvent arg0) 
 					{
+						if(tfSubTotalEmpanada.getText()!=" ")
+						{
 						Integer subtotal=Integer.parseInt(tfPrecioUniEmpanada.getText())* Integer.parseInt(tfUnidadEmpanada.getText());
 						model.addRow(new String[] {tfAgregarEmpanada.getText(),""+tfUnidadEmpanada.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalEmpanada,"suma"));
-						vaciarFormulario();					
+						vaciarFormulario();	
+						}
+					else
+						JOptionPane.showMessageDialog(null, "Error, presione ENTER para que se genere el subtotal");
 					}
 				});
 				btnAgregarEmpanada.setBounds(372, 150, 36, 35);
@@ -485,11 +497,16 @@ public class ordenDePedido extends JDialog {
 					@Override
 					public void mouseClicked(MouseEvent arg0) 
 					{
+						if(tfSubTotalPizza.getText()!=" ")
+						{
 						Integer subtotal=Integer.parseInt(tfPrecioUniPizza.getText())* Integer.parseInt(tfUnidadPizza.getText());
 						model.addRow(new String[] {tfAgregarPizza.getText(),""+tfUnidadPizza.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalPizza,"suma"));
 						vaciarFormulario();
+						}
+						else
+							JOptionPane.showMessageDialog(null, "Error, presione ENTER para que se genere el subtotal");
 					}
 				});
 				btnAgregarPizza.setOpaque(false);
