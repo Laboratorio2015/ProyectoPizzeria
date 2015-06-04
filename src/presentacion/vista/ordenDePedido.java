@@ -89,10 +89,7 @@ public class ordenDePedido extends JDialog {
 	private JTextField tfUnidadOtro;
 	private JTextField tfSubTotalOtro;
 	private JTextField tfTotal;
-	//nose
-	private JTextField tfBusquedaEmpanada;
-	private JTextField tfBusquedaPizza;
-	private JTextField tfBusquedaOtroProducto;
+	
 	
 
 	public ordenDePedido(VentanaPrincipal padre,final Controlador control) 
@@ -108,81 +105,71 @@ public class ordenDePedido extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		tfBusquedaEmpanada = new JTextField();
-		tfBusquedaEmpanada.addKeyListener(new KeyAdapter() 
+		tfAgregarEmpanada = new JTextField();
+		tfAgregarEmpanada.addKeyListener(new KeyAdapter() 
 		{
 			@Override
 			public void keyTyped(KeyEvent evt) 
 			{
-				validarTexto(evt,tfBusquedaEmpanada);
+				validarTexto(evt,tfAgregarEmpanada);
 			}
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				producto=control.getProducto().buscarProductoPorNombre(tfBusquedaEmpanada.getText());
-				if(tfBusquedaEmpanada.getText().length()>4)
+				producto=control.getProducto().buscarProductoPorNombre(tfAgregarEmpanada.getText());
+				if(tfAgregarEmpanada.getText().length()>4)
 					tfPrecioUniEmpanada.setText(Integer.toString(producto.getPrecio()));
 			}
 			});	
 		
-		tfBusquedaEmpanada.setBounds(68, 170, 222, 25);
-		contentPanel.add(tfBusquedaEmpanada);
-		tfBusquedaEmpanada.setColumns(10);
+		tfAgregarEmpanada.setBounds(68, 170, 222, 25);
+		contentPanel.add(tfAgregarEmpanada);
+		tfAgregarEmpanada.setColumns(10);
 		
 		{
 		tfAgregarPizza = new JTextField();
 		tfAgregarPizza.addKeyListener(new KeyAdapter() 
 		{
 			@Override
-			public void keyTyped(KeyEvent evt) 
-			tfBusquedaPizza = new JTextField();
-			tfBusquedaPizza.addKeyListener(new KeyAdapter() 
-			{
-
-				validarTexto(evt, tfAgregarPizza);
-			}
-
-				@Override
 				public void keyTyped(KeyEvent evt) 
 				{
-					validarTexto(evt, tfBusquedaPizza);
+					validarTexto(evt, tfAgregarPizza);
 				}
 
 			
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				producto=control.getProducto().buscarProductoPorNombre(tfBusquedaPizza.getText());
-				if(tfBusquedaPizza.getText().length()>4)
+				producto=control.getProducto().buscarProductoPorNombre(tfAgregarPizza.getText());
+				if(tfAgregarPizza.getText().length()>4)
 				tfPrecioUniPizza.setText(Integer.toString(producto.getPrecio()));
 			}
 			});
-			tfBusquedaPizza.setColumns(10);
-			tfBusquedaPizza.setBounds(492, 174, 229, 25);
-			contentPanel.add(tfBusquedaPizza);
+
+			contentPanel.add(tfAgregarPizza);
 		}
 		
 		{
-			tfBusquedaOtroProducto = new JTextField();
-			tfBusquedaOtroProducto.addKeyListener(new KeyAdapter() 
+			tfAgregarOtroProducto = new JTextField();
+			tfAgregarOtroProducto.addKeyListener(new KeyAdapter() 
 			{
 				@Override
 				public void keyTyped(KeyEvent evt) 
 				{
-					validarTexto(evt,tfBusquedaOtroProducto);
+					validarTexto(evt,tfAgregarOtroProducto);
 				}
 				
 				@Override
 				public void keyReleased(KeyEvent e) 
 				{
-					producto=control.getProducto().buscarProductoPorNombre(tfBusquedaOtroProducto.getText());
-					if(tfBusquedaOtroProducto.getText().length()>4)
+					producto=control.getProducto().buscarProductoPorNombre(tfAgregarOtroProducto.getText());
+					if(tfAgregarOtroProducto.getText().length()>4)
 					tfPrecioUniOtro.setText(Integer.toString(producto.getPrecio()));
 				}
 			});
-			tfBusquedaOtroProducto.setColumns(10);
-			tfBusquedaOtroProducto.setBounds(64, 333, 224, 25);
-			contentPanel.add(tfBusquedaOtroProducto);
+			tfAgregarOtroProducto.setColumns(10);
+			tfAgregarOtroProducto.setBounds(64, 333, 224, 25);
+			contentPanel.add(tfAgregarOtroProducto);
 		}
 		{
 			tfPrecioUniEmpanada = new JTextField();
@@ -460,7 +447,7 @@ public class ordenDePedido extends JDialog {
 					public void actionPerformed(ActionEvent e) 
 					{					
 						Integer subtotal=Integer.parseInt(tfPrecioUniOtro.getText())* Integer.parseInt(tfUnidadOtro.getText());
-						model.addRow(new String[] {tfBusquedaOtroProducto.getText(),""+tfUnidadOtro.getText(),""+subtotal});
+						model.addRow(new String[] {tfAgregarOtroProducto.getText(),""+tfUnidadOtro.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalOtro,"suma"));
 						vaciarFormulario();
@@ -476,7 +463,7 @@ public class ordenDePedido extends JDialog {
 					public void mouseClicked(MouseEvent arg0) 
 					{
 						Integer subtotal=Integer.parseInt(tfPrecioUniEmpanada.getText())* Integer.parseInt(tfUnidadEmpanada.getText());
-						model.addRow(new String[] {tfBusquedaEmpanada.getText(),""+tfUnidadEmpanada.getText(),""+subtotal});
+						model.addRow(new String[] {tfAgregarEmpanada.getText(),""+tfUnidadEmpanada.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalEmpanada,"suma"));
 						vaciarFormulario();					
@@ -496,7 +483,7 @@ public class ordenDePedido extends JDialog {
 					public void mouseClicked(MouseEvent arg0) 
 					{
 						Integer subtotal=Integer.parseInt(tfPrecioUniPizza.getText())* Integer.parseInt(tfUnidadPizza.getText());
-						model.addRow(new String[] {tfBusquedaPizza.getText(),""+tfUnidadPizza.getText(),""+subtotal});
+						model.addRow(new String[] {tfAgregarPizza.getText(),""+tfUnidadPizza.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalPizza,"suma"));
 						vaciarFormulario();
@@ -506,15 +493,15 @@ public class ordenDePedido extends JDialog {
 				btnAgregarPizza.setBounds(797, 153, 36, 35);
 				contentPanel.add(btnAgregarPizza);
 				
-				TextAutoCompleter AutoCompletar = new TextAutoCompleter(tfBusquedaEmpanada);
+				TextAutoCompleter AutoCompletar = new TextAutoCompleter(tfAgregarEmpanada);
 				AutoCompletar.setCaseSensitive(false); //No sensible a mayúsculas
 				AutoCompletar.addItems(control.getProducto().buscaNombresProductos("empanada"));
 				
-				TextAutoCompleter autoCompletar2=new TextAutoCompleter(tfBusquedaPizza);
+				TextAutoCompleter autoCompletar2=new TextAutoCompleter(tfAgregarPizza);
 				autoCompletar2.setCaseSensitive(false);
 				autoCompletar2.addItems(control.getProducto().buscaNombresProductos("pizza"));
 				
-				TextAutoCompleter autoCompletar3=new TextAutoCompleter(tfBusquedaOtroProducto);
+				TextAutoCompleter autoCompletar3=new TextAutoCompleter(tfAgregarOtroProducto);
 				autoCompletar3.setCaseSensitive(false);
 				autoCompletar3.addItems(control.getProducto().buscaNombresProductos("otros"));
 				
@@ -567,37 +554,17 @@ public class ordenDePedido extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		tfBusquedaEmpanada = new JTextField();
-		tfBusquedaEmpanada.addKeyListener(new KeyAdapter() 
-		{
-			@Override
-			public void keyTyped(KeyEvent evt) 
-			{
-				validarTexto(evt,tfBusquedaEmpanada);
-			}
-			@Override
-			public void keyReleased(KeyEvent e) 
-		});
-		tfBusquedaEmpanada.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				producto=control.getProducto().buscarProductoPorNombre(tfBusquedaEmpanada.getText());
-				if(tfAgregarEmpanada.getText().length()>4)
-					tfPrecioUniEmpanada.setText(Integer.toString(producto.getPrecio()));
-			}
-			});
-	
-		
-		tfAgregarEmpanada.setBounds(67, 170, 224, 25);
+		tfAgregarEmpanada = new JTextField();		
+		tfAgregarEmpanada.setBounds(100, 161, 224, 25);
 		contentPanel.add(tfAgregarEmpanada);
 		tfAgregarEmpanada.setColumns(10);
-		tfBusquedaEmpanada.setBounds(170, 161, 254, 22);
-		contentPanel.add(tfBusquedaEmpanada);
-		tfBusquedaEmpanada.setColumns(10);
+		tfAgregarEmpanada.setBounds(170, 161, 254, 22);
+		contentPanel.add(tfAgregarEmpanada);
+		tfAgregarEmpanada.setColumns(10);
 		
 		{
-			tfBusquedaPizza = new JTextField();
-			tfBusquedaPizza.addKeyListener(new KeyAdapter() 
+			tfAgregarPizza = new JTextField();
+			tfAgregarPizza.addKeyListener(new KeyAdapter() 
 			{
 				@Override
 				public void keyTyped(KeyEvent evt) 
@@ -606,12 +573,8 @@ public class ordenDePedido extends JDialog {
 				}
 				@Override
 				public void keyReleased(KeyEvent e) 
-			});
-			tfBusquedaPizza.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent arg0)
 				{
-					producto=control.getProducto().buscarProductoPorNombre(tfBusquedaPizza.getText());
+					producto=control.getProducto().buscarProductoPorNombre(tfAgregarPizza.getText());
 					if(tfAgregarPizza.getText().length()>4)
 					tfPrecioUniPizza.setText(Integer.toString(producto.getPrecio()));
 				}
@@ -619,27 +582,23 @@ public class ordenDePedido extends JDialog {
 			tfAgregarPizza.setColumns(10);
 			tfAgregarPizza.setBounds(494, 174, 224, 25);
 			contentPanel.add(tfAgregarPizza);
-			tfBusquedaPizza.setColumns(10);
-			tfBusquedaPizza.setBounds(168, 305, 254, 25);
-			contentPanel.add(tfBusquedaPizza);
+			tfAgregarPizza.setColumns(10);
+			tfAgregarPizza.setBounds(168, 305, 254, 25);
+			contentPanel.add(tfAgregarPizza);
 		}
 		{
-			tfBusquedaOtroProducto = new JTextField();
-			tfBusquedaOtroProducto.addKeyListener(new KeyAdapter() 
+			tfAgregarOtroProducto = new JTextField();
+			tfAgregarOtroProducto.addKeyListener(new KeyAdapter() 
 			{
 				@Override
 				public void keyTyped(KeyEvent evt) 
 				{
-					validarTexto(evt,tfBusquedaOtroProducto);
+					validarTexto(evt,tfAgregarOtroProducto);
 				}
 				@Override
 				public void keyReleased(KeyEvent e) 
-			});
-			tfBusquedaOtroProducto.addActionListener(new ActionListener() 
-			{
-				public void actionPerformed(ActionEvent arg0) 
 				{
-					producto=control.getProducto().buscarProductoPorNombre(tfBusquedaOtroProducto.getText());
+					producto=control.getProducto().buscarProductoPorNombre(tfAgregarOtroProducto.getText());
 					if(tfAgregarOtroProducto.getText().length()>4)
 					tfPrecioUniOtro.setText(Integer.toString(producto.getPrecio()));
 				}
@@ -647,9 +606,9 @@ public class ordenDePedido extends JDialog {
 			tfAgregarOtroProducto.setColumns(10);
 			tfAgregarOtroProducto.setBounds(64, 333, 224, 25);
 			contentPanel.add(tfAgregarOtroProducto);
-			tfBusquedaOtroProducto.setColumns(10);
-			tfBusquedaOtroProducto.setBounds(169, 440, 254, 25);
-			contentPanel.add(tfBusquedaOtroProducto);
+			tfAgregarOtroProducto.setColumns(10);
+			tfAgregarOtroProducto.setBounds(169, 440, 254, 25);
+			contentPanel.add(tfAgregarOtroProducto);
 		}
 		{
 			tfPrecioUniEmpanada = new JTextField();
@@ -879,7 +838,7 @@ public class ordenDePedido extends JDialog {
 				public void mouseClicked(MouseEvent arg0) 
 				{
 					Integer subtotal=Integer.parseInt(tfPrecioUniEmpanada.getText())* Integer.parseInt(tfUnidadEmpanada.getText());
-					model.addRow(new String[] {tfBusquedaEmpanada.getText(),""+tfUnidadEmpanada.getText(),""+subtotal});
+					model.addRow(new String[] {tfAgregarEmpanada.getText(),""+tfUnidadEmpanada.getText(),""+subtotal});
 					tablaItems.setModel(model);
 					tfTotal.setText(actualizarTotal(tfSubTotalEmpanada,"suma"));
 					vaciarFormulario();									
@@ -933,7 +892,7 @@ public class ordenDePedido extends JDialog {
 					public void actionPerformed(ActionEvent e) 
 					{
 						Integer subtotal=Integer.parseInt(tfPrecioUniOtro.getText())* Integer.parseInt(tfUnidadOtro.getText());
-						model.addRow(new String[] {tfBusquedaOtroProducto.getText(),""+tfUnidadOtro.getText(),""+subtotal});
+						model.addRow(new String[] {tfAgregarOtroProducto.getText(),""+tfUnidadOtro.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalOtro,"suma"));
 						vaciarFormulario();
@@ -951,7 +910,7 @@ public class ordenDePedido extends JDialog {
 					public void mouseClicked(MouseEvent arg0) 
 					{
 						Integer subtotal=Integer.parseInt(tfPrecioUniPizza.getText())* Integer.parseInt(tfUnidadPizza.getText());
-						model.addRow(new String[] {tfBusquedaPizza.getText(),""+tfUnidadPizza.getText(),""+subtotal});
+						model.addRow(new String[] {tfAgregarPizza.getText(),""+tfUnidadPizza.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalPizza,"suma"));
 						vaciarFormulario();
@@ -961,15 +920,15 @@ public class ordenDePedido extends JDialog {
 				btnAgregarPizza.setBounds(797, 153, 36, 35);
 				contentPanel.add(btnAgregarPizza);
 				
-				TextAutoCompleter AutoCompletar = new TextAutoCompleter(tfBusquedaEmpanada);
+				TextAutoCompleter AutoCompletar = new TextAutoCompleter(tfAgregarEmpanada);
 				AutoCompletar.setCaseSensitive(false); //No sensible a mayúsculas
 				AutoCompletar.addItems(control.getProducto().buscaNombresProductos("empanada"));
 				
-				TextAutoCompleter autoCompletar2=new TextAutoCompleter(tfBusquedaPizza);
+				TextAutoCompleter autoCompletar2=new TextAutoCompleter(tfAgregarPizza);
 				autoCompletar2.setCaseSensitive(false);
 				autoCompletar2.addItems(control.getProducto().buscaNombresProductos("pizza"));
 				
-				TextAutoCompleter autoCompletar3=new TextAutoCompleter(tfBusquedaOtroProducto);
+				TextAutoCompleter autoCompletar3=new TextAutoCompleter(tfAgregarOtroProducto);
 				autoCompletar3.setCaseSensitive(false);
 				autoCompletar3.addItems(control.getProducto().buscaNombresProductos("otros"));
 				
@@ -1109,32 +1068,32 @@ public class ordenDePedido extends JDialog {
 	
 	
 	public JTextField getTfAgregarEmpanada() {
-		return tfBusquedaEmpanada;
+		return tfAgregarEmpanada;
 	}
 
 
 	public void setTfAgregarEmpanada(JTextField tfAgregarEmpanada) {
-		this.tfBusquedaEmpanada = tfAgregarEmpanada;
+		this.tfAgregarEmpanada = tfAgregarEmpanada;
 	}
 
 
 	public JTextField getTfAgregarPizza() {
-		return tfBusquedaPizza;
+		return tfAgregarPizza;
 	}
 
 
 	public void setTfAgregarPizza(JTextField tfAgregarPizza) {
-		this.tfBusquedaPizza = tfAgregarPizza;
+		this.tfAgregarPizza = tfAgregarPizza;
 	}
 
 
 	public JTextField getTfAgregarOtroProducto() {
-		return tfBusquedaOtroProducto;
+		return tfAgregarOtroProducto;
 	}
 
 
 	public void setTfAgregarOtroProducto(JTextField tfAgregarOtroProducto) {
-		this.tfBusquedaOtroProducto = tfAgregarOtroProducto;
+		this.tfAgregarOtroProducto = tfAgregarOtroProducto;
 	}
 
 
@@ -1310,15 +1269,15 @@ public class ordenDePedido extends JDialog {
 	
 	private void vaciarFormulario() 
 	{
-		tfBusquedaEmpanada.setText("");
+		tfAgregarEmpanada.setText("");
 		tfPrecioUniEmpanada.setText("");
 		tfSubTotalEmpanada.setText("");
 		tfUnidadEmpanada.setText("");
-		tfBusquedaPizza.setText("");
+		tfAgregarPizza.setText("");
 		tfPrecioUniPizza.setText("");
 		tfSubTotalPizza.setText("");
 		tfUnidadPizza.setText("");
-		tfBusquedaOtroProducto.setText("");
+		tfAgregarOtroProducto.setText("");
 		tfPrecioUniOtro.setText("");
 		tfSubTotalOtro.setText("");
 		tfUnidadOtro.setText("");
