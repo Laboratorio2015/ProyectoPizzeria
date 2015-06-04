@@ -12,11 +12,14 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 
 import presentacion.controlador.Controlador;
-
+import dao.ProveedorDAO;
+import dto.ProveedorDTO;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.util.ArrayList;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -38,7 +41,11 @@ public class ordenarMatPrima extends JDialog {
 	private JButton buttonSeleccProveed;
 	private JButton buttonAgregarMatPrima;
 	private JButton buttonQuitarMatPrimaSeleccionada;
+	private JComboBox<ProveedorDTO> comboBoxProveedores;
 	private DefaultTableModel modeloMatPrima;
+	
+	private ProveedorDAO conexionProveedor;
+	private ArrayList<ProveedorDTO> listadoProveedores;
 
 
 	@SuppressWarnings("serial")
@@ -94,9 +101,9 @@ public class ordenarMatPrima extends JDialog {
 		tablaListaMatPrima.setModel(modeloMatPrima);
 		scrollPane.setViewportView(tablaListaMatPrima);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(100, 272, 301, 25);
-		contentPanel.add(comboBox);
+		comboBoxProveedores = new JComboBox<ProveedorDTO>();
+		comboBoxProveedores.setBounds(100, 272, 301, 25);
+		contentPanel.add(comboBoxProveedores);
 		
 		JLabel label = new JLabel("");
 		label.setOpaque(true);
@@ -185,5 +192,19 @@ public class ordenarMatPrima extends JDialog {
 		textFieldDireccProveed.setColumns(10);
 		textFieldDireccProveed.setBounds(463, 156, 107, 20);
 		contentPanel.add(textFieldDireccProveed);
+		
+		listadoProveedores = (ArrayList<ProveedorDTO>) conexionProveedor.readAll(); //ArrayList Con todos los proveedores.
+	}
+	
+	private void cargarComboProveedores() throws Exception{
+		if (listadoProveedores != null){
+			for (int i = 0; i < listadoProveedores.size();i++){
+				comboBoxProveedores.addItem(listadoProveedores.get(i));
+
+			}
+		}
+		else{
+			throw new Exception("El listado de proveedores esta vacio");
+		}
 	}
 }
