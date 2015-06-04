@@ -47,7 +47,7 @@ public class seleccionDeCliente extends JDialog {
 	private JButton btnAgregarCliente;
 	private Controlador control;
 	private Comanda comanda=new Comanda();
-	public seleccionDeCliente(final Controlador control, PedidoDTO pedido)
+	public seleccionDeCliente(final Controlador control,final PedidoDTO pedido)
 	{
 		setModal(true);
 		this.pedido=pedido;
@@ -112,6 +112,7 @@ public class seleccionDeCliente extends JDialog {
 			btnSeleccionar.addActionListener((ActionListener) control);
 			btnSeleccionar.addMouseListener(new MouseAdapter() 
 			{
+				//este metodo agrega el cliente a el pedido y debe crear el ticket y la comanda.
 				@Override
 				public void mouseClicked(MouseEvent arg0)
 				{

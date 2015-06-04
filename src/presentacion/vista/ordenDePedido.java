@@ -145,6 +145,9 @@ public class ordenDePedido extends JDialog {
 				tfPrecioUniPizza.setText(Integer.toString(producto.getPrecio()));
 			}
 			});
+		tfAgregarPizza.setColumns(10);
+		tfAgregarPizza.setBounds(494, 174, 224, 25);
+		contentPanel.add(tfAgregarPizza);
 
 			contentPanel.add(tfAgregarPizza);
 		}
@@ -581,9 +584,6 @@ public class ordenDePedido extends JDialog {
 			});
 			tfAgregarPizza.setColumns(10);
 			tfAgregarPizza.setBounds(494, 174, 224, 25);
-			contentPanel.add(tfAgregarPizza);
-			tfAgregarPizza.setColumns(10);
-			tfAgregarPizza.setBounds(168, 305, 254, 25);
 			contentPanel.add(tfAgregarPizza);
 		}
 		{

@@ -465,9 +465,8 @@ public class Controlador implements ActionListener
 			int a=1;
 			boolean insertar=false;
 			while(!insertar)
-			{
-				System.out.println((String)this.ventanaPedido.getModel().getValueAt(i, 3));
-			ItemDTO aux=new ItemDTO(this.getListaItems().size()+a+i,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3));
+			{	
+			ItemDTO aux=new ItemDTO(this.item.obtenerItems().size()+a+i,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3));
 			if(item.agregarItem(aux))
 				{
 				listaAux.add(aux);
