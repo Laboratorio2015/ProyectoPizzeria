@@ -261,7 +261,7 @@ public class Controlador implements ActionListener
 		}
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarProducto())
 		{
-			ventanaEditarProducto=new productoBajaModificacion();
+			ventanaEditarProducto=new productoBajaModificacion(this);
 			ventanaEditarProducto.setVisible(true);
 		}
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarProveedor())
