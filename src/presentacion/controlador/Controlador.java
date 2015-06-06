@@ -67,12 +67,6 @@ public class Controlador implements ActionListener
 	private pedidoMenu ventanamenu;
 	private registroDeCliente ventanaRegistrarCliente;
 	
-	//dto
-	private List<PedidoDTO> listaPedidos;
-	private List<ProductoDTO> listaProductos;
-	private List<ClienteDTO> listaClientes;
-	private List<ItemDTO> listaItems;
-	
 	//modelo
 	private Productos producto;
 	private Proveedores proveedor;
@@ -90,13 +84,7 @@ public class Controlador implements ActionListener
 		this.item=item;
 		this.producto=producto;
 		this.proveedor=proveedor;
-		this.repartidor=repartidor;
-		
-//		this.listaClientes=this.cliente.obtenerClientes();
-//		this.listaProductos=this.producto.obtenerProducto();
-//		this.listaItems=this.item.obtenerItems();
-//		this.listaPedidos=this.pedido.obtenerPedidos();
-		
+		this.repartidor=repartidor;		
 		this.ventana.getBtnIngresarPedido().addActionListener(this);
 		this.ventana.getBtnPedidosPendientes().addActionListener(this);
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
@@ -149,11 +137,11 @@ public class Controlador implements ActionListener
 			ventanaConfiguraciones.getBtnAgregarMatPrima().addActionListener(this);
 			ventanaConfiguraciones.getBtnEditarMatPrima().addActionListener(this);
 		}
-		//al ordenar crea un pedido
+		//al ordenar.... crea un pedido y llama a la ventana para seleccionar un cliente
 		else if(this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnOrdenar())
 		{
 			PedidoDTO nuevoPedido=new PedidoDTO();
-			nuevoPedido.setIdpedido(this.pedido.obtenerPedidos().size()+1);
+			nuevoPedido.setIdpedido(this.pedido.ultimoPedido()+1);
 			nuevoPedido.set_estado("solicitado");
 			nuevoPedido.setTotal(Integer.parseInt(this.ventanaPedido.getTfTotal().getText()));
 			if(ventanaPedido.getCheckBoxDelivery().isSelected())
@@ -245,13 +233,32 @@ public class Controlador implements ActionListener
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarProducto())
 		{
 			ventanaAgregarProducto=new productoAlta();
+			llenarTablaProductos();
+			ventanaAgregarProducto.getBtnAgregarProducto().addActionListener(this);
 			ventanaAgregarProducto.setVisible(true);
 		}
+		
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarProveedor())
 		{
 			ventanaAgregarProveedor=new proveedorAlta();
+			ventanaAgregarProveedor.getBtnRegistrar().addActionListener(this);
 			ventanaAgregarProveedor.setVisible(true);
 		}
+		
+		//crear un proveedor
+		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnRegistrar())
+		{
+			ProveedorDTO nuevo= new ProveedorDTO();
+			nuevo.setId(proveedor.ultimoProveedor()+1);
+			nuevo.setNombre(ventanaAgregarProveedor.getTfDenominacion().getText());
+			nuevo.setCategoria(ventanaAgregarProveedor.getTfCategoria().getText());
+			nuevo.setDireccion(ventanaAgregarProveedor.getTfDireccion().getText());
+			nuevo.setEmail(ventanaAgregarProveedor.getTfEmail().getText());
+			nuevo.setTelefono(ventanaAgregarProveedor.getTfTelefono().getText());
+			proveedor.agregarProveedor(nuevo);
+			ventanaAgregarProveedor.dispose();
+		}
+		
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarRepartidor())
 		{
 			ventanaAgregarRepartidor=new repartidorAlta();
@@ -259,23 +266,131 @@ public class Controlador implements ActionListener
 			ventanaAgregarRepartidor.getBtnRegistrar().addActionListener(this);
 			ventanaAgregarRepartidor.setVisible(true);
 		}
+		
+		//dar de alta a un producto
+		else if (this.ventanaAgregarProducto!= null && e.getSource()==this.ventanaAgregarProducto.getBtnAgregarProducto())
+		{
+			ProductoDTO nuevo=new ProductoDTO();
+			nuevo.setIdproducto(this.producto.ultimoProducto()+1);
+			nuevo.setNombre(ventanaAgregarProducto.getTfDenominacion().getText().toString());
+			nuevo.setPrecio(Integer.parseInt(ventanaAgregarProducto.getTfPrecio().getText().toString()));
+			System.out.println(ventanaAgregarProducto.getCbTipo().getSelectedItem().toString());
+			nuevo.setTipo(ventanaAgregarProducto.getCbTipo().getSelectedItem().toString());
+			producto.agregarProducto(nuevo);
+			llenarTablaProductos();
+		}
+		
+		//acciones asocidas a editar productos
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarProducto())
 		{
 			ventanaEditarProducto=new productoBajaModificacion(this);
+			ventanaEditarProducto=new productoBajaModificacion(this);
+			ventanaEditarProducto.getBtnGuardar().addActionListener(this);
+			ventanaEditarProducto.getBtnQuitar().addActionListener(this);
+			llenarTablaProductosEditados();
 			ventanaEditarProducto.setVisible(true);
 		}
+		//quitar productos
+		else if(this.ventanaEditarProducto!= null && e.getSource()==this.ventanaEditarProducto.getBtnQuitar())
+		{
+			ProductoDTO nuevo= this.producto.buscarProductoPorNombre(ventanaEditarProducto.getTable().getValueAt(this.ventanaEditarProducto.getTable().getSelectedRow(), 0).toString());
+			this.producto.quitarProducto(nuevo);
+			llenarTablaProductosEditados();
+			ventanaEditarProducto.getTfNombre().setText("");
+			ventanaEditarProducto.getTfPrecio().setText("");
+		}
+		//modificar producto
+		else if(this.ventanaEditarProducto!= null && e.getSource()==this.ventanaEditarProducto.getBtnGuardar())
+		{
+			ProductoDTO nuevo= this.producto.buscarProductoPorNombre(ventanaEditarProducto.getTable().getValueAt(this.ventanaEditarProducto.getTable().getSelectedRow(), 0).toString());
+			nuevo.setNombre(ventanaEditarProducto.getTfNombre().getText().toString());
+			nuevo.setPrecio(Integer.parseInt(ventanaEditarProducto.getTfPrecio().getText().toString()));
+			nuevo.setTipo(ventanaEditarProducto.getCbTipo().getSelectedItem().toString());
+			this.producto.quitarProducto(nuevo);
+			this.producto.agregarProducto(nuevo);
+			llenarTablaProductosEditados();
+			ventanaEditarProducto.getTfNombre().setText("");
+			ventanaEditarProducto.getTfPrecio().setText("");			
+		}
+		
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarProveedor())
 		{
 			ventanaEditarProveedor=new proveedorBajaModificacion(this);
 			llenarTablaProveedor();
+			ventanaEditarProveedor.getBtnQuitar().addActionListener(this);
+			ventanaEditarProveedor.getBtnGuardar().addActionListener(this);
 			ventanaEditarProveedor.setVisible(true);
+		}
+		//quitar proveedor
+		else if (this.ventanaEditarProveedor!= null && e.getSource()==this.ventanaEditarProveedor.getBtnQuitar())
+		{
+			ProveedorDTO aux= this.proveedor.buscarProveedor(ventanaEditarProveedor.getTfDenominacion().getText());
+			this.proveedor.quitarProveedor(aux);
+			llenarTablaProveedor();
+			ventanaEditarProveedor.getTfCategoria().setText("");
+			ventanaEditarProveedor.getTfDenominacion().setText("");
+			ventanaEditarProveedor.getTfDireccion().setText("");
+			ventanaEditarProveedor.getTfEmail().setText("");
+			ventanaEditarProveedor.getTfTelefono().setText("");
+		}
+		//modificar un proveedor
+		else if (this.ventanaEditarProveedor!= null && e.getSource()==this.ventanaEditarProveedor.getBtnGuardar())
+		{
+			ProveedorDTO aux= this.proveedor.buscarProveedor(ventanaEditarProveedor.getTfDenominacion().getText());
+			aux.setDireccion(ventanaEditarProveedor.getTfDireccion().getText());
+			aux.setEmail(ventanaEditarProveedor.getTfEmail().getText());
+			aux.setTelefono(ventanaEditarProveedor.getTfTelefono().getText());
+			this.proveedor.quitarProveedor(aux);
+			this.proveedor.agregarProveedor(aux);
+			llenarTablaProveedor();
+			ventanaEditarProveedor.getTfCategoria().setText("");
+			ventanaEditarProveedor.getTfDenominacion().setText("");
+			ventanaEditarProveedor.getTfDireccion().setText("");
+			ventanaEditarProveedor.getTfEmail().setText("");
+			ventanaEditarProveedor.getTfTelefono().setText("");
 		}
 		//acciones relacionadas a la baja modificacion de repartidores
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarRepartidor())
 		{
 			ventanaEditarRepartidor=new repartidorBajaModificacion(this);
 			llenarTablaRepartidor();
+			ventanaEditarRepartidor.getBtnQuitar().addActionListener(this);
+			ventanaEditarRepartidor.getBtnGuardar().addActionListener(this);
 			ventanaEditarRepartidor.setVisible(true);
+		}
+		//quitar un repartidor
+		else if (this.ventanaEditarRepartidor!= null && e.getSource()==this.ventanaEditarRepartidor.getBtnQuitar())
+		{
+			RepartidorDTO nuevo= this.repartidor.buscarRepartidor(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
+			this.repartidor.quitarRepartidor(nuevo);
+			llenarTablaRepartidor();
+			ventanaEditarRepartidor.getTfdni().setText("");
+			ventanaEditarRepartidor.getTfApellido().setText("");
+			ventanaEditarRepartidor.getTfCelular().setText("");
+			ventanaEditarRepartidor.getTfdni().setText("");
+			ventanaEditarRepartidor.getTfFechaNacimiento().setText("");
+			ventanaEditarRepartidor.getTfNombre().setText("");
+		}
+		//modificar un repartidor
+		else if (this.ventanaEditarRepartidor!= null && e.getSource()==this.ventanaEditarRepartidor.getBtnGuardar())
+		{
+			RepartidorDTO rep= this.repartidor.buscarRepartidor(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
+			rep.setId(rep.getId());
+			rep.setNombre(ventanaEditarRepartidor.getTfNombre().getText().toString());
+			rep.setDni(rep.getDni());
+			rep.setApellido(ventanaEditarRepartidor.getTfApellido().getText().toString());
+			rep.setFechaNacimiento(ventanaEditarRepartidor.getTfFechaNacimiento().getText().toString());
+			rep.setTelefono(ventanaEditarRepartidor.getTfCelular().getText().toString());
+			rep.setEstado(null);
+			repartidor.quitarRepartidor(rep);
+			repartidor.agregarRepartidor(rep);
+			llenarTablaRepartidor();
+			ventanaEditarRepartidor.getTfdni().setText("");
+			ventanaEditarRepartidor.getTfApellido().setText("");
+			ventanaEditarRepartidor.getTfCelular().setText("");
+			ventanaEditarRepartidor.getTfdni().setText("");
+			ventanaEditarRepartidor.getTfFechaNacimiento().setText("");
+			ventanaEditarRepartidor.getTfNombre().setText("");
 		}
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarMatPrima())
 		{
@@ -357,24 +472,10 @@ public class Controlador implements ActionListener
 			else
 				JOptionPane.showMessageDialog(null, "Error el debe haber un dni registrado para poder editarlo");
 		}
+		
+		
 	}
 	
-
-	public List<PedidoDTO> getListaPedidos() {
-		return listaPedidos;
-	}
-
-	public void setListaPedidos(List<PedidoDTO> listaPedidos) {
-		this.listaPedidos = listaPedidos;
-	}
-
-	public List<ProductoDTO> getListaProductos() {
-		return listaProductos;
-	}
-
-	public void setListaProductos(List<ProductoDTO> listaProductos) {
-		this.listaProductos = listaProductos;
-	}
 	
 	public Repartidores getRepartidor() {
 		return repartidor;
@@ -382,22 +483,6 @@ public class Controlador implements ActionListener
 
 	public void setRepartidor(Repartidores repartidor) {
 		this.repartidor = repartidor;
-	}
-
-	public List<ClienteDTO> getListaClientes() {
-		return listaClientes;
-	}
-
-	public void setListaClientes(List<ClienteDTO> listaClientes) {
-		this.listaClientes = listaClientes;
-	}
-
-	public List<ItemDTO> getListaItems() {
-		return listaItems;
-	}
-
-	public void setListaItems(List<ItemDTO> listaItems) {
-		this.listaItems = listaItems;
 	}
 
 	public Productos getProducto() {
@@ -463,19 +548,9 @@ public class Controlador implements ActionListener
 		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
 		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
 		{
-			int a=1;
-			boolean insertar=false;
-			while(!insertar)
-			{	
-			ItemDTO aux=new ItemDTO(this.item.obtenerItems().size()+a+i,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3));
-			if(item.agregarItem(aux))
-				{
-				listaAux.add(aux);
-				insertar=true;
-				}
-			else
-				a++;
-			}
+			ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3));
+			item.agregarItem(aux);
+			listaAux.add(aux);
 		}
 		return listaAux;
 	}
@@ -538,6 +613,34 @@ public class Controlador implements ActionListener
 			RepartidorDTO elemento = Iterador.next();
 			Object[] fila = {elemento.getDni(), elemento.getNombre(), elemento.getApellido()};
 			this.ventanaEditarRepartidor.getModel().addRow(fila);			
+		}
+	}
+	
+	private void llenarTablaProductos()
+	{
+		this.ventanaAgregarProducto.getModel().setRowCount(0);
+		this.ventanaAgregarProducto.getModel().setColumnCount(0);
+		this.ventanaAgregarProducto.getModel().setColumnIdentifiers(this.ventanaAgregarProducto.getNombreColumnasProducto());
+		Iterator<ProductoDTO> Iterador = this.producto.obtenerProducto().iterator();
+		while(Iterador.hasNext())
+		{
+			ProductoDTO elemento = Iterador.next();
+			Object[] fila = {elemento.getNombre(), elemento.getPrecio(), elemento.getTipo()};
+			this.ventanaAgregarProducto.getModel().addRow(fila);			
+		}
+	}
+	
+	private void llenarTablaProductosEditados()
+	{
+		this.ventanaEditarProducto.getModel().setRowCount(0);
+		this.ventanaEditarProducto.getModel().setColumnCount(0);
+		this.ventanaEditarProducto.getModel().setColumnIdentifiers(this.ventanaEditarProducto.getNombreColumnasProducto());
+		Iterator<ProductoDTO> Iterador = this.producto.obtenerProducto().iterator();
+		while(Iterador.hasNext())
+		{
+			ProductoDTO elemento = Iterador.next();
+			Object[] fila = {elemento.getNombre(), elemento.getPrecio(), elemento.getTipo()};
+			this.ventanaEditarProducto.getModel().addRow(fila);			
 		}
 	}
 }

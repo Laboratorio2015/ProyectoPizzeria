@@ -22,6 +22,8 @@ import presentacion.controlador.Controlador;
 
 import main.Main;
 import modelo.Pedidos;
+import java.awt.Color;
+import javax.swing.border.MatteBorder;
 
 public class registrarCobroDePedido extends JDialog {
 
@@ -30,7 +32,6 @@ public class registrarCobroDePedido extends JDialog {
 	private registrarCobroDePedido _this;
 	private PedidoDTO pedid;
 	private JTextField tfCliente;
-	private JTextField tfRepartidor;
 	private JTextField tfMontoPedido;
 
 	public registrarCobroDePedido(pedidosPendientes padre, PedidoDTO pedido, Controlador control) 
@@ -47,23 +48,24 @@ public class registrarCobroDePedido extends JDialog {
 		contentPanel.setLayout(null);
 		
 		tfCliente = new JTextField();
+		tfCliente.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfCliente.setBackground(new Color(204, 204, 0));
 		tfCliente.setEditable(false);
-		tfCliente.setBounds(123, 113, 260, 20);
+		tfCliente.setBounds(103, 113, 280, 20);
 		contentPanel.add(tfCliente);
 		tfCliente.setColumns(10);
 		
-		tfRepartidor = new JTextField();
-		tfRepartidor.setEditable(false);
-		tfRepartidor.setColumns(10);
-		tfRepartidor.setBounds(123, 144, 260, 20);
-		contentPanel.add(tfRepartidor);
-		
 		tfMontoPedido = new JTextField();
+		tfMontoPedido.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfMontoPedido.setBackground(new Color(204, 204, 0));
 		tfMontoPedido.setEditable(false);
 		tfMontoPedido.setColumns(10);
-		tfMontoPedido.setBounds(162, 170, 221, 20);
-		tfCliente.setText(pedido.getCliente().getNombre()+"   "+pedido.getCliente().getApellido());
+		tfMontoPedido.setBounds(162, 154, 221, 20);
+		
+		//seteados los datos
+		tfCliente.setText(pedido.getCliente().getApellido()+" "+pedido.getCliente().getNombre());
 		tfMontoPedido.setText(pedido.getTotal().toString());
+		
 		
 		contentPanel.add(tfMontoPedido);
 		{
@@ -81,7 +83,6 @@ public class registrarCobroDePedido extends JDialog {
 				{
 					
 					pedid.set_estado("cobrado");
-					_padre.vaciarTabla();
 					_padre.llenarTabla();
 					dispose();
 				}

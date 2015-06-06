@@ -21,6 +21,15 @@ import dto.ProductoDTO;
 
 import javax.swing.JTable;
 
+import presentacion.controlador.Controlador;
+
+import dto.ProductoDTO;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class productoBajaModificacion extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -30,6 +39,12 @@ public class productoBajaModificacion extends JDialog {
 	private static Controlador control;
 	private DefaultTableModel model;
 	private JTable tablaProductos;
+	private JComboBox cbTipo;
+	private DefaultTableModel model;
+	private  String[] nombreColumnasProducto = {"Nombre","Precio","Tipo"};
+	private JButton btnQuitar;
+	private JButton btnGuardar;
+	private Controlador control;
 
 	/**
 	 * Launch the application.
@@ -48,6 +63,7 @@ public class productoBajaModificacion extends JDialog {
 	 * Create the dialog.
 	 */
 	public productoBajaModificacion(final Controlador control) {
+	public productoBajaModificacion(final Controlador control) {
 		setBounds(100, 100, 746, 586);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -60,6 +76,7 @@ public class productoBajaModificacion extends JDialog {
 		
 		tablaProductos = new JTable();
 		scrollPane.setColumnHeaderView(tablaProductos);
+		model = new DefaultTableModel(null,nombreColumnasProducto);
 		{
 			tfNombre = new JTextField();
 			tfNombre.setBounds(491, 159, 173, 22);
@@ -78,6 +95,26 @@ public class productoBajaModificacion extends JDialog {
 			tfPrecio.setBounds(490, 230, 91, 23);
 			contentPanel.add(tfPrecio);
 		}
+		
+		cbTipo= new JComboBox();
+		cbTipo.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione un tipo de Producto)", "empanada", "pizza", "otros"}));
+		cbTipo.setBounds(491, 216, 180, 23);
+		contentPanel.add(cbTipo);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(36, 146, 186, 355);
+		contentPanel.add(scrollPane);
+		
+		table = new JTable(model);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				ProductoDTO auxi=control.getProducto().buscarProductoPorNombre(model.getValueAt(table.getSelectedRow(), 0).toString());
+				agregarDatos(auxi);
+			}
+		});
+
+		scrollPane.setViewportView(table);
 		{
 			tfTipo = new JTextField();
 			tfTipo.setColumns(10);
@@ -91,6 +128,12 @@ public class productoBajaModificacion extends JDialog {
 			contentPanel.add(label);
 		}
 		{
+			btnQuitar= new JButton("OK");
+			btnQuitar.setOpaque(false);
+			btnQuitar.setBounds(243, 284, 52, 52);
+			contentPanel.add(btnQuitar);
+			btnQuitar.setActionCommand("OK");
+			getRootPane().setDefaultButton(btnQuitar);
 			JButton borrarButton = new JButton("OK");
 			borrarButton.setBounds(248, 291, 41, 38);
 			contentPanel.add(borrarButton);
@@ -107,16 +150,26 @@ public class productoBajaModificacion extends JDialog {
 	}
 	
 	public void llenarTabla() 
-	{
+		{
+			JButton btnFinalizar = new JButton("Cancel");
+			btnFinalizar.setOpaque(false);
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
 		Iterator<ProductoDTO> Iterador = control.getListaProductos().iterator();
 		while(Iterador.hasNext())
 		{
 			ProductoDTO elemento = Iterador.next();
 			model.addRow(new String[] {elemento.getNombre(),elemento.getTipo(),elemento.getPrecio().toString()});			
+				}
+			});
+			btnFinalizar.setBounds(440, 459, 151, 38);
+			contentPanel.add(btnFinalizar);
+			btnFinalizar.setActionCommand("Cancel");
 		}
 		tablaProductos.setModel(model);		
 	}
-	
+		
 	
 	
 	public DefaultTableModel crearModelo()
@@ -126,5 +179,80 @@ public class productoBajaModificacion extends JDialog {
 			modelo.addColumn("Tipo");
 			modelo.addColumn("Precio");
 		return modelo;
+		btnGuardar= new JButton("New button");
+		btnGuardar.setOpaque(false);
+		btnGuardar.setBounds(418, 326, 48, 52);
+		contentPanel.add(btnGuardar);
 	}
+
+	public JTextField getTfNombre() {
+		return tfNombre;
+	}
+
+	public void setTfNombre(JTextField tfNombre) {
+		this.tfNombre = tfNombre;
+	}
+
+	public JTextField getTfPrecio() {
+		return tfPrecio;
+	}
+
+	public void setTfPrecio(JTextField tfPrecio) {
+		this.tfPrecio = tfPrecio;
+	}
+
+	public JTable getTable() {
+		return table;
+	}
+
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+
+	public DefaultTableModel getModel() {
+		return model;
+	}
+
+	public void setModel(DefaultTableModel model) {
+		this.model = model;
+	}
+
+	public String[] getNombreColumnasProducto() {
+		return nombreColumnasProducto;
+	}
+
+	public void setNombreColumnasProducto(String[] nombreColumnasProducto) {
+		this.nombreColumnasProducto = nombreColumnasProducto;
+	}
+
+	public JButton getBtnQuitar() {
+		return btnQuitar;
+	}
+
+	public void setBtnQuitar(JButton btnQuitar) {
+		this.btnQuitar = btnQuitar;
+	}
+
+	public JButton getBtnGuardar() {
+		return btnGuardar;
+	}
+
+	public void setBtnGuardar(JButton btnGuardar) {
+		this.btnGuardar = btnGuardar;
+	}
+	
+	private void agregarDatos(ProductoDTO aux)
+	{
+		tfNombre.setText(aux.getNombre());
+		tfPrecio.setText(aux.getPrecio().toString());
+	}
+
+	public JComboBox getCbTipo() {
+		return cbTipo;
+	}
+
+	public void setCbTipo(JComboBox cbTipo) {
+		this.cbTipo = cbTipo;
+	}
+	
 }

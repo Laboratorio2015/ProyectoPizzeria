@@ -38,7 +38,7 @@ public class MatPrimas {
 	{
 		return this.matPrima.obtenerListaMatPrima(idproveedor);
 	}
-	
+/*	
 	public ArrayList<Integer> idmatprimas(ProveedorDTO proveedor)
 	{
 		ArrayList<Integer> listaId=new ArrayList<Integer>();
@@ -49,5 +49,5 @@ public class MatPrimas {
 			listaId.add(elemento.getId());
 		}
 		return listaId;
-	}
+	}*/
 }

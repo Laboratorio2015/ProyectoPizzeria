@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -14,6 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class productoAlta extends JDialog {
 
@@ -21,6 +24,10 @@ public class productoAlta extends JDialog {
 	private JTextField tfDenominacion;
 	private JTextField tfPrecio;
 	private JTable tableProductos;
+	private DefaultTableModel model;
+	private JButton btnAgregarProducto;
+	private JComboBox cbTipo ;
+	private  String[] nombreColumnasProducto = {"Nombre","Precio","Tipo"};
 
 	public productoAlta() {
 		setBounds(100, 100, 664, 536);
@@ -28,8 +35,9 @@ public class productoAlta extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		model = new DefaultTableModel(null,nombreColumnasProducto);
 		
-		JComboBox cbTipo = new JComboBox();
+		cbTipo= new JComboBox();
 		cbTipo.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione un tipo de Producto)", "empanada", "pizza", "otros"}));
 		cbTipo.setBounds(175, 200, 180, 22);
 		contentPanel.add(cbTipo);
@@ -45,10 +53,10 @@ public class productoAlta extends JDialog {
 		contentPanel.add(tfPrecio);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(384, 153, 180, 246);
+		scrollPane.setBounds(384, 153, 238, 246);
 		contentPanel.add(scrollPane);
 		
-		tableProductos = new JTable();
+		tableProductos = new JTable(model);
 		scrollPane.setViewportView(tableProductos);
 		{
 			JLabel label = new JLabel("");
@@ -57,19 +65,82 @@ public class productoAlta extends JDialog {
 			contentPanel.add(label);
 		}
 		{
-			JButton okButton = new JButton("OK");
-			okButton.setOpaque(false);
-			okButton.setBounds(126, 309, 38, 40);
-			contentPanel.add(okButton);
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
+			btnAgregarProducto= new JButton("OK");
+			btnAgregarProducto.setOpaque(false);
+			btnAgregarProducto.setBounds(129, 346, 38, 40);
+			contentPanel.add(btnAgregarProducto);
+			btnAgregarProducto.setActionCommand("OK");
+			getRootPane().setDefaultButton(btnAgregarProducto);
 		}
 		{
-			JButton cancelButton = new JButton("Cancel");
-			cancelButton.setOpaque(false);
-			cancelButton.setBounds(239, 434, 150, 34);
-			contentPanel.add(cancelButton);
-			cancelButton.setActionCommand("Cancel");
+			JButton btnFinalizar = new JButton("Cancel");
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+			btnFinalizar.setOpaque(false);
+			btnFinalizar.setBounds(239, 434, 150, 34);
+			contentPanel.add(btnFinalizar);
+			btnFinalizar.setActionCommand("Cancel");
 		}
+		
 	}
+
+	public JTextField getTfDenominacion() {
+		return tfDenominacion;
+	}
+
+	public void setTfDenominacion(JTextField tfDenominacion) {
+		this.tfDenominacion = tfDenominacion;
+	}
+
+	public JTextField getTfPrecio() {
+		return tfPrecio;
+	}
+
+	public void setTfPrecio(JTextField tfPrecio) {
+		this.tfPrecio = tfPrecio;
+	}
+
+	public JTable getTableProductos() {
+		return tableProductos;
+	}
+
+	public void setTableProductos(JTable tableProductos) {
+		this.tableProductos = tableProductos;
+	}
+
+	public DefaultTableModel getModel() {
+		return model;
+	}
+
+	public void setModel(DefaultTableModel model) {
+		this.model = model;
+	}
+
+	public String[] getNombreColumnasProducto() {
+		return nombreColumnasProducto;
+	}
+
+	public void setNombreColumnasProducto(String[] nombreColumnasProducto) {
+		this.nombreColumnasProducto = nombreColumnasProducto;
+	}
+
+	public JButton getBtnAgregarProducto() {
+		return btnAgregarProducto;
+	}
+
+	public void setBtnAgregarProducto(JButton btnAgregarProducto) {
+		this.btnAgregarProducto = btnAgregarProducto;
+	}
+
+	public JComboBox getCbTipo() {
+		return cbTipo;
+	}
+
+	public void setCbTipo(JComboBox cbTipo) {
+		this.cbTipo = cbTipo;
+	}
+	
 }

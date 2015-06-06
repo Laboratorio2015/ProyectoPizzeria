@@ -20,33 +20,6 @@ public class Pedidos
 	{
 		this.pedido=new PedidoDAO();
 	}
-	/*
-	public void agregarPedido(PedidoDTO nuevoPedido, ArrayList<Productos> producto)
-	{
-		pedidos.insert(nuevoPedido);
-		productos.agragar;
-	}
-	
-	public void quitarPedido(PedidoDTO pedidoQuitar)
-	{
-		pedidos.delete(pedidoQuitar);
-	}
-
-	public List<PedidoDTO> obtenerPedido()
-	{
-		return this.pedidos.readAll();
-	}
-	public static PedidoDTO buscarPedido(Pedidos listaPedidos, PedidoDTO pedido)
-	{
-		Iterator<PedidoDTO> Iterador = listaPedidos.pedidos.iterator();
-		while(Iterador.hasNext())
-		{
-			PedidoDTO elemento = Iterador.next();
-			if(elemento.getIdpedido()==pedido.getIdpedido())
-				return elemento;
-		}
-		return null;
-	}*/
 	
 	public void agregarPedido(PedidoDTO pedidoAgregar)
 	{
@@ -60,6 +33,20 @@ public class Pedidos
 	public List<PedidoDTO> obtenerPedidos()
 	{
 		return this.pedido.readAll();
+	}
+	
+	public Integer ultimoPedido()
+	{
+		Integer ultimo=0;
+		List<PedidoDTO> pedidos=this.pedido.readAll();
+		Iterator<PedidoDTO> Iterador = pedidos.iterator();
+		while(Iterador.hasNext())
+		{
+			PedidoDTO elemento = Iterador.next();
+			if(elemento.getIdpedido()>ultimo)
+				ultimo=elemento.getIdpedido();
+		}
+		return ultimo;
 	}
 	
 	public PedidoDTO buscarPedidoId(Integer idpedido)

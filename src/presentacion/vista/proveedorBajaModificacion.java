@@ -47,9 +47,11 @@ public class proveedorBajaModificacion extends JDialog {
 	private Controlador control;
 	private  String[] nombreColumnasProveedor = {"Nombre"};
 	private String[] nombreColumnasMatPrimas = {"Nombre"};
+	private JButton btnQuitar ;
+	private JButton btnGuardar;
 
 	public proveedorBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 965, 638);
+		setBounds(100, 100, 766, 638);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -79,11 +81,13 @@ public class proveedorBajaModificacion extends JDialog {
 		scrollPane.setViewportView(tableProveedor);
 		
 		tfDenominacion = new JTextField();
+		tfDenominacion.setEditable(false);
 		tfDenominacion.setBounds(468, 233, 174, 22);
 		contentPanel.add(tfDenominacion);
 		tfDenominacion.setColumns(10);
 		
 		tfCategoria = new JTextField();
+		tfCategoria.setEditable(false);
 		tfCategoria.setColumns(10);
 		tfCategoria.setBounds(468, 269, 174, 22);
 		contentPanel.add(tfCategoria);
@@ -115,6 +119,11 @@ public class proveedorBajaModificacion extends JDialog {
 		contentPanel.add(label);
 		{
 			JButton btnFinalizar = new JButton("OK");
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
 			btnFinalizar.setOpaque(false);
 			btnFinalizar.setBounds(442, 525, 151, 36);
 			contentPanel.add(btnFinalizar);
@@ -122,21 +131,21 @@ public class proveedorBajaModificacion extends JDialog {
 			getRootPane().setDefaultButton(btnFinalizar);
 		}
 		{
-			JButton cancelButton = new JButton("Cancel");
-			cancelButton.setOpaque(false);
-			cancelButton.setBounds(36, 482, 53, 49);
-			contentPanel.add(cancelButton);
-			cancelButton.addActionListener(new ActionListener() {
+			btnQuitar= new JButton("Cancel");
+			btnQuitar.setOpaque(false);
+			btnQuitar.setBounds(36, 482, 53, 49);
+			contentPanel.add(btnQuitar);
+			btnQuitar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				}
 			});
-			cancelButton.setActionCommand("Cancel");
+			btnQuitar.setActionCommand("Cancel");
 		}
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setOpaque(false);
-		btnNewButton.setBounds(382, 420, 64, 49);
-		contentPanel.add(btnNewButton);
+		btnGuardar = new JButton("New button");
+		btnGuardar.setOpaque(false);
+		btnGuardar.setBounds(382, 420, 64, 49);
+		contentPanel.add(btnGuardar);
 	}
 
 	public JTable getTableProveedor() {
@@ -229,6 +238,22 @@ public class proveedorBajaModificacion extends JDialog {
 		tfDireccion.setText(aux.getDireccion());
 		tfEmail.setText(aux.getEmail());
 		tfTelefono.setText(aux.getTelefono());
+	}
+
+	public JButton getBtnQuitar() {
+		return btnQuitar;
+	}
+
+	public void setBtnQuitar(JButton btnQuitar) {
+		this.btnQuitar = btnQuitar;
+	}
+
+	public JButton getBtnGuardar() {
+		return btnGuardar;
+	}
+
+	public void setBtnGuardar(JButton btnGuardar) {
+		this.btnGuardar = btnGuardar;
 	}
 	
 }

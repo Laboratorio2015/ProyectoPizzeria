@@ -63,4 +63,18 @@ public class Items
 		}
 		return null;
 	}
+
+	public int ultimoItem() 
+	{
+		Integer ultimo=0;
+		List<ItemDTO> items=this.item.readAll();
+		Iterator<ItemDTO> Iterador = items.iterator();
+		while(Iterador.hasNext())
+		{
+			ItemDTO elemento = Iterador.next();
+			if(elemento.getIditem()>ultimo)
+				ultimo=elemento.getIditem();
+		}
+		return ultimo;
+	}
 }

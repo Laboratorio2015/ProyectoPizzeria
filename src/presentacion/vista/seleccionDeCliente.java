@@ -117,10 +117,11 @@ public class seleccionDeCliente extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent arg0)
 				{
-					seleccionDeCliente.this.pedido.setCliente(cliente);
-					//control.getPedido().agregarPedido(seleccionDeCliente.this.pedido);
-					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
-					control.getMonitorCocina().nuevoPedido(seleccionDeCliente.this.pedido);
+					cliente=control.getCliente().buscarCliente(Integer.parseInt(tfAgregarDNI.getText()));
+					pedido.setCliente(cliente);
+					control.getPedido().agregarPedido(pedido);
+					//JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
+					//control.getMonitorCocina().nuevoPedido(pedido);
 					new ReporteTicket(seleccionDeCliente.this.pedido.getProductos()).mostrar();
 					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
 					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);

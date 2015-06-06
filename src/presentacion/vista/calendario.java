@@ -15,6 +15,8 @@ import java.util.Date;
 import javax.swing.JScrollPane;
 
 import org.freixas.jcalendar.JCalendar;
+import java.awt.Color;
+import javax.swing.border.MatteBorder;
 
 public class calendario extends JDialog {
 
@@ -31,11 +33,14 @@ public class calendario extends JDialog {
 		setTitle("Calendario");
 		setBounds(100, 100, 319, 239);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(new Color(204, 204, 0));
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
 			 _calendar= new JCalendar();
+			 _calendar.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			 _calendar.setBackground(new Color(204, 204, 0));
 			 contentPanel.add(_calendar);
 		}
 		{

@@ -35,6 +35,9 @@ public class repartidorBajaModificacion extends JDialog {
 	private  String[] nombreColumnasRepartidor = {"DNI","Nombre","Apellido"};
 	private DefaultTableModel model;
 	private Controlador control;
+	private JButton btnGuardar;
+	private JButton btnQuitar ;
+	private JButton btnFinalizar;
 
 	public repartidorBajaModificacion(final Controlador control) {
 		setBounds(100, 100, 697, 638);
@@ -45,23 +48,24 @@ public class repartidorBajaModificacion extends JDialog {
 		this.control=control;
 		contentPanel.setLayout(null);
 		{
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(67, 188, 200, 254);
-			contentPanel.add(scrollPane);
-			{
-				table = new JTable(model);
-				table.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mousePressed(MouseEvent e) {
-						RepartidorDTO auxi=control.getRepartidor().buscarRepartidor(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
-						agregarDatos(auxi);
-					}
-				});
-				scrollPane.setViewportView(table);
-			}
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(67, 188, 200, 254);
+		contentPanel.add(scrollPane);
+		{
+			table = new JTable(model);
+			table.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					RepartidorDTO auxi=control.getRepartidor().buscarRepartidor(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
+					agregarDatos(auxi);
+				}
+			});
+			scrollPane.setViewportView(table);
+		}
 		}
 		
 		tfdni = new JTextField();
+		tfdni.setEditable(false);
 		tfdni.setBounds(464, 174, 200, 22);
 		contentPanel.add(tfdni);
 		tfdni.setColumns(10);
@@ -92,7 +96,7 @@ public class repartidorBajaModificacion extends JDialog {
 			label.setIcon(new ImageIcon(repartidorBajaModificacion.class.getResource("/prototipos/modificar-baja repartidor.png")));
 		}
 		{
-			JButton btnGuardar = new JButton("OK");
+			btnGuardar= new JButton("OK");
 			btnGuardar.setOpaque(false);
 			btnGuardar.setBounds(395, 406, 61, 46);
 			contentPanel.add(btnGuardar);
@@ -100,22 +104,22 @@ public class repartidorBajaModificacion extends JDialog {
 			getRootPane().setDefaultButton(btnGuardar);
 		}
 		{
-			JButton btnCancelar = new JButton("Cancel");
-			btnCancelar.setOpaque(false);
-			btnCancelar.addActionListener(new ActionListener() {
+			btnQuitar= new JButton("Cancel");
+			btnQuitar.setOpaque(false);
+			btnQuitar.setBounds(40, 478, 52, 46);
+			contentPanel.add(btnQuitar);
+			btnQuitar.setActionCommand("Cancel");
+		}
+		{
+			btnFinalizar= new JButton("OK");
+			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
 				}
 			});
-			btnCancelar.setBounds(40, 478, 52, 46);
-			contentPanel.add(btnCancelar);
-			btnCancelar.setActionCommand("Cancel");
-		}
-		{
-			JButton btnFinalizar = new JButton("OK");
 			btnFinalizar.setOpaque(false);
 			btnFinalizar.setActionCommand("OK");
-			btnFinalizar.setBounds(475, 534, 150, 36);
+			btnFinalizar.setBounds(472, 534, 150, 36);
 			contentPanel.add(btnFinalizar);
 		}
 	}
@@ -126,6 +130,14 @@ public class repartidorBajaModificacion extends JDialog {
 
 	public void setTable(JTable table) {
 		this.table = table;
+	}
+	
+	public JButton getBtnQuitar() {
+		return btnQuitar;
+	}
+
+	public void setBtnQuitar(JButton btnQuitar) {
+		this.btnQuitar = btnQuitar;
 	}
 
 	public JTextField getTfdni() {
@@ -183,6 +195,23 @@ public class repartidorBajaModificacion extends JDialog {
 	public void setNombreColumnasRepartidor(String[] nombreColumnasRepartidor) {
 		this.nombreColumnasRepartidor = nombreColumnasRepartidor;
 	}
+	
+	public JButton getBtnGuardar() {
+		return btnGuardar;
+	}
+
+	public void setBtnGuardar(JButton btnGuardar) {
+		this.btnGuardar = btnGuardar;
+	}
+
+	public JButton getBtnFinalizar() {
+		return btnFinalizar;
+	}
+
+	public void setBtnFinalizar(JButton btnFinalizar) {
+		this.btnFinalizar = btnFinalizar;
+	}
+
 	public void agregarDatos(RepartidorDTO aux)
 	{
 		tfdni.setText(aux.getDni().toString());

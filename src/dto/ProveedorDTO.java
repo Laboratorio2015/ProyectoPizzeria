@@ -12,10 +12,10 @@ public class ProveedorDTO
 	private String telefono;
 	private String email;
 	private String direccion;
-	private ArrayList<MateriaPrimaDTO> materiasProvistas;
 	
 	
-	public ProveedorDTO(Integer identificador, String nombre,String categoria ,String telefono,String email ,String direccion,ArrayList<MateriaPrimaDTO> materiasProvistas)
+	
+	public ProveedorDTO(Integer identificador, String nombre,String categoria ,String telefono,String email ,String direccion)
 	{
 		this.id = identificador;
 		this.nombre = nombre;
@@ -23,7 +23,10 @@ public class ProveedorDTO
 		this.telefono=telefono;
 		this.email=email;
 		this.direccion=direccion;
-		this.materiasProvistas=materiasProvistas;
+	}
+	public ProveedorDTO()
+	{
+		
 	}
 	
 	public Integer getId() {
@@ -76,13 +79,6 @@ public class ProveedorDTO
 		this.email = email;
 	}
 	
-	public ArrayList<MateriaPrimaDTO> getMateriasProvistas() {
-		return materiasProvistas;
-	}
-
-	public void setMateriasProvistas(ArrayList<MateriaPrimaDTO> materiasProvistas) {
-		this.materiasProvistas = materiasProvistas;
-	}
 
 	//esta funcion verifica al proveedor para no cargarlo dos veces
 		public static boolean estaProveedor(List<ProveedorDTO> proveedores, Integer num)

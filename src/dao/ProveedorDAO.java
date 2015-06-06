@@ -26,22 +26,15 @@ public class ProveedorDAO {
 		PreparedStatement statement;
 		try 
 		{
-			MatPrimas matAux=new MatPrimas();
-			ArrayList<Integer> idMateriasPri= matAux.idmatprimas(proveedor);
-			Iterator<Integer> Iterador = idMateriasPri.iterator();
+			//MatPrimas matAux=new MatPrimas();
 			statement = conexion.getSQLConexion().prepareStatement(insert);
-			while(Iterador.hasNext())
-			{
-				Integer elemento = Iterador.next();
 				statement.setInt(1, proveedor.getId());
 				statement.setString(2, proveedor.getNombre());
 				statement.setString(3, proveedor.getCategoria());
 				statement.setString(4,proveedor.getTelefono());
 				statement.setString(5, proveedor.getDireccion());
 				statement.setString(6, proveedor.getEmail());
-				statement.setInt(7, elemento);
 				statement.executeUpdate();
-			}
 			System.out.println("inserccion exitosa de proveedor");
 			return true;
 			
@@ -114,10 +107,9 @@ public class ProveedorDAO {
 						  break;
 				}
 				
-				MatPrimas matAux=new MatPrimas();
 				ProveedorDTO aux=new ProveedorDTO(resultSet.getInt("idproveedor"),nombre,
 						categoria,resultSet.getString("telefono"),
-						resultSet.getString("email"),resultSet.getString("direccion"),(ArrayList<MateriaPrimaDTO>)matAux.obtenerMatPrimas(resultSet.getInt("idproveedor")));
+						resultSet.getString("email"),resultSet.getString("direccion"));
 				if(!ProveedorDTO.estaProveedor(proveedores, aux.getId()))
 					proveedores.add(aux);
 			}

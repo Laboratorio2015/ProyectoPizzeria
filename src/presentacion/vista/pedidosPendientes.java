@@ -26,6 +26,7 @@ import javax.swing.JTable;
 
 import dto.PedidoDTO;
 import dto.ProductoDTO;
+import dto.RepartidorDTO;
 
 import main.Main;
 import modelo.Pedidos;
@@ -73,7 +74,7 @@ public class pedidosPendientes extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(43, 124, 253, 362);
+		scrollPane.setBounds(24, 113, 295, 377);
 		contentPanel.add(scrollPane);
 
 		
@@ -101,17 +102,25 @@ public class pedidosPendientes extends JDialog {
 					lMarcarComoPreparado.setVisible(false);
 					lRechazarPedido.setVisible(true);
 					lModificarPedido.setVisible(false);
-					lCobroACliente.setVisible(true);
-					if(pedido.getLlevaDelivery())
+					String repartidor=table.getValueAt(numFilaSeleccionada, 4).toString();
+					if(pedido.getLlevaDelivery() && repartidor.compareTo(" ")==0)
 					{
 						lAsignarRepartidor.setVisible(true);
-						lCobroADelivery.setVisible(true);	
-						
+						lCobroADelivery.setVisible(false);
+						lCobroACliente.setVisible(false);
+					}
+
+					else if(pedido.getLlevaDelivery() && table.getValueAt(numFilaSeleccionada, 4).toString().compareTo("")!=0)
+					{
+						lAsignarRepartidor.setVisible(false);
+						lCobroADelivery.setVisible(true);
+						lCobroACliente.setVisible(false);
 					}
 					else
 					{
 						lAsignarRepartidor.setVisible(false);
 						lCobroADelivery.setVisible(false);
+						lCobroACliente.setVisible(true);
 						
 					}
 				}
@@ -178,7 +187,6 @@ public class pedidosPendientes extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent e) 
 				{
-					vaciarTabla();
 					dispose();
 				}
 			});
@@ -227,9 +235,15 @@ public class pedidosPendientes extends JDialog {
 				{
 					if(model.getValueAt(numFilaSeleccionada, 2).toString()!="rechazado")
 					{
-					registrarCobroManualmente cobroManual=new registrarCobroManualmente(_pedPendiente);
-					cobroManual.setVisible(true);
+						registrarCobroManualmente cobroManual=new registrarCobroManualmente(_pedPendiente);
+						cobroManual.setVisible(true);
+						PedidoDTO aux= control.getPedido().buscarPedidoId(Integer.parseInt(table.getValueAt(numFilaSeleccionada, 0).toString()));
+						aux.set_estado("cobrado");
+						control.getPedido().quitarPedido(aux);
+						control.getPedido().agregarPedido(aux);
+						llenarTabla();
 					}
+					llenarTabla();
 				}
 			});
 			btnRegistrarCobroManual.setOpaque(false);
@@ -248,6 +262,9 @@ public class pedidosPendientes extends JDialog {
 						control.getMonitorCocina().quitarPedido(pedidoCambia);
 						model.setValueAt("rechazado", numFilaSeleccionada, 2);
 						pedidoCambia.set_estado("rechazado");
+						control.getPedido().quitarPedido(pedidoCambia);
+						control.getPedido().agregarPedido(pedidoCambia);
+						llenarTabla();						
 				}
 			});
 			
@@ -263,10 +280,16 @@ public class pedidosPendientes extends JDialog {
 				public void mouseClicked(MouseEvent arg0) 
 				{
 					numFilaSeleccionada=table.getSelectedRow();
-					if(model.getValueAt(numFilaSeleccionada, 2).toString()=="preparado"&& model.getValueAt(numFilaSeleccionada, 2).toString()!="rechazado")
+					if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("preparado")==0)
 					{
-						registrarCobroDePedido cobroPedido= new registrarCobroDePedido(_pedPendiente,control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0))),control);
+						PedidoDTO cobrado=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
+						registrarCobroDePedido cobroPedido= new registrarCobroDePedido(_pedPendiente,cobrado,control);
 						cobroPedido.setVisible(true);
+						model.setValueAt("cobrado", numFilaSeleccionada, 2);
+						cobrado.set_estado("cobrado");
+						control.getPedido().quitarPedido(cobrado);
+						control.getPedido().agregarPedido(cobrado);
+						
 					}
 					else if(model.getValueAt(numFilaSeleccionada, 2).toString()=="solicitado")
 					{
@@ -287,7 +310,7 @@ public class pedidosPendientes extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent arg0) 
 				{
-					seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente);
+					seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente,control, numFilaSeleccionada);
 					selecRepartidor.setVisible(true);
 				}
 			});
@@ -327,27 +350,35 @@ public class pedidosPendientes extends JDialog {
 		model.addColumn("Pedido");
 		model.addColumn("Valor");
 		model.addColumn("Estado");
+		model.addColumn("Delivery");
+		model.addColumn("Itinerario");
 	}
 	
-	
-
 	public void llenarTabla() 
 	{
+		model.setRowCount(0); //Para vaciar la tabla
+		model.setColumnCount(0);
+		model.addColumn("Pedido");
+		model.addColumn("Valor");
+		model.addColumn("Estado");
+		model.addColumn("Delivery");
+		model.addColumn("Itinerario");
 		Iterator<PedidoDTO> Iterador = control.getPedido().obtenerPedidos().iterator();
 		while(Iterador.hasNext())
 		{
 			PedidoDTO elemento = Iterador.next();
-			model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado()});			
+			model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento)," "});			
 		}
 		table.setModel(model);		
 	}
 	
-	public void vaciarTabla()
+
+	private String Delivery(PedidoDTO aux)
 	{
-		       for (int i = 0; i < table.getRowCount(); i++) {
-		           model.removeRow(i);
-		           i-=1;
-		       }
+		if(aux.getLlevaDelivery())
+			return "true";
+		else
+			return  "-";
 	}
 
 	public DefaultTableModel getModel() {
@@ -362,4 +393,13 @@ public class pedidosPendientes extends JDialog {
 	{
 		return numFilaSeleccionada;
 	}
+
+	public JTable getTable() {
+		return table;
+	}
+
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+	
 }

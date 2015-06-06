@@ -24,6 +24,7 @@ public class proveedorAlta extends JDialog {
 	private JTextField tfEmail;
 	private JTextField tfDireccion;
 	private JButton btnCancelar;
+	private JButton btnRegistrar;
 
 
 	public proveedorAlta() {
@@ -74,7 +75,7 @@ public class proveedorAlta extends JDialog {
 			contentPanel.add(label);
 		}
 		{
-			JButton btnRegistrar = new JButton("OK");
+			btnRegistrar= new JButton("OK");
 			btnRegistrar.setOpaque(false);
 			btnRegistrar.setBounds(98, 409, 165, 35);
 			contentPanel.add(btnRegistrar);
@@ -95,4 +96,65 @@ public class proveedorAlta extends JDialog {
 			contentPanel.add(btnCancelar);
 		}
 	}
+
+
+	public JTextField getTfDenominacion() {
+		return tfDenominacion;
+	}
+
+
+	public void setTfDenominacion(JTextField tfDenominacion) {
+		this.tfDenominacion = tfDenominacion;
+	}
+
+
+	public JTextField getTfCategoria() {
+		return tfCategoria;
+	}
+
+
+	public void setTfCategoria(JTextField tfCategoria) {
+		this.tfCategoria = tfCategoria;
+	}
+
+
+	public JTextField getTfTelefono() {
+		return tfTelefono;
+	}
+
+
+	public void setTfTelefono(JTextField tfTelefono) {
+		this.tfTelefono = tfTelefono;
+	}
+
+
+	public JTextField getTfEmail() {
+		return tfEmail;
+	}
+
+
+	public void setTfEmail(JTextField tfEmail) {
+		this.tfEmail = tfEmail;
+	}
+
+
+	public JTextField getTfDireccion() {
+		return tfDireccion;
+	}
+
+
+	public void setTfDireccion(JTextField tfDireccion) {
+		this.tfDireccion = tfDireccion;
+	}
+
+
+	public JButton getBtnRegistrar() {
+		return btnRegistrar;
+	}
+
+
+	public void setBtnRegistrar(JButton btnRegistrar) {
+		this.btnRegistrar = btnRegistrar;
+	}
+	
 }

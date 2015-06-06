@@ -18,6 +18,10 @@ public class ProductoDTO
 		this.precio=precio;
 		this.tipo=tipo;
 	}
+	public ProductoDTO()
+	{
+		
+	}
 	
 	public String getTipo() {
 		return tipo;

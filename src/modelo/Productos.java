@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dao.ProductoDAO;
+import dto.ItemDTO;
 import dto.ProductoDTO;
 
 
@@ -57,5 +58,19 @@ public class Productos
 				nombres.add(elemento.getNombre());
 		}
 		return nombres;
+	}
+
+	public int ultimoProducto()
+	{
+		Integer ultimo=0;
+		List<ProductoDTO> productos=this.producto.readAll();
+		Iterator<ProductoDTO> Iterador = productos.iterator();
+		while(Iterador.hasNext())
+		{
+			ProductoDTO elemento = Iterador.next();
+			if(elemento.getIdproducto()>ultimo)
+				ultimo=elemento.getIdproducto();
+		}
+		return ultimo;
 	}
 }

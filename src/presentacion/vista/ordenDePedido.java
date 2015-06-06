@@ -574,11 +574,24 @@ public class ordenDePedido extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		tfAgregarEmpanada = new JTextField();		
-		tfAgregarEmpanada.setBounds(100, 161, 224, 25);
-		contentPanel.add(tfAgregarEmpanada);
-		tfAgregarEmpanada.setColumns(10);
-		tfAgregarEmpanada.setBounds(170, 161, 254, 22);
+		tfAgregarEmpanada = new JTextField();
+		tfAgregarEmpanada.addKeyListener(new KeyAdapter() 
+		{
+			@Override
+			public void keyTyped(KeyEvent evt) 
+			{
+				validarTexto(evt,tfAgregarEmpanada);
+			}
+			@Override
+			public void keyReleased(KeyEvent e) 
+			{
+				producto=control.getProducto().buscarProductoPorNombre(tfAgregarEmpanada.getText());
+				if(tfAgregarEmpanada.getText().length()>4)
+					tfPrecioUniEmpanada.setText(Integer.toString(producto.getPrecio()));
+			}
+			});	
+		
+		tfAgregarEmpanada.setBounds(68, 170, 222, 25);
 		contentPanel.add(tfAgregarEmpanada);
 		tfAgregarEmpanada.setColumns(10);
 		
@@ -612,6 +625,7 @@ public class ordenDePedido extends JDialog {
 				{
 					validarTexto(evt,tfAgregarOtroProducto);
 				}
+				
 				@Override
 				public void keyReleased(KeyEvent e) 
 				{
@@ -622,9 +636,6 @@ public class ordenDePedido extends JDialog {
 			});
 			tfAgregarOtroProducto.setColumns(10);
 			tfAgregarOtroProducto.setBounds(64, 333, 224, 25);
-			contentPanel.add(tfAgregarOtroProducto);
-			tfAgregarOtroProducto.setColumns(10);
-			tfAgregarOtroProducto.setBounds(169, 440, 254, 25);
 			contentPanel.add(tfAgregarOtroProducto);
 		}
 		{
@@ -830,7 +841,6 @@ public class ordenDePedido extends JDialog {
 			{
 				public void actionPerformed(ActionEvent arg0)
 				{
-					System.out.println(pedidoCambiar);
 					PedidoDTO nuevoPedido=new PedidoDTO();
 					nuevoPedido.setIdpedido(pedidoCambiar.getIdpedido());
 					nuevoPedido.set_estado("solicitado");
@@ -839,9 +849,13 @@ public class ordenDePedido extends JDialog {
 					nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 					nuevoPedido.setProductos(generarListaItem());
 					nuevoPedido.setCliente(pedidoCambiar.getCliente());
+					if(checkBoxRepartidor.isSelected())
+						nuevoPedido.setLlevaDelivery(true);
+					else
+						nuevoPedido.setLlevaDelivery(false);
 					control.getPedido().quitarPedido(pedidoCambiar);
 					control.getPedido().agregarPedido(nuevoPedido);
-					control.getMonitorCocina().nuevoPedido(nuevoPedido);
+					//control.getMonitorCocina().nuevoPedido(nuevoPedido);
 					vaciarFormulario();
 					dispose();
 				}

@@ -43,4 +43,17 @@ public class Proveedores
 		}
 		return null;		
 	}
+	public Integer ultimoProveedor()
+	{
+		Integer ultimo=0;
+		List<ProveedorDTO> proveedores=this.proveedor.readAll();
+		Iterator<ProveedorDTO> Iterador = proveedores.iterator();
+		while(Iterador.hasNext())
+		{
+			ProveedorDTO elemento = Iterador.next();
+			if(elemento.getId()>ultimo)
+				ultimo=elemento.getId();
+		}
+		return ultimo;
+	}
 }

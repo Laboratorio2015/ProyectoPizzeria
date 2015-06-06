@@ -25,6 +25,8 @@ public class PedidoDAO
 	private static final String readall = "SELECT * FROM pedidos";
 	private static final String pedidosPendientes="select * from pedidos where estado='solicitado'";
 	private static final String listaItems="select iditem,producto, cantidad, comentario from pedidos P join items I on p.item=i.iditem and p.idpedido=";
+	private static final String ultimoPedido="select max(idpedido) from pedidos;";
+	private static final String borrarUltimoPedido="drop table ultimopedido;";
 	private static final Conexion conexion = Conexion.getConexion();
 	
 	public boolean insert(PedidoDTO pedido)
@@ -136,6 +138,8 @@ public class PedidoDAO
 		}
 		return pedidos;
 	}
+	
+	
 	
 	public List<PedidoDTO> pedidosPendientes()
 	{

@@ -14,12 +14,17 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JTextField;
 
 public class registrarCobroManualmente extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private pedidosPendientes _padre;
 	private registrarCobroManualmente _this;
+	private JTextField tfSeleccionItinerario;
+	private JTextField tfMuestraRepartidor;
+	private JTextField tfMontoPedido;
+	private JButton btnRegistrar;
 	
 	public registrarCobroManualmente(pedidosPendientes padre) 
 	{
@@ -33,6 +38,23 @@ public class registrarCobroManualmente extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		
+		tfSeleccionItinerario = new JTextField();
+		tfSeleccionItinerario.setBounds(301, 61, 141, 20);
+		contentPanel.add(tfSeleccionItinerario);
+		tfSeleccionItinerario.setColumns(10);
+		
+		tfMuestraRepartidor = new JTextField();
+		tfMuestraRepartidor.setEditable(false);
+		tfMuestraRepartidor.setBounds(136, 122, 274, 20);
+		contentPanel.add(tfMuestraRepartidor);
+		tfMuestraRepartidor.setColumns(10);
+		
+		tfMontoPedido = new JTextField();
+		tfMontoPedido.setEditable(false);
+		tfMontoPedido.setColumns(10);
+		tfMontoPedido.setBounds(175, 154, 235, 20);
+		contentPanel.add(tfMontoPedido);
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(registrarCobroManualmente.class.getResource("/prototipos/registrarCobroManualmete.png")));
@@ -40,20 +62,12 @@ public class registrarCobroManualmente extends JDialog {
 			contentPanel.add(label);
 		}
 		{
-			JButton okButton = new JButton("OK");
-			okButton.addMouseListener(new MouseAdapter() 
-			{
-				@Override
-				public void mouseClicked(MouseEvent e) 
-				{
-					dispose();
-				}
-			});
-			okButton.setOpaque(false);
-			okButton.setBounds(123, 212, 113, 29);
-			contentPanel.add(okButton);
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
+			btnRegistrar= new JButton("OK");
+			btnRegistrar.setOpaque(false);
+			btnRegistrar.setBounds(123, 212, 113, 29);
+			contentPanel.add(btnRegistrar);
+			btnRegistrar.setActionCommand("OK");
+			getRootPane().setDefaultButton(btnRegistrar);
 		}
 		{
 			JButton cancelButton = new JButton("Cancel");
@@ -71,5 +85,4 @@ public class registrarCobroManualmente extends JDialog {
 			cancelButton.setActionCommand("Cancel");
 		}
 	}
-
 }

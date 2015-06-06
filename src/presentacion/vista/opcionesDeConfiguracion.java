@@ -32,14 +32,6 @@ public class opcionesDeConfiguracion extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
-		btnAgregarMatPrima = new JButton("agregarMatPrima");
-		btnAgregarMatPrima.setBounds(697, 359, 114, 23);
-		contentPanel.add(btnAgregarMatPrima);
-		
-		btnEditarMatPrima = new JButton("EditarMatPrima");
-		btnEditarMatPrima.setBounds(697, 392, 114, 23);
-		contentPanel.add(btnEditarMatPrima);
 		{
 			JLabel label = new JLabel("");
 			label.setMinimumSize(new Dimension(1000, 650));
@@ -47,6 +39,16 @@ public class opcionesDeConfiguracion extends JDialog {
 			label.setBounds(0, 0, 984, 650);
 			contentPanel.add(label);
 		}
+		
+		btnAgregarMatPrima = new JButton("agregarMatPrima");
+		btnAgregarMatPrima.setOpaque(false);
+		btnAgregarMatPrima.setBounds(697, 359, 114, 23);
+		contentPanel.add(btnAgregarMatPrima);
+		
+		btnEditarMatPrima = new JButton("EditarMatPrima");
+		btnEditarMatPrima.setOpaque(false);
+		btnEditarMatPrima.setBounds(697, 392, 114, 23);
+		contentPanel.add(btnEditarMatPrima);
 		{
 			btnAgregarRepartidor = new JButton("OK");
 			btnAgregarRepartidor.setOpaque(false);
