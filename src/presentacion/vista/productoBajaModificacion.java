@@ -3,28 +3,21 @@ package presentacion.vista;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.Iterator;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
-
 import presentacion.controlador.Controlador;
-
 import dto.PedidoDTO;
 import dto.ProductoDTO;
-
 import javax.swing.JTable;
-
-import presentacion.controlador.Controlador;
-
-import dto.ProductoDTO;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -40,11 +33,9 @@ public class productoBajaModificacion extends JDialog {
 	private DefaultTableModel model;
 	private JTable tablaProductos;
 	private JComboBox cbTipo;
-	private DefaultTableModel model;
 	private  String[] nombreColumnasProducto = {"Nombre","Precio","Tipo"};
 	private JButton btnQuitar;
 	private JButton btnGuardar;
-	private Controlador control;
 
 	/**
 	 * Launch the application.
@@ -62,7 +53,7 @@ public class productoBajaModificacion extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public productoBajaModificacion(final Controlador control) {
+	
 	public productoBajaModificacion(final Controlador control) {
 		setBounds(100, 100, 746, 586);
 		getContentPane().setLayout(new BorderLayout());
@@ -161,8 +152,9 @@ public class productoBajaModificacion extends JDialog {
 		{
 			ProductoDTO elemento = Iterador.next();
 			model.addRow(new String[] {elemento.getNombre(),elemento.getTipo(),elemento.getPrecio().toString()});			
-				}
-			});
+		}
+		});
+			
 			btnFinalizar.setBounds(440, 459, 151, 38);
 			contentPanel.add(btnFinalizar);
 			btnFinalizar.setActionCommand("Cancel");
@@ -179,10 +171,6 @@ public class productoBajaModificacion extends JDialog {
 			modelo.addColumn("Tipo");
 			modelo.addColumn("Precio");
 		return modelo;
-		btnGuardar= new JButton("New button");
-		btnGuardar.setOpaque(false);
-		btnGuardar.setBounds(418, 326, 48, 52);
-		contentPanel.add(btnGuardar);
 	}
 
 	public JTextField getTfNombre() {
