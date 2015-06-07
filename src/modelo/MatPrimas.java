@@ -29,7 +29,7 @@ public class MatPrimas {
 		this.matPrima.delete(quitarMatPrima);
 	}
 	
-	public List<MateriaPrimaDTO> obtenerItems()
+	public List<MateriaPrimaDTO> obtenerMatPrimas()
 	{
 		return this.matPrima.readAll();
 	}
@@ -37,6 +37,19 @@ public class MatPrimas {
 	public List<MateriaPrimaDTO> obtenerMatPrimas(Integer idproveedor)
 	{
 		return this.matPrima.obtenerListaMatPrima(idproveedor);
+	}
+
+	public MateriaPrimaDTO buscarMatPrima(int idmatprima)
+	{
+		List<MateriaPrimaDTO> matprima=this.obtenerMatPrimas();
+		Iterator<MateriaPrimaDTO> Iterador = matprima.iterator();
+		while(Iterador.hasNext())
+		{
+			MateriaPrimaDTO elemento = Iterador.next();
+			if(elemento.getIdMatPrima().equals(idmatprima))
+				return elemento;
+		}
+		return null;
 	}
 
 }

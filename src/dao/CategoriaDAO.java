@@ -12,7 +12,7 @@ import dto.CategoriaDTO;
 public class CategoriaDAO 
 {
 	private static final String insert = "INSERT INTO categorias(idcategoria,nombre, fueeliminado) VALUES(?,?,?)";
-	private static final String delete = "DELETE FROM clientes WHERE idcategoria = ?";
+	private static final String delete = "DELETE FROM categorias WHERE idcategoria = ?";
 	private static final String readall = "SELECT * FROM categorias";
 	private static final Conexion conexion = Conexion.getConexion();
 	

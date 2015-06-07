@@ -5,27 +5,21 @@ public class MateriaPrimaDTO
 	private Integer idMatPrima;
 	private String nombre;
 	private CategoriaDTO categoria;
+	private Integer precio;
 	private Boolean fueeliminado;
 
 	
-	public MateriaPrimaDTO(Integer identificador, String nombre, CategoriaDTO categoria, Boolean fueliminado)
+	public MateriaPrimaDTO(Integer identificador, String nombre, CategoriaDTO categoria,Integer precio ,Boolean fueliminado)
 	{
 		this.idMatPrima = identificador;
 		this.nombre = nombre;
 		this.categoria=categoria;
+		this.precio=precio;
 		this.fueeliminado=fueliminado;
 	}
 	//constructor vacio
 	public MateriaPrimaDTO()
 	{
-	}
-	
-	public Integer getId() {
-		return idMatPrima;
-	}
-	public void setId(Integer num) 
-	{
-		this.idMatPrima = num;
 	}
 	
 	public String getNombre() 
@@ -54,6 +48,12 @@ public class MateriaPrimaDTO
 		this.categoria = categoria;
 	}
 		
+	public Integer getPrecio() {
+		return precio;
+	}
+	public void setPrecio(Integer precio) {
+		this.precio = precio;
+	}
 	public CategoriaDTO getCategoria() {
 		return categoria;
 	}

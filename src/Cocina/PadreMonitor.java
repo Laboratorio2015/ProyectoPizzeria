@@ -56,7 +56,7 @@ public class PadreMonitor {
 				if (getIntDeFaltante(elementoItem.getProducto().getNombre())!= -1)
 				{
 					int faltante = getIntDeFaltante(elementoItem.getProducto().getNombre());
-					ItemDTO actualizado = new ItemDTO(elementoItem.getIditem(), elementoItem.getProducto(), elementoItem.getCantidad() + productosFaltantes.get(faltante).getCantidad(),elementoItem.getComentario());
+					ItemDTO actualizado = new ItemDTO(elementoItem.getIditem(), elementoItem.getProducto(), elementoItem.getCantidad() + productosFaltantes.get(faltante).getCantidad(),elementoItem.getComentario(),false);
 					productosFaltantes.set(faltante, actualizado);
 				}
 				else{
@@ -82,7 +82,7 @@ public class PadreMonitor {
 			if (getIntDeFaltante(elementoItem.getProducto().getNombre())!= -1)
 			{
 				int faltante = getIntDeFaltante(elementoItem.getProducto().getNombre());
-				ItemDTO actualizado = new ItemDTO(elementoItem.getIditem(),elementoItem.getProducto(), elementoItem.getCantidad() + productosFaltantes.get(faltante).getCantidad(),elementoItem.getComentario());
+				ItemDTO actualizado = new ItemDTO(elementoItem.getIditem(),elementoItem.getProducto(), elementoItem.getCantidad() + productosFaltantes.get(faltante).getCantidad(),elementoItem.getComentario(),false);
 				productosFaltantes.set(faltante, actualizado);
 			}
 			else
@@ -109,7 +109,7 @@ public class PadreMonitor {
 		while(iteradorItem.hasNext()){
 			ItemDTO elementoItem = iteradorItem.next();
 			int indexAborrar = getIntDeFaltante(elementoItem.getProducto().getNombre());
-			ItemDTO correcionFaltantes = new ItemDTO(elementoItem.getIditem(),elementoItem.getProducto(), productosFaltantes.get(indexAborrar).getCantidad()-elementoItem.getCantidad(),elementoItem.getComentario());
+			ItemDTO correcionFaltantes = new ItemDTO(elementoItem.getIditem(),elementoItem.getProducto(), productosFaltantes.get(indexAborrar).getCantidad()-elementoItem.getCantidad(),elementoItem.getComentario(),false);
 			productosFaltantes.set(indexAborrar, correcionFaltantes);
 		}
 		if (listadoDePedidos.obtenerPedidos().contains(borrarPedido)){

@@ -1,9 +1,12 @@
 package modelo;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import dto.CategoriaDTO;
 import dto.ClienteDTO;
+import dto.ItemDTO;
 import dto.PedidoDTO;
 import dto.ProveedorDTO;
 import dao.ProveedorDAO;
@@ -43,6 +46,18 @@ public class Proveedores
 		}
 		return null;		
 	}
+	public ProveedorDTO buscarProveedorPorId(int idproveedor)
+	{
+		List<ProveedorDTO> proveedores=this.obtenerProveedor();
+		Iterator<ProveedorDTO> Iterador = proveedores.iterator();
+		while(Iterador.hasNext())
+		{
+			ProveedorDTO elemento = Iterador.next();
+			if(elemento.getIdproveedor().equals(idproveedor))
+				return elemento;
+		}
+		return null;
+	}
 	public Integer ultimoProveedor()
 	{
 		Integer ultimo=0;
@@ -56,4 +71,6 @@ public class Proveedores
 		}
 		return ultimo;
 	}
+
+	
 }

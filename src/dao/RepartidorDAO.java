@@ -32,8 +32,8 @@ public class RepartidorDAO
 				statement.setString(7,repartidor.getPatente());
 				statement.setString(8,repartidor.getTelefono());
 				statement.setString(9, repartidor.getEstado());
-				statement.setString(6,repartidor.getComentario());
-				statement.setBoolean(6,repartidor.getFueeliminado());
+				statement.setString(10,repartidor.getComentario());
+				statement.setBoolean(11,repartidor.getFueeliminado());
 
 
 				

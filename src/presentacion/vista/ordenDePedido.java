@@ -1321,7 +1321,7 @@ public class ordenDePedido extends JDialog {
 		System.out.println(this.control);
 		for(int i=0; i<this.tablaItems.getRowCount(); i++)
 		{
-			ItemDTO aux=new ItemDTO(empieza+i,control.getProducto().buscarProductoPorNombre(model.getValueAt(i, 0).toString()), Integer.parseInt((String)model.getValueAt(i, 1)), (String)model.getValueAt(i, 3));
+			ItemDTO aux=new ItemDTO(empieza+i,control.getProducto().buscarProductoPorNombre(model.getValueAt(i, 0).toString()), Integer.parseInt((String)model.getValueAt(i, 1)), (String)model.getValueAt(i, 3),false);
 			listaAux.add(aux);
 			control.getItem().agregarItem(aux);
 		}

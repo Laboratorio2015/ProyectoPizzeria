@@ -233,7 +233,7 @@ public class proveedorBajaModificacion extends JDialog {
 	public void agregarDatos(ProveedorDTO aux)
 	{
 		
-		tfCategoria.setText(aux.getCategoria());
+		tfCategoria.setText(aux.getCategoria().toString());
 		tfDenominacion.setText(aux.getNombre());
 		tfDireccion.setText(aux.getDireccion());
 		tfEmail.setText(aux.getEmail());

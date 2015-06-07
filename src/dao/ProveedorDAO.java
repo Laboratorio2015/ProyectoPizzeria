@@ -114,7 +114,7 @@ public class ProveedorDAO {
 						  break;
 				}
 				Categorias cat=new Categorias();
-				ArrayList<CategoriaDTO>listaCategoria= cat.pasarDeStringAArray(resultSet.getString("c"));
+				ArrayList<CategoriaDTO>listaCategoria= cat.pasarDeStringAArray(resultSet.getString("categoria"));
 				ProveedorDTO aux=new ProveedorDTO(resultSet.getInt("idproveedor"),nombre,
 						resultSet.getString("nombrecontacto"), listaCategoria,
 						resultSet.getString("telefono"),resultSet.getString("direccion"),

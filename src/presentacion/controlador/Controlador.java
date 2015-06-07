@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import Cocina.PadreMonitor;
+import modelo.Categorias;
 import modelo.Clientes;
 import modelo.Items;
 import modelo.Ofertas;
@@ -87,9 +88,10 @@ public class Controlador implements ActionListener
 	private Items item;
 	private Repartidores repartidor;
 	private Ofertas oferta;
+	private Categorias categoria;
 	
 	
-	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor, Repartidores repartidor,Ofertas oferta) 
+	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor, Repartidores repartidor,Ofertas oferta, Categorias categoria) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -99,6 +101,7 @@ public class Controlador implements ActionListener
 		this.proveedor=proveedor;
 		this.repartidor=repartidor;
 		this.oferta=oferta;
+		this.categoria=categoria;
 		this.ventana.getBtnIngresarPedido().addActionListener(this);
 		this.ventana.getBtnPedidosPendientes().addActionListener(this);
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
@@ -159,7 +162,7 @@ public class Controlador implements ActionListener
 		else if(this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnOrdenar())
 		{
 			Calendar c1 = GregorianCalendar.getInstance();
-			String fecha=(c1.getTime().getDay()+"-"+c1.getTime().getDate()+"-"+(c1.getTime().getYear()+1900));
+			String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
 			String hora=c1.getTime().getHours()+":"+c1.getTime().getMinutes();
 			PedidoDTO nuevoPedido=new PedidoDTO();
 			nuevoPedido.setIdpedido(this.pedido.ultimoPedido()+1);
@@ -269,19 +272,7 @@ public class Controlador implements ActionListener
 			ventanaAgregarProveedor.setVisible(true);
 		}
 		
-		//crear un proveedor
-		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnRegistrar())
-		{
-			ProveedorDTO nuevo= new ProveedorDTO();
-			nuevo.setId(proveedor.ultimoProveedor()+1);
-			nuevo.setNombre(ventanaAgregarProveedor.getTfDenominacion().getText());
-			nuevo.setCategoria(ventanaAgregarProveedor.getTfCategoria().getText());
-			nuevo.setDireccion(ventanaAgregarProveedor.getTfDireccion().getText());
-			nuevo.setEmail(ventanaAgregarProveedor.getTfEmail().getText());
-			nuevo.setTelefono(ventanaAgregarProveedor.getTfTelefono().getText());
-			proveedor.agregarProveedor(nuevo);
-			ventanaAgregarProveedor.dispose();
-		}
+
 		
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarRepartidor())
 		{
@@ -336,7 +327,19 @@ public class Controlador implements ActionListener
 			ventanaEditarProducto.getTfNombre().setText("");
 			ventanaEditarProducto.getTfPrecio().setText("");			
 		}
-		
+		//crear un proveedor
+		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnRegistrar())
+		{
+			ProveedorDTO nuevo= new ProveedorDTO();
+			nuevo.setId(proveedor.ultimoProveedor()+1);
+			nuevo.setNombre(ventanaAgregarProveedor.getTfDenominacion().getText());
+			nuevo.setCategoria(categoria.pasarDeStringAArray(ventanaAgregarProveedor.getTfCategoria().getText()));
+			nuevo.setDireccion(ventanaAgregarProveedor.getTfDireccion().getText());
+			nuevo.setEmail(ventanaAgregarProveedor.getTfEmail().getText());
+			nuevo.setTelefono(ventanaAgregarProveedor.getTfTelefono().getText());
+			proveedor.agregarProveedor(nuevo);
+			ventanaAgregarProveedor.dispose();
+		}
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarProveedor())
 		{
 			ventanaEditarProveedor=new proveedorBajaModificacion(this);
@@ -444,6 +447,7 @@ public class Controlador implements ActionListener
 			rep.setFechaNacimiento(ventanaAgregarRepartidor.getTfFechaNacimiento().getText().toString());
 			rep.setTelefono(ventanaAgregarRepartidor.getTfCelular().getText().toString());
 			rep.setEstado(null);
+			rep.setFueeliminado(false);
 			repartidor.agregarRepartidor(rep);
 			ventanaAgregarRepartidor.dispose();
 		}
@@ -535,7 +539,7 @@ public class Controlador implements ActionListener
 		{
 			if(producto.buscaNombresProductos(this.ventanaPedido.getModel().getValueAt(i, 0).toString())!=null)
 			{
-				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3));
+				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3),false);
 				item.agregarItem(aux);
 				listaAux.add(aux);
 			}

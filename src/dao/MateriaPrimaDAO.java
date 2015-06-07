@@ -18,7 +18,7 @@ import dto.RepartidorDTO;
 
 public class MateriaPrimaDAO 
 {
-	private static final String insert = "INSERT INTO matprimas(idmatprima,nombre, categoria, fueeliminado) VALUES(?, ?,?,?)";
+	private static final String insert = "INSERT INTO matprimas(idmatprima,nombre, categoria,precio ,fueeliminado) VALUES(?, ?,?,?)";
 	private static final String delete = "DELETE FROM matprimas WHERE idmatprima = ?";
 	private static final String readall = "SELECT * FROM matprimas";
 	private static final String obtenerlistamatprimas="select idmatprima,i.nombre from proveedores P join matprimas I on p.matprima=i.idmatprima and p.idproveedor= ?;";
@@ -31,10 +31,11 @@ public class MateriaPrimaDAO
 		try 
 		{
 			statement = conexion.getSQLConexion().prepareStatement(insert);
-			statement.setInt(1, materiaPrima.getId());
+			statement.setInt(1, materiaPrima.getIdMatPrima());
 			statement.setString(2, materiaPrima.getNombre());
 			statement.setInt(3, materiaPrima.getCategoria().getIdCategoria());
-			statement.setBoolean(4, materiaPrima.getFueeliminado());
+			statement.setInt(4, materiaPrima.getPrecio());
+			statement.setBoolean(5, materiaPrima.getFueeliminado());
 
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
@@ -62,7 +63,7 @@ public class MateriaPrimaDAO
 		try 
 		{
 			statement = conexion.getSQLConexion().prepareStatement(delete);
-			statement.setInt(1, materiaPrima_a_eliminar.getId());
+			statement.setInt(1, materiaPrima_a_eliminar.getIdMatPrima());
 			chequeoUpdate = statement.executeUpdate();
 			if(chequeoUpdate > 0)
 			{
@@ -97,7 +98,7 @@ public class MateriaPrimaDAO
 				Categorias aux= new Categorias();
 				CategoriaDTO categoria=aux.buscarCategoria(resultSet.getInt("categoria"));
 				materiaPrima.add(new MateriaPrimaDTO(resultSet.getInt("idmatprima"), resultSet.getString("nombre"),
-						categoria,resultSet.getBoolean("fueeliminado")));
+						categoria,resultSet.getInt("precio"),resultSet.getBoolean("fueeliminado")));
 			}
 		} 
 		catch (SQLException e) 
@@ -127,7 +128,7 @@ public class MateriaPrimaDAO
 				Categorias aux= new Categorias();
 				CategoriaDTO categoria=aux.buscarCategoria(resultSet.getInt("categoria"));
 				matprimas.add(new MateriaPrimaDTO(resultSet.getInt("idmatprima"), resultSet.getString("nombre"),
-						categoria,resultSet.getBoolean("fueeliminado")));
+						categoria,resultSet.getInt("precio"),resultSet.getBoolean("fueeliminado")));
 			}
 		} 
 		catch (SQLException e) 
