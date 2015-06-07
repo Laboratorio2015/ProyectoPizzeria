@@ -10,13 +10,15 @@ public class ProductoDTO
 	private String nombre;
 	private Integer precio;
 	private String tipo;
+	private Boolean fueeliminado;
 	
-	public ProductoDTO( Integer idproducto,String nombre, Integer precio, String tipo)
+	public ProductoDTO( Integer idproducto,String nombre, Integer precio, String tipo, Boolean fueeliminado)
 	{
 		this.nombre=nombre;
 		this.idproducto=idproducto;
 		this.precio=precio;
 		this.tipo=tipo;
+		this.fueeliminado=fueeliminado;
 	}
 	public ProductoDTO()
 	{
@@ -56,7 +58,13 @@ public class ProductoDTO
 	public void setIdproducto(Integer idproducto) {
 		this.idproducto = idproducto;
 	}
-
+	
+	public Boolean getFueeliminado() {
+		return fueeliminado;
+	}
+	public void setFueeliminado(Boolean fueeliminado) {
+		this.fueeliminado = fueeliminado;
+	}
 	public static Integer buscarPrecio (ArrayList<ProductoDTO> productos, String nombre)
 	{
 		Iterator<ProductoDTO> Iterador = productos.iterator();

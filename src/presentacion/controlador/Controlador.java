@@ -3,6 +3,8 @@ package presentacion.controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,18 +13,22 @@ import javax.swing.JOptionPane;
 import Cocina.PadreMonitor;
 import modelo.Clientes;
 import modelo.Items;
+import modelo.Ofertas;
 import modelo.Pedidos;
 import modelo.Productos;
 import modelo.Proveedores;
 import modelo.Repartidores;
 import dto.ClienteDTO;
 import dto.ItemDTO;
+import dto.OfertaDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;
 import dto.ProveedorDTO;
 import dto.RepartidorDTO;
 import presentacion.vista.VentanaPrincipal;
 import presentacion.vista.calendario;
+import presentacion.vista.clienteBajaModificacion;
+import presentacion.vista.gestionCategoria;
 import presentacion.vista.matPrimaAlta;
 import presentacion.vista.matPrimaBajaModificacion;
 import presentacion.vista.opcionesDeConfiguracion;
@@ -32,6 +38,8 @@ import presentacion.vista.pedidoMenu;
 import presentacion.vista.pedidosPendientes;
 import presentacion.vista.productoAlta;
 import presentacion.vista.productoBajaModificacion;
+import presentacion.vista.promocionAlta;
+import presentacion.vista.promocionBajaModificacion;
 import presentacion.vista.proveedorAlta;
 import presentacion.vista.proveedorBajaModificacion;
 import presentacion.vista.registrarCobroDePedido;
@@ -59,6 +67,10 @@ public class Controlador implements ActionListener
 	private repartidorBajaModificacion ventanaEditarRepartidor;
 	private matPrimaAlta ventanaAgregarMatPrima;
 	private matPrimaBajaModificacion ventanaEditarMatPrima;
+	private promocionAlta ventanaAgregarPromocion;
+	private promocionBajaModificacion ventanaEditarPromocion;
+	private gestionCategoria ventanaGestionCategoria;
+	private clienteBajaModificacion ventanaModificacionCliente;
 	private calendario ventanaCalendario;
 	private registrarCobroDePedido ventanaRegCobroPedido;
 	private registrarCobroManualmente ventanaRegCobroManual;
@@ -74,9 +86,10 @@ public class Controlador implements ActionListener
 	private Clientes cliente;
 	private Items item;
 	private Repartidores repartidor;
+	private Ofertas oferta;
 	
 	
-	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor, Repartidores repartidor) 
+	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor, Repartidores repartidor,Ofertas oferta) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -84,7 +97,8 @@ public class Controlador implements ActionListener
 		this.item=item;
 		this.producto=producto;
 		this.proveedor=proveedor;
-		this.repartidor=repartidor;		
+		this.repartidor=repartidor;
+		this.oferta=oferta;
 		this.ventana.getBtnIngresarPedido().addActionListener(this);
 		this.ventana.getBtnPedidosPendientes().addActionListener(this);
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
@@ -136,10 +150,17 @@ public class Controlador implements ActionListener
 			ventanaConfiguraciones.getBtnEditarRepartidor().addActionListener(this);
 			ventanaConfiguraciones.getBtnAgregarMatPrima().addActionListener(this);
 			ventanaConfiguraciones.getBtnEditarMatPrima().addActionListener(this);
+			ventanaConfiguraciones.getBtnAgregarPromocion().addActionListener(this);
+			ventanaConfiguraciones.getBtnEditarPromocion().addActionListener(this);
+			ventanaConfiguraciones.getBtnEditarCliente().addActionListener(this);
+			ventanaConfiguraciones.getBtnGestionarCategorias().addActionListener(this);
 		}
 		//al ordenar.... crea un pedido y llama a la ventana para seleccionar un cliente
 		else if(this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnOrdenar())
 		{
+			Calendar c1 = GregorianCalendar.getInstance();
+			String fecha=(c1.getTime().getDay()+"-"+c1.getTime().getDate()+"-"+(c1.getTime().getYear()+1900));
+			String hora=c1.getTime().getHours()+":"+c1.getTime().getMinutes();
 			PedidoDTO nuevoPedido=new PedidoDTO();
 			nuevoPedido.setIdpedido(this.pedido.ultimoPedido()+1);
 			nuevoPedido.set_estado("solicitado");
@@ -151,7 +172,10 @@ public class Controlador implements ActionListener
 			nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 			nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 			nuevoPedido.setProductos(generarListaItems());
-			
+			nuevoPedido.setOfertas(generarListaOfertas());
+			nuevoPedido.setFecha(fecha);
+			nuevoPedido.setHora(hora);
+			nuevoPedido.setFueeliminado(false);
 			this.ventanaCliente=new seleccionDeCliente(this,nuevoPedido);
 			this.ventanaCliente.getBtnAgregarCliente().addActionListener(this);
 			this.ventanaCliente.getBtnEditarCliente().addActionListener(this);
@@ -423,7 +447,33 @@ public class Controlador implements ActionListener
 			repartidor.agregarRepartidor(rep);
 			ventanaAgregarRepartidor.dispose();
 		}
+		//ventana de configuracion agregar una promocion
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarPromocion())
+		{
+			ventanaAgregarPromocion=new promocionAlta();
+			ventanaAgregarPromocion.setVisible(true);
+		}
 		
+		//ventana de configuracion editar una promocion
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarPromocion())
+		{
+			ventanaEditarPromocion=new promocionBajaModificacion();
+			ventanaEditarPromocion.setVisible(true);
+		}
+		
+		//ventana de configuracion para editar un cliente
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarCliente())
+		{
+			ventanaModificacionCliente=new clienteBajaModificacion();
+			ventanaModificacionCliente.setVisible(true);
+		}
+		
+		//ventana de configuraciones para gestionar una categoria
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnGestionarCategorias())
+		{
+			ventanaGestionCategoria=new gestionCategoria();
+			ventanaGestionCategoria.setVisible(true);
+		}
 		//generar ventana para dar de alta a cliente
 		else if (this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnAgregarCliente())
 		{
@@ -477,6 +527,40 @@ public class Controlador implements ActionListener
 	}
 	
 	
+	public ArrayList<ItemDTO> generarListaItems() 
+	{
+		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
+		
+		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
+		{
+			if(producto.buscaNombresProductos(this.ventanaPedido.getModel().getValueAt(i, 0).toString())!=null)
+			{
+				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3));
+				item.agregarItem(aux);
+				listaAux.add(aux);
+			}
+		}
+		return listaAux;
+	}
+	private ArrayList<OfertaDTO> generarListaOfertas() 
+	{
+		ArrayList<OfertaDTO> listaAux= new ArrayList<OfertaDTO>();
+		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
+		{
+			if((oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()))!=null)
+			{
+				OfertaDTO aux=oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 1).toString());
+				aux.setIdOferta(this.oferta.ultimaOferta()+1);
+				aux.setNombre(aux.getNombre());
+				aux.setPrecio(aux.getPrecio());
+				aux.setProductosOfertados(aux.getProductosOfertados());
+				oferta.agregarOferta(aux);
+				listaAux.add(aux);
+			}
+		}
+	return listaAux;
+	}
+
 	public Repartidores getRepartidor() {
 		return repartidor;
 	}
@@ -543,17 +627,6 @@ public class Controlador implements ActionListener
 		this.ventanaPedido = ventanaPedido;
 	}
 	
-	public ArrayList<ItemDTO> generarListaItems() 
-	{
-		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
-		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
-		{
-			ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3));
-			item.agregarItem(aux);
-			listaAux.add(aux);
-		}
-		return listaAux;
-	}
 	
 	private void vaciarFormulario() 
 	{

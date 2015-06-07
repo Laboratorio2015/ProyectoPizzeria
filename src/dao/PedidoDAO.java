@@ -5,28 +5,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
 import modelo.Clientes;
 import modelo.Items;
+import modelo.Ofertas;
 import modelo.Pedidos;
 
 import dto.ClienteDTO;
 import dto.ItemDTO;
+import dto.OfertaDTO;
 import dto.PedidoDTO;
 import conexion.Conexion;
 
 
 public class PedidoDAO 
 {
-	private static final String insert = "INSERT INTO pedidos(idpedido, item,fecha, hora, estado, total, ticket,comanda, cliente,delivery) VALUES(?,?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String insert = "INSERT INTO pedidos(idpedido, item,fecha, hora, estado, total, ticket,comanda, cliente,llevadelivery,oferta,fueeliminado) VALUES(?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String delete = "DELETE FROM pedidos WHERE idpedido = ?";
 	private static final String readall = "SELECT * FROM pedidos";
 	private static final String pedidosPendientes="select * from pedidos where estado='solicitado'";
-	private static final String listaItems="select iditem,producto, cantidad, comentario from pedidos P join items I on p.item=i.iditem and p.idpedido=";
-	private static final String ultimoPedido="select max(idpedido) from pedidos;";
-	private static final String borrarUltimoPedido="drop table ultimopedido;";
+	private static final String listaItems="select item from pedidos where idpedido=";
+	private static final String listaOfertas="select oferta from pedidos where idpedido=";
 	private static final Conexion conexion = Conexion.getConexion();
 	
 	public boolean insert(PedidoDTO pedido)
@@ -34,25 +37,25 @@ public class PedidoDAO
 		PreparedStatement statement;
 		try 
 		{
+			
 			Items ite=new Items();
-			ArrayList<Integer> iditems= ite.iditems(pedido);
-			Iterator<Integer> Iterador = iditems.iterator();
-			statement = conexion.getSQLConexion().prepareStatement(insert);
-			while(Iterador.hasNext())
-			{
-				Integer elemento = Iterador.next();			
+			String iditems= ite.iditemsPed(pedido);
+			Ofertas ofe=new Ofertas();
+			String idofertas= ofe.iditemsOferta(pedido);
+			statement = conexion.getSQLConexion().prepareStatement(insert);		
 				statement.setInt(1, pedido.getIdpedido());
-				statement.setInt(2, elemento);
-				statement.setDate(3, pedido.getFecha());
-				statement.setTime(4, pedido.getHora());
+				statement.setString(2, iditems);
+				statement.setString(3, pedido.getFecha());
+				statement.setString(4, pedido.getHora());
 				statement.setString(5,pedido.get_estado());
 				statement.setInt(6, pedido.getTotal());
 				statement.setInt(7, pedido.get_ticket());
 				statement.setInt(8, pedido.get_comanda());
-				statement.setInt(9, pedido.getCliente().getDni());
+				statement.setInt(9, pedido.getCliente().getIdcliente());
 				statement.setBoolean(10, pedido.getLlevaDelivery());
+				statement.setString(11, idofertas);
+				statement.setBoolean(12, pedido.getFueeliminado());
 				statement.executeUpdate();
-			}
 				System.out.println("inserccion exitosa de pedido");
 				return true;
 			
@@ -116,16 +119,18 @@ public class PedidoDAO
 					  if (y.charAt(i) != ' ')
 					    estadoPedido += y.charAt(i);
 				}
-				Items ite=new Items();
 				Clientes cli=new Clientes();
-				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),(ArrayList<ItemDTO>)ite.obtenerItemsPedido(resultSet.getInt("idpedido")),
-				resultSet.getDate("fecha"),resultSet.getTime("hora"),estadoPedido,
+				Items ite=new Items();
+				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
+				Ofertas ofe=new Ofertas();
+				ArrayList<OfertaDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
+				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
-				resultSet.getInt("comanda"),ClienteDTO.buscarCliente(cli.obtenerClientes(),(Integer)resultSet.getInt("cliente")),resultSet.getBoolean("delivery"));
-				
-				if(!PedidoDTO.estaPedido(pedidos, aux.getIdpedido()))
-					pedidos.add(aux);
-
+				resultSet.getInt("comanda"),
+				ClienteDTO.buscarCliente(cli.obtenerClientes(),(Integer)resultSet.getInt("cliente")),
+				resultSet.getBoolean("llevadelivery"),listOfertas,resultSet.getBoolean("fueeliminado"));
+				pedidos.add(aux);
 			}
 		} 
 		catch (SQLException e) 
@@ -160,17 +165,18 @@ public class PedidoDAO
 					  if (y.charAt(i) != ' ')
 					    estadoPedido += y.charAt(i);
 				}
-				Items ite=new Items();
 				Clientes cli=new Clientes();
-				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),(ArrayList<ItemDTO>)ite.obtenerItemsPedido(resultSet.getInt("idpedido")),
-				resultSet.getDate("fecha"),resultSet.getTime("hora"),estadoPedido,
+				Items ite=new Items();
+				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
+				Ofertas ofe=new Ofertas();
+				ArrayList<OfertaDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
+				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
-				resultSet.getInt("comanda"),ClienteDTO.buscarCliente(cli.obtenerClientes(),(Integer)resultSet.getInt("cliente")),resultSet.getBoolean("delivery"));
-				if(!PedidoDTO.estaPedido(pedidos, aux.getIdpedido()))
-					pedidos.add(aux);
-				
-				//clienteAux.buscarCliente(resultSet.getInt("cliente")
-				//itemAux.obtenerListaItems(resultSet.getInt("idpedido"))
+				resultSet.getInt("comanda"),
+				ClienteDTO.buscarCliente(cli.obtenerClientes(),(Integer)resultSet.getInt("cliente")),
+				resultSet.getBoolean("llevadelivery"),listOfertas,resultSet.getBoolean("fueeliminado"));
+				pedidos.add(aux);
 			}
 		} 
 		catch (SQLException e) 

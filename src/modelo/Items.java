@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dto.ItemDTO;
+import dto.OfertaDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;
 
@@ -39,14 +40,28 @@ public class Items
 		return this.item.obtenerListaItems(idpedido);
 	}
 	
-	public ArrayList<Integer> iditems(PedidoDTO pedido)
+	//obtiene los items de un pedido y los agrupa en un string para subirlo a la DB
+	public String iditemsPed(PedidoDTO pedido)
 	{
-		ArrayList<Integer> listaId=new ArrayList<Integer>();
+		String listaId="";
 		Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
 		while(Iterador.hasNext())
 		{
 			ItemDTO elemento = Iterador.next();
-			listaId.add(elemento.getIditem());
+			listaId=listaId +elemento.getIditem()+" ";
+		}
+		return listaId;
+	}
+	
+	//obtiene los items de una oferta y los agrupa en un string para subirlo a la DB
+	public String iditemsOfe(OfertaDTO oferta)
+	{
+		String listaId="";
+		Iterator<ItemDTO> Iterador = oferta.getProductosOfertados().iterator();
+		while(Iterador.hasNext())
+		{
+			ItemDTO elemento = Iterador.next();
+			listaId=listaId +elemento.getIditem()+" ";
 		}
 		return listaId;
 	}
@@ -76,5 +91,23 @@ public class Items
 				ultimo=elemento.getIditem();
 		}
 		return ultimo;
+	}
+
+	public ArrayList<ItemDTO> pasarDeStringAArray(String listado) 
+	{
+		ArrayList<ItemDTO> result=new ArrayList<ItemDTO>();
+		for (int i=0; i<listado.length(); i++)
+		{
+			  if (listado.charAt(i) != ' ')
+			  {
+				  String a=listado.charAt(i)+"";
+				  int elemento=Integer.parseInt(a);
+				  ItemDTO item=this.buscarItem(elemento);
+				  result.add(item);
+			  }
+			  else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
+				  break;
+		}
+		return result;
 	}
 }

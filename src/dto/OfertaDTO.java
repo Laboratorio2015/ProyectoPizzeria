@@ -4,22 +4,31 @@ import java.util.ArrayList;
 
 public class OfertaDTO {
 
-	Integer nroOferta;
-	ArrayList<ItemDTO> productosOfertados = new ArrayList<ItemDTO>();
-	Double precio;
+	private Integer idOferta;
+	private String nombre;
+	private ArrayList<ItemDTO> productosOfertados;
+	private Integer precio;
+	private Boolean fueeliminado;
 
-	public OfertaDTO (Integer nroOferta, ArrayList<ItemDTO> productosOfertados, Double precio){
-		this.nroOferta = nroOferta;
+	public OfertaDTO (Integer nroOferta,String nombre, Integer precio,  ArrayList<ItemDTO> productosOfertados,Boolean fueeliminado)
+	{
+		this.idOferta = nroOferta;
+		this.nombre=nombre;
 		this.productosOfertados = productosOfertados;
 		this.precio = precio;
+		this.fueeliminado=fueeliminado;
+	}
+	public OfertaDTO()
+	{
+		
+	}
+	
+	public Integer getIdOferta() {
+		return idOferta;
 	}
 
-	public Integer getNroOferta() {
-		return nroOferta;
-	}
-
-	public void setNroOferta(Integer nroOferta) {
-		this.nroOferta = nroOferta;
+	public void setIdOferta(Integer nroOferta) {
+		this.idOferta = nroOferta;
 	}
 
 	public ArrayList<ItemDTO> getProductosOfertados() {
@@ -30,14 +39,27 @@ public class OfertaDTO {
 		this.productosOfertados = productosOfertados;
 	}
 
-	public Double getPrecio() {
+	public Integer getPrecio() {
 		return precio;
 	}
 
-	public void setPrecio(Double precio) {
+	public void setPrecio(Integer precio) {
 		this.precio = precio;
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
 
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	public Boolean getFueeliminado() {
+		return fueeliminado;
+	}
+	public void setFueeliminado(Boolean fueeliminado) {
+		this.fueeliminado = fueeliminado;
+	}
+	
 }
 

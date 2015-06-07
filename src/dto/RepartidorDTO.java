@@ -2,23 +2,31 @@ package dto;
 
 public class RepartidorDTO 
 {
-	private Integer id;
+	private Integer idRepartidor;
 	private Integer dni;
 	private String nombre;
 	private String apellido;
 	private String fechaDeNacimiento;
+	private String vehiculo;
+	private String patente;
 	private String telefono;
 	private String estado;
+	private String comentario;
+	private Boolean fueeliminado;
 	
-	public RepartidorDTO(Integer identificador, Integer dni, String nombr, String apellid, String fechaDeNac, String tel, String estado)
+	public RepartidorDTO(Integer identificador, Integer dni, String nombr, String apellid, String fechaDeNac,String vehiculo,String patente, String tel, String estado,String comentario,Boolean fueeliminado)
 	{
-		this.id = identificador;
+		this.idRepartidor = identificador;
 		this.dni = dni;
 		this.nombre = nombr;
 		this.apellido = apellid;
 		this.fechaDeNacimiento = fechaDeNac;
 		this.telefono = tel;
 		this.estado = estado;
+		this.vehiculo=vehiculo;
+		this.patente=patente;
+		this.comentario=comentario;
+		this.fueeliminado=fueeliminado;
 	}
 	
 	public RepartidorDTO()
@@ -27,11 +35,11 @@ public class RepartidorDTO
 	}
 	
 	public Integer getId() {
-		return id;
+		return idRepartidor;
 	}
 	public void setId(Integer num) 
 	{
-		this.id = num;
+		this.idRepartidor = num;
 	}
 	public Integer getDni() {
 		return dni;
@@ -88,10 +96,58 @@ public class RepartidorDTO
 		this.estado = estado;
 	}
 	
+	public Integer getIdRepartidor() {
+		return idRepartidor;
+	}
+
+	public void setIdRepartidor(Integer idRepartidor) {
+		this.idRepartidor = idRepartidor;
+	}
+
+	public String getFechaDeNacimiento() {
+		return fechaDeNacimiento;
+	}
+
+	public void setFechaDeNacimiento(String fechaDeNacimiento) {
+		this.fechaDeNacimiento = fechaDeNacimiento;
+	}
+
+	public String getVehiculo() {
+		return vehiculo;
+	}
+
+	public void setVehiculo(String vehiculo) {
+		this.vehiculo = vehiculo;
+	}
+
+	public String getPatente() {
+		return patente;
+	}
+
+	public void setPatente(String patente) {
+		this.patente = patente;
+	}
+
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+
+	public Boolean getFueeliminado() {
+		return fueeliminado;
+	}
+
+	public void setFueeliminado(Boolean fueeliminado) {
+		this.fueeliminado = fueeliminado;
+	}
+
 	@Override
 	public String toString()
 	{
-		return (this.id+ "  " + this.nombre + "  " +  this.apellido + "  " + this.estado);
+		return (this.idRepartidor+ "  " + this.nombre + "  " +  this.apellido + "  " + this.estado);
 	}
 	
 }

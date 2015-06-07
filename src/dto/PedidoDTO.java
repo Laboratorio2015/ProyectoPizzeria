@@ -3,6 +3,8 @@ package dto;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import dto.ItemDTO;
@@ -13,21 +15,25 @@ public class PedidoDTO
 	//public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
 	private Integer idpedido;
 	private ArrayList<ItemDTO> items;
-	private Date fecha;
-	private Time hora;
+	private ArrayList<OfertaDTO> ofertas;
+	private String fecha;
+	private String hora;
 	private Integer total;
 	private String estado;
 	private Integer ticket;
 	private Integer comanda;
 	private ClienteDTO cliente;
 	private Boolean llevaDelivery;
+	private Boolean fueeliminado;
 	
 	
-	public PedidoDTO(Integer pedido,ArrayList<ItemDTO> items , Date fecha, Time hora, String estado, Integer total,
-			Integer ticket, Integer comanda, ClienteDTO cliente, Boolean llevaDelivery) 
+	public PedidoDTO(Integer pedido,ArrayList<ItemDTO> items ,String fecha, String hora, String estado, Integer total,
+			Integer ticket, Integer comanda, ClienteDTO cliente,
+			Boolean llevaDelivery,ArrayList<OfertaDTO> ofertas,	Boolean fueeliminado) 
 	{
 		this.idpedido=pedido;
 		this.items=items;
+		this.ofertas=ofertas;
 		this.fecha=fecha;
 		this.hora=hora;
 		this.estado=estado;
@@ -36,6 +42,7 @@ public class PedidoDTO
 		this.comanda=comanda;
 		this.cliente=cliente;
 		this.llevaDelivery=llevaDelivery;
+		this.fueeliminado=fueeliminado;
 		
 	}
 	public PedidoDTO()
@@ -65,19 +72,19 @@ public class PedidoDTO
 		this.idpedido = idpedido;
 	}
 	
-	public Date getFecha() 
+	public String getFecha() 
 	{
 		return fecha;
 	}
-	public void setFecha(Date fecha) 
+	public void setFecha(String fecha) 
 	{
 		this.fecha = fecha;
 	}
-	public Time getHora() 
+	public String getHora() 
 	{
 		return hora;
 	}
-	public void setHora(Time hora) 
+	public void setHora(String hora) 
 	{
 		this.hora = hora;
 	}
@@ -130,7 +137,43 @@ public class PedidoDTO
 	public void setLlevaDelivery(Boolean llevaDelivery) {
 		this.llevaDelivery = llevaDelivery;
 	}
-	
+		
+	public ArrayList<ItemDTO> getItems() {
+		return items;
+	}
+	public void setItems(ArrayList<ItemDTO> items) {
+		this.items = items;
+	}
+	public ArrayList<OfertaDTO> getOfertas() {
+		return ofertas;
+	}
+	public void setOfertas(ArrayList<OfertaDTO> ofertas) {
+		this.ofertas = ofertas;
+	}
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+	public Integer getTicket() {
+		return ticket;
+	}
+	public void setTicket(Integer ticket) {
+		this.ticket = ticket;
+	}
+	public Integer getComanda() {
+		return comanda;
+	}
+	public void setComanda(Integer comanda) {
+		this.comanda = comanda;
+	}
+	public Boolean getFueeliminado() {
+		return fueeliminado;
+	}
+	public void setFueeliminado(Boolean fueeliminado) {
+		this.fueeliminado = fueeliminado;
+	}
 	//esta funcion verifica al pedido para no cargarlo dos veces
 	public static boolean estaPedido(List<PedidoDTO> pedidos, Integer num)
 	{

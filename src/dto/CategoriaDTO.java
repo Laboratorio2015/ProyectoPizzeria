@@ -4,11 +4,13 @@ public class CategoriaDTO {
 	
 	Integer idCategoria;
 	String denominacion;
+	Boolean fueEliminado;
 	
-	public CategoriaDTO(Integer idCategoria, String denominacion) {
+	public CategoriaDTO(Integer idCategoria, String denominacion, Boolean fueeliminado) {
 		super();
 		this.idCategoria = idCategoria;
 		this.denominacion = denominacion;
+		this.fueEliminado=fueeliminado;
 	}
 
 	public Integer getIdCategoria() {
@@ -27,6 +29,14 @@ public class CategoriaDTO {
 		this.denominacion = denominacion;
 	}
 
+	public Boolean getFueEliminado() {
+		return fueEliminado;
+	}
+
+	public void setFueEliminado(Boolean fueEliminado) {
+		this.fueEliminado = fueEliminado;
+	}
+	
 	
 
 }

@@ -15,7 +15,7 @@ import dto.ProductoDTO;
 public class ItemDAO 
 
 {
-	private static final String insert = "INSERT INTO items(iditem, producto,cantidad,comentario) VALUES(?, ?, ?,?)";
+	private static final String insert = "INSERT INTO items(iditem, producto,cantidad,comentario,fueeliminado) VALUES(?,?, ?, ?,?)";
 	private static final String delete = "DELETE FROM items WHERE iditem = ?";
 	private static final String readall = "SELECT * FROM items ";
 	private static final String obtenerlistaitems="select iditem,producto, cantidad, comentario from pedidos P join items I on p.item=i.iditem and p.idpedido= ?;";
@@ -33,6 +33,7 @@ public class ItemDAO
 			statement.setInt(2, item.getProducto().getIdproducto());
 			statement.setInt(3, item.getCantidad());
 			statement.setString(4, item.getComentario());
+			statement.setBoolean(5, item.getFueeliminado());
 
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
@@ -95,7 +96,7 @@ public class ItemDAO
 				Productos a=new Productos();
 				ProductoDTO productoAux=ProductoDTO.buscarProducto(a.obtenerProducto(),resultSet.getInt("iditem"));
 				items.add(new ItemDTO(resultSet.getInt("iditem"),productoAux, resultSet.getInt("cantidad"),
-						resultSet.getString("comentario")));
+						resultSet.getString("comentario"), resultSet.getBoolean("fueeliminado")));
 
 			}
 		} 
@@ -153,7 +154,7 @@ public class ItemDAO
 				Productos a =new Productos();
 				ProductoDTO productoAux=ProductoDTO.buscarProducto(a.obtenerProducto(),resultSet.getInt("producto"));
 				items.add(new ItemDTO(resultSet.getInt("iditem"),productoAux, resultSet.getInt("cantidad"),
-						resultSet.getString("comentario")));
+						resultSet.getString("comentario"), resultSet.getBoolean("fueeliminado")));
 			}
 		} 
 		catch (SQLException e) 

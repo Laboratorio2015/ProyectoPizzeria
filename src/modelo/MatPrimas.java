@@ -38,16 +38,5 @@ public class MatPrimas {
 	{
 		return this.matPrima.obtenerListaMatPrima(idproveedor);
 	}
-/*	
-	public ArrayList<Integer> idmatprimas(ProveedorDTO proveedor)
-	{
-		ArrayList<Integer> listaId=new ArrayList<Integer>();
-		Iterator<MateriaPrimaDTO> Iterador = proveedor.getMateriasProvistas().iterator();
-		while(Iterador.hasNext())
-		{
-			MateriaPrimaDTO elemento = Iterador.next();
-			listaId.add(elemento.getId());
-		}
-		return listaId;
-	}*/
+
 }

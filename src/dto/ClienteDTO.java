@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ClienteDTO 
 {
+	private Integer idcliente;
 	private Integer dni;
 	private String nombre;
 	private String apellido;
@@ -14,17 +15,27 @@ public class ClienteDTO
 	private String entrecalle2;
 	private String codPostal;
 	private String email;
+	private String telefono;
+	private String comentario;
+	private Boolean fueeliminado;
 	
-	public ClienteDTO(Integer documento, String nombr, String apellid, String direccio, String numeracion, String entrecalle1, String entrecalle2, String codPostal, String email)
+	public ClienteDTO(Integer idcliente,Integer documento, String nombr, String apellid, String direccio, String numeracion, String telefono,String entrecalle1, String entrecalle2, String codPostal, String email,String comentario, Boolean fueeliminado)
 	{
-		dni=documento;
-		nombre=nombr;
-		apellido=apellid;
-		calle=direccio;
+		this.idcliente=idcliente;
+		this.dni=documento;
+		this.nombre=nombr;
+		this.apellido=apellid;
+		this.calle=direccio;
+		this.telefono=telefono;
 		this.numeracion=numeracion;
 		this.entrecalle1=entrecalle1;
+		this.entrecalle2=entrecalle2;
+		this.comentario=comentario;
 		this.codPostal=codPostal;
 		this.email=email;
+		this.fueeliminado=fueeliminado;
+		
+		this.fueeliminado=fueeliminado;
 	}
 	
 	public ClienteDTO()
@@ -81,14 +92,21 @@ public class ClienteDTO
 	}
 	public String getTelefono() 
 	{
-		return numeracion;
+		return telefono;
 	}
 	public void setTelefono(String telefono)
 	{
-		this.numeracion = telefono;
+		this.telefono = telefono;
 	}
-	
-	
+		
+	public Integer getIdcliente() {
+		return idcliente;
+	}
+
+	public void setIdcliente(Integer idcliente) {
+		this.idcliente = idcliente;
+	}
+
 	public String getCalle() {
 		return calle;
 	}
@@ -136,6 +154,22 @@ public class ClienteDTO
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+
+	public Boolean getFueeliminado() {
+		return fueeliminado;
+	}
+
+	public void setFueeliminado(Boolean fueeliminado) {
+		this.fueeliminado = fueeliminado;
+	}
 
 	@Override
 	public String toString()
@@ -154,5 +188,6 @@ public class ClienteDTO
 		}
 		return null;
 	}
+	
 
 }

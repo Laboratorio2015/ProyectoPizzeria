@@ -2,6 +2,7 @@ package main;
 
 import modelo.Clientes;
 import modelo.Items;
+import modelo.Ofertas;
 import modelo.Pedidos;
 import modelo.Productos;
 import modelo.Proveedores;
@@ -18,10 +19,11 @@ public class Main
 		Pedidos pedido=new Pedidos();
 		Productos producto= new Productos();
 		Items item= new Items();
+		Ofertas oferta=new Ofertas();
 		Proveedores proveedor=new Proveedores();
 		Repartidores repartidor=new Repartidores();
 		VentanaPrincipal ventanaPrincial=new VentanaPrincipal();
-		Controlador controlador=new Controlador(ventanaPrincial,pedido,cliente,producto,item, proveedor, repartidor);
+		Controlador controlador=new Controlador(ventanaPrincial,pedido,cliente,producto,item, proveedor, repartidor,oferta);
 		controlador.inicializar();
 	}
 		

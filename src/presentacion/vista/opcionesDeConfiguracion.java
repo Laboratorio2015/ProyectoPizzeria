@@ -18,16 +18,19 @@ public class opcionesDeConfiguracion extends JDialog {
 	private JButton btnEditarRepartidor;
 	private JButton btnAgregarProducto;
 	private JButton btnEditarProducto;
-	private JButton btnAgregarOferta;
+	private JButton btnAgregarPromocion;
 	private JButton btnAgregarProveedor;
 	private JButton btnEditarProveedor;
 	private JButton btnAgregarMatPrima;
 	private JButton btnEditarMatPrima;
+	private JButton btnEditarPromocion;
+	private JButton btnGestionarCategorias;
+	private JButton btnEditarCliente;
 
 
 	public opcionesDeConfiguracion() {
 		setMinimumSize(new Dimension(1000, 650));
-		setBounds(150, 50, 1000, 689);
+		setBounds(150, 10, 1000, 689);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -42,18 +45,18 @@ public class opcionesDeConfiguracion extends JDialog {
 		
 		btnAgregarMatPrima = new JButton("agregarMatPrima");
 		btnAgregarMatPrima.setOpaque(false);
-		btnAgregarMatPrima.setBounds(697, 359, 114, 23);
+		btnAgregarMatPrima.setBounds(691, 154, 123, 91);
 		contentPanel.add(btnAgregarMatPrima);
 		
 		btnEditarMatPrima = new JButton("EditarMatPrima");
 		btnEditarMatPrima.setOpaque(false);
-		btnEditarMatPrima.setBounds(697, 392, 114, 23);
+		btnEditarMatPrima.setBounds(840, 144, 123, 101);
 		contentPanel.add(btnEditarMatPrima);
 		{
 			btnAgregarRepartidor = new JButton("OK");
 			btnAgregarRepartidor.setOpaque(false);
 			btnAgregarRepartidor.setToolTipText("Agregar Repartidor");
-			btnAgregarRepartidor.setBounds(136, 199, 141, 136);
+			btnAgregarRepartidor.setBounds(61, 144, 100, 111);
 			contentPanel.add(btnAgregarRepartidor);
 			btnAgregarRepartidor.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnAgregarRepartidor);
@@ -63,43 +66,64 @@ public class opcionesDeConfiguracion extends JDialog {
 		btnEditarRepartidor.setOpaque(false);
 		btnEditarRepartidor.setToolTipText("Editar Repartidor");
 		btnEditarRepartidor.setActionCommand("OK");
-		btnEditarRepartidor.setBounds(20, 346, 141, 136);
+		btnEditarRepartidor.setBounds(205, 144, 100, 111);
 		contentPanel.add(btnEditarRepartidor);
 		
 		btnAgregarProducto= new JButton("OK");
 		btnAgregarProducto.setOpaque(false);
 		btnAgregarProducto.setToolTipText("Agregar Producto");
 		btnAgregarProducto.setActionCommand("OK");
-		btnAgregarProducto.setBounds(427, 188, 141, 136);
+		btnAgregarProducto.setBounds(57, 346, 93, 101);
 		contentPanel.add(btnAgregarProducto);
 		
 		btnEditarProducto= new JButton("OK");
 		btnEditarProducto.setOpaque(false);
 		btnEditarProducto.setToolTipText("Editar Oferta o Producto");
 		btnEditarProducto.setActionCommand("OK");
-		btnEditarProducto.setBounds(325, 335, 141, 136);
+		btnEditarProducto.setBounds(186, 357, 100, 90);
 		contentPanel.add(btnEditarProducto);
-		
-		btnAgregarOferta= new JButton("OK");
-		btnAgregarOferta.setOpaque(false);
-		btnAgregarOferta.setToolTipText("Agregar Oferta");
-		btnAgregarOferta.setActionCommand("OK");
-		btnAgregarOferta.setBounds(529, 335, 141, 136);
-		contentPanel.add(btnAgregarOferta);
 		
 		btnAgregarProveedor= new JButton("OK");
 		btnAgregarProveedor.setOpaque(false);
 		btnAgregarProveedor.setToolTipText("Agregar Proveedor");
 		btnAgregarProveedor.setActionCommand("OK");
-		btnAgregarProveedor.setBounds(697, 199, 141, 136);
+		btnAgregarProveedor.setBounds(380, 124, 100, 131);
 		contentPanel.add(btnAgregarProveedor);
 		
 		btnEditarProveedor= new JButton("OK");
 		btnEditarProveedor.setOpaque(false);
 		btnEditarProveedor.setToolTipText("Modificar o Eliminar Proveedores");
 		btnEditarProveedor.setActionCommand("OK");
-		btnEditarProveedor.setBounds(821, 346, 141, 136);
+		btnEditarProveedor.setBounds(519, 131, 100, 136);
 		contentPanel.add(btnEditarProveedor);
+		
+		btnAgregarPromocion= new JButton("OK");
+		btnAgregarPromocion.setOpaque(false);
+		btnAgregarPromocion.setToolTipText("Agregar Promocion");
+		btnAgregarPromocion.setActionCommand("OK");
+		btnAgregarPromocion.setBounds(380, 346, 100, 108);
+		contentPanel.add(btnAgregarPromocion);
+		
+		btnEditarPromocion= new JButton("OK");
+		btnEditarPromocion.setToolTipText("Editar Promocion");
+		btnEditarPromocion.setOpaque(false);
+		btnEditarPromocion.setActionCommand("OK");
+		btnEditarPromocion.setBounds(533, 346, 109, 108);
+		contentPanel.add(btnEditarPromocion);
+		
+		btnGestionarCategorias = new JButton("OK");
+		btnGestionarCategorias.setToolTipText("Gestionar Categorias");
+		btnGestionarCategorias.setOpaque(false);
+		btnGestionarCategorias.setActionCommand("OK");
+		btnGestionarCategorias.setBounds(716, 357, 100, 108);
+		contentPanel.add(btnGestionarCategorias);
+		
+		btnEditarCliente= new JButton("OK");
+		btnEditarCliente.setToolTipText("Editar un Cliente ya ingresado en el Sistema");
+		btnEditarCliente.setOpaque(false);
+		btnEditarCliente.setActionCommand("OK");
+		btnEditarCliente.setBounds(851, 357, 112, 108);
+		contentPanel.add(btnEditarCliente);
 	}
 
 
@@ -144,12 +168,12 @@ public class opcionesDeConfiguracion extends JDialog {
 
 
 	public JButton getBtnAgregarOferta() {
-		return btnAgregarOferta;
+		return btnAgregarPromocion;
 	}
 
 
 	public void setBtnAgregarOferta(JButton btnAgregarOferta) {
-		this.btnAgregarOferta = btnAgregarOferta;
+		this.btnAgregarPromocion = btnAgregarOferta;
 	}
 
 
@@ -191,6 +215,45 @@ public class opcionesDeConfiguracion extends JDialog {
 	public void setBtnEditarMatPrima(JButton btnEditarMatPrima) {
 		this.btnEditarMatPrima = btnEditarMatPrima;
 	}
-	
+
+
+	public JButton getBtnAgregarPromocion() {
+		return btnAgregarPromocion;
+	}
+
+
+	public void setBtnAgregarPromocion(JButton btnAgregarPromocion) {
+		this.btnAgregarPromocion = btnAgregarPromocion;
+	}
+
+
+	public JButton getBtnEditarPromocion() {
+		return btnEditarPromocion;
+	}
+
+
+	public void setBtnEditarPromocion(JButton btnEditarPromocion) {
+		this.btnEditarPromocion = btnEditarPromocion;
+	}
+
+
+	public JButton getBtnGestionarCategorias() {
+		return btnGestionarCategorias;
+	}
+
+
+	public void setBtnGestionarCategorias(JButton btnGestionarCategorias) {
+		this.btnGestionarCategorias = btnGestionarCategorias;
+	}
+
+
+	public JButton getBtnEditarCliente() {
+		return btnEditarCliente;
+	}
+
+
+	public void setBtnEditarCliente(JButton btnEditarCliente) {
+		this.btnEditarCliente = btnEditarCliente;
+	}
 	
 }

@@ -14,24 +14,18 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
-
 import main.Main;
-
 import com.mxrck.autocompleter.TextAutoCompleter;
-
 import dto.ClienteDTO;
 import dto.PedidoDTO;
-
 import javax.swing.border.MatteBorder;
-
 import presentacion.controlador.Controlador;
-import presentacion.reportes.Comanda;
-import presentacion.reportes.ReporteTicket;
-import presentacion.reportes.Ticket;
-
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class seleccionDeCliente extends JDialog {
 
@@ -47,7 +41,8 @@ public class seleccionDeCliente extends JDialog {
 	private JButton btnEditarCliente;
 	private JButton btnAgregarCliente;
 	private Controlador control;
-	private Comanda comanda=new Comanda();
+	//private Comanda comanda=new Comanda();
+	
 	public seleccionDeCliente(final Controlador control,final PedidoDTO pedido)
 	{
 		setModal(true);
@@ -71,7 +66,7 @@ public class seleccionDeCliente extends JDialog {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				if(tfAgregarDNI.getText().length()>7)
+				
 				{
 				cliente=control.getCliente().buscarCliente(Integer.parseInt(tfAgregarDNI.getText()));
 				tfNombrApellido.setText("Apellido y Nombre: "+cliente.getApellido()+""+ cliente.getNombre());
@@ -84,6 +79,10 @@ public class seleccionDeCliente extends JDialog {
 		tfAgregarDNI.setColumns(10);
 		
 		TextAutoCompleter autoCompletar=new TextAutoCompleter(tfAgregarDNI);
+		autoCompletar.setCaseSensitive(false);
+		autoCompletar.addItems(control.getCliente().dniClientes());
+		
+		
 		{
 			tfDireccionTelefono = new JTextField();
 			tfDireccionTelefono.setBackground(new Color(204, 204, 0));
@@ -122,7 +121,6 @@ public class seleccionDeCliente extends JDialog {
 					control.getPedido().agregarPedido(pedido);
 					//JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
 					//control.getMonitorCocina().nuevoPedido(pedido);
-					new ReporteTicket(seleccionDeCliente.this.pedido.getProductos()).mostrar();
 					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
 					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					dispose();
@@ -160,8 +158,7 @@ public class seleccionDeCliente extends JDialog {
 			btnEditarCliente.setBounds(571, 114, 78, 29);
 			contentPanel.add(btnEditarCliente);
 		}
-		autoCompletar.setCaseSensitive(false);
-		autoCompletar.addItems(control.getCliente().dniClientes());
+
 	}
 
 	

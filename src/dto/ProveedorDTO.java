@@ -6,23 +6,29 @@ import java.util.List;
 
 public class ProveedorDTO 
 {
-	private Integer id;
+	private Integer idproveedor;
 	private String nombre;
-	private String categoria;
+	private ArrayList<CategoriaDTO> categoria;
+	private String nombrecontacto;
 	private String telefono;
-	private String email;
 	private String direccion;
+	private String email;
+	private String comentario;
+	private Boolean fueeliminado;
 	
 	
 	
-	public ProveedorDTO(Integer identificador, String nombre,String categoria ,String telefono,String email ,String direccion)
+	public ProveedorDTO(Integer identificador, String nombre,String nombrecontact,ArrayList<CategoriaDTO> categoria ,String telefono,String direccion,String email ,String comentario, Boolean fueeliminado)
 	{
-		this.id = identificador;
+		this.idproveedor = identificador;
 		this.nombre = nombre;
+		this.nombrecontacto=nombrecontact;
 		this.categoria=categoria;
 		this.telefono=telefono;
 		this.email=email;
 		this.direccion=direccion;
+		this.comentario=comentario;
+		this.fueeliminado=fueeliminado;
 	}
 	public ProveedorDTO()
 	{
@@ -30,11 +36,11 @@ public class ProveedorDTO
 	}
 	
 	public Integer getId() {
-		return id;
+		return idproveedor;
 	}
 	public void setId(Integer num) 
 	{
-		this.id = num;
+		this.idproveedor = num;
 	}
 	public String getNombre() 
 	{
@@ -63,11 +69,11 @@ public class ProveedorDTO
 		this.direccion = direccion;
 	}
 	
-	public String getCategoria() {
+	public ArrayList<CategoriaDTO> getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(String categoria) {
+	public void setCategoria(ArrayList<CategoriaDTO> categoria) {
 		this.categoria = categoria;
 	}
 
@@ -78,9 +84,32 @@ public class ProveedorDTO
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
 
-	//esta funcion verifica al proveedor para no cargarlo dos veces
+	public Integer getIdproveedor() {
+		return idproveedor;
+	}
+	public void setIdproveedor(Integer idproveedor) {
+		this.idproveedor = idproveedor;
+	}
+	public String getNombrecontacto() {
+		return nombrecontacto;
+	}
+	public void setNombrecontacto(String nombrecontacto) {
+		this.nombrecontacto = nombrecontacto;
+	}
+	public String getComentario() {
+		return comentario;
+	}
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+	public Boolean getFueeliminado() {
+		return fueeliminado;
+	}
+	public void setFueeliminado(Boolean fueeliminado) {
+		this.fueeliminado = fueeliminado;
+	}
+		//esta funcion verifica al proveedor para no cargarlo dos veces
 		public static boolean estaProveedor(List<ProveedorDTO> proveedores, Integer num)
 		{
 			Iterator<ProveedorDTO> Iterador = proveedores.iterator();
@@ -96,6 +125,6 @@ public class ProveedorDTO
 	@Override
 	public String toString()
 	{
-		return (this.id+ "  " + this.nombre + "  " +  this.direccion + "  " + this.telefono);
+		return (this.idproveedor+ "  " + this.nombre + "  " +  this.direccion + "  " + this.telefono);
 	}
 }

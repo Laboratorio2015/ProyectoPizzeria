@@ -2,22 +2,30 @@ package dto;
 
 public class MateriaPrimaDTO 
 {
-	private Integer id;
+	private Integer idMatPrima;
 	private String nombre;
+	private CategoriaDTO categoria;
+	private Boolean fueeliminado;
 
 	
-	public MateriaPrimaDTO(Integer identificador, String nombr)
+	public MateriaPrimaDTO(Integer identificador, String nombre, CategoriaDTO categoria, Boolean fueliminado)
 	{
-		this.id = identificador;
-		this.nombre = nombr;
+		this.idMatPrima = identificador;
+		this.nombre = nombre;
+		this.categoria=categoria;
+		this.fueeliminado=fueliminado;
+	}
+	//constructor vacio
+	public MateriaPrimaDTO()
+	{
 	}
 	
 	public Integer getId() {
-		return id;
+		return idMatPrima;
 	}
 	public void setId(Integer num) 
 	{
-		this.id = num;
+		this.idMatPrima = num;
 	}
 	
 	public String getNombre() 
@@ -30,14 +38,28 @@ public class MateriaPrimaDTO
 		this.nombre = nombre;
 	}
 	
+	public Integer getIdMatPrima() {
+		return idMatPrima;
+	}
+	public void setIdMatPrima(Integer idMatPrima) {
+		this.idMatPrima = idMatPrima;
+	}
+	public Boolean getFueeliminado() {
+		return fueeliminado;
+	}
+	public void setFueeliminado(Boolean fueeliminado) {
+		this.fueeliminado = fueeliminado;
+	}
+	public void setCategoria(CategoriaDTO categoria) {
+		this.categoria = categoria;
+	}
+		
+	public CategoriaDTO getCategoria() {
+		return categoria;
+	}
 	@Override
 	public String toString()
 	{
-		return (this.id+ "  " + this.nombre);
+		return (this.idMatPrima+ "  " + this.nombre);
 	}
-
-	public String getCategoria() {
-		return "categoriaEjemplo";
-	}
-
 }

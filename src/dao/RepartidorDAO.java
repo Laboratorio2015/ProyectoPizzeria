@@ -11,7 +11,7 @@ import conexion.Conexion;
 
 public class RepartidorDAO 
 {
-		private static final String insert = "INSERT INTO repartidores(idrepartidor,dni,nombre,apellido,fechaNacimiento,telefono,estado) VALUES(?, ?, ?, ?, ?, ?, ?)";
+		private static final String insert = "INSERT INTO repartidores(idrepartidor,dni,nombre,apellido,fechaNacimiento,vehiculo,patente,telefono,estado,comentario,fueeliminado) VALUES(?, ?, ?, ?, ?, ?,?,?,?,?,?)";
 		private static final String delete = "DELETE FROM repartidores WHERE idrepartidor = ?";
 		private static final String readall = "SELECT * FROM repartidores";
 		private static final Conexion conexion = Conexion.getConexion();
@@ -28,8 +28,12 @@ public class RepartidorDAO
 				statement.setString(3, repartidor.getNombre());
 				statement.setString(4, repartidor.getApellido());
 				statement.setString(5, repartidor.getFechaNacimiento());
-				statement.setString(6,repartidor.getTelefono());
-				statement.setString(7, repartidor.getEstado());
+				statement.setString(6,repartidor.getVehiculo());
+				statement.setString(7,repartidor.getPatente());
+				statement.setString(8,repartidor.getTelefono());
+				statement.setString(9, repartidor.getEstado());
+				statement.setString(6,repartidor.getComentario());
+				statement.setBoolean(6,repartidor.getFueeliminado());
 
 
 				
@@ -109,7 +113,9 @@ public class RepartidorDAO
 							  break;
 					}
 					repartidores.add(new RepartidorDTO(resultSet.getInt("idrepartidor"), resultSet.getInt("dni"),nombre,
-					apellido, resultSet.getString("fechanacimiento"), resultSet.getString("telefono"),resultSet.getString("estado")));
+					apellido, resultSet.getString("fechanacimiento"),resultSet.getString("vehiculo"),
+					resultSet.getString("patente"), resultSet.getString("telefono"),
+					resultSet.getString("estado"),resultSet.getString("comentario"),resultSet.getBoolean("fueeliminado")));
 				}
 			} 
 			catch (SQLException e) 

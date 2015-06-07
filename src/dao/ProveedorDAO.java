@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import modelo.Categorias;
+import modelo.Items;
 import modelo.MatPrimas;
 
+import dto.CategoriaDTO;
 import dto.ItemDTO;
 import dto.MateriaPrimaDTO;
 import dto.PedidoDTO;
@@ -16,7 +19,7 @@ import dto.ProveedorDTO;
 import conexion.Conexion;
 
 public class ProveedorDAO {
-	private static final String insert = "INSERT INTO proveedores(idproveedor, nombre,categoria,telefono, direccion,email) VALUES(?,?,?, ?, ?, ?)";
+	private static final String insert = "INSERT INTO proveedores(idproveedor, nombre,nombrecontacto,categoria,telefono, direccion,email,comentario, fueeliminado) VALUES(?,?,?, ?, ?, ?,?,?,?)";
 	private static final String delete = "DELETE FROM proveedores WHERE idproveedor = ?";
 	private static final String readall = "SELECT * FROM proveedores";
 	private static final Conexion conexion = Conexion.getConexion();
@@ -26,14 +29,18 @@ public class ProveedorDAO {
 		PreparedStatement statement;
 		try 
 		{
-			//MatPrimas matAux=new MatPrimas();
+			Categorias cat=new Categorias();
+			String idcategorias= cat.iditemsCategorias(proveedor);
 			statement = conexion.getSQLConexion().prepareStatement(insert);
 				statement.setInt(1, proveedor.getId());
 				statement.setString(2, proveedor.getNombre());
-				statement.setString(3, proveedor.getCategoria());
-				statement.setString(4,proveedor.getTelefono());
-				statement.setString(5, proveedor.getDireccion());
-				statement.setString(6, proveedor.getEmail());
+				statement.setString(3, proveedor.getNombrecontacto());
+				statement.setString(4,idcategorias);
+				statement.setString(5,proveedor.getTelefono());
+				statement.setString(6, proveedor.getDireccion());
+				statement.setString(7, proveedor.getEmail());
+				statement.setString(8, proveedor.getComentario());
+				statement.setBoolean(9, proveedor.getFueeliminado());
 				statement.executeUpdate();
 			System.out.println("inserccion exitosa de proveedor");
 			return true;
@@ -106,12 +113,14 @@ public class ProveedorDAO {
 					  else if(t.charAt(i)==' ' && t.charAt(i+1)==' ')
 						  break;
 				}
-				
+				Categorias cat=new Categorias();
+				ArrayList<CategoriaDTO>listaCategoria= cat.pasarDeStringAArray(resultSet.getString("c"));
 				ProveedorDTO aux=new ProveedorDTO(resultSet.getInt("idproveedor"),nombre,
-						categoria,resultSet.getString("telefono"),
-						resultSet.getString("email"),resultSet.getString("direccion"));
-				if(!ProveedorDTO.estaProveedor(proveedores, aux.getId()))
-					proveedores.add(aux);
+						resultSet.getString("nombrecontacto"), listaCategoria,
+						resultSet.getString("telefono"),resultSet.getString("direccion"),
+						resultSet.getString("email"),resultSet.getString("comentario"),
+						resultSet.getBoolean("fueeliminado"));
+				proveedores.add(aux);
 			}
 		} 
 		catch (SQLException e) 

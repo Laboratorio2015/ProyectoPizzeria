@@ -13,8 +13,8 @@ import conexion.Conexion;
 
 public class ClienteDAO 
 {
-	private static final String insert = "INSERT INTO clientes(dni, nombre,apellido, calle, numeracion,entrecalle1,entrecalle2,codpostal,email) VALUES(?,?,?, ?, ?, ?, ?,?,?)";
-	private static final String delete = "DELETE FROM clientes WHERE dni = ?";
+	private static final String insert = "INSERT INTO clientes(idcliente,dni, nombre,apellido, calle, numeracion,telefono,entrecalle1,entrecalle2,codpostal,email,comentario,fueeliminado) VALUES(?,?,?,?,?,?,?, ?, ?, ?, ?,?,?)";
+	private static final String delete = "DELETE FROM clientes WHERE idcliente = ?";
 	private static final String readall = "SELECT * FROM clientes";
 	private static final Conexion conexion = Conexion.getConexion();
 	
@@ -24,15 +24,19 @@ public class ClienteDAO
 		try 
 		{
 			statement = conexion.getSQLConexion().prepareStatement(insert);
-			statement.setInt(1, cliente.getDni());
-			statement.setString(2, cliente.getNombre());
-			statement.setString(3, cliente.getApellido());
-			statement.setString(4, cliente.getCalle());
-			statement.setString(5,cliente.getNumeracion());
-			statement.setString(6, cliente.getEntrecalle1());
-			statement.setString(7, cliente.getEntrecalle2());
-			statement.setString(8, cliente.getCodPostal());
-			statement.setString(9, cliente.getEmail());
+			statement.setInt(1, cliente.getIdcliente());
+			statement.setInt(2, cliente.getDni());
+			statement.setString(3, cliente.getNombre());
+			statement.setString(4, cliente.getApellido());
+			statement.setString(5, cliente.getCalle());
+			statement.setString(6,cliente.getNumeracion());
+			statement.setString(7, cliente.getTelefono());
+			statement.setString(8, cliente.getEntrecalle1());
+			statement.setString(9, cliente.getEntrecalle2());
+			statement.setString(10, cliente.getCodPostal());
+			statement.setString(11, cliente.getEmail());
+			statement.setString(12, cliente.getComentario());
+			statement.setBoolean(13, cliente.getFueeliminado());
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
 			{
@@ -91,9 +95,13 @@ public class ClienteDAO
 			
 			while(resultSet.next())
 			{
-				clientes.add(new ClienteDTO(resultSet.getInt("dni"), resultSet.getString("nombre"),
-				resultSet.getString("apellido"),resultSet.getString("calle"),resultSet.getString("numeracion"),
-				resultSet.getString("entrecalle1"), resultSet.getString("entrecalle2"), resultSet.getString("codpostal"), resultSet.getString("email")));
+				clientes.add(new ClienteDTO(resultSet.getInt("idcliente"),resultSet.getInt("dni"),
+						resultSet.getString("nombre"),resultSet.getString("apellido"),
+						resultSet.getString("calle"),resultSet.getString("numeracion"),
+						resultSet.getString("telefono"),resultSet.getString("entrecalle1"),
+						resultSet.getString("entrecalle2"), resultSet.getString("codpostal"),
+						resultSet.getString("email"), resultSet.getString("comentario"),
+						resultSet.getBoolean("fueeliminado")));
 			}
 		} 
 		catch (SQLException e) 

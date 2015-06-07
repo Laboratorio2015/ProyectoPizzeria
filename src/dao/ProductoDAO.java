@@ -12,7 +12,7 @@ import conexion.Conexion;
 
 public class ProductoDAO 
 {
-	private static final String insert = "INSERT INTO productos(idproducto, nombre,precio,tipo) VALUES(?, ?, ?,?)";
+	private static final String insert = "INSERT INTO productos(idproducto, nombre,precio,tipo,fueeliminado) VALUES(?,?, ?, ?,?)";
 	private static final String delete = "DELETE FROM productos WHERE idproducto = ?";
 	private static final String readall = "SELECT * FROM productos";
 	private static final String buscar="SELECT * from productos where idproducto= ?";
@@ -28,6 +28,7 @@ public class ProductoDAO
 			statement.setString(2, producto.getNombre());
 			statement.setInt(3, producto.getPrecio());
 			statement.setString(4, producto.getTipo());
+			statement.setBoolean(5, producto.getFueeliminado());
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
 			{
 				System.out.println("inserccion exitosa de producto");
@@ -102,7 +103,7 @@ public class ProductoDAO
 				}
 				
 				productos.add(new ProductoDTO(resultSet.getInt("idproducto"),nombreProducto,
-						resultSet.getInt("precio"),tipoProducto));
+						resultSet.getInt("precio"),tipoProducto,resultSet.getBoolean("fueeliminado")));
 			}
 		} 
 		catch (SQLException e) 

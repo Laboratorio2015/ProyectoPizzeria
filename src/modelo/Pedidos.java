@@ -7,6 +7,8 @@ import java.util.List;
 
 import dao.PedidoDAO;
 import dto.ClienteDTO;
+import dto.HojaItinerarioDTO;
+import dto.ItemDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;
 
@@ -60,5 +62,36 @@ public class Pedidos
 				return elemento;
 		}
 		return null;	
+	}
+
+	public String iditemsPedido(HojaItinerarioDTO itinerario)
+	{
+		String listaId="";
+		Iterator<PedidoDTO> Iterador = itinerario.getPedidos().iterator();
+		while(Iterador.hasNext())
+		{
+			PedidoDTO elemento = Iterador.next();
+			listaId=listaId +elemento.getIdpedido()+" ";
+		}
+		return listaId;
+	}
+
+	//crea el array de pedidos a partir del string 
+	public ArrayList<PedidoDTO> pasarDeStringAArray(String listado)
+	{
+		ArrayList<PedidoDTO> result=new ArrayList<PedidoDTO>();
+		for (int i=0; i<listado.length(); i++)
+		{
+			  if (listado.charAt(i) != ' ')
+			  {
+				  String a=listado.charAt(i)+"";
+				  int elemento=Integer.parseInt(a);
+				  PedidoDTO pedido=this.buscarPedidoId(elemento);
+				  result.add(pedido);
+			  }
+			  else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
+				  break;
+		}
+		return result;
 	}
 }

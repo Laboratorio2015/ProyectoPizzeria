@@ -9,13 +9,15 @@ public class ItemDTO
 	private ProductoDTO producto;
 	private Integer cantidad;
 	private String comentario;
+	private Boolean fueeliminado;
 
-	public ItemDTO(Integer iditem,ProductoDTO producto, Integer cantidad, String comentario)
+	public ItemDTO(Integer iditem,ProductoDTO producto, Integer cantidad, String comentario, Boolean fueeliminado)
 	{
 		this.iditem=iditem;
 		this.producto=producto;
 		this.cantidad=cantidad;
 		this.comentario=comentario;
+		this.fueeliminado=fueeliminado;
 	}
 
 	public ProductoDTO getProducto() {
@@ -51,6 +53,14 @@ public class ItemDTO
 		this.iditem = iditem;
 	}
 
+	public Boolean getFueeliminado() {
+		return fueeliminado;
+	}
+
+	public void setFueeliminado(Boolean fueeliminado) {
+		this.fueeliminado = fueeliminado;
+	}
+
 	public ItemDTO buscarItem(ArrayList<ItemDTO> listaItem)
 	{
 		Iterator<ItemDTO> Iterador = listaItem.iterator();
@@ -58,6 +68,17 @@ public class ItemDTO
 		{
 			ItemDTO elemento = Iterador.next();
 			if(elemento.getProducto()==this.getProducto() && elemento.getCantidad()== this.getCantidad())
+				return elemento;
+		}
+		return null;
+	}
+	public static ItemDTO buscarItem(ArrayList<ItemDTO> listaItem,ItemDTO itemBuscar)
+	{
+		Iterator<ItemDTO> Iterador = listaItem.iterator();
+		while(Iterador.hasNext())
+		{
+			ItemDTO elemento = Iterador.next();
+			if(elemento.getProducto()==itemBuscar.getProducto() && elemento.getCantidad()== itemBuscar.getCantidad())
 				return elemento;
 		}
 		return null;

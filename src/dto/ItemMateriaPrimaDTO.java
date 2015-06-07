@@ -2,8 +2,10 @@ package dto;
 
 public class ItemMateriaPrimaDTO {
 
+	private Integer idItemMatPrima;
 	private MateriaPrimaDTO itemMatPrima;
 	private Integer cantidad;
+	private Boolean fueeliminado;
 
 	public ItemMateriaPrimaDTO(MateriaPrimaDTO itemMatPrima, Integer cantidad){
 		this.itemMatPrima = itemMatPrima;
