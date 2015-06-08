@@ -20,6 +20,9 @@ import dto.ClienteDTO;
 import dto.PedidoDTO;
 import javax.swing.border.MatteBorder;
 import presentacion.controlador.Controlador;
+import presentacion.reportes.Comanda;
+import presentacion.reportes.Ticket;
+
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -119,10 +122,10 @@ public class seleccionDeCliente extends JDialog {
 					cliente=control.getCliente().buscarCliente(Integer.parseInt(tfAgregarDNI.getText()));
 					pedido.setCliente(cliente);
 					control.getPedido().agregarPedido(pedido);
-					//JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
-					//control.getMonitorCocina().nuevoPedido(pedido);
-					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
-					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
+					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
+					control.getMonitorCocina().nuevoPedido(pedido);
+					new Ticket().generarTicket(seleccionDeCliente.this.pedido);
+					new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					dispose();
 				}
 			});
