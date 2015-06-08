@@ -51,7 +51,7 @@ public class calendario extends JDialog {
 				public void actionPerformed(ActionEvent e) 
 				{
 					Date fech=_calendar.getDate();
-					_padre.getTfFechaNacimiento().setText(fech.getYear()+1900+"-"+(fech.getMonth()+1)+"-"+fech.getDay());
+					_padre.getTfFechaNacimiento().setText(fech.getDay()+"-"+(fech.getMonth()+1)+"-"+(fech.getYear()+1900));
 					dispose();
 				}
 			});

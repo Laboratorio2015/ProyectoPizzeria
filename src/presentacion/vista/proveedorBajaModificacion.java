@@ -38,7 +38,6 @@ public class proveedorBajaModificacion extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTable tableProveedor;
 	private JTextField tfDenominacion;
-	private JTextField tfCategoria;
 	private JTextField tfTelefono;
 	private JTextField tfEmail;
 	private JTextField tfDireccion;
@@ -51,14 +50,14 @@ public class proveedorBajaModificacion extends JDialog {
 	private JButton btnGuardar;
 
 	public proveedorBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 766, 638);
+		setBounds(100, 100, 766, 895);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(69, 211, 185, 244);
+		scrollPane.setBounds(36, 121, 237, 310);
 		contentPanel.add(scrollPane);
 		this.control=control;
 		model = new DefaultTableModel(null,nombreColumnasProveedor);
@@ -82,40 +81,28 @@ public class proveedorBajaModificacion extends JDialog {
 		
 		tfDenominacion = new JTextField();
 		tfDenominacion.setEditable(false);
-		tfDenominacion.setBounds(468, 233, 174, 22);
+		tfDenominacion.setBounds(352, 150, 174, 22);
 		contentPanel.add(tfDenominacion);
 		tfDenominacion.setColumns(10);
 		
-		tfCategoria = new JTextField();
-		tfCategoria.setEditable(false);
-		tfCategoria.setColumns(10);
-		tfCategoria.setBounds(468, 269, 174, 22);
-		contentPanel.add(tfCategoria);
-		
 		tfTelefono = new JTextField();
 		tfTelefono.setColumns(10);
-		tfTelefono.setBounds(468, 306, 174, 22);
+		tfTelefono.setBounds(352, 207, 174, 22);
 		contentPanel.add(tfTelefono);
 		
 		tfEmail = new JTextField();
 		tfEmail.setColumns(10);
-		tfEmail.setBounds(468, 343, 174, 22);
+		tfEmail.setBounds(352, 320, 290, 22);
 		contentPanel.add(tfEmail);
 		
 		tfDireccion = new JTextField();
 		tfDireccion.setColumns(10);
-		tfDireccion.setBounds(468, 381, 174, 20);
+		tfDireccion.setBounds(352, 261, 290, 22);
 		contentPanel.add(tfDireccion);
-		
-		JLabel label_1 = new JLabel("Direccion");
-		label_1.setForeground(Color.WHITE);
-		label_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		label_1.setBounds(353, 382, 93, 14);
-		contentPanel.add(label_1);
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(proveedorBajaModificacion.class.getResource("/prototipos/baja-modif de Proveedor.png")));
-		label.setBounds(0, 0, 960, 599);
+		label.setBounds(0, 0, 960, 749);
 		contentPanel.add(label);
 		{
 			JButton btnFinalizar = new JButton("OK");
@@ -163,14 +150,6 @@ public class proveedorBajaModificacion extends JDialog {
 
 	public void setTfDenominacion(JTextField tfDenominacion) {
 		this.tfDenominacion = tfDenominacion;
-	}
-
-	public JTextField getTfCategoria() {
-		return tfCategoria;
-	}
-
-	public void setTfCategoria(JTextField tfCategoria) {
-		this.tfCategoria = tfCategoria;
 	}
 
 	public JTextField getTfTelefono() {
@@ -233,7 +212,7 @@ public class proveedorBajaModificacion extends JDialog {
 	public void agregarDatos(ProveedorDTO aux)
 	{
 		
-		tfCategoria.setText(aux.getCategoria().toString());
+		
 		tfDenominacion.setText(aux.getNombre());
 		tfDireccion.setText(aux.getDireccion());
 		tfEmail.setText(aux.getEmail());

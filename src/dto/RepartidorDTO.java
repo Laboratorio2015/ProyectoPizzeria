@@ -143,7 +143,19 @@ public class RepartidorDTO
 	public void setFueeliminado(Boolean fueeliminado) {
 		this.fueeliminado = fueeliminado;
 	}
-
+	public String sinEspacio(String comentario)
+	{
+		String coment="";
+		for (int i=0; i<comentario.length(); i++)
+		{
+			  if (comentario.charAt(i) != ' ' || (comentario.charAt(i)==' ' && comentario.charAt(i+1)!=' '))
+			    coment += comentario.charAt(i);
+			  else if(comentario.charAt(i)==' ' && comentario.charAt(i+1)==' ')
+				  break;
+		}
+		return coment;
+	}
+	
 	@Override
 	public String toString()
 	{

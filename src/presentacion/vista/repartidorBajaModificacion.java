@@ -38,9 +38,12 @@ public class repartidorBajaModificacion extends JDialog {
 	private JButton btnGuardar;
 	private JButton btnQuitar ;
 	private JButton btnFinalizar;
+	private JTextField tfComentario;
+	private JTextField tfPatente;
+	private JTextField tfDescripcion;
 
 	public repartidorBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 697, 638);
+		setBounds(100, 100, 695, 737);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -49,7 +52,7 @@ public class repartidorBajaModificacion extends JDialog {
 		contentPanel.setLayout(null);
 		{
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(67, 188, 200, 254);
+		scrollPane.setBounds(54, 194, 234, 318);
 		contentPanel.add(scrollPane);
 		{
 			table = new JTable(model);
@@ -65,40 +68,60 @@ public class repartidorBajaModificacion extends JDialog {
 		}
 		
 		tfdni = new JTextField();
-		tfdni.setEditable(false);
-		tfdni.setBounds(464, 174, 200, 22);
+		tfdni.setBounds(464, 173, 178, 22);
 		contentPanel.add(tfdni);
 		tfdni.setColumns(10);
 		
 		tfNombre = new JTextField();
 		tfNombre.setColumns(10);
-		tfNombre.setBounds(464, 211, 200, 22);
+		tfNombre.setBounds(464, 210, 178, 22);
 		contentPanel.add(tfNombre);
 		
 		tfApellido = new JTextField();
 		tfApellido.setColumns(10);
-		tfApellido.setBounds(464, 249, 200, 22);
+		tfApellido.setBounds(464, 247, 178, 22);
 		contentPanel.add(tfApellido);
 		
 		tfCelular = new JTextField();
 		tfCelular.setColumns(10);
-		tfCelular.setBounds(464, 287, 200, 22);
+		tfCelular.setBounds(464, 286, 178, 22);
 		contentPanel.add(tfCelular);
 		
 		tfFechaNacimiento = new JTextField();
+		tfFechaNacimiento.setEditable(false);
 		tfFechaNacimiento.setColumns(10);
-		tfFechaNacimiento.setBounds(464, 329, 200, 22);
+		tfFechaNacimiento.setBounds(464, 319, 113, 22);
 		contentPanel.add(tfFechaNacimiento);
+		
+		JButton btnCalendario = new JButton("");
+		btnCalendario.setIcon(new ImageIcon(repartidorBajaModificacion.class.getResource("/Botones/calendario.gif")));
+		btnCalendario.setBounds(596, 314, 45, 31);
+		contentPanel.add(btnCalendario);
+		
+		tfComentario = new JTextField();
+		tfComentario.setBounds(464, 350, 178, 53);
+		contentPanel.add(tfComentario);
+		tfComentario.setColumns(10);
+		
+		tfPatente = new JTextField();
+		tfPatente.setColumns(10);
+		tfPatente.setBounds(358, 466, 86, 22);
+		contentPanel.add(tfPatente);
+		
+		tfDescripcion = new JTextField();
+		tfDescripcion.setColumns(10);
+		tfDescripcion.setBounds(462, 466, 182, 22);
+		contentPanel.add(tfDescripcion);
 		{
 			JLabel label = new JLabel("");
-			label.setBounds(0, 0, 730, 600);
+			label.setBounds(0, 0, 680, 699);
 			contentPanel.add(label);
 			label.setIcon(new ImageIcon(repartidorBajaModificacion.class.getResource("/prototipos/modificar-baja repartidor.png")));
 		}
 		{
 			btnGuardar= new JButton("OK");
 			btnGuardar.setOpaque(false);
-			btnGuardar.setBounds(395, 406, 61, 46);
+			btnGuardar.setBounds(373, 544, 61, 46);
 			contentPanel.add(btnGuardar);
 			btnGuardar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnGuardar);
@@ -106,7 +129,7 @@ public class repartidorBajaModificacion extends JDialog {
 		{
 			btnQuitar= new JButton("Cancel");
 			btnQuitar.setOpaque(false);
-			btnQuitar.setBounds(40, 478, 52, 46);
+			btnQuitar.setBounds(46, 538, 52, 46);
 			contentPanel.add(btnQuitar);
 			btnQuitar.setActionCommand("Cancel");
 		}
@@ -119,7 +142,7 @@ public class repartidorBajaModificacion extends JDialog {
 			});
 			btnFinalizar.setOpaque(false);
 			btnFinalizar.setActionCommand("OK");
-			btnFinalizar.setBounds(472, 534, 150, 36);
+			btnFinalizar.setBounds(244, 629, 150, 36);
 			contentPanel.add(btnFinalizar);
 		}
 	}
@@ -211,6 +234,30 @@ public class repartidorBajaModificacion extends JDialog {
 	public void setBtnFinalizar(JButton btnFinalizar) {
 		this.btnFinalizar = btnFinalizar;
 	}
+	
+	public JTextField getTfComentario() {
+		return tfComentario;
+	}
+
+	public void setTfComentario(JTextField tfComentario) {
+		this.tfComentario = tfComentario;
+	}
+
+	public JTextField getTfPatente() {
+		return tfPatente;
+	}
+
+	public void setTfPatente(JTextField tfPatente) {
+		this.tfPatente = tfPatente;
+	}
+
+	public JTextField getTfDescripcion() {
+		return tfDescripcion;
+	}
+
+	public void setTfDescripcion(JTextField tfDescripcion) {
+		this.tfDescripcion = tfDescripcion;
+	}
 
 	public void agregarDatos(RepartidorDTO aux)
 	{
@@ -219,5 +266,8 @@ public class repartidorBajaModificacion extends JDialog {
 		tfApellido.setText(aux.getApellido());
 		tfFechaNacimiento.setText(aux.getFechaNacimiento());
 		tfCelular.setText(aux.getTelefono());
+		tfComentario.setText(aux.sinEspacio(aux.getComentario()));
+		tfDescripcion.setText(aux.getVehiculo());
+		tfPatente.setText(aux.getVehiculo());
 	}
 }

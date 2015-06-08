@@ -112,7 +112,7 @@ public class Controlador implements ActionListener
 	
 	public void inicializar()
 	{
-		this.monitorCocina=new PadreMonitor(pedido);
+		//this.monitorCocina=new PadreMonitor(pedido);
 		this.ventana.show();
 	}
 	@Override
@@ -333,7 +333,11 @@ public class Controlador implements ActionListener
 			ProveedorDTO nuevo= new ProveedorDTO();
 			nuevo.setId(proveedor.ultimoProveedor()+1);
 			nuevo.setNombre(ventanaAgregarProveedor.getTfDenominacion().getText());
-			nuevo.setCategoria(categoria.pasarDeStringAArray(ventanaAgregarProveedor.getTfCategoria().getText()));
+			nuevo.setNombrecontacto(ventanaAgregarProveedor.getTfNombreContacto().getText());
+			nuevo.setComentario(ventanaAgregarProveedor.getTfComentario().getText());
+			nuevo.setFueeliminado(false);
+			//agregar la lista de categorias
+			//nuevo.setCategoria(categoria.pasarDeStringAArray(ventanaAgregarProveedor.getTfCategoria().getText()));
 			nuevo.setDireccion(ventanaAgregarProveedor.getTfDireccion().getText());
 			nuevo.setEmail(ventanaAgregarProveedor.getTfEmail().getText());
 			nuevo.setTelefono(ventanaAgregarProveedor.getTfTelefono().getText());
@@ -354,7 +358,6 @@ public class Controlador implements ActionListener
 			ProveedorDTO aux= this.proveedor.buscarProveedor(ventanaEditarProveedor.getTfDenominacion().getText());
 			this.proveedor.quitarProveedor(aux);
 			llenarTablaProveedor();
-			ventanaEditarProveedor.getTfCategoria().setText("");
 			ventanaEditarProveedor.getTfDenominacion().setText("");
 			ventanaEditarProveedor.getTfDireccion().setText("");
 			ventanaEditarProveedor.getTfEmail().setText("");
@@ -370,7 +373,6 @@ public class Controlador implements ActionListener
 			this.proveedor.quitarProveedor(aux);
 			this.proveedor.agregarProveedor(aux);
 			llenarTablaProveedor();
-			ventanaEditarProveedor.getTfCategoria().setText("");
 			ventanaEditarProveedor.getTfDenominacion().setText("");
 			ventanaEditarProveedor.getTfDireccion().setText("");
 			ventanaEditarProveedor.getTfEmail().setText("");
@@ -397,6 +399,10 @@ public class Controlador implements ActionListener
 			ventanaEditarRepartidor.getTfdni().setText("");
 			ventanaEditarRepartidor.getTfFechaNacimiento().setText("");
 			ventanaEditarRepartidor.getTfNombre().setText("");
+			ventanaEditarRepartidor.getTfComentario().setText("");
+			ventanaEditarRepartidor.getTfPatente().setText("");
+			ventanaEditarRepartidor.getTfDescripcion().setText("");
+			
 		}
 		//modificar un repartidor
 		else if (this.ventanaEditarRepartidor!= null && e.getSource()==this.ventanaEditarRepartidor.getBtnGuardar())
@@ -447,6 +453,9 @@ public class Controlador implements ActionListener
 			rep.setFechaNacimiento(ventanaAgregarRepartidor.getTfFechaNacimiento().getText().toString());
 			rep.setTelefono(ventanaAgregarRepartidor.getTfCelular().getText().toString());
 			rep.setEstado(null);
+			rep.setComentario(ventanaAgregarRepartidor.getTfComentario().getText().toString());
+			rep.setVehiculo(ventanaAgregarRepartidor.getTfVehiculo().getText().toString());
+			rep.setPatente(ventanaAgregarRepartidor.getTfPatente().getText().toString());
 			rep.setFueeliminado(false);
 			repartidor.agregarRepartidor(rep);
 			ventanaAgregarRepartidor.dispose();
