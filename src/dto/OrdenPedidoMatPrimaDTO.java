@@ -21,6 +21,16 @@ public class OrdenPedidoMatPrimaDTO
 		this.fueeliminado=fueeliminado;
 	}
 	
+	public OrdenPedidoMatPrimaDTO(Integer idCompra, ProveedorDTO proveedor,ArrayList<ItemMateriaPrimaDTO> listadoCompra) {
+		super();
+		this.idCompra = idCompra;
+		this.proveedor = proveedor;
+		this.listadoCompra = listadoCompra;
+		this.estado="guardado";
+		this.fueeliminado=false;
+	}
+	
+	
 	public Integer getIdCompra() {
 		return idCompra;
 	}

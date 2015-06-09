@@ -14,14 +14,19 @@ import Cocina.PadreMonitor;
 import modelo.Categorias;
 import modelo.Clientes;
 import modelo.Items;
+import modelo.MatPrimas;
 import modelo.Ofertas;
+import modelo.OrdenesMateriaPrimas;
 import modelo.Pedidos;
 import modelo.Productos;
 import modelo.Proveedores;
 import modelo.Repartidores;
 import dto.ClienteDTO;
 import dto.ItemDTO;
+import dto.ItemMateriaPrimaDTO;
+import dto.MateriaPrimaDTO;
 import dto.OfertaDTO;
+import dto.OrdenPedidoMatPrimaDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;
 import dto.ProveedorDTO;
@@ -50,6 +55,7 @@ import presentacion.vista.repartidorAlta;
 import presentacion.vista.repartidorBajaModificacion;
 import presentacion.vista.seleccionDeCliente;
 import presentacion.vista.seleccionarRepartidor;
+import presentacion.reportes.solicitudDeMateriaPrima;
 
 public class Controlador implements ActionListener
 {
@@ -58,7 +64,7 @@ public class Controlador implements ActionListener
 	private ordenDePedido ventanaPedido;
 	private pedidosPendientes ventanaPedPendiente;
 	private seleccionDeCliente ventanaCliente;
-	private ordenarMatPrima ventanaMatPrima;
+	private ordenarMatPrima ventanaOrdenMatPrima;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
 	private productoAlta ventanaAgregarProducto;
 	private productoBajaModificacion ventanaEditarProducto;
@@ -89,9 +95,12 @@ public class Controlador implements ActionListener
 	private Repartidores repartidor;
 	private Ofertas oferta;
 	private Categorias categoria;
+	private OrdenesMateriaPrimas ordenesMatPrimas;
+	private MatPrimas materiasPrimas;
 	
 	
-	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor, Repartidores repartidor,Ofertas oferta, Categorias categoria) 
+	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, 
+			Proveedores proveedor, Repartidores repartidor,Ofertas oferta, Categorias categoria) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -109,6 +118,31 @@ public class Controlador implements ActionListener
 		this.ventana.getBtnReportes().addActionListener(this);
 		
 	}
+	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
+	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
+			Repartidores repartidor,Ofertas oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas) 
+	{
+		this.ventana=ventana;
+		this.pedido=pedido;
+		this.cliente=cliente;
+		this.item=item;
+		this.producto=producto;
+		this.proveedor=proveedor;
+		this.repartidor=repartidor;
+		this.oferta=oferta;
+		this.categoria=categoria;
+		this.ordenesMatPrimas = ordenesMatPrimas;
+		this.materiasPrimas = matPrimas;
+		this.ventana.getBtnIngresarPedido().addActionListener(this);
+		this.ventana.getBtnPedidosPendientes().addActionListener(this);
+		this.ventana.getBtnConfiguraciones().addActionListener(this);
+		this.ventana.getBtnPedMatPrima().addActionListener(this);
+		this.ventana.getBtnReportes().addActionListener(this);
+		
+	}
+	
+	
+	
 	
 	public void inicializar()
 	{
@@ -135,11 +169,118 @@ public class Controlador implements ActionListener
 			ventanaPedPendiente.llenarTabla();
 			this.ventanaPedPendiente.setVisible(true);
 		}
+		
+		///FIN CONTROL ORDENAR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
-			ventanaMatPrima= new ordenarMatPrima(ventana, null);
-			ventanaMatPrima.setVisible(true);
+			ventanaOrdenMatPrima= new ordenarMatPrima(ventana, this);
+			ventanaOrdenMatPrima.setVisible(true);
+			
+			this.ventanaOrdenMatPrima.getButtonAgregarMateriaPrima().addActionListener(this);
+			this.ventanaOrdenMatPrima.getButtonQuitarMatPrima().addActionListener(this);
+			this.ventanaOrdenMatPrima.getButtonLimpiarBuscador().addActionListener(this);
+			this.ventanaOrdenMatPrima.getBtnVermatprima().addActionListener(this);
+			this.ventanaOrdenMatPrima.getBtnCancelar().addActionListener(this);
+			this.ventanaOrdenMatPrima.getBtnEnviarform().addActionListener(this);
+			this.ventanaOrdenMatPrima.getBtnGuardarform().addActionListener(this);
+			this.ventanaOrdenMatPrima.getBtnVermatprima().addActionListener(this);
+			this.ventanaOrdenMatPrima.getBtnVerproveedores().addActionListener(this);
+			this.ventanaOrdenMatPrima.getComboListaCategorias().addActionListener(this);
+			this.ventanaOrdenMatPrima.getComboListaProveedores().addActionListener(this);
+		
+			//CARGA PROVEEDORES, CATEGORIA Y MAT PRIMA FILTRADA
+			cargarProveedores();
+			try {
+				getProveedorSeleccionado();
+			} catch (Exception e1) {
+				//exepcion> "El proveedor recibido en nulo O no existe en el listado de proveedores." 
+				e1.printStackTrace();
+			}
+			cargarCategorias();
+			try {
+				generarArrayMatPrimaProveed();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			try {
+				generarArrayMatPrimaProveed();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			prepararMatPrimaParaBusqXCategoria();
+			//FIN CARGA PROVEEDORES, CATEGORIA Y MAT PRIMA FILTRADA
+		
 		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getButtonAgregarMateriaPrima())
+		//accion para Agregar item Mat Prima
+		{
+			if (ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString().compareTo("")!=0 && ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString().compareTo("")!=0){
+				if (ventanaOrdenMatPrima.getProvBloqueado() == false){
+					ventanaOrdenMatPrima.getComboListaProveedores().setEnabled(false);
+					ventanaOrdenMatPrima.setProvBloqueado(true);
+				}
+				ventanaOrdenMatPrima.setItemSolicitado(new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString()),
+						Integer.parseInt(ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString()))); 
+				
+				agregarItemTabla(ventanaOrdenMatPrima.getItemSolicitado());
+				ventanaOrdenMatPrima.getTextFieldCantMatPrima().setText("");
+				ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().setText("");
+				ventanaOrdenMatPrima.getButtonAgregarMateriaPrima().setEnabled(false);
+			}
+			else{
+				ventanaOrdenMatPrima.getButtonAgregarMateriaPrima().setEnabled(false);
+			}
+		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getButtonQuitarMatPrima())
+		//accion para BORRAR ITEM AGREGADO
+		{
+			if (ventanaOrdenMatPrima.getTablaItemsMateriaPrima().getSelectedRow() >= 0){
+				ventanaOrdenMatPrima.getModeloItemsSolicitados().removeRow(ventanaOrdenMatPrima.getTablaItemsMateriaPrima().getSelectedRow());
+				ventanaOrdenMatPrima.getTablaItemsMateriaPrima().setModel(ventanaOrdenMatPrima.getModeloItemsSolicitados());
+			}
+		
+		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnGuardarform())
+		//accion para GENERAR PDF Y GUARDAR ORDEN DE PEDIDO
+		{
+			ventanaOrdenMatPrima.setListadoItemsOrdenados(generarListadoCompra());
+			ArrayList<OrdenPedidoMatPrimaDTO> listadoOrdenesMatPrima = (ArrayList<OrdenPedidoMatPrimaDTO>) this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima();
+			int id = listadoOrdenesMatPrima.size();
+			ventanaOrdenMatPrima.setNuevaOrden(new OrdenPedidoMatPrimaDTO(id,ventanaOrdenMatPrima.getProvSeleccionado(),
+					ventanaOrdenMatPrima.getListadoItemsOrdenados()));
+			try {
+				generarPDFordenMatPrima();
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			try {
+
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			//borrarFormulario();
+			//dispose();
+		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getComboListaProveedores())
+		//accion para CARGAR INFORMACION TRAS CAMBIO DE PROV SELECCIONADO.
+		{
+			cargarCategorias();
+			try {
+				generarArrayMatPrimaProveed();
+			} catch (Exception e1) {
+				System.out.println("Proveedor no hayado");		
+				e1.printStackTrace();
+			}
+			prepararMatPrimaParaBusqXCategoria();
+		}
+		
+		
+		///FIN CONTROL ORDENAR MAT PRIMA
+
+		
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
 		{
 			ventanaConfiguraciones=new opcionesDeConfiguracion();
@@ -539,7 +680,52 @@ public class Controlador implements ActionListener
 		
 	}
 	
-	
+	private void generarPDFordenMatPrima() {
+		solicitudDeMateriaPrima ordenPDF = new solicitudDeMateriaPrima(ventanaOrdenMatPrima.getNuevaOrden());
+		
+	}
+
+	private ArrayList<ItemMateriaPrimaDTO> generarListadoCompra() {
+		ArrayList<ItemMateriaPrimaDTO> listadoCompra = new ArrayList<ItemMateriaPrimaDTO>();
+		for (int i=0; i < ventanaOrdenMatPrima.getModeloItemsSolicitados().getRowCount(); i++){
+			//MateriaPrimaDTO MatPrima= getMatPrimaSeleccionada(modeloMatPrima.getValueAt(i, 0).toString());
+			ItemMateriaPrimaDTO itemMatPrima = new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i, 0).toString()), 
+					Integer.parseInt(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i, 1).toString()));
+			listadoCompra.add( itemMatPrima);
+		}
+		return listadoCompra;
+	}
+
+	private void agregarItemTabla(ItemMateriaPrimaDTO itemSolicitado) {
+		Integer indice = getIntFilaItem(itemSolicitado);
+		if (indice==-1){
+			ventanaOrdenMatPrima.getModeloItemsSolicitados().addRow(new Object[] {itemSolicitado.getItemMatPrima().getNombre(), String.valueOf(itemSolicitado.getCantidad())});
+		}
+		else{
+			Integer cantTotal = Integer.parseInt(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(indice, 1).toString()) + itemSolicitado.getCantidad();
+			ventanaOrdenMatPrima.getModeloItemsSolicitados().setValueAt(cantTotal, indice, 1);
+		}
+		ventanaOrdenMatPrima.getTablaItemsMateriaPrima().setModel(ventanaOrdenMatPrima.getModeloItemsSolicitados());		
+	}
+
+	private Integer getIntFilaItem(ItemMateriaPrimaDTO itemSolicitado) {
+		for (int i = 0; i < ventanaOrdenMatPrima.getModeloItemsSolicitados().getRowCount();i++){
+			if (((String) ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i, 0)).compareTo(itemSolicitado.getItemMatPrima().getNombre())==0 ){
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private MateriaPrimaDTO getMatPrimaSeleccionada(String text) {
+		for (int  i= 0; i < ventanaOrdenMatPrima.getMateriasPrimasFiltradas().size();i++){
+			if ( text.compareTo(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getNombre())==0 ){
+				return ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i);
+			}
+		}
+		return null;
+	}
+
 	public ArrayList<ItemDTO> generarListaItems() 
 	{
 		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
@@ -729,4 +915,71 @@ public class Controlador implements ActionListener
 			this.ventanaEditarProducto.getModel().addRow(fila);			
 		}
 	}
+	///  METODOS PARA VENTANA ORDEN DE MATERIA PRIMA
+	private void cargarProveedores(){
+		ArrayList<ProveedorDTO> listaProveedores = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
+		for (int i=0; i< listaProveedores.size();i++){
+			ventanaOrdenMatPrima.getComboListaProveedores().addItem(listaProveedores.get(i).getNombre());
+		}
+	}
+	
+	private void cargarCategorias() {
+		ventanaOrdenMatPrima.getComboListaCategorias().removeAllItems();
+		for (int i = 0; i < ventanaOrdenMatPrima.getProvSeleccionado().getCategoria().size();i++){
+			ventanaOrdenMatPrima.getComboListaCategorias().addItem(ventanaOrdenMatPrima.getProvSeleccionado().getCategoria().get(i).getDenominacion());
+		 }
+	}
+	
+	private ProveedorDTO getProveedorSeleccionado() throws Exception{
+		String nomProveedor = (String) ventanaOrdenMatPrima.getComboListaProveedores().getSelectedItem();
+		if (getProveedor(nomProveedor)!= null){
+			return getProveedor(nomProveedor);
+		}
+		else{
+			throw new Exception("El proveedor recibido en nulo O no existe en el listado de proveedores.");
+		}
+	}
+	
+	private ProveedorDTO getProveedor(String nomProveedor){
+		ArrayList<ProveedorDTO> listaProveedores = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
+		for (int i= 0; i < listaProveedores.size();i++){
+			if (nomProveedor.compareTo(listaProveedores.get(i).getNombre()) == 0){
+				return listaProveedores.get(i);
+			}
+		}
+		return null;
+	}
+	
+	private void prepararMatPrimaParaBusqXCategoria() {
+		ventanaOrdenMatPrima.getTextAutoAcompleter().removeAllItems();
+		for (int i=0; i < ventanaOrdenMatPrima.getMateriasPrimasFiltradas().size(); i++){
+			if(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getCategoria().getDenominacion().compareTo
+					((String)ventanaOrdenMatPrima.getComboListaCategorias().getSelectedItem()) == 0){
+				ventanaOrdenMatPrima.getTextAutoAcompleter().addItem(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getNombre());
+			}
+		}
+	}
+	
+	private void generarArrayMatPrimaProveed() throws Exception {
+		/** Tomo cada elemento q compone el comboBox categorias, con cada nombre de categoria pregunto por cada item*/
+		ventanaOrdenMatPrima.getMateriasPrimasFiltradas().clear();
+		ventanaOrdenMatPrima.getTextAutoAcompleter().removeAllItems();
+		ArrayList<MateriaPrimaDTO> materiasPrimas = (ArrayList<MateriaPrimaDTO>) this.materiasPrimas.obtenerMatPrimas();
+		for (int i = 0; i < materiasPrimas.size();i++){
+			if ( contieneCategoria(materiasPrimas.get(i).getCategoria().getDenominacion())){
+				ventanaOrdenMatPrima.getMateriasPrimasFiltradas().add(materiasPrimas.get(i));
+			}
+		}
+		
+	}
+	
+	private boolean contieneCategoria(String nomCategoria) throws Exception {
+		for (int  i= 0; i < ventanaOrdenMatPrima.getProveedorSeleccionado().getCategoria().size();i++){
+			if (ventanaOrdenMatPrima.getProveedorSeleccionado().getCategoria().get(i).getDenominacion().compareTo(nomCategoria)== 0){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

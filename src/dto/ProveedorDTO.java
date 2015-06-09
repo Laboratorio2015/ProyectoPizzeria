@@ -1,5 +1,6 @@
 package dto;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -126,5 +127,9 @@ public class ProveedorDTO
 	public String toString()
 	{
 		return (this.idproveedor+ "  " + this.nombre + "  " +  this.direccion + "  " + this.telefono);
+	}
+	public Component getCategorias() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

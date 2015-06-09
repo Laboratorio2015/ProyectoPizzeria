@@ -1,129 +1,124 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.EventQueue;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import java.awt.Dimension;
 import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
 
-import presentacion.controlador.Controlador;
-import dao.*;
-import dto.*;
+import dto.ItemMateriaPrimaDTO;
+import dto.MateriaPrimaDTO;
+import dto.OrdenPedidoMatPrimaDTO;
+import dto.ProveedorDTO;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JTextField;
-import java.awt.Color;
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+
+import presentacion.controlador.Controlador;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JComboBox;
 
-import modelo.MatPrimas;
+import com.mxrck.autocompleter.TextAutoCompleter;
 
-// poner funcionalidad al boton seleccionar proveedor, actualmente, se cargaria automaticamente al seleccionar el prov desde el combo box.
-public class ordenarMatPrima extends JDialog {
+public class ordenarMatPrima extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	private final JPanel contentPanel = new JPanel();
-	private VentanaPrincipal _padre;
+	private JButton buttonAgregarMateriaPrima;
 
-	private JTextField txFieldBuscarProveedor;
-	private JTextField textFieldBusquedaMatPrima;
-	private JTextField textFieldCantMatPrima;
-	private JTextField txtFieldCategProveed;
-	private JTextField textFieldTelProveed;
-	private JTextField textFieldDireccProveed;
-	private JTable tablaListaMatPrima;
-	private JButton buttonGuardarOrden;
-	private JButton buttonSeleccProveed;
-	private JButton buttonAgregarMatPrima;
-	private JButton buttonQuitarMatPrimaSeleccionada;
-	private JComboBox<String> comboBoxProveedores;
-	private JComboBox<String> comboBoxCategorias;
-	private ProveedorDTO provSeleccionado;
-	private DefaultTableModel modeloMatPrima;
+	private JPanel contentPane;
+	//BOTONES
+	private JButton buttonLimpiarBuscador;
+	private JButton buttonQuitarMatPrima;
+	private JButton btnEnviarform;
+	private JButton btnGuardarform;
+	private JButton btnCancelar;
+	private JButton btnVerproveedores;
+	private JButton btnVermatprima;
 	
-	private ProveedorDAO conexionProveedor;
+	//COMBOBOX
+	private JComboBox<String> comboListaProveedores;
+	private JComboBox<String> comboListaCategorias;
+	private JTextField textFieldBuscadorMatPrima;
+	private JTextField textFieldCantMatPrima;
+	private VentanaPrincipal ventanaPrincipal;
+	private Controlador controlador;
+
+	//TABLA
+	private DefaultTableModel modeloItemsSolicitados;
+	private JTable tablaItemsMateriaPrima;
+	
+	//Auxiliares
+	private Boolean ProvBloqueado=false;
+	private ProveedorDTO provSeleccionado;
+	private ItemMateriaPrimaDTO itemSolicitado;
 	private ArrayList<ProveedorDTO> listadoProveedores;
 	private ArrayList<MateriaPrimaDTO> materiasPrimasFiltradas;
+	private ArrayList<ItemMateriaPrimaDTO> listadoItemsOrdenados;
+	private OrdenPedidoMatPrimaDTO nuevaOrden;
+	private TextAutoCompleter textAutoAcompleter;
 
-	private ordenarMatPrima _matPrima;
-	private MateriaPrimaDAO conexionMatPrima;
-	private ArrayList<MateriaPrimaDTO> listadoMatPrimas;
 
-
-	@SuppressWarnings("serial")
-	public ordenarMatPrima(VentanaPrincipal padre, final Controlador control) {
-		setModal(true);
-		padre=_padre;
-		_matPrima=this;
+	
+	public ordenarMatPrima(VentanaPrincipal ventanaPrincipal, Controlador controlador) {
+		this.ventanaPrincipal = ventanaPrincipal;
+		this.controlador = controlador;
 		materiasPrimasFiltradas = new ArrayList<MateriaPrimaDTO>();
-		setMinimumSize(new Dimension(700, 600));
-		setBounds(300, 50, 700, 641);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
 		
-		comboBoxProveedores = new JComboBox<String>();
-		comboBoxProveedores.setBounds(120, 135, 253, 25);
-		comboBoxProveedores.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				try {
-					provSeleccionado = getProveedorSeleccionado();
-					cargarDatosProveedor(provSeleccionado);
-					cargarCategorias();
-					cargarMatPrimaXcategoria();
-				} catch (Exception e) {
-					System.out.println("El proveedor recibido es nulo o no se puede encontrar.");
-					e.printStackTrace();
-				}
-			}
-		});
-		contentPanel.add(comboBoxProveedores);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 898, 651);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
-		comboBoxCategorias = new JComboBox();
-		comboBoxCategorias.setBounds(100, 272, 300, 23);
-		contentPanel.add(comboBoxCategorias);
-		
-		txFieldBuscarProveedor = new JTextField();
-		txFieldBuscarProveedor.setBackground(Color.LIGHT_GRAY);
-		txFieldBuscarProveedor.setBounds(120, 135, 253, 25);
-		contentPanel.add(txFieldBuscarProveedor);
-		txFieldBuscarProveedor.setColumns(10);
-		
-		textFieldBusquedaMatPrima = new JTextField();
-		textFieldBusquedaMatPrima.setBackground(Color.LIGHT_GRAY);
-		textFieldBusquedaMatPrima.setBounds(100, 319, 311, 25);
-		contentPanel.add(textFieldBusquedaMatPrima);
-		textFieldBusquedaMatPrima.setColumns(10);
+		textFieldBuscadorMatPrima = new JTextField();
+		textFieldBuscadorMatPrima.setBounds(63, 389, 299, 25);
+		contentPane.add(textFieldBuscadorMatPrima);
+		textFieldBuscadorMatPrima.setColumns(10);
 		
 		textFieldCantMatPrima = new JTextField();
-		textFieldCantMatPrima.setBounds(427, 319, 55, 25);
-		contentPanel.add(textFieldCantMatPrima);
+		textFieldCantMatPrima.setBounds(407, 389, 48, 25);
+		contentPane.add(textFieldCantMatPrima);
 		textFieldCantMatPrima.setColumns(10);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(120, 405, 526, 114);
-		contentPanel.add(scrollPane);
+		comboListaProveedores = new JComboBox<String>();
+		comboListaProveedores.setBounds(68, 143, 250, 25);
+		contentPane.add(comboListaProveedores);
 		
-		tablaListaMatPrima = new JTable();
-		modeloMatPrima = new DefaultTableModel(
+		comboListaCategorias = new JComboBox<String>();
+		comboListaCategorias.setBounds(63, 328, 299, 25);
+		contentPane.add(comboListaCategorias);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(601, 143, 250, 360);
+		contentPane.add(scrollPane);
+		
+		tablaItemsMateriaPrima = new JTable();
+		modeloItemsSolicitados = new DefaultTableModel(
 				new Object[][] {
 				},
 				new String[] {
 					"Materia Prima", "Cantidad"
 				}
 			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
 				@SuppressWarnings("rawtypes")
 				Class[] columnTypes = new Class[] {
 					String.class, Integer.class
@@ -132,181 +127,282 @@ public class ordenarMatPrima extends JDialog {
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
-		};
-		tablaListaMatPrima.setModel(modeloMatPrima);
-		scrollPane.setViewportView(tablaListaMatPrima);
+			};
+
+		scrollPane.setViewportView(tablaItemsMateriaPrima);
 		
 		JLabel label = new JLabel("");
-		label.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				/**Tomar el nombre cargado en el txt field de mat prima, buscar el objeto MateriaPrima con ese nombre y guardarlo.
-				 * Creo un nuevo objeto que se llama itemMatPrima(MatPrima, Cantidad). Y lo uso para almacenar el item guardado con la cantidad
-				 *ingresada por el usuario.
-				 * */
-				
-			}
-		});
-		label.setOpaque(true);
-		label.setBounds(0, 0, 684, 600);
-		contentPanel.add(label);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setIcon(new ImageIcon("C:\\Users\\Yanina\\Documents\\Elab de constr de Soft\\tp pizzeria\\Gui\\Recursos\\Editados\\Ventanas\\orden de materia prima.png"));
-		{
-			JButton okButton = new JButton("OK");
-			okButton.setOpaque(false);
-			okButton.addMouseListener(new MouseAdapter() 
-			{
-				@Override
-				public void mouseClicked(MouseEvent e) 
-				{
-					/**se debe crear en la base de datos una tabla con nombre
-					OrdenDePedido, con los campos idOrden,idMatPrima,idProveed,fecha,hora.
-					Y dentro de esta tabla guardar el registro de orden de pedido creada.
-					Luego de guardarla, tengo q tomar toda esta informacion, para elaborar un pdf,
-					y enviarlo adjunto al mail indicado por el proveedor seleccionado.
-					*/
-					//dispose();
-				}
-			});
-			okButton.setBounds(155, 540, 116, 38);
-			contentPanel.add(okButton);
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
-		}
-		{
-			JButton cancelButton = new JButton("Cancel");
-			cancelButton.setOpaque(false);
-			cancelButton.addMouseListener(new MouseAdapter() 
-			{
-				@Override
-				public void mouseClicked(MouseEvent e) 
-				{
-					dispose();
-				}
-			});
-			cancelButton.setBounds(427, 540, 125, 38);
-			contentPanel.add(cancelButton);
-			cancelButton.setActionCommand("Cancel");
-		}
+		label.setBounds(0, 11, 882, 600);
+		contentPane.add(label);
 		
-		buttonGuardarOrden = new JButton("Guardar");
-		buttonGuardarOrden.setOpaque(false);
-		buttonGuardarOrden.addMouseListener(new MouseAdapter() 
-		{
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				/**se debe crear en la base de datos una tabla con nombre
-				OrdenDePedido, con los campos idOrden,idMatPrima,idProveed,fecha,hora.
-				Y dentro de esta tabla guardar el registro de orden de pedido creada.
-				*/
-				//dispose();
-			}
-		});
-		buttonGuardarOrden.setActionCommand("OK");
-		buttonGuardarOrden.setBounds(291, 540, 116, 38);
-		contentPanel.add(buttonGuardarOrden);
-		
-		buttonSeleccProveed = new JButton("");
-		buttonSeleccProveed.setBounds(624, 135, 33, 38);
-		contentPanel.add(buttonSeleccProveed);
-		
-		buttonAgregarMatPrima = new JButton("");
-		buttonAgregarMatPrima.addMouseListener(new MouseAdapter() {
+		buttonAgregarMateriaPrima = new JButton("agregarMatPrima");
+		buttonAgregarMateriaPrima.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				ItemMateriaPrimaDTO itemSolicitado = new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(), Integer.getInteger(textFieldCantMatPrima.getText()));
-				modeloMatPrima.addColumn(new Object[] {itemSolicitado.getItemMatPrima().getNombre(), itemSolicitado.getCantidad()});
+				dispose();
+//				if (textFieldCantMatPrima.getText().toString().compareTo("")!=0 && textFieldBusquedaMatPrima.getText().toString().compareTo("")!=0){
+//					if (bloquearProveedor==false){
+//						comboBoxProveedores.setEnabled(false);
+//						bloquearProveedor=true;
+//					}
+//					itemSolicitado = new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(textFieldBusquedaMatPrima.getText()),
+//															Integer.parseInt(textFieldCantMatPrima.getText().toString()));
+//					agregarItemTabla(itemSolicitado);
+//					textFieldCantMatPrima.setText("");
+//					textFieldBusquedaMatPrima.setText("");
+//					buttonAgregarMatPrima.setEnabled(false);
+//				}
+//				else{
+//					buttonAgregarMatPrima.setEnabled(false);
+//				}
 			}
 		});
-		buttonAgregarMatPrima.setBounds(555, 295, 33, 38);
-		contentPanel.add(buttonAgregarMatPrima);
+		buttonAgregarMateriaPrima.setOpaque(false);
+		buttonAgregarMateriaPrima.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		buttonAgregarMateriaPrima.setBorder(null);
+		buttonAgregarMateriaPrima.setBounds(92, 439, 127, 37);
+		contentPane.add(buttonAgregarMateriaPrima);
 		
-		buttonQuitarMatPrimaSeleccionada = new JButton("");
-		buttonQuitarMatPrimaSeleccionada.setBounds(50, 438, 39, 38);
-		contentPanel.add(buttonQuitarMatPrimaSeleccionada);
+		buttonLimpiarBuscador = new JButton("Limpiar Busq");
+		buttonLimpiarBuscador.setOpaque(false);
+		buttonLimpiarBuscador.setBounds(251, 439, 149, 36);
+		contentPane.add(buttonLimpiarBuscador);
 		
-		txtFieldCategProveed = new JTextField();
-		txtFieldCategProveed.setBounds(463, 112, 107, 20);
-		contentPanel.add(txtFieldCategProveed);
-		txtFieldCategProveed.setColumns(10);
+		buttonQuitarMatPrima = new JButton("borrarMatPrima");
+		buttonQuitarMatPrima.setOpaque(false);
+		buttonQuitarMatPrima.setBounds(535, 264, 34, 37);
+		contentPane.add(buttonQuitarMatPrima);
 		
-		textFieldTelProveed = new JTextField();
-		textFieldTelProveed.setColumns(10);
-		textFieldTelProveed.setBounds(463, 137, 107, 20);
-		contentPanel.add(textFieldTelProveed);
+		btnEnviarform = new JButton("enviarForm");
+		btnEnviarform.setOpaque(false);
+		btnEnviarform.setBounds(242, 532, 120, 37);
+		contentPane.add(btnEnviarform);
 		
-		textFieldDireccProveed = new JTextField();
-		textFieldDireccProveed.setColumns(10);
-		textFieldDireccProveed.setBounds(463, 156, 107, 20);
-		contentPanel.add(textFieldDireccProveed);
+		btnGuardarform = new JButton("GuardarForm");
+		btnGuardarform.setOpaque(false);
+		btnGuardarform.setBounds(378, 532, 120, 37);
+		contentPane.add(btnGuardarform);
 		
-		listadoProveedores = (ArrayList<ProveedorDTO>) conexionProveedor.readAll(); //ArrayList Con todos los proveedores.
-		listadoMatPrimas = (ArrayList<MateriaPrimaDTO>) conexionMatPrima.readAll();
-		cargarProveedores();
-	}
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setOpaque(false);
+		btnCancelar.setBounds(520, 532, 127, 37);
+		contentPane.add(btnCancelar);
+		
+		btnVerproveedores = new JButton("VerProveedores");
+		btnVerproveedores.setOpaque(false);
+		btnVerproveedores.setBounds(339, 127, 76, 37);
+		contentPane.add(btnVerproveedores);
+		
+		btnVermatprima = new JButton("verMatPrima");
+		btnVermatprima.setOpaque(false);
+		btnVermatprima.setBounds(394, 310, 67, 42);
+		contentPane.add(btnVermatprima);
 	
-	protected MateriaPrimaDTO getMatPrimaSeleccionada() {
-		String nomMatPrimaSeleccionada = textFieldBusquedaMatPrima.getText();
-		for (int  i= 0; i < materiasPrimasFiltradas.size();i++){
-			if ( nomMatPrimaSeleccionada.compareTo(materiasPrimasFiltradas.get(i).getNombre())==0 ){
-				return materiasPrimasFiltradas.get(i);
-			}
-		}
-		return null;
-	}
-
-	protected void cargarMatPrimaXcategoria() {
-		/** Tomo cada elemento q compone el comboBox categorias, con nada nombre de categoria pregunto por cada item*/
-		materiasPrimasFiltradas = new ArrayList<MateriaPrimaDTO>();
-		for (int i = 0; i < listadoMatPrimas.size();i++){
-			if ( contieneCategoria(listadoMatPrimas.get(i).getCategoria())){
-				materiasPrimasFiltradas.add(listadoMatPrimas.get(i));
-			}
-		}
-	}
-
-	private boolean contieneCategoria(String nomCategoria) {
-		for (int  i= 0; i < comboBoxCategorias.getComponentCount();i++){
-			if (comboBoxCategorias.getItemAt(i).compareTo(nomCategoria)== 0){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	protected void cargarCategorias() {
-		//Cuando el prov tenga un arraylist de Categorias, activo esta funcion>
-		/**
-		 for (int i = 0; i < proSeleccionado.getCategorias().size();i++){
-		  		comboBoxCategorias.addItem(provSeleccionado.get(i));
-		 *  */	
-		comboBoxCategorias.addItem(provSeleccionado.getCategoria());
-	}
-
-	protected void cargarDatosProveedor(ProveedorDTO provSeleccionado) {
-		textFieldDireccProveed.setText(provSeleccionado.getDireccion());
-		textFieldTelProveed.setText(provSeleccionado.getTelefono());
-		//FALTA CARGAR CATEGORIAS ASOCIADAS
-	}
-
-	public void cargarProveedores(){
-		for (int i=0; i< listadoProveedores.size();i++){
-			comboBoxProveedores.addItem(listadoProveedores.get(i).getNombre());
-		}
+		textAutoAcompleter = new TextAutoCompleter( textFieldBuscadorMatPrima );
+		textAutoAcompleter.setMode(0);
+		textAutoAcompleter.setCaseSensitive(false);
 	}
 	
 	public ProveedorDTO getProveedorSeleccionado() throws Exception{
-		String nomProveedor = (String) comboBoxProveedores.getSelectedItem();
-		return getProveedor(nomProveedor);
+		String nomProveedor = (String) comboListaProveedores.getSelectedItem();
+		if (obtenerProveedor(nomProveedor)!= null){
+			return obtenerProveedor(nomProveedor);
+		}
+		else{
+			throw new Exception("El proveedor recibido en nulo.");
+		}
 	}
 	
-	public ProveedorDTO getProveedor(String nomProveedor){
+	public ProveedorDTO obtenerProveedor(String nomProveedor){
 		for (int i= 0; i < listadoProveedores.size();i++){
 			if (nomProveedor.compareTo(listadoProveedores.get(i).getNombre()) == 0){
 				return listadoProveedores.get(i);
 			}
 		}
 		return null;
+	}
+
+	
+	
+	
+	//GETTERS AND SETTERS.
+	public JButton getButtonAgregarMateriaPrima() {
+		return buttonAgregarMateriaPrima;
+	}
+
+	public void setButtonAgregarMateriaPrima(JButton buttonAgregarMateriaPrima) {
+		this.buttonAgregarMateriaPrima = buttonAgregarMateriaPrima;
+	}
+
+	public JButton getButtonLimpiarBuscador() {
+		return buttonLimpiarBuscador;
+	}
+
+	public void setButtonLimpiarBuscador(JButton buttonLimpiarBuscador) {
+		this.buttonLimpiarBuscador = buttonLimpiarBuscador;
+	}
+
+	public JButton getButtonQuitarMatPrima() {
+		return buttonQuitarMatPrima;
+	}
+
+	public void setButtonQuitarMatPrima(JButton buttonQuitarMatPrima) {
+		this.buttonQuitarMatPrima = buttonQuitarMatPrima;
+	}
+
+	public JButton getBtnEnviarform() {
+		return btnEnviarform;
+	}
+
+	public void setBtnEnviarform(JButton btnEnviarform) {
+		this.btnEnviarform = btnEnviarform;
+	}
+
+	public JButton getBtnGuardarform() {
+		return btnGuardarform;
+	}
+
+	public void setBtnGuardarform(JButton btnGuardarform) {
+		this.btnGuardarform = btnGuardarform;
+	}
+
+	public JButton getBtnCancelar() {
+		return btnCancelar;
+	}
+
+	public void setBtnCancelar(JButton btnCancelar) {
+		this.btnCancelar = btnCancelar;
+	}
+
+	public JButton getBtnVerproveedores() {
+		return btnVerproveedores;
+	}
+
+	public void setBtnVerproveedores(JButton btnVerproveedores) {
+		this.btnVerproveedores = btnVerproveedores;
+	}
+
+	public JButton getBtnVermatprima() {
+		return btnVermatprima;
+	}
+
+	public void setBtnVermatprima(JButton btnVermatprima) {
+		this.btnVermatprima = btnVermatprima;
+	}
+
+	public JComboBox<String> getComboListaProveedores() {
+		return comboListaProveedores;
+	}
+
+	public void setComboListaProveedores(JComboBox<String> comboListaProveedores) {
+		this.comboListaProveedores = comboListaProveedores;
+	}
+
+	public JComboBox<String> getComboListaCategorias() {
+		return comboListaCategorias;
+	}
+
+	public void setComboListaCategorias(JComboBox<String> comboListaCategorias) {
+		this.comboListaCategorias = comboListaCategorias;
+	}
+
+	public JTextField getTextFieldBuscadorMatPrima() {
+		return textFieldBuscadorMatPrima;
+	}
+
+	public void setTextFieldBuscadorMatPrima(JTextField textFieldBuscadorMatPrima) {
+		this.textFieldBuscadorMatPrima = textFieldBuscadorMatPrima;
+	}
+
+	public JTextField getTextFieldCantMatPrima() {
+		return textFieldCantMatPrima;
+	}
+
+	public void setTextFieldCantMatPrima(JTextField textFieldCantMatPrima) {
+		this.textFieldCantMatPrima = textFieldCantMatPrima;
+	}
+
+	public Boolean getProvBloqueado() {
+		return ProvBloqueado;
+	}
+
+	public void setProvBloqueado(Boolean provBloqueado) {
+		ProvBloqueado = provBloqueado;
+	}
+
+	public ItemMateriaPrimaDTO getItemSolicitado() {
+		return itemSolicitado;
+	}
+
+	public void setItemSolicitado(ItemMateriaPrimaDTO itemSolicitado) {
+		this.itemSolicitado = itemSolicitado;
+	}
+
+	public ArrayList<MateriaPrimaDTO> getMateriasPrimasFiltradas() {
+		return materiasPrimasFiltradas;
+	}
+
+	public void setMateriasPrimasFiltradas(
+			ArrayList<MateriaPrimaDTO> materiasPrimasFiltradas) {
+		this.materiasPrimasFiltradas = materiasPrimasFiltradas;
+	}
+
+	public ArrayList<ProveedorDTO> getListadoProveedores() {
+		return listadoProveedores;
+	}
+
+	public void setListadoProveedores(ArrayList<ProveedorDTO> listadoProveedores) {
+		this.listadoProveedores = listadoProveedores;
+	}
+
+	public DefaultTableModel getModeloItemsSolicitados() {
+		return modeloItemsSolicitados;
+	}
+
+	public void setModeloItemsSolicitados(DefaultTableModel modeloItemsSolicitados) {
+		this.modeloItemsSolicitados = modeloItemsSolicitados;
+	}
+
+	public JTable getTablaItemsMateriaPrima() {
+		return tablaItemsMateriaPrima;
+	}
+
+	public void setTablaItemsMateriaPrima(JTable tablaItemsMateriaPrima) {
+		this.tablaItemsMateriaPrima = tablaItemsMateriaPrima;
+	}
+
+	public ArrayList<ItemMateriaPrimaDTO> getListadoItemsOrdenados() {
+		return listadoItemsOrdenados;
+	}
+
+	public void setListadoItemsOrdenados(
+			ArrayList<ItemMateriaPrimaDTO> listadoItemsOrdenados) {
+		this.listadoItemsOrdenados = listadoItemsOrdenados;
+	}
+
+	public OrdenPedidoMatPrimaDTO getNuevaOrden() {
+		return nuevaOrden;
+	}
+
+	public void setNuevaOrden(OrdenPedidoMatPrimaDTO nuevaOrden) {
+		this.nuevaOrden = nuevaOrden;
+	}
+
+	public ProveedorDTO getProvSeleccionado() {
+		return provSeleccionado;
+	}
+
+	public void setProvSeleccionado(ProveedorDTO provSeleccionado) {
+		this.provSeleccionado = provSeleccionado;
+	}
+
+	public TextAutoCompleter getTextAutoAcompleter() {
+		return textAutoAcompleter;
+	}
+
+	public void setTextAutoAcompleter(TextAutoCompleter textAutoAcompleter) {
+		this.textAutoAcompleter = textAutoAcompleter;
 	}
 }
