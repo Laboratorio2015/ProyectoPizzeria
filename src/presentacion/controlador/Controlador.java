@@ -7,9 +7,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import Cocina.PadreMonitor;
 import modelo.Categorias;
 import modelo.Clientes;
@@ -55,7 +53,7 @@ import presentacion.vista.repartidorAlta;
 import presentacion.vista.repartidorBajaModificacion;
 import presentacion.vista.seleccionDeCliente;
 import presentacion.vista.seleccionarRepartidor;
-import presentacion.reportes.solicitudDeMateriaPrima;
+
 
 public class Controlador implements ActionListener
 {

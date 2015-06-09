@@ -368,7 +368,8 @@ public class pedidosPendientes extends JDialog {
 		while(Iterador.hasNext())
 		{
 			PedidoDTO elemento = Iterador.next();
-			model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento)," "});			
+			if(elemento.getEstado().compareTo("cobrado")!=0 &&elemento.getEstado().compareTo("rechazado")!=0)
+				model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento)," "});			
 		}
 		table.setModel(model);		
 	}
