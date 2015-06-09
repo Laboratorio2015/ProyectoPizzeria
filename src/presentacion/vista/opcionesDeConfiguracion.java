@@ -101,7 +101,7 @@ public class opcionesDeConfiguracion extends JDialog {
 		btnAgregarPromocion.setOpaque(false);
 		btnAgregarPromocion.setToolTipText("Agregar Promocion");
 		btnAgregarPromocion.setActionCommand("OK");
-		btnAgregarPromocion.setBounds(380, 346, 100, 108);
+		btnAgregarPromocion.setBounds(387, 346, 93, 108);
 		contentPanel.add(btnAgregarPromocion);
 		
 		btnEditarPromocion= new JButton("OK");
@@ -165,17 +165,6 @@ public class opcionesDeConfiguracion extends JDialog {
 	public void setBtnEditarProducto(JButton btnEditarProducto) {
 		this.btnEditarProducto = btnEditarProducto;
 	}
-
-
-	public JButton getBtnAgregarOferta() {
-		return btnAgregarPromocion;
-	}
-
-
-	public void setBtnAgregarOferta(JButton btnAgregarOferta) {
-		this.btnAgregarPromocion = btnAgregarOferta;
-	}
-
 
 	public JButton getBtnAgregarProveedor() {
 		return btnAgregarProveedor;

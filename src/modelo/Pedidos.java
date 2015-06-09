@@ -80,14 +80,22 @@ public class Pedidos
 	public ArrayList<PedidoDTO> pasarDeStringAArray(String listado)
 	{
 		ArrayList<PedidoDTO> result=new ArrayList<PedidoDTO>();
+		String a="";
 		for (int i=0; i<listado.length(); i++)
 		{
-			  if (listado.charAt(i) != ' ')
+			
+			  if (listado.charAt(i) != ' '&& listado.charAt(i+1)!=' ')
 			  {
-				  String a=listado.charAt(i)+"";
+				  a=a+listado.charAt(i)+"";
+				  
+			  }
+			  if(listado.charAt(i) != ' '&& listado.charAt(i+1)==' ')
+			  {
+				  a=a+listado.charAt(i);
 				  int elemento=Integer.parseInt(a);
-				  PedidoDTO pedido=this.buscarPedidoId(elemento);
-				  result.add(pedido);
+				  PedidoDTO item=this.buscarPedidoId(elemento);
+				  result.add(item);
+				  a="";
 			  }
 			  else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
 				  break;

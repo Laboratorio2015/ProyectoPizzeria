@@ -59,6 +59,18 @@ public class Productos
 		}
 		return nombres;
 	}
+	public ProductoDTO buscarProductoPorId(int idProducto)
+	{
+		List<ProductoDTO> productos=this.obtenerProducto();
+		Iterator<ProductoDTO> Iterador = productos.iterator();
+		while(Iterador.hasNext())
+		{
+			ProductoDTO elemento = Iterador.next();
+			if(elemento.getIdproducto().equals(idProducto))
+				return elemento;
+		}
+		return null;
+	}
 
 	public int ultimoProducto()
 	{
@@ -73,4 +85,6 @@ public class Productos
 		}
 		return ultimo;
 	}
+
+
 }

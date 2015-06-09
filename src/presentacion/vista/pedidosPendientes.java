@@ -207,10 +207,11 @@ public class pedidosPendientes extends JDialog {
 					{
 						numFilaSeleccionada=table.getSelectedRow();
 						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
+						System.out.println(pedidoCambia.getItems().get(0).getProducto().toString());
 						ordenDePedido pedidoCambiar=new ordenDePedido(_padre,pedidoCambia,control);
 						pedidoCambiar.llenarTabla(pedidoCambia);
 						pedidoCambiar.getTfTotal().setText(pedidoCambia.getTotal().toString());
-						control.getMonitorCocina().quitarPedido(pedidoCambia);
+						//control.getMonitorCocina().quitarPedido(pedidoCambia);
 						pedidoCambiar.setVisible(true);
 						dispose();
 					}
@@ -259,7 +260,7 @@ public class pedidosPendientes extends JDialog {
 				{
 						numFilaSeleccionada=table.getSelectedRow();
 						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
-						control.getMonitorCocina().quitarPedido(pedidoCambia);
+						//control.getMonitorCocina().quitarPedido(pedidoCambia);
 						model.setValueAt("rechazado", numFilaSeleccionada, 2);
 						pedidoCambia.set_estado("rechazado");
 						control.getPedido().quitarPedido(pedidoCambia);
@@ -333,7 +334,7 @@ public class pedidosPendientes extends JDialog {
 						control.getPedido().quitarPedido(pedido);
 						pedido.set_estado("preparado");
 						control.getPedido().agregarPedido(pedido);
-						control.getMonitorCocina().quitarPedido(pedido);
+						//control.getMonitorCocina().quitarPedido(pedido);
 					}
 					else if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("rechazado")==0)
 						JOptionPane.showMessageDialog(null, "Error, el pedido se encuentra Rechazado");

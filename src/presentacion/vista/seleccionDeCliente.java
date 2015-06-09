@@ -71,7 +71,7 @@ public class seleccionDeCliente extends JDialog {
 			{
 				
 				{
-				cliente=control.getCliente().buscarCliente(Integer.parseInt(tfAgregarDNI.getText()));
+				cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText()));
 				tfNombrApellido.setText("Apellido y Nombre: "+cliente.getApellido()+""+ cliente.getNombre());
 				tfDireccionTelefono.setText("Direccion: "+cliente.getDireccion()+""+cliente.getNumeracion());
 				}
@@ -119,10 +119,13 @@ public class seleccionDeCliente extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent arg0)
 				{
-					cliente=control.getCliente().buscarCliente(Integer.parseInt(tfAgregarDNI.getText()));
+					cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText()));
 					pedido.setCliente(cliente);
 					control.getPedido().agregarPedido(pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
+					//control.getMonitorCocina().nuevoPedido(pedido);
+					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
+					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					//control.getMonitorCocina().nuevoPedido(pedido);
 					System.out.println(seleccionDeCliente.this.pedido.getIdpedido());
 					new Ticket(seleccionDeCliente.this.pedido).generarTicket();

@@ -35,12 +35,12 @@ public class Clientes
 	
 	public ClienteDTO buscarCliente(Integer dni)
 	{
-		List<ClienteDTO> productos=this.obtenerClientes();
-		Iterator<ClienteDTO> Iterador = productos.iterator();
+		List<ClienteDTO> clientes=this.obtenerClientes();
+		Iterator<ClienteDTO> Iterador = clientes.iterator();
 		while(Iterador.hasNext())
 		{
 			ClienteDTO elemento = Iterador.next();
-			if(elemento.getDni().equals(dni))
+			if(elemento.getIdcliente().equals(dni))
 				return elemento;
 		}
 		return null;
@@ -57,6 +57,19 @@ public class Clientes
 			aux.add(a);
 		}
 		return aux;
+	}
+
+	public ClienteDTO buscarClientePorDNI(int dni)
+	{
+		List<ClienteDTO> clientes=this.obtenerClientes();
+		Iterator<ClienteDTO> Iterador = clientes.iterator();
+		while(Iterador.hasNext())
+		{
+			ClienteDTO elemento = Iterador.next();
+			if(elemento.getDni().equals(dni))
+				return elemento;
+		}
+		return null;
 	}
 	
 /*	

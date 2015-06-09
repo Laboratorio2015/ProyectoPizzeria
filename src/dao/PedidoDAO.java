@@ -120,6 +120,7 @@ public class PedidoDAO
 					    estadoPedido += y.charAt(i);
 				}
 				Clientes cli=new Clientes();
+				ClienteDTO lab=cli.buscarCliente(resultSet.getInt("cliente"));
 				Items ite=new Items();
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
 				Ofertas ofe=new Ofertas();
@@ -128,8 +129,7 @@ public class PedidoDAO
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
 				resultSet.getInt("comanda"),
-				ClienteDTO.buscarCliente(cli.obtenerClientes(),(Integer)resultSet.getInt("cliente")),
-				resultSet.getBoolean("llevadelivery"),listOfertas,resultSet.getBoolean("fueeliminado"));
+				lab,resultSet.getBoolean("llevadelivery"),listOfertas,resultSet.getBoolean("fueeliminado"));
 				pedidos.add(aux);
 			}
 		} 

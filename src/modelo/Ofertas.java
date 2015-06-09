@@ -93,11 +93,14 @@ public class Ofertas {
 	public String iditemsOferta(PedidoDTO pedido)
 	{
 		String listaId="";
-		Iterator<OfertaDTO> Iterador = pedido.getOfertas().iterator();
-		while(Iterador.hasNext())
+		if(pedido.getOfertas()!=null)
 		{
-			OfertaDTO elemento = Iterador.next();
-			listaId=listaId +elemento.getIdOferta()+" ";
+			Iterator<OfertaDTO> Iterador = pedido.getOfertas().iterator();
+			while(Iterador.hasNext())
+			{
+				OfertaDTO elemento = Iterador.next();
+				listaId=listaId +elemento.getIdOferta()+" ";
+			}
 		}
 		return listaId;
 	}
@@ -105,14 +108,22 @@ public class Ofertas {
 	public ArrayList<OfertaDTO> pasarDeStringAArray(String listado) 
 	{
 		ArrayList<OfertaDTO> result=new ArrayList<OfertaDTO>();
+		String a="";
 		for (int i=0; i<listado.length(); i++)
 		{
-			  if (listado.charAt(i) != ' ')
+			
+			  if (listado.charAt(i) != ' '&& listado.charAt(i+1)!=' ')
 			  {
-				  String a=listado.charAt(i)+"";
+				  a=a+listado.charAt(i)+"";
+				  
+			  }
+			  if(listado.charAt(i) != ' '&& listado.charAt(i+1)==' ')
+			  {
+				  a=a+listado.charAt(i);
 				  int elemento=Integer.parseInt(a);
 				  OfertaDTO item=this.buscarOferta(elemento);
 				  result.add(item);
+				  a="";
 			  }
 			  else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
 				  break;

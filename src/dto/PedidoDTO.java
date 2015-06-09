@@ -27,8 +27,8 @@ public class PedidoDTO
 	private Boolean fueeliminado;
 	
 	
-	public PedidoDTO(Integer pedido,ArrayList<ItemDTO> items ,String fecha, String hora, String estado, Integer total,
-			Integer ticket, Integer comanda, ClienteDTO cliente,
+	public PedidoDTO(Integer pedido,ArrayList<ItemDTO> items ,String fecha, String hora, String estado,
+			Integer total, Integer ticket, Integer comanda, ClienteDTO cliente,
 			Boolean llevaDelivery,ArrayList<OfertaDTO> ofertas,	Boolean fueeliminado) 
 	{
 		this.idpedido=pedido;

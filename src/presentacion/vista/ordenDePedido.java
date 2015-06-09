@@ -19,6 +19,8 @@ import dto.ProductoDTO;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import javax.swing.JTable;
 import java.awt.Color;
@@ -841,6 +843,9 @@ public class ordenDePedido extends JDialog {
 			{
 				public void actionPerformed(ActionEvent arg0)
 				{
+					Calendar c1 = GregorianCalendar.getInstance();
+					String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
+					String hora=c1.getTime().getHours()+":"+c1.getTime().getMinutes();
 					PedidoDTO nuevoPedido=new PedidoDTO();
 					nuevoPedido.setIdpedido(pedidoCambiar.getIdpedido());
 					nuevoPedido.set_estado("solicitado");
@@ -848,6 +853,9 @@ public class ordenDePedido extends JDialog {
 					nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 					nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 					nuevoPedido.setProductos(generarListaItem());
+					nuevoPedido.setHora(hora);
+					nuevoPedido.setFecha(fecha);
+					nuevoPedido.setFueeliminado(false);
 					nuevoPedido.setCliente(pedidoCambiar.getCliente());
 					if(checkBoxRepartidor.isSelected())
 						nuevoPedido.setLlevaDelivery(true);
@@ -1087,7 +1095,8 @@ public class ordenDePedido extends JDialog {
 		while(Iterador.hasNext())
 		{
 			ItemDTO elemento = Iterador.next();
-			model.addRow(new String[] {elemento.getProducto().getNombre(),""+elemento.getCantidad(),""+(elemento.getProducto().getPrecio()* elemento.getCantidad())});
+			
+			model.addRow(new String[] {elemento.getProducto().getNombre(),""+elemento.getCantidad(),""+(elemento.getProducto().getPrecio()* elemento.getCantidad()),elemento.getComentario()});
 		}
 		tablaItems.setModel(model);
 	}

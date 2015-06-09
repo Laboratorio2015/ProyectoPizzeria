@@ -28,7 +28,7 @@ public class ItemMateriaPrimaDAO
 			statement.setInt(1, itemmatprima.getIdItemMatPrima());
 			statement.setInt(2, itemmatprima.getItemMatPrima().getIdMatPrima());
 			statement.setInt(3, itemmatprima.getCantidad());
-			statement.setBoolean(4, itemmatprima.getFueeliminado());
+			statement.setBoolean(4, itemmatprima.getFueEliminado());
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
 			{

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dao.ItemMateriaPrimaDAO;
+import dto.CategoriaDTO;
 import dto.ItemMateriaPrimaDTO;
 import dto.OrdenPedidoMatPrimaDTO;
 import dto.ProveedorDTO;
@@ -63,14 +64,22 @@ private ItemMateriaPrimaDAO itemMatPrima;
 	public ArrayList<ItemMateriaPrimaDTO> pasarDeStringAArray(String listado)
 	{
 		ArrayList<ItemMateriaPrimaDTO> result=new ArrayList<ItemMateriaPrimaDTO>();
+		String a="";
 		for (int i=0; i<listado.length(); i++)
 		{
-			  if (listado.charAt(i) != ' ')
+			
+			  if (listado.charAt(i) != ' '&& listado.charAt(i+1)!=' ')
 			  {
-				  String a=listado.charAt(i)+"";
+				  a=a+listado.charAt(i)+"";
+				  
+			  }
+			  if(listado.charAt(i) != ' '&& listado.charAt(i+1)==' ')
+			  {
+				  a=a+listado.charAt(i);
 				  int elemento=Integer.parseInt(a);
 				  ItemMateriaPrimaDTO item=this.buscarItemMatPrima(elemento);
 				  result.add(item);
+				  a="";
 			  }
 			  else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
 				  break;

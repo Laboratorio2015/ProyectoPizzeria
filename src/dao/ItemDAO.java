@@ -94,7 +94,7 @@ public class ItemDAO
 			while(resultSet.next())
 			{
 				Productos a=new Productos();
-				ProductoDTO productoAux=ProductoDTO.buscarProducto(a.obtenerProducto(),resultSet.getInt("iditem"));
+				ProductoDTO productoAux=a.buscarProductoPorId(resultSet.getInt("producto"));
 				items.add(new ItemDTO(resultSet.getInt("iditem"),productoAux, resultSet.getInt("cantidad"),
 						resultSet.getString("comentario"), resultSet.getBoolean("fueeliminado")));
 

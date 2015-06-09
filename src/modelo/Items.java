@@ -68,8 +68,8 @@ public class Items
 	
 	public ItemDTO buscarItem(Integer iditem)
 	{
-		List<ItemDTO> productos=this.obtenerItems();
-		Iterator<ItemDTO> Iterador = productos.iterator();
+		List<ItemDTO> items=this.obtenerItems();
+		Iterator<ItemDTO> Iterador = items.iterator();
 		while(Iterador.hasNext())
 		{
 			ItemDTO elemento = Iterador.next();
@@ -96,14 +96,22 @@ public class Items
 	public ArrayList<ItemDTO> pasarDeStringAArray(String listado) 
 	{
 		ArrayList<ItemDTO> result=new ArrayList<ItemDTO>();
+		String a="";
 		for (int i=0; i<listado.length(); i++)
 		{
-			  if (listado.charAt(i) != ' ')
+			
+			  if (listado.charAt(i) != ' '&& listado.charAt(i+1)!=' ')
 			  {
-				  String a=listado.charAt(i)+"";
+				  a=a+listado.charAt(i)+"";
+				  
+			  }
+			  if(listado.charAt(i) != ' '&& listado.charAt(i+1)==' ')
+			  {
+				  a=a+listado.charAt(i);
 				  int elemento=Integer.parseInt(a);
 				  ItemDTO item=this.buscarItem(elemento);
 				  result.add(item);
+				  a="";
 			  }
 			  else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
 				  break;

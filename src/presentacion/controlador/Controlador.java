@@ -285,7 +285,6 @@ public class Controlador implements ActionListener
 		{
 			ventanaConfiguraciones=new opcionesDeConfiguracion();
 			ventanaConfiguraciones.setVisible(true);
-			ventanaConfiguraciones.getBtnAgregarOferta().addActionListener(this);
 			ventanaConfiguraciones.getBtnAgregarProducto().addActionListener(this);
 			ventanaConfiguraciones.getBtnAgregarProveedor().addActionListener(this);
 			ventanaConfiguraciones.getBtnAgregarRepartidor().addActionListener(this);
@@ -393,10 +392,6 @@ public class Controlador implements ActionListener
 			}
 			}
 			ventanamenu.dispose();
-		}
-		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarOferta())
-		{
-			//nose que hace
 		}
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarProducto())
 		{

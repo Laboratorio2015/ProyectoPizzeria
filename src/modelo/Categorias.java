@@ -64,19 +64,26 @@ public class Categorias {
 	public ArrayList<CategoriaDTO> pasarDeStringAArray(String listado)
 	{
 		ArrayList<CategoriaDTO> result=new ArrayList<CategoriaDTO>();
+		String a="";
 		for (int i=0; i<listado.length(); i++)
 		{
-			  if (listado.charAt(i) != ' ')
+			
+			  if (listado.charAt(i) != ' '&& listado.charAt(i+1)!=' ')
 			  {
-				  String a=listado.charAt(i)+"";
+				  a=a+listado.charAt(i)+"";
+				  
+			  }
+			  if(listado.charAt(i) != ' '&& listado.charAt(i+1)==' ')
+			  {
+				  a=a+listado.charAt(i);
 				  int elemento=Integer.parseInt(a);
 				  CategoriaDTO item=this.buscarCategoria(elemento);
 				  result.add(item);
+				  a="";
 			  }
 			  else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
 				  break;
 		}
 		return result;
 	}
-
 }
