@@ -20,12 +20,13 @@ import dto.PedidoDTO;
 
 public class Comanda {
 	
-	PedidoDTO pedido;
+	private PedidoDTO pedido;
+	private static Document documento = new Document();
 	
-	public void generarComanda(PedidoDTO pedido)
+	public void generarComanda()
 	{
 		try {
-			this.pedido = pedido;
+			String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Comanda De Pedido " + this.pedido.getIdpedido().toString() + ".pdf";
 		    PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
 		    addContentPage (documento,pedido);
@@ -36,8 +37,11 @@ public class Comanda {
 		
 	}
 	
-	private String FILE = "C:/Users/leandro gabriel/Documents/reportes/Comanda De Pedido" + this.pedido.getIdpedido().toString() + ".pdf";
-	static Document documento = new Document();
+	public Comanda(PedidoDTO pedido)
+	{
+		this.pedido = pedido;
+	}
+	
 	/*
 	public static void main(String[] args) 
 	{

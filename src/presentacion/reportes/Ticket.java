@@ -23,12 +23,14 @@ import dto.ProductoDTO;
 
 public class Ticket {
 	
-	PedidoDTO pedido;
+	private PedidoDTO pedido;
+	private static Document documento = new Document();
 	
-	public void generarTicket(PedidoDTO pedido)
+	public void generarTicket()
 	{
 		try {
-			this.pedido = pedido;
+			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Ticket de Pedido " + this.pedido.getIdpedido().toString() + ".pdf";
+	
 		    PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
 		    addContentPage (documento,pedido);
@@ -39,11 +41,11 @@ public class Ticket {
 		
 	}
 	
-	private String FILE = "C:/Users/leandro gabriel/Documents/reportes/Ticket De Pedido" + this.pedido.getIdpedido().toString() + ".pdf";
-	static Document documento = new Document();
+
 	
-	public Ticket()
+	public Ticket(PedidoDTO pedido)
 	{	
+		this.pedido = pedido;
 	}
 		
 
