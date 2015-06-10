@@ -27,10 +27,8 @@ public class Main
 		Repartidores repartidor=new Repartidores();
 		Categorias categoria= new Categorias();
 		ItemMateriasPrimas itemsMateriaPrima = new ItemMateriasPrimas();
-		
 		OrdenesMateriaPrimas ordenesMatPrima = new OrdenesMateriaPrimas();
 		MatPrimas materiasPrimas = new MatPrimas();
-		
 		VentanaPrincipal ventanaPrincial=new VentanaPrincipal();
 		//Controlador controlador=new Controlador(ventanaPrincial,pedido,cliente,producto,item, proveedor, repartidor,oferta,categoria);
 		///agrego entidades de ORDENES DE MAT PRIMA Y MATERIAS PRIMAS, por lo cual uso este constructor

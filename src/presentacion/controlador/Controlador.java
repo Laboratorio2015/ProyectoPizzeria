@@ -13,7 +13,6 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;import com.itextpdf.text.log.SysoCounter;
-
 import Cocina.PadreMonitor;
 import modelo.Categorias;
 import modelo.Clientes;
@@ -37,9 +36,8 @@ import dto.PedidoDTO;
 import dto.ProductoDTO;
 import dto.ProveedorDTO;
 import dto.RepartidorDTO;
-import presentacion.reportes.solicitudDeMateriaPrima;
 import presentacion.vista.VentanaPrincipal;
-import presentacion.vista.buscadorProveedor;
+
 import presentacion.vista.calendario;
 import presentacion.vista.clienteBajaModificacion;
 import presentacion.vista.gestionCategoria;
@@ -73,7 +71,7 @@ public class Controlador implements ActionListener
 	private pedidosPendientes ventanaPedPendiente;
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
-	private buscadorProveedor ventanaSeleccionProveedor;
+	//private buscadorProveedor ventanaSeleccionProveedor;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
 	private productoAlta ventanaAgregarProducto;
 	private productoBajaModificacion ventanaEditarProducto;
@@ -110,7 +108,7 @@ public class Controlador implements ActionListener
 	private MatPrimas materiasPrimas;
 	private ItemMateriasPrimas itemsMateriaPrima;
 
-
+/*
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, 
 			Proveedores proveedor, Repartidores repartidor,Ofertas oferta, Categorias categoria) 
 	{
@@ -129,8 +127,7 @@ public class Controlador implements ActionListener
 		this.ventana.getBtnPedMatPrima().addActionListener(this);
 		this.ventana.getBtnReportes().addActionListener(this);
 		this.monitorCocina = new PadreMonitor(pedido);
-
-	}
+	}*/
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
 			Repartidores repartidor,Ofertas oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima) 
@@ -161,7 +158,7 @@ public class Controlador implements ActionListener
 		//this.monitorCocina=new PadreMonitor(pedido);
 		this.ventana.show();
 	}
-	@SuppressWarnings("serial")
+
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
@@ -218,7 +215,7 @@ public class Controlador implements ActionListener
 		{
 			ventanaOrdenMatPrima.dispose();
 		}
-		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnVerproveedores())
+		/*else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnVerproveedores())
 		{
 			ventanaSeleccionProveedor = new buscadorProveedor(ventana, this);
 			ventanaSeleccionProveedor.setVisible(true);
@@ -244,7 +241,7 @@ public class Controlador implements ActionListener
 			ventanaSeleccionProveedor.getResultadoBusquedaProv().setModel(ventanaSeleccionProveedor.getModeloResultados());
 			cargarResultados();
 			
-		}
+		}*/
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnEnviarform())
 		{
 			generarPDFyPersistir();
@@ -715,7 +712,7 @@ public class Controlador implements ActionListener
 		}
 	}
 
-
+/*
 	//METODOS PARA VENTANA ORDEN DE MATERIA PRIMA
 	private void preCargarCamposdeBusqueda() {
 		//cargamos categorias existenets
@@ -799,7 +796,7 @@ public class Controlador implements ActionListener
 			break;
 		}
 		}
-	}	
+	}*/	
 	private void borrarTodo() {
 		limpiarCampos();
 		ventanaOrdenMatPrima.getComboListaProveedores().setEnabled(true);
@@ -830,7 +827,7 @@ public class Controlador implements ActionListener
 		this.ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
 		//ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
 		try {
-			solicitudDeMateriaPrima ordenPDF = new solicitudDeMateriaPrima(ventanaOrdenMatPrima.getNuevaOrden());
+			//solicitudDeMateriaPrima ordenPDF = new solicitudDeMateriaPrima(ventanaOrdenMatPrima.getNuevaOrden());
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}		
