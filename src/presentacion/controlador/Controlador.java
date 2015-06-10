@@ -2,15 +2,22 @@ package presentacion.controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;import com.itextpdf.text.log.SysoCounter;
+
 import Cocina.PadreMonitor;
 import modelo.Categorias;
 import modelo.Clientes;
+import modelo.ItemMateriasPrimas;
 import modelo.Items;
 import modelo.MatPrimas;
 import modelo.Ofertas;
@@ -19,6 +26,7 @@ import modelo.Pedidos;
 import modelo.Productos;
 import modelo.Proveedores;
 import modelo.Repartidores;
+import dto.CategoriaDTO;
 import dto.ClienteDTO;
 import dto.ItemDTO;
 import dto.ItemMateriaPrimaDTO;
@@ -29,7 +37,9 @@ import dto.PedidoDTO;
 import dto.ProductoDTO;
 import dto.ProveedorDTO;
 import dto.RepartidorDTO;
+import presentacion.reportes.solicitudDeMateriaPrima;
 import presentacion.vista.VentanaPrincipal;
+import presentacion.vista.buscadorProveedor;
 import presentacion.vista.calendario;
 import presentacion.vista.clienteBajaModificacion;
 import presentacion.vista.gestionCategoria;
@@ -63,6 +73,7 @@ public class Controlador implements ActionListener
 	private pedidosPendientes ventanaPedPendiente;
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
+	private buscadorProveedor ventanaSeleccionProveedor;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
 	private productoAlta ventanaAgregarProducto;
 	private productoBajaModificacion ventanaEditarProducto;
@@ -83,6 +94,8 @@ public class Controlador implements ActionListener
 	private PadreMonitor monitorCocina;
 	private pedidoMenu ventanamenu;
 	private registroDeCliente ventanaRegistrarCliente;
+
+
 	
 	//modelo
 	private Productos producto;
@@ -95,8 +108,9 @@ public class Controlador implements ActionListener
 	private Categorias categoria;
 	private OrdenesMateriaPrimas ordenesMatPrimas;
 	private MatPrimas materiasPrimas;
-	
-	
+	private ItemMateriasPrimas itemsMateriaPrima;
+
+
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, 
 			Proveedores proveedor, Repartidores repartidor,Ofertas oferta, Categorias categoria) 
 	{
@@ -114,11 +128,12 @@ public class Controlador implements ActionListener
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
 		this.ventana.getBtnPedMatPrima().addActionListener(this);
 		this.ventana.getBtnReportes().addActionListener(this);
-		
+		this.monitorCocina = new PadreMonitor(pedido);
+
 	}
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
-			Repartidores repartidor,Ofertas oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas) 
+			Repartidores repartidor,Ofertas oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -131,26 +146,25 @@ public class Controlador implements ActionListener
 		this.categoria=categoria;
 		this.ordenesMatPrimas = ordenesMatPrimas;
 		this.materiasPrimas = matPrimas;
+		this.itemsMateriaPrima = itemsMatPrima;
 		this.ventana.getBtnIngresarPedido().addActionListener(this);
 		this.ventana.getBtnPedidosPendientes().addActionListener(this);
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
 		this.ventana.getBtnPedMatPrima().addActionListener(this);
 		this.ventana.getBtnReportes().addActionListener(this);
-		
+		this.monitorCocina = new PadreMonitor(pedido);
 	}
-	
-	
-	
-	
+
+
 	public void inicializar()
 	{
 		//this.monitorCocina=new PadreMonitor(pedido);
 		this.ventana.show();
 	}
+	@SuppressWarnings("serial")
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		
 		if(e.getSource() == this.ventana.getBtnIngresarPedido())
 		{
 			ventanaPedido=new ordenDePedido(ventana,this);
@@ -167,118 +181,144 @@ public class Controlador implements ActionListener
 			ventanaPedPendiente.llenarTabla();
 			this.ventanaPedPendiente.setVisible(true);
 		}
-		
-		///FIN CONTROL ORDENAR MAT PRIMA
+
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
 			ventanaOrdenMatPrima= new ordenarMatPrima(ventana, this);
 			ventanaOrdenMatPrima.setVisible(true);
-			
+
 			this.ventanaOrdenMatPrima.getButtonAgregarMateriaPrima().addActionListener(this);
 			this.ventanaOrdenMatPrima.getButtonQuitarMatPrima().addActionListener(this);
 			this.ventanaOrdenMatPrima.getButtonLimpiarBuscador().addActionListener(this);
-			this.ventanaOrdenMatPrima.getBtnVermatprima().addActionListener(this);
 			this.ventanaOrdenMatPrima.getBtnCancelar().addActionListener(this);
 			this.ventanaOrdenMatPrima.getBtnEnviarform().addActionListener(this);
 			this.ventanaOrdenMatPrima.getBtnGuardarform().addActionListener(this);
-			this.ventanaOrdenMatPrima.getBtnVermatprima().addActionListener(this);
+			//			this.ventanaOrdenMatPrima.getBtnVermatprima().addActionListener(this);
 			this.ventanaOrdenMatPrima.getBtnVerproveedores().addActionListener(this);
-			this.ventanaOrdenMatPrima.getComboListaCategorias().addActionListener(this);
 			this.ventanaOrdenMatPrima.getComboListaProveedores().addActionListener(this);
-		
+			this.ventanaOrdenMatPrima.getComboListaCategorias().addActionListener(this);
+
 			//CARGA PROVEEDORES, CATEGORIA Y MAT PRIMA FILTRADA
-			cargarProveedores();
-			try {
-				getProveedorSeleccionado();
-			} catch (Exception e1) {
-				//exepcion> "El proveedor recibido en nulo O no existe en el listado de proveedores." 
-				e1.printStackTrace();
-			}
+			//cargarProveedores();
+			cargarProveedores(ventanaOrdenMatPrima.getComboListaProveedores());
+			guardarProveedorSeleccionado();
+			generarArrayMatPrimaProveed();
 			cargarCategorias();
-			try {
-				generarArrayMatPrimaProveed();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			try {
-				generarArrayMatPrimaProveed();
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			prepararMatPrimaParaBusqXCategoria();
-			//FIN CARGA PROVEEDORES, CATEGORIA Y MAT PRIMA FILTRADA
-		
+		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getComboListaCategorias())
+		{
+			if ( ventanaOrdenMatPrima.getComboListaCategorias().getSelectedItem()!=null){
+				System.out.println("categoria seleccionada" + ventanaOrdenMatPrima.getComboListaCategorias().getSelectedItem().toString());
+				prepararMatPrimaParaBusqXCategoria();
+				limpiarCampos();
+			}
+		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnCancelar())
+		{
+			ventanaOrdenMatPrima.dispose();
+		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnVerproveedores())
+		{
+			ventanaSeleccionProveedor = new buscadorProveedor(ventana, this);
+			ventanaSeleccionProveedor.setVisible(true);
+			preCargarCamposdeBusqueda();
+			cargarResultados();
+			ventanaSeleccionProveedor.getComboFiltroBusqueda().addActionListener(this);
+
+		}
+		else if(this.ventanaSeleccionProveedor!= null && e.getSource()==this.ventanaSeleccionProveedor.getComboFiltroBusqueda())
+		{
+			ventanaSeleccionProveedor.setModeloResultados(new DefaultTableModel(new Object[][] {},new String[] {"Proveedor", "Direcci\u00F3n", "Tel\u00E9fono", "E-mail"
+					}
+				) {
+					@SuppressWarnings("rawtypes")
+					Class[] columnTypes = new Class[] {
+						String.class, String.class, String.class, String.class
+					};
+					@SuppressWarnings({ "unchecked", "rawtypes" })
+					public Class getColumnClass(int columnIndex) {
+						return columnTypes[columnIndex];
+					}
+				});
+			ventanaSeleccionProveedor.getResultadoBusquedaProv().setModel(ventanaSeleccionProveedor.getModeloResultados());
+			cargarResultados();
+			
+		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnEnviarform())
+		{
+			generarPDFyPersistir();
+			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra y fue enviado con por e-mail a su proveedor.", "Confirmación", JOptionPane.WARNING_MESSAGE);
+			borrarTodo();
 		}
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getButtonAgregarMateriaPrima())
-		//accion para Agregar item Mat Prima
+			//accion para Agregar item Mat Prima
 		{
+			System.out.println("item agregado");
 			if (ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString().compareTo("")!=0 && ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString().compareTo("")!=0){
 				if (ventanaOrdenMatPrima.getProvBloqueado() == false){
 					ventanaOrdenMatPrima.getComboListaProveedores().setEnabled(false);
 					ventanaOrdenMatPrima.setProvBloqueado(true);
 				}
-				ventanaOrdenMatPrima.setItemSolicitado(new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString()),
-						Integer.parseInt(ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString()))); 
-				
-				agregarItemTabla(ventanaOrdenMatPrima.getItemSolicitado());
-				ventanaOrdenMatPrima.getTextFieldCantMatPrima().setText("");
-				ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().setText("");
-				ventanaOrdenMatPrima.getButtonAgregarMateriaPrima().setEnabled(false);
+				//(Integer iditemMatPrima,MateriaPrimaDTO itemMatPrima, Integer cantidad, Boolean fueeliminado){
+				Integer idItem = itemsMateriaPrima.obtenerItemMatPrima().size();
+				ItemMateriaPrimaDTO itemSeleccionado = new ItemMateriaPrimaDTO(idItem, getMatPrimaSeleccionada(ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString()),
+						Integer.parseInt(ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString()), false);
+//				ventanaOrdenMatPrima.setItemSolicitado(new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString()),
+//						Integer.parseInt(ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString()))); 
+				//ventanaOrdenMatPrima.getListadoItemsOrdenados().add(ventanaOrdenMatPrima.getItemSolicitado());
+				agregarItemTabla(itemSeleccionado);
+				limpiarCampos();
 			}
-			else{
-				ventanaOrdenMatPrima.getButtonAgregarMateriaPrima().setEnabled(false);
-			}
+
 		}
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getButtonQuitarMatPrima())
-		//accion para BORRAR ITEM AGREGADO
+			//accion para BORRAR ITEM AGREGADO
 		{
 			if (ventanaOrdenMatPrima.getTablaItemsMateriaPrima().getSelectedRow() >= 0){
 				ventanaOrdenMatPrima.getModeloItemsSolicitados().removeRow(ventanaOrdenMatPrima.getTablaItemsMateriaPrima().getSelectedRow());
 				ventanaOrdenMatPrima.getTablaItemsMateriaPrima().setModel(ventanaOrdenMatPrima.getModeloItemsSolicitados());
 			}
-		
+		}
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getButtonLimpiarBuscador())
+		{
+			limpiarCampos();
 		}
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnGuardarform())
-		//accion para GENERAR PDF Y GUARDAR ORDEN DE PEDIDO
+			//accion para GENERAR PDF Y GUARDAR ORDEN DE PEDIDO
 		{
-			ventanaOrdenMatPrima.setListadoItemsOrdenados(generarListadoCompra());
-			ArrayList<OrdenPedidoMatPrimaDTO> listadoOrdenesMatPrima = (ArrayList<OrdenPedidoMatPrimaDTO>) this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima();
-			int id = listadoOrdenesMatPrima.size();
-			ventanaOrdenMatPrima.setNuevaOrden(new OrdenPedidoMatPrimaDTO(id,ventanaOrdenMatPrima.getProvSeleccionado(),
-					ventanaOrdenMatPrima.getListadoItemsOrdenados()));
-			try {
-				generarPDFordenMatPrima();
-			} catch (Exception e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-			try {
-
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			//borrarFormulario();
-			//dispose();
+			generarPDFyPersistir();
+			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra", "Confirmación", JOptionPane.WARNING_MESSAGE);
+			borrarTodo();
 		}
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getComboListaProveedores())
-		//accion para CARGAR INFORMACION TRAS CAMBIO DE PROV SELECCIONADO.
+			//accion para CARGAR INFORMACION TRAS CAMBIO DE PROV SELECCIONADO.
 		{
+			guardarProveedorSeleccionado();
 			cargarCategorias();
-			try {
-				generarArrayMatPrimaProveed();
-			} catch (Exception e1) {
-				System.out.println("Proveedor no hayado");		
-				e1.printStackTrace();
-			}
+			generarArrayMatPrimaProveed();
+
+			//mostrar array primas filtradas
+			//			 System.out.println("materias primas filtradas>");
+			//			 for (int i=0;i<ventanaOrdenMatPrima.getMateriasPrimasFiltradas().size();i++){
+			//				 System.out.println(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getNombre());
+			//			 } 
 			prepararMatPrimaParaBusqXCategoria();
+			limpiarCampos();
+			System.out.println("prov seleccionado>  " + ventanaOrdenMatPrima.getProvSeleccionado().getNombre());
+			//			try {
+			//				generarArrayMatPrimaProveed();
+			//			} catch (Exception e1) {
+			//				System.out.println("Proveedor no hayado");		
+			//				e1.printStackTrace();
+			//			}
+			//			prepararMatPrimaParaBusqXCategoria();
 		}
-		
-		
+
+
 		///FIN CONTROL ORDENAR MAT PRIMA
 
-		
+
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
 		{
 			ventanaConfiguraciones=new opcionesDeConfiguracion();
@@ -317,12 +357,16 @@ public class Controlador implements ActionListener
 			nuevoPedido.setFecha(fecha);
 			nuevoPedido.setHora(hora);
 			nuevoPedido.setFueeliminado(false);
+			//////////ENVIA el NUEVO PEDIDO AL MONITOR//////
+			this.monitorCocina.nuevoPedido(nuevoPedido);
+			/////////////////////////////////////////////
 			this.ventanaCliente=new seleccionDeCliente(this,nuevoPedido);
 			this.ventanaCliente.getBtnAgregarCliente().addActionListener(this);
 			this.ventanaCliente.getBtnEditarCliente().addActionListener(this);
 			this.ventanaCliente.setVisible(true);
 			vaciarFormulario();
 			this.ventanaPedido.dispose();
+			
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerEmpanadas())
 		{
@@ -331,7 +375,7 @@ public class Controlador implements ActionListener
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("empanada");
 			ventanamenu.setVisible(true);
-			
+
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerPizzas())
 		{
@@ -340,7 +384,7 @@ public class Controlador implements ActionListener
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("pizza");
 			ventanamenu.setVisible(true);
-			
+
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerOtros())
 		{
@@ -349,7 +393,7 @@ public class Controlador implements ActionListener
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("otros");
 			ventanamenu.setVisible(true);
-			
+
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerPromociones())
 		{
@@ -358,7 +402,7 @@ public class Controlador implements ActionListener
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("promocion");
 			ventanamenu.setVisible(true);
-			
+
 		}
 		else if (this.ventanamenu!= null && e.getSource()==this.ventanamenu.getBtnSeleccionar())
 		{
@@ -398,16 +442,16 @@ public class Controlador implements ActionListener
 			ventanaAgregarProducto.getBtnAgregarProducto().addActionListener(this);
 			ventanaAgregarProducto.setVisible(true);
 		}
-		
+
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarProveedor())
 		{
 			ventanaAgregarProveedor=new proveedorAlta();
 			ventanaAgregarProveedor.getBtnRegistrar().addActionListener(this);
 			ventanaAgregarProveedor.setVisible(true);
 		}
-		
 
-		
+
+
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarRepartidor())
 		{
 			ventanaAgregarRepartidor=new repartidorAlta();
@@ -415,7 +459,7 @@ public class Controlador implements ActionListener
 			ventanaAgregarRepartidor.getBtnRegistrar().addActionListener(this);
 			ventanaAgregarRepartidor.setVisible(true);
 		}
-		
+
 		//dar de alta a un producto
 		else if (this.ventanaAgregarProducto!= null && e.getSource()==this.ventanaAgregarProducto.getBtnAgregarProducto())
 		{
@@ -428,7 +472,7 @@ public class Controlador implements ActionListener
 			producto.agregarProducto(nuevo);
 			llenarTablaProductos();
 		}
-		
+
 		//acciones asocidas a editar productos
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarProducto())
 		{
@@ -536,7 +580,7 @@ public class Controlador implements ActionListener
 			ventanaEditarRepartidor.getTfComentario().setText("");
 			ventanaEditarRepartidor.getTfPatente().setText("");
 			ventanaEditarRepartidor.getTfDescripcion().setText("");
-			
+
 		}
 		//modificar un repartidor
 		else if (this.ventanaEditarRepartidor!= null && e.getSource()==this.ventanaEditarRepartidor.getBtnGuardar())
@@ -569,7 +613,7 @@ public class Controlador implements ActionListener
 			ventanaEditarMatPrima=new matPrimaBajaModificacion();
 			ventanaEditarMatPrima.setVisible(true);
 		}
-		
+
 		//acciones asociadas el alta de repartidores
 		else if (this.ventanaAgregarRepartidor!= null && e.getSource()==this.ventanaAgregarRepartidor.getBtnCalendario())
 		{
@@ -600,21 +644,21 @@ public class Controlador implements ActionListener
 			ventanaAgregarPromocion=new promocionAlta();
 			ventanaAgregarPromocion.setVisible(true);
 		}
-		
+
 		//ventana de configuracion editar una promocion
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarPromocion())
 		{
 			ventanaEditarPromocion=new promocionBajaModificacion();
 			ventanaEditarPromocion.setVisible(true);
 		}
-		
+
 		//ventana de configuracion para editar un cliente
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarCliente())
 		{
 			ventanaModificacionCliente=new clienteBajaModificacion();
 			ventanaModificacionCliente.setVisible(true);
 		}
-		
+
 		//ventana de configuraciones para gestionar una categoria
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnGestionarCategorias())
 		{
@@ -629,25 +673,25 @@ public class Controlador implements ActionListener
 			ventanaRegistrarCliente.setVisible(true);
 		}
 		//dar de alta a cliente
-				else if (this.ventanaRegistrarCliente!= null && e.getSource()==this.ventanaRegistrarCliente.getBtnRegistrar())
-				{
-					ClienteDTO nuevo= new ClienteDTO();
-					nuevo.setDni(Integer.parseInt(ventanaRegistrarCliente.getTfdni().getText().toString()));
-					nuevo.setApellido(ventanaRegistrarCliente.getTfApellido().getText().toString());
-					nuevo.setNombre(ventanaRegistrarCliente.getTfNombre().getText().toString());
-					nuevo.setCalle(ventanaRegistrarCliente.getTfCalle().getText().toString());
-					nuevo.setNumeracion(ventanaRegistrarCliente.getTfNumeracion().getText().toString());
-					nuevo.setEntrecalle1(ventanaRegistrarCliente.getTfEntreCalle1().getText().toString());
-					nuevo.setEntrecalle2(ventanaRegistrarCliente.getTfEntreCalle2().getText().toString());
-					nuevo.setCodPostal(ventanaRegistrarCliente.getTfCodPostal().getText().toString());
-					nuevo.setEmail(ventanaRegistrarCliente.getTfEmail().getText().toString());
-					cliente.agregarCliente(nuevo);
-					ventanaCliente.getTfAgregarDNI().setText(nuevo.getDni().toString());
-					ventanaCliente.getTfNombrApellido().setText("Apellido y Nombre: "+nuevo.getNombre()+" "+ nuevo.getApellido());
-					ventanaCliente.getTfDireccionTelefono().setText("Direccion: "+nuevo.getCalle()+" "+nuevo.getNumeracion());
-					ventanaRegistrarCliente.dispose();
-				}
-		
+		else if (this.ventanaRegistrarCliente!= null && e.getSource()==this.ventanaRegistrarCliente.getBtnRegistrar())
+		{
+			ClienteDTO nuevo= new ClienteDTO();
+			nuevo.setDni(Integer.parseInt(ventanaRegistrarCliente.getTfdni().getText().toString()));
+			nuevo.setApellido(ventanaRegistrarCliente.getTfApellido().getText().toString());
+			nuevo.setNombre(ventanaRegistrarCliente.getTfNombre().getText().toString());
+			nuevo.setCalle(ventanaRegistrarCliente.getTfCalle().getText().toString());
+			nuevo.setNumeracion(ventanaRegistrarCliente.getTfNumeracion().getText().toString());
+			nuevo.setEntrecalle1(ventanaRegistrarCliente.getTfEntreCalle1().getText().toString());
+			nuevo.setEntrecalle2(ventanaRegistrarCliente.getTfEntreCalle2().getText().toString());
+			nuevo.setCodPostal(ventanaRegistrarCliente.getTfCodPostal().getText().toString());
+			nuevo.setEmail(ventanaRegistrarCliente.getTfEmail().getText().toString());
+			cliente.agregarCliente(nuevo);
+			ventanaCliente.getTfAgregarDNI().setText(nuevo.getDni().toString());
+			ventanaCliente.getTfNombrApellido().setText("Apellido y Nombre: "+nuevo.getNombre()+" "+ nuevo.getApellido());
+			ventanaCliente.getTfDireccionTelefono().setText("Direccion: "+nuevo.getCalle()+" "+nuevo.getNumeracion());
+			ventanaRegistrarCliente.dispose();
+		}
+
 		//editar cliente
 		else if(this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnEditarCliente())
 		{
@@ -669,26 +713,143 @@ public class Controlador implements ActionListener
 			else
 				JOptionPane.showMessageDialog(null, "Error el debe haber un dni registrado para poder editarlo");
 		}
-		
-		
-	}
-	
-	private void generarPDFordenMatPrima() {
-		solicitudDeMateriaPrima ordenPDF = new solicitudDeMateriaPrima(ventanaOrdenMatPrima.getNuevaOrden());
-		
 	}
 
-	private ArrayList<ItemMateriaPrimaDTO> generarListadoCompra() {
+
+	//METODOS PARA VENTANA ORDEN DE MATERIA PRIMA
+	private void preCargarCamposdeBusqueda() {
+		//cargamos categorias existenets
+		Iterator<CategoriaDTO> Iterador = this.categoria.obtenerCategorias().iterator();
+		while(Iterador.hasNext())
+		{
+			CategoriaDTO elementoCategoria = Iterador.next();
+			ventanaSeleccionProveedor.getComboBoxCategorias().addItem(elementoCategoria.getDenominacion());
+		}
+		//cargamos todos los proveedores
+		ventanaSeleccionProveedor.getTextAutoAcompleter().removeAllItems();
+		Iterator<ProveedorDTO> IteradorProveedores = this.proveedor.obtenerProveedor().iterator();
+		while(IteradorProveedores.hasNext())
+		{
+			ProveedorDTO elementoProveedor = IteradorProveedores.next();
+			ventanaSeleccionProveedor.getTextAutoAcompleter().addItem(elementoProveedor.getNombre());
+		}
+	}
+	@SuppressWarnings("serial")
+	private void cargarResultados() {
+		switch(ventanaSeleccionProveedor.getComboFiltroBusqueda().getSelectedItem().toString())
+		{
+		case("Seleccione una categoria..."):
+		{
+			ventanaSeleccionProveedor.setModeloResultados(new DefaultTableModel(new Object[][] {},new String[] {"Proveedor", "Direcci\u00F3n", "Tel\u00E9fono", "E-mail"
+			}
+					) {
+				@SuppressWarnings("rawtypes")
+				Class[] columnTypes = new Class[] {
+					String.class, String.class, String.class, String.class
+				};
+				@SuppressWarnings({ "unchecked", "rawtypes" })
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+			ventanaSeleccionProveedor.getResultadoBusquedaProv().setModel(ventanaSeleccionProveedor.getModeloResultados());
+		}
+		case("Todos"):
+		{
+			//Carga direcamente en el jtable todos los proveedores
+			ventanaSeleccionProveedor.getComboBoxCategorias().setVisible(false);
+			ventanaSeleccionProveedor.getTextFieldBuscadorProv().setVisible(false);
+
+			Iterator<ProveedorDTO> IteradorProveedores = this.proveedor.obtenerProveedor().iterator();
+			while(IteradorProveedores.hasNext())
+			{
+				ProveedorDTO elementoProveedor = IteradorProveedores.next();
+				//"Proveedor", "Direcci\u00F3n", "Tel\u00E9fono", "E-mail"
+				ventanaSeleccionProveedor.getModeloResultados().addRow(new Object[] {elementoProveedor.getNombre(),elementoProveedor.getDireccion()
+						,elementoProveedor.getTelefono(),elementoProveedor.getEmail()});
+			}
+			ventanaSeleccionProveedor.setModeloResultados(ventanaSeleccionProveedor.getModeloResultados());
+			break;
+		}
+		case("Categoría"):
+		{
+			ventanaSeleccionProveedor.getComboBoxCategorias().setVisible(true);
+			ventanaSeleccionProveedor.getTextFieldBuscadorProv().setVisible(false);
+			//Seleccione de un combobox la categoria. En este caso el campo textfield de busqued deberia ponerse en visible(false) y el combo en
+			//visible true. Puede comenzar ya precargado con todas las categorias existentes.
+			
+			Iterator<ProveedorDTO> IteradorProveedores = this.proveedor.obtenerProveedor().iterator();
+			while(IteradorProveedores.hasNext())
+			{
+				ProveedorDTO elementoProveedor = IteradorProveedores.next();
+				if (elementoProveedor.isCategoria(ventanaSeleccionProveedor.getComboBoxCategorias().getSelectedItem().toString()));
+				{
+					ventanaSeleccionProveedor.getModeloResultados().addRow(new Object[] {elementoProveedor.getNombre(),elementoProveedor.getDireccion()
+							,elementoProveedor.getTelefono(),elementoProveedor.getEmail()});
+				}
+			}
+			ventanaSeleccionProveedor.setModeloResultados(ventanaSeleccionProveedor.getModeloResultados());
+			break;
+		}
+		case("Nombre"):
+		{
+			ventanaSeleccionProveedor.getComboBoxCategorias().setVisible(false);
+			ventanaSeleccionProveedor.getTextFieldBuscadorProv().setVisible(true);
+			//Escriba el nombre del proveedor. Se pograma el autocomplete con todos los nombres de los proveedores, esto tmb puede estar pre cargado.
+			break;
+		}
+		}
+	}	
+	private void borrarTodo() {
+		limpiarCampos();
+		ventanaOrdenMatPrima.getComboListaProveedores().setEnabled(true);
+		ventanaOrdenMatPrima.setModeloItemsSolicitados(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"Materia Prima", "Cantidad"
+				}
+				) {
+			private static final long serialVersionUID = 1L;
+			@SuppressWarnings("rawtypes")
+			Class[] columnTypes = new Class[] {
+				String.class, Integer.class
+			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		ventanaOrdenMatPrima.actualizarModelo();
+	}
+	private void generarPDFyPersistir() {
+		generarListadoCompra();
+		int id = this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size();
+		ventanaOrdenMatPrima.setNuevaOrden(new OrdenPedidoMatPrimaDTO(id,ventanaOrdenMatPrima.getProvSeleccionado(),
+				ventanaOrdenMatPrima.getListadoItemsOrdenados()));
+		this.ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
+		//ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
+		try {
+			solicitudDeMateriaPrima ordenPDF = new solicitudDeMateriaPrima(ventanaOrdenMatPrima.getNuevaOrden());
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}		
+	}
+	private void limpiarCampos() {
+		ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().setText("");
+		ventanaOrdenMatPrima.getTextFieldCantMatPrima().setText("");
+	}
+	private void generarListadoCompra() {
 		ArrayList<ItemMateriaPrimaDTO> listadoCompra = new ArrayList<ItemMateriaPrimaDTO>();
 		for (int i=0; i < ventanaOrdenMatPrima.getModeloItemsSolicitados().getRowCount(); i++){
-			//MateriaPrimaDTO MatPrima= getMatPrimaSeleccionada(modeloMatPrima.getValueAt(i, 0).toString());
-			ItemMateriaPrimaDTO itemMatPrima = new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i, 0).toString()), 
-					Integer.parseInt(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i, 1).toString()));
-			listadoCompra.add( itemMatPrima);
+			//Este metodo genera un array list de items se materia prima, por lo cual recorre la tabla creada.
+			MateriaPrimaDTO materiaPrima = getMatPrimaSeleccionada(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i,0).toString());
+			ItemMateriaPrimaDTO itemMatPrima = new ItemMateriaPrimaDTO(this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size(), materiaPrima,
+					Integer.parseInt(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i,1).toString()), false);
+			listadoCompra.add(itemMatPrima);
 		}
-		return listadoCompra;
+		ventanaOrdenMatPrima.setListadoItemsOrdenados(listadoCompra);
 	}
-
 	private void agregarItemTabla(ItemMateriaPrimaDTO itemSolicitado) {
 		Integer indice = getIntFilaItem(itemSolicitado);
 		if (indice==-1){
@@ -700,7 +861,6 @@ public class Controlador implements ActionListener
 		}
 		ventanaOrdenMatPrima.getTablaItemsMateriaPrima().setModel(ventanaOrdenMatPrima.getModeloItemsSolicitados());		
 	}
-
 	private Integer getIntFilaItem(ItemMateriaPrimaDTO itemSolicitado) {
 		for (int i = 0; i < ventanaOrdenMatPrima.getModeloItemsSolicitados().getRowCount();i++){
 			if (((String) ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i, 0)).compareTo(itemSolicitado.getItemMatPrima().getNombre())==0 ){
@@ -709,7 +869,6 @@ public class Controlador implements ActionListener
 		}
 		return -1;
 	}
-
 	private MateriaPrimaDTO getMatPrimaSeleccionada(String text) {
 		for (int  i= 0; i < ventanaOrdenMatPrima.getMateriasPrimasFiltradas().size();i++){
 			if ( text.compareTo(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getNombre())==0 ){
@@ -718,11 +877,10 @@ public class Controlador implements ActionListener
 		}
 		return null;
 	}
-
 	public ArrayList<ItemDTO> generarListaItems() 
 	{
 		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
-		
+
 		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
 		{
 			if(producto.buscaNombresProductos(this.ventanaPedido.getModel().getValueAt(i, 0).toString())!=null)
@@ -734,6 +892,102 @@ public class Controlador implements ActionListener
 		}
 		return listaAux;
 	}
+	private void cargarProveedores(JComboBox<String> comboBox){
+		//		ArrayList<ProveedorDTO> listaProveedores;// = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
+		//		listaProveedores = quitarEspacioArray((ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor());
+		//		for (int i=0; i< listaProveedores.size();i++){
+		//			ventanaOrdenMatPrima.getComboListaProveedores().addItem(listaProveedores.get(i).getNombre());
+		//		}
+
+		ArrayList<ProveedorDTO> listaProveedores;// = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
+		listaProveedores = quitarEspacioArray((ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor());
+		for (int i=0; i< listaProveedores.size();i++){
+			comboBox.addItem(listaProveedores.get(i).getNombre());
+		}
+	}
+	private void mostrarArray(ArrayList<ProveedorDTO> obtenerProveedor) {
+		System.out.println("categorias>");
+
+		for (int i = 0; i < obtenerProveedor.size();i++){
+			for (int x = 0; x < obtenerProveedor.size();x++){
+				System.out.println(obtenerProveedor.get(i).getCategoria().get(x).getDenominacion());
+			}
+		}
+	}
+	private ArrayList<ProveedorDTO> quitarEspacioArray(ArrayList<ProveedorDTO> listaProveedores) {
+		//ArrayList<ProveedorDTO> proveedoresArreglado = new ArrayList<ProveedorDTO>();
+
+		for (int i=0; i < listaProveedores.size();i++){
+			listaProveedores.get(i).setNombre(listaProveedores.get(i).getNombre().trim());
+			listaProveedores.get(i).setNombre(listaProveedores.get(i).getNombre().replace("_"," "));
+			for (int x=0; x < listaProveedores.get(i).getCategoria().size();x++){
+				listaProveedores.get(i).getCategoria().get(x).setDenominacion(
+						listaProveedores.get(i).getCategoria().get(x).getDenominacion().trim());	
+			}
+		}
+		return listaProveedores;		
+	}	
+	private void cargarCategorias() {
+		ventanaOrdenMatPrima.getComboListaCategorias().removeAllItems();
+		for (int i = 0; i < ventanaOrdenMatPrima.getProvSeleccionado().getCategoria().size();i++){
+			ventanaOrdenMatPrima.getComboListaCategorias().addItem(ventanaOrdenMatPrima.getProvSeleccionado().getCategoria().get(i).getDenominacion());
+		}
+	}
+	private void guardarProveedorSeleccionado(){
+		String nomProveedor = (String) ventanaOrdenMatPrima.getComboListaProveedores().getSelectedItem().toString();
+		if (getProveedor(nomProveedor)!= null){
+			ventanaOrdenMatPrima.setProvSeleccionado(getProveedor(nomProveedor));
+		}
+	}	
+	private ProveedorDTO getProveedor(String nomProveedor){
+		ArrayList<ProveedorDTO> listaProveedores = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
+		for (int i= 0; i < listaProveedores.size();i++){
+			if (nomProveedor.compareTo(listaProveedores.get(i).getNombre()) == 0){
+				return listaProveedores.get(i);
+			}
+		}
+		return null;
+	}
+	private void prepararMatPrimaParaBusqXCategoria() {
+		ventanaOrdenMatPrima.getTextAutoAcompleter().removeAllItems();
+		for (int i=0; i < ventanaOrdenMatPrima.getMateriasPrimasFiltradas().size(); i++){
+			if(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getCategoria().getDenominacion().compareTo
+					(ventanaOrdenMatPrima.getComboListaCategorias().getSelectedItem().toString()) == 0){
+				ventanaOrdenMatPrima.getTextAutoAcompleter().addItem(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getNombre());
+			}
+		}
+	}
+	private void generarArrayMatPrimaProveed(){
+		/** Tomo cada elemento q compone el comboBox categorias, con cada nombre de categoria pregunto por cada item*/
+		ventanaOrdenMatPrima.getMateriasPrimasFiltradas().clear();
+		ventanaOrdenMatPrima.getTextAutoAcompleter().removeAllItems();
+		ArrayList<MateriaPrimaDTO> materiasPrimas = (ArrayList<MateriaPrimaDTO>) this.materiasPrimas.obtenerMatPrimas();
+		materiasPrimas = quitarEspacios(materiasPrimas);
+
+		for (int i = 0; i < materiasPrimas.size();i++){
+			if ( contieneCategoria(materiasPrimas.get(i).getCategoria().getDenominacion())){
+				ventanaOrdenMatPrima.getMateriasPrimasFiltradas().add(materiasPrimas.get(i));
+			}
+		}
+	}
+	private ArrayList<MateriaPrimaDTO> quitarEspacios(ArrayList<MateriaPrimaDTO> materiasPrimas2) {
+		//ArrayList<MateriaPrimaDTO> materiasPrimas = new ArrayList<MateriaPrimaDTO>();
+		for (int i = 0 ; i < materiasPrimas2.size();i++){
+			materiasPrimas2.get(i).setNombre(materiasPrimas2.get(i).getNombre().trim());
+			materiasPrimas2.get(i).setNombre(materiasPrimas2.get(i).getNombre().replace("_", " "));
+		}
+		return materiasPrimas2;
+	}
+	private boolean contieneCategoria(String nomCategoria)  {
+		for (int  i= 0; i < ventanaOrdenMatPrima.getProvSeleccionado().getCategoria().size();i++){
+			if (ventanaOrdenMatPrima.getProvSeleccionado().getCategoria().get(i).getDenominacion().compareTo(nomCategoria)== 0){
+				return true;
+			}
+		}
+		return false;
+	}
+	//FIN METODOS PARA VENTANA ORDEN DE MATERIA PRIMA
+
 	private ArrayList<OfertaDTO> generarListaOfertas() 
 	{
 		ArrayList<OfertaDTO> listaAux= new ArrayList<OfertaDTO>();
@@ -750,7 +1004,7 @@ public class Controlador implements ActionListener
 				listaAux.add(aux);
 			}
 		}
-	return listaAux;
+		return listaAux;
 	}
 
 	public Repartidores getRepartidor() {
@@ -802,7 +1056,7 @@ public class Controlador implements ActionListener
 	{
 		this.monitorCocina = monitorCocina;
 	}
-	
+
 	public Proveedores getProveedor() {
 		return proveedor;
 	}
@@ -818,8 +1072,8 @@ public class Controlador implements ActionListener
 	public void setVentanaPedido(ordenDePedido ventanaPedido) {
 		this.ventanaPedido = ventanaPedido;
 	}
-	
-	
+
+
 	private void vaciarFormulario() 
 	{
 		this.ventanaPedido.getTfAgregarEmpanada().setText("");
@@ -835,14 +1089,14 @@ public class Controlador implements ActionListener
 		this.ventanaPedido.getTfSubTotalOtro().setText("");
 		this.ventanaPedido.getTfUnidadOtro().setText("");
 	}
-	
+
 	private void llenarTablaMenu(String tipo) 
 	{
 		this.ventanamenu.getModel().setRowCount(0); //Para vaciar la tabla
 		this.ventanamenu.getModel().setColumnCount(0);
 		this.ventanamenu.getModel().setColumnIdentifiers(this.ventanamenu.getNombreColumnas());
-		
-	 	Iterator<ProductoDTO> Iterador = this.producto.obtenerProducto().iterator();
+
+		Iterator<ProductoDTO> Iterador = this.producto.obtenerProducto().iterator();
 		while(Iterador.hasNext())
 		{
 			ProductoDTO elemento = Iterador.next();
@@ -866,7 +1120,7 @@ public class Controlador implements ActionListener
 			this.ventanaEditarProveedor.getModel().addRow(fila);			
 		}
 	}
-	
+
 	private void llenarTablaRepartidor()
 	{
 		this.ventanaEditarRepartidor.getModel().setRowCount(0);
@@ -880,7 +1134,7 @@ public class Controlador implements ActionListener
 			this.ventanaEditarRepartidor.getModel().addRow(fila);			
 		}
 	}
-	
+
 	private void llenarTablaProductos()
 	{
 		this.ventanaAgregarProducto.getModel().setRowCount(0);
@@ -894,7 +1148,7 @@ public class Controlador implements ActionListener
 			this.ventanaAgregarProducto.getModel().addRow(fila);			
 		}
 	}
-	
+
 	private void llenarTablaProductosEditados()
 	{
 		this.ventanaEditarProducto.getModel().setRowCount(0);
@@ -908,71 +1162,8 @@ public class Controlador implements ActionListener
 			this.ventanaEditarProducto.getModel().addRow(fila);			
 		}
 	}
-	///  METODOS PARA VENTANA ORDEN DE MATERIA PRIMA
-	private void cargarProveedores(){
-		ArrayList<ProveedorDTO> listaProveedores = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
-		for (int i=0; i< listaProveedores.size();i++){
-			ventanaOrdenMatPrima.getComboListaProveedores().addItem(listaProveedores.get(i).getNombre());
-		}
+	public PadreMonitor getMonitor(){
+		return this.monitorCocina;
 	}
-	
-	private void cargarCategorias() {
-		ventanaOrdenMatPrima.getComboListaCategorias().removeAllItems();
-		for (int i = 0; i < ventanaOrdenMatPrima.getProvSeleccionado().getCategoria().size();i++){
-			ventanaOrdenMatPrima.getComboListaCategorias().addItem(ventanaOrdenMatPrima.getProvSeleccionado().getCategoria().get(i).getDenominacion());
-		 }
-	}
-	
-	private ProveedorDTO getProveedorSeleccionado() throws Exception{
-		String nomProveedor = (String) ventanaOrdenMatPrima.getComboListaProveedores().getSelectedItem();
-		if (getProveedor(nomProveedor)!= null){
-			return getProveedor(nomProveedor);
-		}
-		else{
-			throw new Exception("El proveedor recibido en nulo O no existe en el listado de proveedores.");
-		}
-	}
-	
-	private ProveedorDTO getProveedor(String nomProveedor){
-		ArrayList<ProveedorDTO> listaProveedores = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
-		for (int i= 0; i < listaProveedores.size();i++){
-			if (nomProveedor.compareTo(listaProveedores.get(i).getNombre()) == 0){
-				return listaProveedores.get(i);
-			}
-		}
-		return null;
-	}
-	
-	private void prepararMatPrimaParaBusqXCategoria() {
-		ventanaOrdenMatPrima.getTextAutoAcompleter().removeAllItems();
-		for (int i=0; i < ventanaOrdenMatPrima.getMateriasPrimasFiltradas().size(); i++){
-			if(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getCategoria().getDenominacion().compareTo
-					((String)ventanaOrdenMatPrima.getComboListaCategorias().getSelectedItem()) == 0){
-				ventanaOrdenMatPrima.getTextAutoAcompleter().addItem(ventanaOrdenMatPrima.getMateriasPrimasFiltradas().get(i).getNombre());
-			}
-		}
-	}
-	
-	private void generarArrayMatPrimaProveed() throws Exception {
-		/** Tomo cada elemento q compone el comboBox categorias, con cada nombre de categoria pregunto por cada item*/
-		ventanaOrdenMatPrima.getMateriasPrimasFiltradas().clear();
-		ventanaOrdenMatPrima.getTextAutoAcompleter().removeAllItems();
-		ArrayList<MateriaPrimaDTO> materiasPrimas = (ArrayList<MateriaPrimaDTO>) this.materiasPrimas.obtenerMatPrimas();
-		for (int i = 0; i < materiasPrimas.size();i++){
-			if ( contieneCategoria(materiasPrimas.get(i).getCategoria().getDenominacion())){
-				ventanaOrdenMatPrima.getMateriasPrimasFiltradas().add(materiasPrimas.get(i));
-			}
-		}
-		
-	}
-	
-	private boolean contieneCategoria(String nomCategoria) throws Exception {
-		for (int  i= 0; i < ventanaOrdenMatPrima.getProveedorSeleccionado().getCategoria().size();i++){
-			if (ventanaOrdenMatPrima.getProveedorSeleccionado().getCategoria().get(i).getDenominacion().compareTo(nomCategoria)== 0){
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 }

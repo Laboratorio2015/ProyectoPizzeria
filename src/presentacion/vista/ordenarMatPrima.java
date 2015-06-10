@@ -32,15 +32,11 @@ import javax.swing.table.DefaultTableModel;
 import com.mxrck.autocompleter.TextAutoCompleter;
 
 public class ordenarMatPrima extends JFrame {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
-
-	private JButton buttonAgregarMateriaPrima;
-
 	private JPanel contentPane;
 	//BOTONES
+	private JButton buttonAgregarMateriaPrima;
 	private JButton buttonLimpiarBuscador;
 	private JButton buttonQuitarMatPrima;
 	private JButton btnEnviarform;
@@ -70,6 +66,7 @@ public class ordenarMatPrima extends JFrame {
 	private ArrayList<ItemMateriaPrimaDTO> listadoItemsOrdenados;
 	private OrdenPedidoMatPrimaDTO nuevaOrden;
 	private TextAutoCompleter textAutoAcompleter;
+	private String categoriaSeleccionada;
 
 
 	
@@ -77,6 +74,8 @@ public class ordenarMatPrima extends JFrame {
 		this.ventanaPrincipal = ventanaPrincipal;
 		this.controlador = controlador;
 		materiasPrimasFiltradas = new ArrayList<MateriaPrimaDTO>();
+		listadoItemsOrdenados = new ArrayList<ItemMateriaPrimaDTO>();
+		categoriaSeleccionada="";
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 898, 651);
@@ -138,27 +137,6 @@ public class ordenarMatPrima extends JFrame {
 		contentPane.add(label);
 		
 		buttonAgregarMateriaPrima = new JButton("agregarMatPrima");
-		buttonAgregarMateriaPrima.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				dispose();
-//				if (textFieldCantMatPrima.getText().toString().compareTo("")!=0 && textFieldBusquedaMatPrima.getText().toString().compareTo("")!=0){
-//					if (bloquearProveedor==false){
-//						comboBoxProveedores.setEnabled(false);
-//						bloquearProveedor=true;
-//					}
-//					itemSolicitado = new ItemMateriaPrimaDTO(getMatPrimaSeleccionada(textFieldBusquedaMatPrima.getText()),
-//															Integer.parseInt(textFieldCantMatPrima.getText().toString()));
-//					agregarItemTabla(itemSolicitado);
-//					textFieldCantMatPrima.setText("");
-//					textFieldBusquedaMatPrima.setText("");
-//					buttonAgregarMatPrima.setEnabled(false);
-//				}
-//				else{
-//					buttonAgregarMatPrima.setEnabled(false);
-//				}
-			}
-		});
 		buttonAgregarMateriaPrima.setOpaque(false);
 		buttonAgregarMateriaPrima.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		buttonAgregarMateriaPrima.setBorder(null);
@@ -205,24 +183,26 @@ public class ordenarMatPrima extends JFrame {
 		textAutoAcompleter.setCaseSensitive(false);
 	}
 	
-	public ProveedorDTO getProveedorSeleccionado() throws Exception{
-		String nomProveedor = (String) comboListaProveedores.getSelectedItem();
-		if (obtenerProveedor(nomProveedor)!= null){
-			return obtenerProveedor(nomProveedor);
-		}
-		else{
-			throw new Exception("El proveedor recibido en nulo.");
-		}
-	}
-	
-	public ProveedorDTO obtenerProveedor(String nomProveedor){
-		for (int i= 0; i < listadoProveedores.size();i++){
-			if (nomProveedor.compareTo(listadoProveedores.get(i).getNombre()) == 0){
-				return listadoProveedores.get(i);
-			}
-		}
-		return null;
-	}
+//	public ProveedorDTO getProveedorSeleccionado() {
+//		String nomProveedor = (String) comboListaProveedores.getSelectedItem();
+//		if (obtenerProveedor(nomProveedor)!= null){
+//			return obtenerProveedor(nomProveedor);
+//		}
+//		else{
+//			//throw new Exception("El proveedor recibido en nulo.");
+//			System.out.println("No se haya el proveedor");
+//			return null;
+//		}
+//	}
+//	
+//	public ProveedorDTO obtenerProveedor(String nomProveedor){
+//		for (int i= 0; i < listadoProveedores.size();i++){
+//			if (nomProveedor.compareTo(listadoProveedores.get(i).getNombre()) == 0){
+//				return listadoProveedores.get(i);
+//			}
+//		}
+//		return null;
+//	}
 
 	
 	
@@ -404,5 +384,17 @@ public class ordenarMatPrima extends JFrame {
 
 	public void setTextAutoAcompleter(TextAutoCompleter textAutoAcompleter) {
 		this.textAutoAcompleter = textAutoAcompleter;
+	}
+
+	public void setCategoriaSeleccionada(String string) {
+		categoriaSeleccionada=string;
+	}
+
+	public String getCategoriaSeleccionada() {
+		return categoriaSeleccionada;
+	}
+
+	public void actualizarModelo() {
+		this.tablaItemsMateriaPrima.setModel(modeloItemsSolicitados);
 	}
 }

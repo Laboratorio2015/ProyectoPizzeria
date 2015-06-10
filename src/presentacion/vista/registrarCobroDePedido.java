@@ -33,12 +33,14 @@ public class registrarCobroDePedido extends JDialog {
 	private PedidoDTO pedid;
 	private JTextField tfCliente;
 	private JTextField tfMontoPedido;
+	private Controlador controlador;
 
 	public registrarCobroDePedido(pedidosPendientes padre, PedidoDTO pedido, Controlador control) 
 	{
 		setModal(true);
 		_padre=padre;
 		_this=this;
+		this.controlador = control;
 		this.pedid=pedido;
 		setMinimumSize(new Dimension(500, 280));
 		setBounds(500, 300, 511, 307);
@@ -81,7 +83,6 @@ public class registrarCobroDePedido extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent e) 
 				{
-					
 					pedid.set_estado("cobrado");
 					_padre.llenarTabla();
 					dispose();

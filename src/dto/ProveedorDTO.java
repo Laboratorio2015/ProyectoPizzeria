@@ -132,4 +132,15 @@ public class ProveedorDTO
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public boolean isCategoria(String nomCategoria) {
+		Iterator<CategoriaDTO> Iterador = categoria.iterator();
+		while(Iterador.hasNext())
+		{
+			CategoriaDTO elementoCategoria = Iterador.next();
+			if (elementoCategoria.getDenominacion().compareTo(nomCategoria)==0){
+				return true;
+			}
+		}
+		return false;
+	}
 }
