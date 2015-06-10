@@ -2,10 +2,8 @@ package presentacion.reportes;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import dto.ItemDTO;
 import dto.ProductoDTO;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;

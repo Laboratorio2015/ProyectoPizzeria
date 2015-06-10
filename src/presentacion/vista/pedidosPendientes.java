@@ -118,6 +118,24 @@ public class pedidosPendientes extends JDialog {
 					lCobroACliente.setVisible(false);
 					lCobroADelivery.setVisible(false);
 				}
+				else if(pedido.get_estado().compareTo("endelivery")==0)
+				{
+					lMarcarComoPreparado.setVisible(false);
+					lRechazarPedido.setVisible(true);
+					lModificarPedido.setVisible(false);
+					lAsignarRepartidor.setVisible(false);
+					lCobroACliente.setVisible(false);
+					lCobroADelivery.setVisible(true);
+				}
+				else if(pedido.get_estado().compareTo("cobrado")==0)
+				{
+					lMarcarComoPreparado.setVisible(false);
+					lRechazarPedido.setVisible(false);
+					lModificarPedido.setVisible(false);
+					lAsignarRepartidor.setVisible(false);
+					lCobroACliente.setVisible(false);
+					lCobroADelivery.setVisible(false);
+				}
 			}
 		});
 		scrollPane.setRowHeaderView(table);
@@ -342,14 +360,20 @@ public class pedidosPendientes extends JDialog {
 	{
 		model.setRowCount(0); //Para vaciar la tabla
 		model.setColumnCount(0);
-
+		model.setColumnIdentifiers(nombreColumnas);
 		Iterator<PedidoDTO> Iterador = control.getPedido().obtenerPedidos().iterator();
 		while(Iterador.hasNext())
 		{
 			PedidoDTO elemento = Iterador.next();
-			if(elemento.getEstado().compareTo("solicitado")==0)
+			if(elemento.getEstado().compareTo("rechazado")!=0 && elemento.getEstado().compareTo("cobrado")!=0)
 			{
-			model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento)," "});
+				if(elemento.getEstado().compareTo("endelivery")==0)
+				{
+					int itinerario=control.getItinerario().buscarItinerarioPorPedido(elemento.getIdpedido());
+					model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),itinerario+""});
+				}
+				else
+					model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),""});
 			}
 		}
 		table.setModel(model);		

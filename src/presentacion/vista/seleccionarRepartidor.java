@@ -14,13 +14,18 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import modelo.Itinerarios;
+
 import presentacion.controlador.Controlador;
 
+import dto.HojaItinerarioDTO;
+import dto.PedidoDTO;
 import dto.RepartidorDTO;
 
 public class seleccionarRepartidor extends JDialog {
@@ -32,11 +37,13 @@ public class seleccionarRepartidor extends JDialog {
 	private JTable table;
 	private DefaultTableModel model;
 	private Controlador control;
-	private Integer numfila;
+	private int[] numfila;
+	private ArrayList<PedidoDTO> listaPedidos;
+	private HojaItinerarioDTO hojaItinerario;
 	private  String[] nombreColumnasRepartidor = {"DNI","Nombre","Apellido"};
 	
 	
-	public seleccionarRepartidor(final pedidosPendientes padre, Controlador control, final Integer numfila)
+	public seleccionarRepartidor(final pedidosPendientes padre, final Controlador control,final int[] numfila, final ArrayList<PedidoDTO> pedidos)
 	{
 		_padre=padre;
 		_this=this;
@@ -70,8 +77,28 @@ public class seleccionarRepartidor extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent arg0) 
 				{
-					padre.getTable().setValueAt("rep", numfila, 4);
-					padre.getTable().setValueAt("en delivery", numfila, 2);
+					//crea la hoja de itinerario con los pedidos seleccionados
+					hojaItinerario=new HojaItinerarioDTO();
+					hojaItinerario.setIdHojaItinerario(control.getItinerario().obtenerItinerarios().size()+1);
+					hojaItinerario.setFueeliminado(false);
+					hojaItinerario.setRepartidor(control.getRepartidor().buscarRepartidor(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString())));
+					hojaItinerario.setPedidos(pedidos);
+					control.getItinerario().agregarItinerario(hojaItinerario);
+					for(int i=0; i<numfila.length;i++)
+					{
+					//ingresar el nuevo estado en la tabla a los pedidos
+					padre.getTable().setValueAt(hojaItinerario.getIdHojaItinerario(), i, 4);
+					padre.getTable().setValueAt("en delivery", i, 2);
+					}
+					Iterator<PedidoDTO> Iterador = pedidos.iterator();
+					//cambia el estado de los pedidos en la base
+					while(Iterador.hasNext())
+					{
+						PedidoDTO elemento = Iterador.next();
+						elemento.setEstado("en delivery");
+						control.getPedido().quitarPedido(elemento);
+						control.getPedido().agregarPedido(elemento);
+					}
 					dispose();
 				}
 			});

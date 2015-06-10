@@ -18,6 +18,7 @@ import modelo.Categorias;
 import modelo.Clientes;
 import modelo.ItemMateriasPrimas;
 import modelo.Items;
+import modelo.Itinerarios;
 import modelo.MatPrimas;
 import modelo.Ofertas;
 import modelo.OrdenesMateriaPrimas;
@@ -93,8 +94,6 @@ public class Controlador implements ActionListener
 	private pedidoMenu ventanamenu;
 	private registroDeCliente ventanaRegistrarCliente;
 
-
-	
 	//modelo
 	private Productos producto;
 	private Proveedores proveedor;
@@ -107,30 +106,11 @@ public class Controlador implements ActionListener
 	private OrdenesMateriaPrimas ordenesMatPrimas;
 	private MatPrimas materiasPrimas;
 	private ItemMateriasPrimas itemsMateriaPrima;
+	private Itinerarios itinerario;
 
-/*
-	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, 
-			Proveedores proveedor, Repartidores repartidor,Ofertas oferta, Categorias categoria) 
-	{
-		this.ventana=ventana;
-		this.pedido=pedido;
-		this.cliente=cliente;
-		this.item=item;
-		this.producto=producto;
-		this.proveedor=proveedor;
-		this.repartidor=repartidor;
-		this.oferta=oferta;
-		this.categoria=categoria;
-		this.ventana.getBtnIngresarPedido().addActionListener(this);
-		this.ventana.getBtnPedidosPendientes().addActionListener(this);
-		this.ventana.getBtnConfiguraciones().addActionListener(this);
-		this.ventana.getBtnPedMatPrima().addActionListener(this);
-		this.ventana.getBtnReportes().addActionListener(this);
-		this.monitorCocina = new PadreMonitor(pedido);
-	}*/
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
-			Repartidores repartidor,Ofertas oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima) 
+			Repartidores repartidor,Ofertas oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -141,6 +121,7 @@ public class Controlador implements ActionListener
 		this.repartidor=repartidor;
 		this.oferta=oferta;
 		this.categoria=categoria;
+		this.itinerario=itinerario;
 		this.ordenesMatPrimas = ordenesMatPrimas;
 		this.materiasPrimas = matPrimas;
 		this.itemsMateriaPrima = itemsMatPrima;
@@ -149,14 +130,15 @@ public class Controlador implements ActionListener
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
 		this.ventana.getBtnPedMatPrima().addActionListener(this);
 		this.ventana.getBtnReportes().addActionListener(this);
-		this.monitorCocina = new PadreMonitor(pedido);
+		//this.monitorCocina = new PadreMonitor(pedido);
 	}
 
 
 	public void inicializar()
 	{
-		//this.monitorCocina=new PadreMonitor(pedido);
 		this.ventana.show();
+		//this.monitorCocina=new PadreMonitor(pedido);
+		
 	}
 
 	@Override
@@ -1043,6 +1025,66 @@ public class Controlador implements ActionListener
 	public void setItem(Items item) {
 		this.item = item;
 	}
+	
+	public Ofertas getOferta() {
+		return oferta;
+	}
+
+
+	public void setOferta(Ofertas oferta) {
+		this.oferta = oferta;
+	}
+
+
+	public Categorias getCategoria() {
+		return categoria;
+	}
+
+
+	public void setCategoria(Categorias categoria) {
+		this.categoria = categoria;
+	}
+
+
+	public OrdenesMateriaPrimas getOrdenesMatPrimas() {
+		return ordenesMatPrimas;
+	}
+
+
+	public void setOrdenesMatPrimas(OrdenesMateriaPrimas ordenesMatPrimas) {
+		this.ordenesMatPrimas = ordenesMatPrimas;
+	}
+
+
+	public MatPrimas getMateriasPrimas() {
+		return materiasPrimas;
+	}
+
+
+	public void setMateriasPrimas(MatPrimas materiasPrimas) {
+		this.materiasPrimas = materiasPrimas;
+	}
+
+
+	public ItemMateriasPrimas getItemsMateriaPrima() {
+		return itemsMateriaPrima;
+	}
+
+
+	public void setItemsMateriaPrima(ItemMateriasPrimas itemsMateriaPrima) {
+		this.itemsMateriaPrima = itemsMateriaPrima;
+	}
+
+
+	public Itinerarios getItinerario() {
+		return itinerario;
+	}
+
+
+	public void setItinerario(Itinerarios itinerario) {
+		this.itinerario = itinerario;
+	}
+
 
 	public PadreMonitor getMonitorCocina()
 	{
