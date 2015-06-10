@@ -1,42 +1,25 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
-
 import presentacion.controlador.Controlador;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
 import dto.PedidoDTO;
-import dto.ProductoDTO;
-import dto.RepartidorDTO;
-
-import main.Main;
-import modelo.Pedidos;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+
 
 public class pedidosPendientes extends JDialog {
 
@@ -46,6 +29,7 @@ public class pedidosPendientes extends JDialog {
 	private PedidoDTO pedido=new PedidoDTO();
 	private JTable table;
 	private DefaultTableModel model;
+	private  String[] nombreColumnas = {"Pedido","Valor","Estado","Delivery","Itinerario"};
 	private JButton btnModificarPedido;
 	private JButton btnRegistrarCobroManual;
 	private JButton btnRechazarPedido;
@@ -77,8 +61,9 @@ public class pedidosPendientes extends JDialog {
 		scrollPane.setBounds(24, 113, 295, 377);
 		contentPanel.add(scrollPane);
 
-		
-		table = new JTable(){
+		model = new DefaultTableModel(null,nombreColumnas);
+		table = new JTable(model)
+		{
 		 public boolean isCellEditable(int rowIndex, int colIndex) {
 	        return false;
 	    }};
@@ -210,7 +195,6 @@ public class pedidosPendientes extends JDialog {
 						//Quita el pedido del MONITOR antes de modificarlo en la siguiente ventana.
 						control.getMonitorCocina().quitarPedido(pedidoCambia);/////////////////////
 						//////////////////////////////////////////////////////////////////////////
-						System.out.println(pedidoCambia.getItems().get(0).getProducto().toString());
 						ordenDePedido pedidoCambiar=new ordenDePedido(_padre,pedidoCambia,control);
 						pedidoCambiar.llenarTabla(pedidoCambia);
 						pedidoCambiar.getTfTotal().setText(pedidoCambia.getTotal().toString());	
@@ -308,19 +292,20 @@ public class pedidosPendientes extends JDialog {
 			contentPanel.add(btnRegistrarCobroPedido);
 		}
 		{
-			btnAsignarRepartidor= new JButton("New button");
-			btnAsignarRepartidor.addMouseListener(new MouseAdapter() 
-			{
-				@Override
-				public void mouseClicked(MouseEvent arg0) 
+			/*btnAsignarRepartidor= new JButton("New button");
+			btnAsignarRepartidor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0)
 				{
-					seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente,control, numFilaSeleccionada);
-					selecRepartidor.setVisible(true);
+					int[] filasSeleccionadas=table.getSelectedRows();
+					System.out.println(filasSeleccionadas);
+					System.out.println("entro");
+					//seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente,control, numFilaSeleccionada);
+					//selecRepartidor.setVisible(true);
 				}
 			});
 			btnAsignarRepartidor.setOpaque(false);
 			btnAsignarRepartidor.setBounds(339, 188, 326, 40);
-			contentPanel.add(btnAsignarRepartidor);
+			contentPanel.add(btnAsignarRepartidor);*/
 		}
 		{
 			btnMarcarComoPreparado= new JButton("New button");
@@ -350,30 +335,19 @@ public class pedidosPendientes extends JDialog {
 			btnMarcarComoPreparado.setOpaque(false);
 			btnMarcarComoPreparado.setBounds(335, 129, 328, 40);
 			contentPanel.add(btnMarcarComoPreparado);
-		}
-		
-		model= new DefaultTableModel();
-		model.addColumn("Pedido");
-		model.addColumn("Valor");
-		model.addColumn("Estado");
-		model.addColumn("Delivery");
-		model.addColumn("Itinerario");
+		}	
 	}
 	
 	public void llenarTabla() 
 	{
 		model.setRowCount(0); //Para vaciar la tabla
 		model.setColumnCount(0);
-		model.addColumn("Pedido");
-		model.addColumn("Valor");
-		model.addColumn("Estado");
-		model.addColumn("Delivery");
-		model.addColumn("Itinerario");
+
 		Iterator<PedidoDTO> Iterador = control.getPedido().obtenerPedidos().iterator();
 		while(Iterador.hasNext())
 		{
 			PedidoDTO elemento = Iterador.next();
-			if(elemento.getEstado().compareTo("cobrado")!=0)
+			if(elemento.getEstado().compareTo("solicitado")==0)
 			{
 			model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento)," "});
 			}
