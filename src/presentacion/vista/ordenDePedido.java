@@ -1095,7 +1095,6 @@ public class ordenDePedido extends JDialog {
 		while(Iterador.hasNext())
 		{
 			ItemDTO elemento = Iterador.next();
-			
 			model.addRow(new String[] {elemento.getProducto().getNombre(),""+elemento.getCantidad(),""+(elemento.getProducto().getPrecio()* elemento.getCantidad()),elemento.getComentario()});
 		}
 		tablaItems.setModel(model);
