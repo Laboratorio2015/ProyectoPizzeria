@@ -39,6 +39,7 @@ import dto.ProveedorDTO;
 import dto.RepartidorDTO;
 import presentacion.vista.VentanaPrincipal;
 
+import presentacion.vista.buscadorProveedor;
 import presentacion.vista.calendario;
 import presentacion.vista.clienteBajaModificacion;
 import presentacion.vista.gestionCategoria;
@@ -72,7 +73,7 @@ public class Controlador implements ActionListener
 	private pedidosPendientes ventanaPedPendiente;
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
-	//private buscadorProveedor ventanaSeleccionProveedor;
+	private buscadorProveedor ventanaSeleccionProveedor;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
 	private productoAlta ventanaAgregarProducto;
 	private productoBajaModificacion ventanaEditarProducto;
@@ -156,9 +157,11 @@ public class Controlador implements ActionListener
 		}
 		else if(e.getSource() == this.ventana.getBtnPedidosPendientes())
 		{
+			System.out.println("entro");
 			ventanaPedPendiente=new pedidosPendientes(ventana, this);
 			ventanaPedPendiente.llenarTabla();
 			this.ventanaPedPendiente.setVisible(true);
+			
 		}
 
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
@@ -172,7 +175,7 @@ public class Controlador implements ActionListener
 			this.ventanaOrdenMatPrima.getBtnCancelar().addActionListener(this);
 			this.ventanaOrdenMatPrima.getBtnEnviarform().addActionListener(this);
 			this.ventanaOrdenMatPrima.getBtnGuardarform().addActionListener(this);
-			//			this.ventanaOrdenMatPrima.getBtnVermatprima().addActionListener(this);
+			this.ventanaOrdenMatPrima.getBtnVermatprima().addActionListener(this);
 			this.ventanaOrdenMatPrima.getBtnVerproveedores().addActionListener(this);
 			this.ventanaOrdenMatPrima.getComboListaProveedores().addActionListener(this);
 			this.ventanaOrdenMatPrima.getComboListaCategorias().addActionListener(this);
@@ -197,7 +200,7 @@ public class Controlador implements ActionListener
 		{
 			ventanaOrdenMatPrima.dispose();
 		}
-		/*else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnVerproveedores())
+		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnVerproveedores())
 		{
 			ventanaSeleccionProveedor = new buscadorProveedor(ventana, this);
 			ventanaSeleccionProveedor.setVisible(true);
@@ -223,7 +226,7 @@ public class Controlador implements ActionListener
 			ventanaSeleccionProveedor.getResultadoBusquedaProv().setModel(ventanaSeleccionProveedor.getModeloResultados());
 			cargarResultados();
 			
-		}*/
+		}
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnEnviarform())
 		{
 			generarPDFyPersistir();
@@ -691,7 +694,7 @@ public class Controlador implements ActionListener
 		}
 	}
 
-/*
+
 	//METODOS PARA VENTANA ORDEN DE MATERIA PRIMA
 	private void preCargarCamposdeBusqueda() {
 		//cargamos categorias existenets
@@ -775,7 +778,7 @@ public class Controlador implements ActionListener
 			break;
 		}
 		}
-	}*/	
+	}	
 	private void borrarTodo() {
 		limpiarCampos();
 		ventanaOrdenMatPrima.getComboListaProveedores().setEnabled(true);

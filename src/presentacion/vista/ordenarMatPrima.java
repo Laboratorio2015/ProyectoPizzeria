@@ -9,25 +9,19 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.WindowConstants;
-
 import dto.ItemMateriaPrimaDTO;
 import dto.MateriaPrimaDTO;
 import dto.OrdenPedidoMatPrimaDTO;
 import dto.ProveedorDTO;
-
 import java.awt.Cursor;
 import java.util.ArrayList;
-
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-
 import presentacion.controlador.Controlador;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import com.mxrck.autocompleter.TextAutoCompleter;
-
 public class ordenarMatPrima extends JDialog  {
 
 	private static final long serialVersionUID = 1L;

@@ -142,7 +142,7 @@ public class ordenDePedido extends JDialog {
 			public void keyReleased(KeyEvent e) 
 			{
 				producto=control.getProducto().buscarProductoPorNombre(tfAgregarPizza.getText());
-				if(tfAgregarPizza.getText().length()>4)
+				if(tfAgregarPizza.getText().length()>4 && producto!=null)
 				tfPrecioUniPizza.setText(Integer.toString(producto.getPrecio()));
 			}
 			});

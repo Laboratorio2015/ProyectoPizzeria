@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import presentacion.controlador.Controlador;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -88,7 +89,7 @@ public class pedidosPendientes extends JDialog {
 					lRechazarPedido.setVisible(true);
 					lModificarPedido.setVisible(false);
 					String repartidor=table.getValueAt(numFilaSeleccionada, 4).toString();
-					if(pedido.getLlevaDelivery() && repartidor.compareTo(" ")==0)
+					if(pedido.getLlevaDelivery() )//&& repartidor.compareTo(" ")==0)
 					{
 						lAsignarRepartidor.setVisible(true);
 						lCobroADelivery.setVisible(false);
@@ -211,7 +212,7 @@ public class pedidosPendientes extends JDialog {
 						numFilaSeleccionada=table.getSelectedRow();
 						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
 						//Quita el pedido del MONITOR antes de modificarlo en la siguiente ventana.
-						control.getMonitorCocina().quitarPedido(pedidoCambia);/////////////////////
+						//control.getMonitorCocina().quitarPedido(pedidoCambia);/////////////////////
 						//////////////////////////////////////////////////////////////////////////
 						ordenDePedido pedidoCambiar=new ordenDePedido(_padre,pedidoCambia,control);
 						pedidoCambiar.llenarTabla(pedidoCambia);
@@ -310,20 +311,26 @@ public class pedidosPendientes extends JDialog {
 			contentPanel.add(btnRegistrarCobroPedido);
 		}
 		{
-			/*btnAsignarRepartidor= new JButton("New button");
-			btnAsignarRepartidor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0)
+			btnAsignarRepartidor= new JButton("New button");
+			btnAsignarRepartidor.addMouseListener(new MouseAdapter() 
+			{
+				@Override
+				public void mouseClicked(MouseEvent arg0) 
 				{
-					int[] filasSeleccionadas=table.getSelectedRows();
-					System.out.println(filasSeleccionadas);
-					System.out.println("entro");
-					//seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente,control, numFilaSeleccionada);
-					//selecRepartidor.setVisible(true);
+					int[] numeros=table.getSelectedRows();
+					int[] pedidos=new int[numeros.length];
+					ArrayList<PedidoDTO> nuevo=new ArrayList<PedidoDTO>();
+					for(int i=0;i<numeros.length;i++)
+					{
+						nuevo.add(control.getPedido().buscarPedidoId(Integer.parseInt(model.getValueAt(numeros[i], 0).toString())));
+					}
+					seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente,control,numeros,nuevo);
+					selecRepartidor.setVisible(true);
 				}
 			});
 			btnAsignarRepartidor.setOpaque(false);
 			btnAsignarRepartidor.setBounds(339, 188, 326, 40);
-			contentPanel.add(btnAsignarRepartidor);*/
+			contentPanel.add(btnAsignarRepartidor);
 		}
 		{
 			btnMarcarComoPreparado= new JButton("New button");
@@ -341,7 +348,7 @@ public class pedidosPendientes extends JDialog {
 						pedido.set_estado("preparado");
 						control.getPedido().agregarPedido(pedido);				
 						//////////QUITA EL PEDIDO DEL MONITOR//////////
-						control.getMonitorCocina().quitarPedido(pedido);
+						//control.getMonitorCocina().quitarPedido(pedido);
 						///////////////////////////////////////////////
 					}
 					else if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("rechazado")==0)

@@ -68,7 +68,9 @@ public class seleccionDeCliente extends JDialog {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText()));
+				String dni=tfAgregarDNI.getText();
+				if(dni!=" ")
+					cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(dni));
 				if(cliente!=null)
 				{
 				tfNombrApellido.setText("Apellido y Nombre: "+cliente.getApellido()+""+ cliente.getNombre());
@@ -127,10 +129,10 @@ public class seleccionDeCliente extends JDialog {
 					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					//control.getMonitorCocina().nuevoPedido(pedido);
 					//////////ENVIA el NUEVO PEDIDO AL MONITOR//////
-					control.getMonitorCocina().nuevoPedido(pedido);  // no funciona, da null pointer exception
+					//control.getMonitorCocina().nuevoPedido(pedido);  // no funciona, da null pointer exception
 					/////////////////////////////////////////////
 					new Ticket(seleccionDeCliente.this.pedido).generarTicket();
-					new Comanda(seleccionDeCliente.this.pedido).generarComanda();
+					//new Comanda(seleccionDeCliente.this.pedido).generarComanda();
 					dispose();
 				}
 			});
