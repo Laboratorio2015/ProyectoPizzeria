@@ -1,8 +1,6 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -97,7 +95,8 @@ public class promocionAlta extends JDialog {
 				model = new DefaultTableModel(null,nombreColumnas);
 				table = new JTable(model)
 				{
-				    public boolean isCellEditable(int rowIndex, int colIndex)
+				    @Override
+					public boolean isCellEditable(int rowIndex, int colIndex)
 				    {
 				        return false; //desabilita la edicion de las celdas
 				    }

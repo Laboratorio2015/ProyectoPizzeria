@@ -1,8 +1,6 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -10,8 +8,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
@@ -102,6 +98,7 @@ public class proveedorAlta extends JDialog {
 		{
 			btnCancelar = new JButton("OK");
 			btnCancelar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0)
 				{
 					dispose();

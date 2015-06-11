@@ -6,13 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import modelo.Items;
 import modelo.Pedidos;
 import modelo.Repartidores;
 
 import conexion.Conexion;
 import dto.HojaItinerarioDTO;
-import dto.ItemDTO;
 import dto.PedidoDTO;
 import dto.RepartidorDTO;
 

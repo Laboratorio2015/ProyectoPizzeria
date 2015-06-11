@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import dao.ClienteDAO;
 import dto.ClienteDTO;
-import dto.ProductoDTO;
 
 
 public class Clientes 

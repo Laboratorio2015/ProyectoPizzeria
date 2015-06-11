@@ -1,8 +1,6 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -10,14 +8,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Color;
-import java.awt.SystemColor;
 import javax.swing.border.MatteBorder;
-import javax.swing.UIManager;
 
 public class promocionBajaModificacion extends JDialog {
 
@@ -56,7 +51,7 @@ public class promocionBajaModificacion extends JDialog {
 		contentPanel.add(tfPrecioFinal);
 		
 		tfPrecioReal = new JTextField();
-		tfPrecioReal.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfPrecioReal.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 		tfPrecioReal.setBackground(new Color(102, 102, 102));
 		tfPrecioReal.setEditable(false);
 		tfPrecioReal.setColumns(10);

@@ -1,15 +1,14 @@
 package presentacion.vista;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+import javax.swing.WindowConstants;
 
 import dto.ItemMateriaPrimaDTO;
 import dto.MateriaPrimaDTO;
@@ -17,8 +16,6 @@ import dto.OrdenPedidoMatPrimaDTO;
 import dto.ProveedorDTO;
 
 import java.awt.Cursor;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
@@ -31,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
 
-public class ordenarMatPrima extends JFrame {
+public class ordenarMatPrima extends JDialog  {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -77,7 +74,7 @@ public class ordenarMatPrima extends JFrame {
 		listadoItemsOrdenados = new ArrayList<ItemMateriaPrimaDTO>();
 		categoriaSeleccionada="";
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 898, 651);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -122,6 +119,7 @@ public class ordenarMatPrima extends JFrame {
 				Class[] columnTypes = new Class[] {
 					String.class, Integer.class
 				};
+				@Override
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];

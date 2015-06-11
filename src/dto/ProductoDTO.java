@@ -102,7 +102,8 @@ public class ProductoDTO
 	}
 
 	// sobreescribir metodo equals
-    public boolean equals (Object obj) {
+    @Override
+	public boolean equals (Object obj) {
         if (obj instanceof ProductoDTO) {
         ProductoDTO tmpProducto = (ProductoDTO) obj;
             if (this.nombre.equals(tmpProducto.nombre))

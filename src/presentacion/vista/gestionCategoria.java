@@ -1,8 +1,6 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -48,7 +46,8 @@ public class gestionCategoria extends JDialog {
 				model = new DefaultTableModel(null,nombreColumnas);
 				table = new JTable(model)
 				{
-				    public boolean isCellEditable(int rowIndex, int colIndex) {
+				    @Override
+					public boolean isCellEditable(int rowIndex, int colIndex) {
 				    	if (colIndex==1) {
 				            return true;  //La columna 1 y 3 son editables.
 				        }
@@ -68,6 +67,7 @@ public class gestionCategoria extends JDialog {
 			JButton btnFinalizar = new JButton("OK");
 			btnFinalizar.setOpaque(false);
 			btnFinalizar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
 					dispose();

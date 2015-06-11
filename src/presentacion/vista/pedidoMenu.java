@@ -14,9 +14,6 @@ import javax.swing.JTable;
 
 import presentacion.controlador.Controlador;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 @SuppressWarnings("serial")
 public class pedidoMenu extends JDialog {
 
@@ -47,7 +44,8 @@ public class pedidoMenu extends JDialog {
 		
 		model = new DefaultTableModel(null,nombreColumnas);
 		table = new JTable(model){
-		    public boolean isCellEditable(int rowIndex, int colIndex) {
+		    @Override
+			public boolean isCellEditable(int rowIndex, int colIndex) {
 		        return false; //desabilita la edicion de las celdas
 		    }
 		};

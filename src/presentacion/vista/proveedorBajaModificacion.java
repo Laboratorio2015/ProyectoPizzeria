@@ -1,8 +1,6 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -17,21 +15,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import dto.MateriaPrimaDTO;
-import dto.ProductoDTO;
 import dto.ProveedorDTO;
 
 import presentacion.controlador.Controlador;
 
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 
 public class proveedorBajaModificacion extends JDialog {
 
@@ -64,6 +53,7 @@ public class proveedorBajaModificacion extends JDialog {
 		model1=new DefaultTableModel(null, nombreColumnasMatPrimas);
 		
 		tableProveedor = new JTable(model){
+		@Override
 		public boolean isCellEditable(int rowIndex, int colIndex) {
 	        return false; //desabilita la edicion de las celdas
 	    }};
@@ -107,6 +97,7 @@ public class proveedorBajaModificacion extends JDialog {
 		{
 			JButton btnFinalizar = new JButton("OK");
 			btnFinalizar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
 				}
@@ -123,6 +114,7 @@ public class proveedorBajaModificacion extends JDialog {
 			btnQuitar.setBounds(36, 482, 53, 49);
 			contentPanel.add(btnQuitar);
 			btnQuitar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 				}
 			});

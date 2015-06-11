@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modelo.Items;
-import modelo.Productos;
 import conexion.Conexion;
 import dto.ItemDTO;
 import dto.OfertaDTO;
-import dto.ProductoDTO;
 
 public class OfertaDAO {
 	private static final String insert = "INSERT INTO ofertas(idoferta, nombre,precio,item,fueeliminado) VALUES(?,?,?,?,?)";

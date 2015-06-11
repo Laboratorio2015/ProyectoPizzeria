@@ -1,13 +1,6 @@
 package Cocina;
 
-import java.util.ArrayList;
 import javax.swing.JFrame;
-
-import main.Main;
-
-import dto.ItemDTO;
-import dto.PedidoDTO;
-import dto.ProductoDTO;
 
 public class mainMonitor {
 

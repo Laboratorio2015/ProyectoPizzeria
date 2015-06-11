@@ -1,8 +1,6 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -95,6 +93,7 @@ public class productoBajaModificacion extends JDialog {
 			JButton btnFinalizar = new JButton("Cancel");
 			btnFinalizar.setOpaque(false);
 			btnFinalizar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
 				}

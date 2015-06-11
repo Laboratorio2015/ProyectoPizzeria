@@ -5,16 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 
 import modelo.Clientes;
 import modelo.Items;
 import modelo.Ofertas;
-import modelo.Pedidos;
-
 import dto.ClienteDTO;
 import dto.ItemDTO;
 import dto.OfertaDTO;
@@ -174,7 +169,7 @@ public class PedidoDAO
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
 				resultSet.getInt("comanda"),
-				ClienteDTO.buscarCliente(cli.obtenerClientes(),(Integer)resultSet.getInt("cliente")),
+				ClienteDTO.buscarCliente(cli.obtenerClientes(),resultSet.getInt("cliente")),
 				resultSet.getBoolean("llevadelivery"),listOfertas,resultSet.getBoolean("fueeliminado"));
 				pedidos.add(aux);
 			}

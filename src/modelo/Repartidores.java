@@ -3,7 +3,6 @@ package modelo;
 import java.util.Iterator;
 import java.util.List;
 
-import dto.ProveedorDTO;
 import dto.RepartidorDTO;
 import dao.RepartidorDAO;
 

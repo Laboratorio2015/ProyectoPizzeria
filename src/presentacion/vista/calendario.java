@@ -2,7 +2,6 @@ package presentacion.vista;
 
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -11,8 +10,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Date;
-
-import javax.swing.JScrollPane;
 
 import org.freixas.jcalendar.JCalendar;
 import java.awt.Color;
@@ -39,7 +36,7 @@ public class calendario extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
 			 _calendar= new JCalendar();
-			 _calendar.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			 _calendar.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			 _calendar.setBackground(new Color(204, 204, 0));
 			 contentPanel.add(_calendar);
 		}
@@ -48,6 +45,7 @@ public class calendario extends JDialog {
 			_aceptar.setBounds(138, 151, 74, 23);
 			contentPanel.add(_aceptar);
 			_aceptar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
 					Date fech=_calendar.getDate();
@@ -63,6 +61,7 @@ public class calendario extends JDialog {
 			cancelButton.setBounds(219, 151, 74, 23);
 			contentPanel.add(cancelButton);
 			cancelButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) 
 				{
 					dispose();

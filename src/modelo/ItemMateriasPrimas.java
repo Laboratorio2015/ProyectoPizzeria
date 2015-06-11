@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dao.ItemMateriaPrimaDAO;
-import dto.CategoriaDTO;
 import dto.ItemMateriaPrimaDTO;
 import dto.OrdenPedidoMatPrimaDTO;
-import dto.ProveedorDTO;
 
 public class ItemMateriasPrimas
 {

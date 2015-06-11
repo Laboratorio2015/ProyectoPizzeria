@@ -60,6 +60,7 @@ public class MonitorThread extends Thread {
 						Class[] columnTypes = new Class[] {
 							String.class, String.class, Integer.class, String.class
 						};
+						@Override
 						@SuppressWarnings({ "unchecked", "rawtypes" })
 						public Class getColumnClass(int columnIndex) {
 							return columnTypes[columnIndex];
@@ -67,6 +68,7 @@ public class MonitorThread extends Thread {
 						boolean[] columnEditables = new boolean[] {
 							false, false, false, false
 						};
+						@Override
 						public boolean isCellEditable(int row, int column) {
 							return columnEditables[column];
 						}
@@ -102,6 +104,7 @@ public class MonitorThread extends Thread {
 					Class[] columnTypes = new Class[] {
 							String.class, Integer.class, String.class, Integer.class
 					};
+					@Override
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					public Class getColumnClass(int columnIndex) {
 						return columnTypes[columnIndex];
@@ -136,6 +139,7 @@ public class MonitorThread extends Thread {
 					Class[] columnTypes = new Class[] {
 						String.class, Integer.class, String.class, Integer.class
 					};
+					@Override
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					public Class getColumnClass(int columnIndex) {
 						return columnTypes[columnIndex];

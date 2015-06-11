@@ -6,8 +6,6 @@ import java.util.List;
 import dto.ItemDTO;
 import dto.OfertaDTO;
 import dto.PedidoDTO;
-import dto.ProductoDTO;
-
 import dao.ItemDAO;
 
 public class Items 

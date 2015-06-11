@@ -6,12 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import dao.PedidoDAO;
-import dto.ClienteDTO;
 import dto.HojaItinerarioDTO;
-import dto.ItemDTO;
 import dto.PedidoDTO;
-import dto.ProductoDTO;
-
 
 public class Pedidos 
 {

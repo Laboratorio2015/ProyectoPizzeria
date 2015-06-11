@@ -7,12 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modelo.ItemMateriasPrimas;
-import modelo.Items;
 import modelo.Proveedores;
 import conexion.Conexion;
-import dto.ItemDTO;
 import dto.ItemMateriaPrimaDTO;
-import dto.OfertaDTO;
 import dto.OrdenPedidoMatPrimaDTO;
 import dto.ProveedorDTO;
 

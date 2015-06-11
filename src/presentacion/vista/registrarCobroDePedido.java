@@ -1,11 +1,8 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Dimension;
@@ -20,8 +17,6 @@ import javax.swing.JTextField;
 
 import presentacion.controlador.Controlador;
 
-import main.Main;
-import modelo.Pedidos;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 
@@ -50,7 +45,7 @@ public class registrarCobroDePedido extends JDialog {
 		contentPanel.setLayout(null);
 		
 		tfCliente = new JTextField();
-		tfCliente.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfCliente.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 		tfCliente.setBackground(new Color(204, 204, 0));
 		tfCliente.setEditable(false);
 		tfCliente.setBounds(103, 113, 280, 20);
@@ -58,7 +53,7 @@ public class registrarCobroDePedido extends JDialog {
 		tfCliente.setColumns(10);
 		
 		tfMontoPedido = new JTextField();
-		tfMontoPedido.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfMontoPedido.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 		tfMontoPedido.setBackground(new Color(204, 204, 0));
 		tfMontoPedido.setEditable(false);
 		tfMontoPedido.setColumns(10);

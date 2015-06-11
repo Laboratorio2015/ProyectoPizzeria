@@ -1,13 +1,9 @@
 package modelo;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import dto.ItemDTO;
 import dto.MateriaPrimaDTO;
-import dto.PedidoDTO;
-import dto.ProveedorDTO;
 import dao.MateriaPrimaDAO;
 
 public class MatPrimas {

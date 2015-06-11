@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import dao.CategoriaDAO;
 import dto.CategoriaDTO;
-import dto.ItemDTO;
 import dto.ProveedorDTO;
 
 public class Categorias {

@@ -89,7 +89,7 @@ public class seleccionDeCliente extends JDialog {
 		{
 			tfDireccionTelefono = new JTextField();
 			tfDireccionTelefono.setBackground(new Color(204, 204, 0));
-			tfDireccionTelefono.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfDireccionTelefono.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfDireccionTelefono.setEditable(false);
 			tfDireccionTelefono.setColumns(10);
 			tfDireccionTelefono.setBounds(348, 166, 301, 20);
@@ -98,7 +98,7 @@ public class seleccionDeCliente extends JDialog {
 		{
 			tfNombrApellido = new JTextField();
 			tfNombrApellido.setBackground(new Color(204, 204, 0));
-			tfNombrApellido.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfNombrApellido.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfNombrApellido.setEditable(false);
 			tfNombrApellido.setBounds(348, 146, 301, 20);
 			contentPanel.add(tfNombrApellido);
@@ -112,7 +112,7 @@ public class seleccionDeCliente extends JDialog {
 		}
 		{
 			btnSeleccionar= new JButton("OK");
-			btnSeleccionar.addActionListener((ActionListener) control);
+			btnSeleccionar.addActionListener(control);
 			btnSeleccionar.addMouseListener(new MouseAdapter() 
 			{
 				//este metodo agrega el cliente a el pedido y debe crear el ticket y la comanda.
@@ -146,6 +146,7 @@ public class seleccionDeCliente extends JDialog {
 			contentPanel.add(btnCancelar);
 			btnCancelar.addActionListener(new ActionListener() 
 			{
+				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
 					dispose();

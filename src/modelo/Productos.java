@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dao.ProductoDAO;
-import dto.ItemDTO;
 import dto.ProductoDTO;
 
 

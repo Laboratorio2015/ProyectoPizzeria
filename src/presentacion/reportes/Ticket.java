@@ -1,6 +1,5 @@
 package presentacion.reportes;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.itextpdf.text.Document;
@@ -15,10 +14,8 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPTable;
 
-import dto.ClienteDTO;
 import dto.ItemDTO;
 import dto.PedidoDTO;
-import dto.ProductoDTO;
 
 
 public class Ticket {

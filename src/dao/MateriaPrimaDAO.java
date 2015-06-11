@@ -7,14 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modelo.Categorias;
-import modelo.Productos;
-
 import conexion.Conexion;
 import dto.CategoriaDTO;
-import dto.ItemDTO;
 import dto.MateriaPrimaDTO;
-import dto.ProductoDTO;
-import dto.RepartidorDTO;
 
 public class MateriaPrimaDAO 
 {

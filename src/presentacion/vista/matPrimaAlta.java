@@ -1,8 +1,5 @@
 package presentacion.vista;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -95,6 +92,7 @@ public class matPrimaAlta extends JDialog {
 		
 		JButton btnCancelar = new JButton("");
 		btnCancelar.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				dispose();

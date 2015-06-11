@@ -1,13 +1,8 @@
 package modelo;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import dto.CategoriaDTO;
-import dto.ClienteDTO;
-import dto.ItemDTO;
-import dto.PedidoDTO;
 import dto.ProveedorDTO;
 import dao.ProveedorDAO;
 

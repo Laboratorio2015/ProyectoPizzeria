@@ -4,17 +4,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import modelo.Categorias;
-import modelo.Items;
-import modelo.MatPrimas;
-
 import dto.CategoriaDTO;
-import dto.ItemDTO;
-import dto.MateriaPrimaDTO;
-import dto.PedidoDTO;
 import dto.ProveedorDTO;
 import conexion.Conexion;
 

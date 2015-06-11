@@ -6,11 +6,6 @@ import javax.swing.UIManager;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import presentacion.controlador.Controlador;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 
 

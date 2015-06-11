@@ -31,8 +31,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JScrollPane;
 import presentacion.controlador.Controlador;
 import javax.swing.JCheckBox;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -179,7 +177,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfPrecioUniEmpanada = new JTextField();
-			tfPrecioUniEmpanada.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfPrecioUniEmpanada.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfPrecioUniEmpanada.setBackground(new Color(204, 204, 0));
 			tfPrecioUniEmpanada.setEditable(false);
 			tfPrecioUniEmpanada.setColumns(10);
@@ -196,6 +194,7 @@ public class ordenDePedido extends JDialog {
 				}
 			});
 			tfUnidadEmpanada.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				cantidad=Integer.parseInt(tfUnidadEmpanada.getText());
@@ -210,7 +209,7 @@ public class ordenDePedido extends JDialog {
 		{
 			tfSubTotalEmpanada = new JTextField();
 			tfSubTotalEmpanada.setBackground(new Color(204, 204, 0));
-			tfSubTotalEmpanada.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfSubTotalEmpanada.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfSubTotalEmpanada.setEditable(false);
 			tfSubTotalEmpanada.setColumns(10);
 			tfSubTotalEmpanada.setBounds(143, 225, 59, 25);
@@ -218,7 +217,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfPrecioUniPizza = new JTextField();
-			tfPrecioUniPizza.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfPrecioUniPizza.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfPrecioUniPizza.setBackground(new Color(204, 204, 0));
 			tfPrecioUniPizza.setEditable(false);
 			tfPrecioUniPizza.setColumns(10);
@@ -237,6 +236,7 @@ public class ordenDePedido extends JDialog {
 			});
 			tfUnidadPizza.addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
 					cantidad=Integer.parseInt(tfUnidadPizza.getText());
@@ -250,7 +250,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfSubTotalPizza = new JTextField();
-			tfSubTotalPizza.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfSubTotalPizza.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfSubTotalPizza.setBackground(new Color(204, 204, 0));
 			tfSubTotalPizza.setEditable(false);
 			tfSubTotalPizza.setColumns(10);
@@ -259,7 +259,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfPrecioUniOtro = new JTextField();
-			tfPrecioUniOtro.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfPrecioUniOtro.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfPrecioUniOtro.setBackground(new Color(204, 204, 0));
 			tfPrecioUniOtro.setEditable(false);
 			tfPrecioUniOtro.setColumns(10);
@@ -278,6 +278,7 @@ public class ordenDePedido extends JDialog {
 			});
 			tfUnidadOtro.addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent e)
 				{
 					cantidad=Integer.parseInt(tfUnidadOtro.getText());
@@ -291,7 +292,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfSubTotalOtro = new JTextField();
-			tfSubTotalOtro.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfSubTotalOtro.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfSubTotalOtro.setBackground(new Color(204, 204, 0));
 			tfSubTotalOtro.setEditable(false);
 			tfSubTotalOtro.setColumns(10);
@@ -325,7 +326,7 @@ public class ordenDePedido extends JDialog {
 		tfSubTotalPromocion = new JTextField();
 		tfSubTotalPromocion.setEditable(false);
 		tfSubTotalPromocion.setColumns(10);
-		tfSubTotalPromocion.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfSubTotalPromocion.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 		tfSubTotalPromocion.setBackground(new Color(204, 204, 0));
 		tfSubTotalPromocion.setBounds(568, 370, 56, 25);
 		contentPanel.add(tfSubTotalPromocion);
@@ -333,7 +334,7 @@ public class ordenDePedido extends JDialog {
 		tfPrecioUniPromocion = new JTextField();
 		tfPrecioUniPromocion.setEditable(false);
 		tfPrecioUniPromocion.setColumns(10);
-		tfPrecioUniPromocion.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfPrecioUniPromocion.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 		tfPrecioUniPromocion.setBackground(new Color(204, 204, 0));
 		tfPrecioUniPromocion.setBounds(502, 370, 48, 25);
 		contentPanel.add(tfPrecioUniPromocion);
@@ -348,7 +349,8 @@ public class ordenDePedido extends JDialog {
 			contentPanel.add(scrollPane_1);
 			tablaItems = new JTable()
 			{
-			    public boolean isCellEditable(int rowIndex, int colIndex) {
+			    @Override
+				public boolean isCellEditable(int rowIndex, int colIndex) {
 			    	if (colIndex==1 || colIndex==3) {
 			            return true;  //La columna 1 y 3 son editables.
 			        }
@@ -372,7 +374,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			JLabel label = new JLabel("");
-			label.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			label.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			label.setIcon(new ImageIcon(ordenDePedido.class.getResource("/prototipos/orden de pedido.png")));
 			label.setBounds(0, 0, 860, 680);
 			contentPanel.add(label);
@@ -391,6 +393,7 @@ public class ordenDePedido extends JDialog {
 			btnEditar.setOpaque(false);
 			btnEditar.addActionListener(new ActionListener() 
 			{
+				@Override
 				public void actionPerformed(ActionEvent arg0)
 				{
 					tablaItems.editCellAt(tablaItems.getSelectedRow(),1);
@@ -403,6 +406,7 @@ public class ordenDePedido extends JDialog {
 			btnAgregarComentario = new JButton("agregar coment");
 			btnAgregarComentario.setOpaque(false);
 			btnAgregarComentario.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) 
 				{
 					tablaItems.editCellAt(tablaItems.getSelectedRow(),3);
@@ -452,6 +456,7 @@ public class ordenDePedido extends JDialog {
 				JButton btnAgregarOtro = new JButton("New button");
 				btnAgregarOtro.addActionListener(new ActionListener() 
 				{
+					@Override
 					public void actionPerformed(ActionEvent e) 
 					{ if(tfSubTotalOtro.getText()!=" ")
 					{
@@ -642,7 +647,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfPrecioUniEmpanada = new JTextField();
-			tfPrecioUniEmpanada.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfPrecioUniEmpanada.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfPrecioUniEmpanada.setBackground(new Color(204, 204, 0));
 			tfPrecioUniEmpanada.setEditable(false);
 			tfPrecioUniEmpanada.setColumns(10);
@@ -660,6 +665,7 @@ public class ordenDePedido extends JDialog {
 				}
 			});
 			tfUnidadEmpanada.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e)
 				{
 					cantidad=Integer.parseInt(tfUnidadEmpanada.getText());
@@ -672,7 +678,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfSubTotalEmpanada = new JTextField();
-			tfSubTotalEmpanada.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfSubTotalEmpanada.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfSubTotalEmpanada.setBackground(new Color(204, 204, 0));
 			tfSubTotalEmpanada.setEditable(false);
 			tfSubTotalEmpanada.setColumns(10);
@@ -681,7 +687,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfPrecioUniPizza = new JTextField();
-			tfPrecioUniPizza.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfPrecioUniPizza.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfPrecioUniPizza.setBackground(new Color(204, 204, 0));
 			tfPrecioUniPizza.setEditable(false);
 			tfPrecioUniPizza.setColumns(10);
@@ -700,6 +706,7 @@ public class ordenDePedido extends JDialog {
 			});
 			tfUnidadPizza.addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
 					cantidad=Integer.parseInt(tfUnidadPizza.getText());
@@ -713,7 +720,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfSubTotalPizza = new JTextField();
-			tfSubTotalPizza.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfSubTotalPizza.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfSubTotalPizza.setBackground(new Color(204, 204, 0));
 			tfSubTotalPizza.setEditable(false);
 			tfSubTotalPizza.setColumns(10);
@@ -722,7 +729,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfPrecioUniOtro = new JTextField();
-			tfPrecioUniOtro.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfPrecioUniOtro.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfPrecioUniOtro.setBackground(new Color(204, 204, 0));
 			tfPrecioUniOtro.setEditable(false);
 			tfPrecioUniOtro.setColumns(10);
@@ -741,6 +748,7 @@ public class ordenDePedido extends JDialog {
 			});
 			tfUnidadOtro.addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent e)
 				{
 					cantidad=Integer.parseInt(tfUnidadOtro.getText());
@@ -754,7 +762,7 @@ public class ordenDePedido extends JDialog {
 		}
 		{
 			tfSubTotalOtro = new JTextField();
-			tfSubTotalOtro.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfSubTotalOtro.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfSubTotalOtro.setBackground(new Color(204, 204, 0));
 			tfSubTotalOtro.setEditable(false);
 			tfSubTotalOtro.setColumns(10);
@@ -776,7 +784,7 @@ public class ordenDePedido extends JDialog {
 		tfPrecioUniPromo = new JTextField();
 		tfPrecioUniPromo.setEditable(false);
 		tfPrecioUniPromo.setColumns(10);
-		tfPrecioUniPromo.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfPrecioUniPromo.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 		tfPrecioUniPromo.setBackground(new Color(204, 204, 0));
 		tfPrecioUniPromo.setBounds(505, 370, 48, 22);
 		contentPanel.add(tfPrecioUniPromo);
@@ -784,7 +792,7 @@ public class ordenDePedido extends JDialog {
 		tfSubTotalPromo = new JTextField();
 		tfSubTotalPromo.setEditable(false);
 		tfSubTotalPromo.setColumns(10);
-		tfSubTotalPromo.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfSubTotalPromo.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 		tfSubTotalPromo.setBackground(new Color(204, 204, 0));
 		tfSubTotalPromo.setBounds(572, 370, 57, 22);
 		contentPanel.add(tfSubTotalPromo);
@@ -804,7 +812,8 @@ public class ordenDePedido extends JDialog {
 			contentPanel.add(scrollPane_1);
 			tablaItems = new JTable()
 			{
-			    public boolean isCellEditable(int rowIndex, int colIndex) {
+			    @Override
+				public boolean isCellEditable(int rowIndex, int colIndex) {
 			    	if (colIndex==1 || colIndex==3) {
 			            return true;  //La columna 1 y 3 son editables.
 			        }
@@ -831,7 +840,7 @@ public class ordenDePedido extends JDialog {
 		
 		{
 			JLabel label = new JLabel("");
-			label.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			label.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			label.setIcon(new ImageIcon(ordenDePedido.class.getResource("/prototipos/orden de pedido.png")));
 			label.setBounds(0, 0, 860, 680);
 			contentPanel.add(label);
@@ -841,9 +850,10 @@ public class ordenDePedido extends JDialog {
 			btnOrdenar1= new JButton("OKi");
 			btnOrdenar1.addActionListener(new ActionListener() 
 			{
+				@Override
 				public void actionPerformed(ActionEvent arg0)
 				{
-					Calendar c1 = GregorianCalendar.getInstance();
+					Calendar c1 = Calendar.getInstance();
 					String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
 					String hora=c1.getTime().getHours()+":"+c1.getTime().getMinutes();
 					PedidoDTO nuevoPedido=new PedidoDTO();
@@ -894,6 +904,7 @@ public class ordenDePedido extends JDialog {
 		{
 			JButton btnCancelar = new JButton("Cancel");
 			btnCancelar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent arg0) {
 				}
 			});
@@ -928,6 +939,7 @@ public class ordenDePedido extends JDialog {
 				JButton btnAgregarOtro = new JButton("New button");
 				btnAgregarOtro.addActionListener(new ActionListener() 
 				{
+					@Override
 					public void actionPerformed(ActionEvent e) 
 					{
 						Integer subtotal=Integer.parseInt(tfPrecioUniOtro.getText())* Integer.parseInt(tfUnidadOtro.getText());
@@ -973,6 +985,7 @@ public class ordenDePedido extends JDialog {
 				
 				btnVerPromociones= new JButton("");
 				btnVerPromociones.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						ventanamenu=new pedidoMenu(control,_this);
 						ventanamenu.setTitle("promocion");
@@ -987,6 +1000,7 @@ public class ordenDePedido extends JDialog {
 				
 				btnVerPizzas= new JButton("");
 				btnVerPizzas.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						ventanamenu=new pedidoMenu(control,_this);
 						ventanamenu.setTitle("pizza");
@@ -1001,6 +1015,7 @@ public class ordenDePedido extends JDialog {
 				
 				btnVerEmpanadas= new JButton("");
 				btnVerEmpanadas.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						ventanamenu=new pedidoMenu(control,_this);
 						ventanamenu.setTitle("empanada");
@@ -1015,6 +1030,7 @@ public class ordenDePedido extends JDialog {
 				
 				btnVerOtros = new JButton("");
 				btnVerOtros.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						ventanamenu=new pedidoMenu(control,_this);
 						ventanamenu.setTitle("otros");
@@ -1032,6 +1048,7 @@ public class ordenDePedido extends JDialog {
 				btnEditarPreOrden.setOpaque(false);
 				btnEditarPreOrden.addActionListener(new ActionListener() 
 				{
+					@Override
 					public void actionPerformed(ActionEvent arg0)
 					{
 						tablaItems.editCellAt(tablaItems.getSelectedRow(),1);
@@ -1046,6 +1063,7 @@ public class ordenDePedido extends JDialog {
 				btnAgregarComentarioPre= new JButton("");
 				btnAgregarComentarioPre.setOpaque(false);
 				btnAgregarComentarioPre.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent arg0) 
 					{
 						tablaItems.editCellAt(tablaItems.getSelectedRow(),3);
