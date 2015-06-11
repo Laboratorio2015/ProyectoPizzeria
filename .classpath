@@ -6,6 +6,8 @@
 	<classpathentry kind="lib" path="lib/itextpdf-5.5.5.jar"/>
 	<classpathentry kind="lib" path="lib/jcalendar.jar"/>
 	<classpathentry kind="lib" path="jasperreports-5.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/AutoCompleter (1).jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jasperreports-5.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/AutoCompleter (1).jar"/>
 	<classpathentry kind="output" path="bin"/>
