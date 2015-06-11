@@ -337,7 +337,7 @@ public class Controlador implements ActionListener
 			nuevoPedido.setHora(hora);
 			nuevoPedido.setFueeliminado(false);
 			//////////ENVIA el NUEVO PEDIDO AL MONITOR//////
-			this.monitorCocina.nuevoPedido(nuevoPedido);
+			//this.monitorCocina.nuevoPedido(nuevoPedido);
 			/////////////////////////////////////////////
 			this.ventanaCliente=new seleccionDeCliente(this,nuevoPedido);
 			this.ventanaCliente.getBtnAgregarCliente().addActionListener(this);
