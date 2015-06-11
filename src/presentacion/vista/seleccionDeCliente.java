@@ -44,7 +44,6 @@ public class seleccionDeCliente extends JDialog {
 	private JButton btnEditarCliente;
 	private JButton btnAgregarCliente;
 	private Controlador control;
-	//private Comanda comanda=new Comanda();
 	
 	public seleccionDeCliente(final Controlador control,final PedidoDTO pedido)
 	{
@@ -69,9 +68,9 @@ public class seleccionDeCliente extends JDialog {
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				
-				{
 				cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText()));
+				if(cliente!=null)
+				{
 				tfNombrApellido.setText("Apellido y Nombre: "+cliente.getApellido()+""+ cliente.getNombre());
 				tfDireccionTelefono.setText("Direccion: "+cliente.getDireccion()+""+cliente.getNumeracion());
 				}
@@ -127,7 +126,9 @@ public class seleccionDeCliente extends JDialog {
 					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
 					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					//control.getMonitorCocina().nuevoPedido(pedido);
-					System.out.println(seleccionDeCliente.this.pedido.getIdpedido());
+					//////////ENVIA el NUEVO PEDIDO AL MONITOR//////
+					control.getMonitorCocina().nuevoPedido(pedido);  // no funciona, da null pointer exception
+					/////////////////////////////////////////////
 					new Ticket(seleccionDeCliente.this.pedido).generarTicket();
 					new Comanda(seleccionDeCliente.this.pedido).generarComanda();
 					dispose();
