@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class registrarCobroManualmente extends JDialog {
 
@@ -36,7 +38,7 @@ public class registrarCobroManualmente extends JDialog {
 		contentPanel.setLayout(null);
 		
 		tfSeleccionItinerario = new JTextField();
-		tfSeleccionItinerario.setBounds(301, 61, 141, 20);
+		tfSeleccionItinerario.setBounds(294, 61, 148, 20);
 		contentPanel.add(tfSeleccionItinerario);
 		tfSeleccionItinerario.setColumns(10);
 		
@@ -51,6 +53,11 @@ public class registrarCobroManualmente extends JDialog {
 		tfMontoPedido.setColumns(10);
 		tfMontoPedido.setBounds(175, 154, 235, 20);
 		contentPanel.add(tfMontoPedido);
+		
+		JComboBox<String> comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"(Filtrar busqueda por Itinerario o Pedido)", "Itinerario", "Pedido"}));
+		comboBox.setBounds(27, 61, 261, 20);
+		contentPanel.add(comboBox);
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(registrarCobroManualmente.class.getResource("/prototipos/registrarCobroManualmete.png")));

@@ -25,18 +25,20 @@ public class registrarCobroDePedido extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private pedidosPendientes _padre;
 	private registrarCobroDePedido _this;
-	private PedidoDTO pedid;
+	private PedidoDTO pedido;
 	private JTextField tfCliente;
 	private JTextField tfMontoPedido;
 	private Controlador controlador;
+	private Integer filaSeleccionada;
 
-	public registrarCobroDePedido(pedidosPendientes padre, PedidoDTO pedido, Controlador control) 
+	public registrarCobroDePedido(pedidosPendientes padre, final PedidoDTO pedido, final Controlador control, final Integer filaSeleccionada) 
 	{
 		setModal(true);
 		_padre=padre;
 		_this=this;
+		this.filaSeleccionada=filaSeleccionada;
 		this.controlador = control;
-		this.pedid=pedido;
+		this.pedido=pedido;
 		setMinimumSize(new Dimension(500, 280));
 		setBounds(500, 300, 511, 307);
 		getContentPane().setLayout(new BorderLayout());
@@ -78,8 +80,11 @@ public class registrarCobroDePedido extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent e) 
 				{
-					pedid.set_estado("cobrado");
+					pedido.set_estado("cobrado");
+					control.getPedido().quitarPedido(pedido);
+					control.getPedido().agregarPedido(pedido);
 					_padre.llenarTabla();
+					_padre.getTable().setValueAt("cobrado", filaSeleccionada, 2);
 					dispose();
 				}
 			});

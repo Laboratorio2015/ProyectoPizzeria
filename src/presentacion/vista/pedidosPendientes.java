@@ -32,9 +32,9 @@ public class pedidosPendientes extends JDialog {
 	private DefaultTableModel model;
 	private  String[] nombreColumnas = {"Pedido","Valor","Estado","Delivery","Itinerario"};
 	private JButton btnModificarPedido;
-	private JButton btnRegistrarCobroManual;
+	private JButton btnRegistrarCobroDelivery;
 	private JButton btnRechazarPedido;
-	private JButton btnRegistrarCobroPedido;
+	private JButton btnRegistrarCobroCliente;
 	private JButton btnAsignarRepartidor;
 	private JButton btnMarcarComoPreparado;
 	private JLabel lMarcarComoPreparado ;
@@ -233,8 +233,8 @@ public class pedidosPendientes extends JDialog {
 			contentPanel.add(btnModificarPedido);
 		}
 		{
-			btnRegistrarCobroManual= new JButton("New button");
-			btnRegistrarCobroManual.addMouseListener(new MouseAdapter() 
+			btnRegistrarCobroDelivery= new JButton("New button");
+			btnRegistrarCobroDelivery.addMouseListener(new MouseAdapter() 
 			{
 				@Override
 				public void mouseClicked(MouseEvent e)
@@ -252,9 +252,9 @@ public class pedidosPendientes extends JDialog {
 					llenarTabla();
 				}
 			});
-			btnRegistrarCobroManual.setOpaque(false);
-			btnRegistrarCobroManual.setBounds(335, 448, 328, 40);
-			contentPanel.add(btnRegistrarCobroManual);
+			btnRegistrarCobroDelivery.setOpaque(false);
+			btnRegistrarCobroDelivery.setBounds(335, 448, 328, 40);
+			contentPanel.add(btnRegistrarCobroDelivery);
 		}
 		{
 			btnRechazarPedido = new JButton("New button");
@@ -272,7 +272,8 @@ public class pedidosPendientes extends JDialog {
 						pedidoCambia.set_estado("rechazado");
 						control.getPedido().quitarPedido(pedidoCambia);
 						control.getPedido().agregarPedido(pedidoCambia);
-						llenarTabla();						
+						llenarTabla();
+						borrarBotones();
 				}
 			});
 			
@@ -281,8 +282,8 @@ public class pedidosPendientes extends JDialog {
 			contentPanel.add(btnRechazarPedido);
 		}
 		{
-			btnRegistrarCobroPedido= new JButton("New button");
-			btnRegistrarCobroPedido.addMouseListener(new MouseAdapter() 
+			btnRegistrarCobroCliente= new JButton("New button");
+			btnRegistrarCobroCliente.addMouseListener(new MouseAdapter() 
 			{
 				@Override
 				public void mouseClicked(MouseEvent arg0) 
@@ -291,12 +292,8 @@ public class pedidosPendientes extends JDialog {
 					if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("preparado")==0)
 					{
 						PedidoDTO cobrado=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
-						registrarCobroDePedido cobroPedido= new registrarCobroDePedido(_pedPendiente,cobrado,control);
+						registrarCobroDePedido cobroPedido= new registrarCobroDePedido(_pedPendiente,cobrado,control,numFilaSeleccionada);
 						cobroPedido.setVisible(true);
-						model.setValueAt("cobrado", numFilaSeleccionada, 2);
-						cobrado.set_estado("cobrado");
-						control.getPedido().quitarPedido(cobrado);
-						control.getPedido().agregarPedido(cobrado);
 					}
 					else if(model.getValueAt(numFilaSeleccionada, 2).toString()=="solicitado")
 					{
@@ -304,11 +301,12 @@ public class pedidosPendientes extends JDialog {
 					}
 					else if(model.getValueAt(numFilaSeleccionada, 2).toString()=="rechazado")
 						JOptionPane.showMessageDialog(null, "Error, el pedido se encuentra Rechazado");
+					borrarBotones();
 				}
 			});
-			btnRegistrarCobroPedido.setOpaque(false);
-			btnRegistrarCobroPedido.setBounds(335, 254, 328, 40);
-			contentPanel.add(btnRegistrarCobroPedido);
+			btnRegistrarCobroCliente.setOpaque(false);
+			btnRegistrarCobroCliente.setBounds(335, 254, 328, 40);
+			contentPanel.add(btnRegistrarCobroCliente);
 		}
 		{
 			btnAsignarRepartidor= new JButton("New button");
@@ -326,6 +324,7 @@ public class pedidosPendientes extends JDialog {
 					}
 					seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente,control,numeros,nuevo);
 					selecRepartidor.setVisible(true);
+					llenarTabla();
 				}
 			});
 			btnAsignarRepartidor.setOpaque(false);
@@ -353,8 +352,8 @@ public class pedidosPendientes extends JDialog {
 					}
 					else if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("rechazado")==0)
 						JOptionPane.showMessageDialog(null, "Error, el pedido se encuentra Rechazado");
-					else
-						System.out.println("no funca");
+					llenarTabla();
+					borrarBotones();
 				}
 			});
 			btnMarcarComoPreparado.setOpaque(false);
@@ -385,7 +384,15 @@ public class pedidosPendientes extends JDialog {
 		}
 		table.setModel(model);		
 	}
-	
+	private void borrarBotones() 
+	{
+		lMarcarComoPreparado.setVisible(false);
+		lRechazarPedido.setVisible(false);
+		lModificarPedido.setVisible(false);
+		lAsignarRepartidor.setVisible(false);
+		lCobroACliente.setVisible(false);
+		lCobroADelivery.setVisible(false);
+	}
 
 	private String Delivery(PedidoDTO aux)
 	{
