@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import com.mxrck.autocompleter.TextAutoCompleter;
+
 public class registrarCobroManualmente extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -23,6 +25,7 @@ public class registrarCobroManualmente extends JDialog {
 	private JTextField tfMuestraRepartidor;
 	private JTextField tfMontoPedido;
 	private JButton btnRegistrar;
+	private TextAutoCompleter AutoCompletar ;
 	
 	public registrarCobroManualmente(pedidosPendientes padre) 
 	{
@@ -87,5 +90,11 @@ public class registrarCobroManualmente extends JDialog {
 			contentPanel.add(cancelButton);
 			cancelButton.setActionCommand("Cancel");
 		}
+		//autocompletar
+		AutoCompletar= new TextAutoCompleter(tfSeleccionItinerario);
+		AutoCompletar.setCaseSensitive(false); //No sensible a mayúsculas
+		
+		AutoCompletar.addItems(control.getProducto().buscaNombresProductos("empanada"));
 	}
+	
 }

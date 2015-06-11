@@ -20,6 +20,8 @@ import presentacion.controlador.Controlador;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 
+import com.mxrck.autocompleter.TextAutoCompleter;
+
 public class registrarCobroDePedido extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -83,8 +85,6 @@ public class registrarCobroDePedido extends JDialog {
 					pedido.set_estado("cobrado");
 					control.getPedido().quitarPedido(pedido);
 					control.getPedido().agregarPedido(pedido);
-					_padre.llenarTabla();
-					_padre.getTable().setValueAt("cobrado", filaSeleccionada, 2);
 					dispose();
 				}
 			});
@@ -93,7 +93,7 @@ public class registrarCobroDePedido extends JDialog {
 			contentPanel.add(btnRegistrar);
 			btnRegistrar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnRegistrar);
-		}
+		}		
 		{
 			JButton btnCancelar = new JButton("Cancel");
 			btnCancelar.addMouseListener(new MouseAdapter() 
