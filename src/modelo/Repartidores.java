@@ -25,7 +25,12 @@ public class Repartidores {
 	{
 		repartidor.delete(clienteQuitar);
 	}
-	
+	//actualiza un repartidor/////////////////////////////
+	public void actualizarRepartidor(RepartidorDTO repartido)
+	{
+		this.repartidor.actualizarRepartidor(repartido);
+	}
+	//////////////////////////////////////////////////////////
 	public List<RepartidorDTO> obtenerRepartidores()
 	{
 		return this.repartidor.readAll();

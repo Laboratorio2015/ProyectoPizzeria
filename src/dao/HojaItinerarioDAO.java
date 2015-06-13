@@ -31,7 +31,7 @@ public class HojaItinerarioDAO
 			String iditems= ped.iditemsPedido(itinerario);
 			statement = conexion.getSQLConexion().prepareStatement(insert);
 			statement.setInt(1, itinerario.getIdHojaItinerario());
-			statement.setInt(2, itinerario.getRepartidor().getId());
+			statement.setInt(2, itinerario.getRepartidor().getIdRepartidor());
 			statement.setString(3,iditems);
 			statement.setBoolean(4, itinerario.getFueeliminado());
 			

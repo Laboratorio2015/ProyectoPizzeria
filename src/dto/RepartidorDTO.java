@@ -33,14 +33,7 @@ public class RepartidorDTO
 	{
 		
 	}
-	
-	public Integer getId() {
-		return idRepartidor;
-	}
-	public void setId(Integer num) 
-	{
-		this.idRepartidor = num;
-	}
+
 	public Integer getDni() {
 		return dni;
 	}
@@ -67,15 +60,6 @@ public class RepartidorDTO
 	public void setApellido(String apellido) 
 	{
 		this.apellido = apellido;
-	}
-	
-	public String getFechaNacimiento() 
-	{
-		return fechaDeNacimiento;
-	}
-	public void setFechaNacimiento(String fecha) 
-	{
-		this.fechaDeNacimiento = fecha;
 	}
 	
 	public String getTelefono() 

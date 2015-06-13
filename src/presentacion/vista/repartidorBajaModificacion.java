@@ -57,7 +57,7 @@ public class repartidorBajaModificacion extends JDialog {
 			table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
-					RepartidorDTO auxi=control.getRepartidor().buscarRepartidor(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
+					RepartidorDTO auxi=control.getRepartidor().buscarRepartidorPorDni(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
 					agregarDatos(auxi);
 				}
 			});
@@ -263,10 +263,10 @@ public class repartidorBajaModificacion extends JDialog {
 		tfdni.setText(aux.getDni().toString());
 		tfNombre.setText(aux.getNombre());
 		tfApellido.setText(aux.getApellido());
-		tfFechaNacimiento.setText(aux.getFechaNacimiento());
+		tfFechaNacimiento.setText(aux.getFechaDeNacimiento());
 		tfCelular.setText(aux.getTelefono());
 		tfComentario.setText(aux.sinEspacio(aux.getComentario()));
 		tfDescripcion.setText(aux.getVehiculo());
-		tfPatente.setText(aux.getVehiculo());
+		tfPatente.setText(aux.getPatente());
 	}
 }

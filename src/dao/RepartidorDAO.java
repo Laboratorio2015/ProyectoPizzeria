@@ -11,8 +11,10 @@ import conexion.Conexion;
 public class RepartidorDAO 
 {
 		private static final String insert = "INSERT INTO repartidores(idrepartidor,dni,nombre,apellido,fechaNacimiento,vehiculo,patente,telefono,estado,comentario,fueeliminado) VALUES(?, ?, ?, ?, ?, ?,?,?,?,?,?)";
-		private static final String delete = "DELETE FROM repartidores WHERE idrepartidor = ?";
+		//mirar como funca
+		private static final String delete = "update FROM repartidores fueeliminado=true WHERE idrepartidor = ?";
 		private static final String readall = "SELECT * FROM repartidores";
+		private static final String actualizarDatos="Update repartidores Set dni=?, nombre=?, apellido=?, fechaNacimiento=?,vehiculo=?, patente=?, telefono=?, estado=?,comentario=?,fueeliminado=? where idrepartidor=?";
 		private static final Conexion conexion = Conexion.getConexion();
 		
 		
@@ -22,11 +24,11 @@ public class RepartidorDAO
 			try 
 			{
 				statement = conexion.getSQLConexion().prepareStatement(insert);
-				statement.setInt(1, repartidor.getId());
+				statement.setInt(1, repartidor.getIdRepartidor());
 				statement.setInt(2, repartidor.getDni());
 				statement.setString(3, repartidor.getNombre());
 				statement.setString(4, repartidor.getApellido());
-				statement.setString(5, repartidor.getFechaNacimiento());
+				statement.setString(5, repartidor.getFechaDeNacimiento());
 				statement.setString(6,repartidor.getVehiculo());
 				statement.setString(7,repartidor.getPatente());
 				statement.setString(8,repartidor.getTelefono());
@@ -61,7 +63,7 @@ public class RepartidorDAO
 			try 
 			{
 				statement = conexion.getSQLConexion().prepareStatement(delete);
-				statement.setInt(1, repartidor_a_eliminar.getId());
+				statement.setInt(1, repartidor_a_eliminar.getIdRepartidor());
 				chequeoUpdate = statement.executeUpdate();
 				if(chequeoUpdate > 0)
 				{
@@ -128,4 +130,43 @@ public class RepartidorDAO
 			return repartidores;
 		}
 	
+		public boolean actualizarRepartidor(RepartidorDTO repartidorActualizar)
+		{
+			PreparedStatement statement;
+			int chequeoUpdate=0;
+			try 
+			{
+				statement = conexion.getSQLConexion().prepareStatement(actualizarDatos);
+				//actializar los datos
+				
+				//statement.setInt(1, repartidorActualizar.getIdRepartidor());
+				statement.setInt(1, repartidorActualizar.getDni());
+				statement.setString(2, repartidorActualizar.getNombre());
+				statement.setString(3, repartidorActualizar.getApellido());
+				statement.setString(4, repartidorActualizar.getFechaDeNacimiento());
+				statement.setString(5, repartidorActualizar.getVehiculo());
+				statement.setString(6, repartidorActualizar.getPatente());
+				statement.setString(7, repartidorActualizar.getTelefono());
+				statement.setString(8, repartidorActualizar.getEstado());
+				statement.setString(9, repartidorActualizar.getComentario());
+				statement.setBoolean(10, repartidorActualizar.getFueeliminado());
+				statement.setInt(11, repartidorActualizar.getIdRepartidor());
+				chequeoUpdate = statement.executeUpdate();
+				if(chequeoUpdate > 0)
+				{
+					System.out.println("Actualizacion exitosa de repartidor");
+					return true;
+				}
+			} 
+			catch (SQLException e) 
+			{
+				System.out.println("Actualizacion fallida de repartidor");
+				e.printStackTrace();
+			}
+			finally
+			{
+				conexion.cerrarConexion();
+			}
+			return false;
+		}
 }

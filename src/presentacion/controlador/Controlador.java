@@ -565,16 +565,15 @@ public class Controlador implements ActionListener
 		//modificar un repartidor
 		else if (this.ventanaEditarRepartidor!= null && e.getSource()==this.ventanaEditarRepartidor.getBtnGuardar())
 		{
-			RepartidorDTO rep= this.repartidor.buscarRepartidor(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
-			rep.setId(rep.getId());
+			RepartidorDTO rep= this.repartidor.buscarRepartidorPorDni(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
+			rep.setIdRepartidor(rep.getIdRepartidor());
 			rep.setNombre(ventanaEditarRepartidor.getTfNombre().getText().toString());
-			rep.setDni(rep.getDni());
+			rep.setDni(Integer.parseInt(ventanaEditarRepartidor.getTfdni().getText().toString()));
 			rep.setApellido(ventanaEditarRepartidor.getTfApellido().getText().toString());
-			rep.setFechaNacimiento(ventanaEditarRepartidor.getTfFechaNacimiento().getText().toString());
+			rep.setFechaDeNacimiento(ventanaEditarRepartidor.getTfFechaNacimiento().getText().toString());
 			rep.setTelefono(ventanaEditarRepartidor.getTfCelular().getText().toString());
 			rep.setEstado(null);
-			repartidor.quitarRepartidor(rep);
-			repartidor.agregarRepartidor(rep);
+			repartidor.actualizarRepartidor(rep);
 			llenarTablaRepartidor();
 			ventanaEditarRepartidor.getTfdni().setText("");
 			ventanaEditarRepartidor.getTfApellido().setText("");
@@ -582,6 +581,9 @@ public class Controlador implements ActionListener
 			ventanaEditarRepartidor.getTfdni().setText("");
 			ventanaEditarRepartidor.getTfFechaNacimiento().setText("");
 			ventanaEditarRepartidor.getTfNombre().setText("");
+			ventanaEditarRepartidor.getTfComentario().setText("");
+			ventanaEditarRepartidor.getTfPatente().setText("");
+			ventanaEditarRepartidor.getTfDescripcion().setText("");
 		}
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarMatPrima())
 		{
@@ -604,11 +606,11 @@ public class Controlador implements ActionListener
 		else if (this.ventanaAgregarRepartidor!= null && e.getSource()==this.ventanaAgregarRepartidor.getBtnRegistrar())
 		{
 			RepartidorDTO rep= new RepartidorDTO();
-			rep.setId(repartidor.obtenerRepartidores().size()+1);
+			rep.setIdRepartidor(repartidor.obtenerRepartidores().size()+1);
 			rep.setNombre(ventanaAgregarRepartidor.getTfNombre().getText().toString());
 			rep.setDni(Integer.parseInt((ventanaAgregarRepartidor.getTfDni().getText().toString())));
 			rep.setApellido(ventanaAgregarRepartidor.getTfApellido().getText().toString());
-			rep.setFechaNacimiento(ventanaAgregarRepartidor.getTfFechaNacimiento().getText().toString());
+			rep.setFechaDeNacimiento(ventanaAgregarRepartidor.getTfFechaNacimiento().getText().toString());
 			rep.setTelefono(ventanaAgregarRepartidor.getTfCelular().getText().toString());
 			rep.setEstado(null);
 			rep.setComentario(ventanaAgregarRepartidor.getTfComentario().getText().toString());
