@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
-import javax.swing.WindowConstants;
 
 
 import java.awt.event.MouseAdapter;
@@ -29,11 +28,11 @@ import dto.ProveedorDTO;
 
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.JProgressBar;
 import java.awt.Cursor;
 import java.util.ArrayList;
 
 import javax.swing.ListSelectionModel;
+import javax.swing.JTextPane;
 
 public class buscadorProveedor extends JDialog {
 
@@ -49,23 +48,20 @@ public class buscadorProveedor extends JDialog {
 	private JComboBox<String> comboFiltroBusqueda;
 	private JComboBox<String> comboBoxCategorias;
 	private JTextField textFieldBuscadorProv;
-	private JLabel labelMuestraCategorias;
 	private JLabel labelMuestraNomContacto;
 	private JButton btnSeleccionarproveedor;
+	private JButton btnDetallesproveedor;
 	private TextAutoCompleter textAutoAcompleter;
-	/**
-	 * @wbp.nonvisual location=674,329
-	 */
-	private final JProgressBar progressBar = new JProgressBar();
+	private JTextPane textPaneComentario;
+	private JTextPane textPanecategorias;
 
 	@SuppressWarnings("serial")
 	public buscadorProveedor(VentanaPrincipal ventanaPrincipal, Controlador controlador) {
 		this.ventanaPrincipal = ventanaPrincipal;
 		this.controlador = controlador;
 
-
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 622, 640);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 594, 725);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -73,18 +69,15 @@ public class buscadorProveedor extends JDialog {
 
 		comboFiltroBusqueda = new JComboBox<String>();
 		comboFiltroBusqueda.setModel(new DefaultComboBoxModel<String>(new String[] {"Todos", "Categor\u00EDa", "Nombre"}));
-		comboFiltroBusqueda.setBounds(66, 168, 204, 20);
+		comboFiltroBusqueda.setBounds(60, 156, 204, 20);
 		contentPane.add(comboFiltroBusqueda);
 		
 		comboBoxCategorias = new JComboBox<String>();
-		comboBoxCategorias.setModel(new DefaultComboBoxModel(new String[] {"Seleccione una categoria..."}));
+		comboBoxCategorias.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione una categoria..."}));
 		comboBoxCategorias.setVisible(false);
-		comboBoxCategorias.setBounds(66, 241, 211, 20);
+		comboBoxCategorias.setBounds(66, 225, 211, 20);
 		contentPane.add(comboBoxCategorias);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(31, 320, 531, 130);
-		contentPane.add(scrollPane);
 		resultadoBusquedaProv = new JTable();
 		resultadoBusquedaProv.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		resultadoBusquedaProv.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -96,37 +89,6 @@ public class buscadorProveedor extends JDialog {
 		resultadoBusquedaProv.setFont(new Font("Leelawadee UI Semilight", Font.PLAIN, 12));
 		resultadoBusquedaProv.setForeground(Color.WHITE);
 		resultadoBusquedaProv.setBackground(new Color(51, 102, 153));
-		scrollPane.setViewportView(resultadoBusquedaProv);	
-		
-		textFieldBuscadorProv = new JTextField();
-		textFieldBuscadorProv.setVisible(false);
-		textFieldBuscadorProv.setBounds(66, 241, 211, 20);
-		contentPane.add(textFieldBuscadorProv);
-		textFieldBuscadorProv.setColumns(10);
-		
-		textAutoAcompleter = new TextAutoCompleter( textFieldBuscadorProv );
-		
-		labelMuestraCategorias = new JLabel("");
-		labelMuestraCategorias.setBackground(new Color(0, 51, 102));
-		labelMuestraCategorias.setOpaque(true);
-		labelMuestraCategorias.setBounds(31, 467, 531, 20);
-		contentPane.add(labelMuestraCategorias);
-		
-		labelMuestraNomContacto = new JLabel("");
-		labelMuestraNomContacto.setOpaque(true);
-		labelMuestraNomContacto.setBackground(new Color(0, 51, 102));
-		labelMuestraNomContacto.setBounds(31, 485, 260, 20);
-		contentPane.add(labelMuestraNomContacto);
-
-		JLabel fondo = new JLabel("");
-		fondo.setHorizontalAlignment(SwingConstants.CENTER);
-		fondo.setIcon(new ImageIcon(buscadorProveedor.class.getResource("/prototipos/Buscador de proveedor.png")));
-		fondo.setBounds(-14, 0, 632, 602);
-		contentPane.add(fondo);
-		textAutoAcompleter.setMode(0);
-		textAutoAcompleter.setCaseSensitive(false);
-		cargarBuscadorProvXnom();
-		
 		
 		modeloResultados = new DefaultTableModel(
 				new Object[][] {
@@ -139,14 +101,65 @@ public class buscadorProveedor extends JDialog {
 				Class[] columnTypes = new Class[] {
 					String.class, String.class, String.class, String.class
 				};
-				@Override
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
 			};
 		resultadoBusquedaProv.setModel(modeloResultados);
+		resultadoBusquedaProv.getColumnModel().getColumn(0).setMaxWidth(200);
+		resultadoBusquedaProv.getColumnModel().getColumn(1).setMaxWidth(200);
+		resultadoBusquedaProv.getColumnModel().getColumn(2).setMaxWidth(55);
+		resultadoBusquedaProv.getColumnModel().getColumn(3).setMaxWidth(300);
+
+		JScrollPane scrollPane = new JScrollPane();
 		
+		scrollPane.setBounds(20, 303, 542, 130);
+		contentPane.add(scrollPane);
+
+
+		scrollPane.setViewportView(resultadoBusquedaProv);	
+		
+		textFieldBuscadorProv = new JTextField();
+		textFieldBuscadorProv.setVisible(false);
+		
+		textPaneComentario = new JTextPane();
+		textPaneComentario.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textPaneComentario.setForeground(new Color(250, 235, 215));
+		textPaneComentario.setBackground(new Color(0, 51, 102));
+		textPaneComentario.setBounds(31, 565, 500, 48);
+		contentPane.add(textPaneComentario);
+		textFieldBuscadorProv.setBounds(66, 225, 211, 20);
+		contentPane.add(textFieldBuscadorProv);
+		textFieldBuscadorProv.setColumns(10);
+		
+		textAutoAcompleter = new TextAutoCompleter( textFieldBuscadorProv );
+		
+		textPanecategorias = new JTextPane();
+		textPanecategorias.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textPanecategorias.setForeground(new Color(250, 235, 215));
+		textPanecategorias.setBackground(new Color(0, 51, 102));
+		textPanecategorias.setBounds(31, 493, 500, 48);
+		contentPane.add(textPanecategorias);
+		
+		labelMuestraNomContacto = new JLabel("");
+		labelMuestraNomContacto.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		labelMuestraNomContacto.setForeground(new Color(250, 235, 215));
+		labelMuestraNomContacto.setOpaque(true);
+		labelMuestraNomContacto.setBackground(new Color(0, 51, 102));
+		labelMuestraNomContacto.setBounds(186, 444, 262, 20);
+		contentPane.add(labelMuestraNomContacto);
+
+		JLabel fondo = new JLabel("");
+		fondo.setHorizontalAlignment(SwingConstants.CENTER);
+		fondo.setIcon(new ImageIcon(buscadorProveedor.class.getResource("/prototipos/Buscador de proveedor.png")));
+		fondo.setBounds(-14, 0, 620, 686);
+		contentPane.add(fondo);
+		textAutoAcompleter.setMode(0);
+		textAutoAcompleter.setCaseSensitive(false);
+		cargarBuscadorProvXnom();
+
+
 		JButton btnFinalizar = new JButton("Finalizar");
 		btnFinalizar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -155,13 +168,18 @@ public class buscadorProveedor extends JDialog {
 			}
 		});
 		btnFinalizar.setOpaque(false);
-		btnFinalizar.setBounds(340, 537, 150, 32);
+		btnFinalizar.setBounds(325, 631, 150, 32);
 		contentPane.add(btnFinalizar);
 		
 		btnSeleccionarproveedor = new JButton("SeleccionarProveedor");
 		btnSeleccionarproveedor.setOpaque(false);
-		btnSeleccionarproveedor.setBounds(132, 537, 184, 32);
+		btnSeleccionarproveedor.setBounds(115, 631, 184, 32);
 		contentPane.add(btnSeleccionarproveedor);
+		
+		btnDetallesproveedor = new JButton("detallesProveedor");
+		btnDetallesproveedor.setOpaque(false);
+		btnDetallesproveedor.setBounds(315, 212, 110, 80);
+		contentPane.add(btnDetallesproveedor);
 	}
 	
 	@SuppressWarnings("serial")
@@ -177,13 +195,18 @@ public class buscadorProveedor extends JDialog {
 				Class[] columnTypes = new Class[] {
 					String.class, String.class, String.class, String.class
 				};
-				@Override
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
 			};
 		resultadoBusquedaProv.setModel(modeloResultados);
+	}
+	
+	public void borrarDetalles(){
+		this.textPanecategorias.setText("");
+		this.textPaneComentario.setText("");
+		this.labelMuestraNomContacto.setText("");
 	}
 	private void cargarBuscadorProvXnom() {
 		ArrayList<ProveedorDTO> proveedores = (ArrayList<ProveedorDTO>) controlador.getProveedor().obtenerProveedor();
@@ -224,14 +247,6 @@ public class buscadorProveedor extends JDialog {
 		this.textFieldBuscadorProv = textFieldBuscadorProv;
 	}
 
-	public JLabel getLabelMuestraCategorias() {
-		return labelMuestraCategorias;
-	}
-
-	public void setLabelMuestraCategorias(JLabel labelMuestraCategorias) {
-		this.labelMuestraCategorias = labelMuestraCategorias;
-	}
-
 	public JLabel getLabelMuestraNomContacto() {
 		return labelMuestraNomContacto;
 	}
@@ -262,5 +277,29 @@ public class buscadorProveedor extends JDialog {
 
 	public void setTextAutoAcompleter(TextAutoCompleter textAutoAcompleter) {
 		this.textAutoAcompleter = textAutoAcompleter;
+	}
+
+	public JButton getBtnDetallesproveedor() {
+		return btnDetallesproveedor;
+	}
+
+	public void setBtnDetallesproveedor(JButton btnDetallesproveedor) {
+		this.btnDetallesproveedor = btnDetallesproveedor;
+	}
+
+	public JTextPane getTextPaneComentario() {
+		return textPaneComentario;
+	}
+
+	public void setTextPaneComentario(JTextPane textPaneComentario) {
+		this.textPaneComentario = textPaneComentario;
+	}
+
+	public JTextPane getTextPanecategorias() {
+		return textPanecategorias;
+	}
+
+	public void setTextPanecategorias(JTextPane textPanecategorias) {
+		this.textPanecategorias = textPanecategorias;
 	}
 }

@@ -38,6 +38,19 @@ public class Repartidores {
 		while(Iterador.hasNext())
 		{
 			RepartidorDTO elemento = Iterador.next();
+			if(elemento.getIdRepartidor().equals(dni))
+				return elemento;
+		}
+		return null;		
+	}
+	
+	public RepartidorDTO buscarRepartidorPorDni(Integer dni)
+	{
+		List<RepartidorDTO> productos=this.obtenerRepartidores();
+		Iterator<RepartidorDTO> Iterador = productos.iterator();
+		while(Iterador.hasNext())
+		{
+			RepartidorDTO elemento = Iterador.next();
 			if(elemento.getDni().equals(dni))
 				return elemento;
 		}

@@ -10,13 +10,31 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import modelo.Itinerarios;
+
+import presentacion.controlador.Controlador;
+
 import com.mxrck.autocompleter.TextAutoCompleter;
 
-public class registrarCobroManualmente extends JDialog {
+import dto.HojaItinerarioDTO;
+import dto.PedidoDTO;
+
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class registrarCobroManualmente extends JDialog implements ItemListener{
 
 	private final JPanel contentPanel = new JPanel();
 	private pedidosPendientes _padre;
@@ -26,12 +44,15 @@ public class registrarCobroManualmente extends JDialog {
 	private JTextField tfMontoPedido;
 	private JButton btnRegistrar;
 	private TextAutoCompleter AutoCompletar ;
+	private JComboBox<String> comboBox;
+	private Controlador control;
 	
-	public registrarCobroManualmente(pedidosPendientes padre) 
+	public registrarCobroManualmente(pedidosPendientes padre, final Controlador control) 
 	{
 		setModal(true);
 		padre=_padre;
 		_this=this;
+		this.control=control;
 		setMaximumSize(new Dimension(500, 280));
 		setMinimumSize(new Dimension(500, 280));
 		setBounds(500, 300, 450, 300);
@@ -41,6 +62,39 @@ public class registrarCobroManualmente extends JDialog {
 		contentPanel.setLayout(null);
 		
 		tfSeleccionItinerario = new JTextField();
+		tfSeleccionItinerario.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) 
+			{
+				String itinerario=tfSeleccionItinerario.getText();
+				String seleccionado=(String)comboBox.getSelectedItem();
+				if(itinerario.compareTo("")!=0)
+				{
+					if(seleccionado.compareTo("Itinerario")==0)
+						{
+							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario));
+							tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
+							tfMontoPedido.setText(costoItinerario(hoja).toString());
+						}
+					else if(seleccionado.compareTo("Pedido")==0)
+					{
+						PedidoDTO pedido=control.getPedido().buscarPedidoId(Integer.parseInt(itinerario));
+						Integer aux=control.getItinerario().buscarItinerarioPorPedido(pedido.getIdpedido());
+						if(aux!=0)
+						{
+						HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(aux);
+						tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
+						tfMontoPedido.setText(pedido.getTotal().toString());
+						}
+					}
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) 
+			{
+				
+			}
+		});
 		tfSeleccionItinerario.setBounds(294, 61, 148, 20);
 		contentPanel.add(tfSeleccionItinerario);
 		tfSeleccionItinerario.setColumns(10);
@@ -57,18 +111,53 @@ public class registrarCobroManualmente extends JDialog {
 		tfMontoPedido.setBounds(175, 154, 235, 20);
 		contentPanel.add(tfMontoPedido);
 		
-		JComboBox<String> comboBox = new JComboBox();
+		//autocompletar
+		AutoCompletar= new TextAutoCompleter(tfSeleccionItinerario);
+		AutoCompletar.setCaseSensitive(false); //No sensible a mayúsculas
+		
+		comboBox= new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"(Filtrar busqueda por Itinerario o Pedido)", "Itinerario", "Pedido"}));
 		comboBox.setBounds(27, 61, 261, 20);
+		comboBox.addItemListener(this);
 		contentPanel.add(comboBox);
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(registrarCobroManualmente.class.getResource("/prototipos/registrarCobroManualmete.png")));
 			label.setBounds(0, 0, 484, 261);
 			contentPanel.add(label);
-		}
+		}		
 		{
 			btnRegistrar= new JButton("OK");
+			btnRegistrar.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0)
+				{
+					//pasar los pedidos a estado cobrado
+					String itinerario=tfSeleccionItinerario.getText();
+					String seleccionado=(String)comboBox.getSelectedItem();
+					if(seleccionado.compareTo("Itinerario")==0)
+					{
+						HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario));
+						//recorro los pedidos y los paso de estado
+						Iterator<PedidoDTO> Iterador=hoja.getPedidos().iterator();
+						while(Iterador.hasNext())
+						{
+							PedidoDTO elemento = Iterador.next();
+							elemento.setEstado("cobrado");
+							control.getPedido().quitarPedido(elemento);
+							control.getPedido().agregarPedido(elemento);
+						}				
+					}
+					else if(seleccionado.compareTo("Pedido")==0)
+					{
+						PedidoDTO pedido=control.getPedido().buscarPedidoId(Integer.parseInt(itinerario));
+						pedido.setEstado("cobrado");
+						control.getPedido().quitarPedido(pedido);
+						control.getPedido().agregarPedido(pedido);
+					}
+					dispose();
+				}
+			});
 			btnRegistrar.setOpaque(false);
 			btnRegistrar.setBounds(123, 212, 113, 29);
 			contentPanel.add(btnRegistrar);
@@ -90,11 +179,56 @@ public class registrarCobroManualmente extends JDialog {
 			contentPanel.add(cancelButton);
 			cancelButton.setActionCommand("Cancel");
 		}
-		//autocompletar
-		AutoCompletar= new TextAutoCompleter(tfSeleccionItinerario);
-		AutoCompletar.setCaseSensitive(false); //No sensible a mayúsculas
-		
-		AutoCompletar.addItems(control.getProducto().buscaNombresProductos("empanada"));
+
+	}
+	private ArrayList<Object> buscarItinerarios()
+	{
+		ArrayList<Object> result=new ArrayList<Object>();
+		Iterator<HojaItinerarioDTO> Iterador=control.getItinerario().obtenerItinerarios().iterator();
+		while(Iterador.hasNext())
+		{
+			HojaItinerarioDTO elemento = Iterador.next();
+			result.add(elemento.getIdHojaItinerario());
+		}
+		return result;
 	}
 	
+	private ArrayList<Object> buscarPedidos()
+	{
+		ArrayList<Object> result=new ArrayList<Object>();
+		Iterator<PedidoDTO> Iterador=control.getPedido().obtenerPedidos().iterator();
+		while(Iterador.hasNext())
+		{
+			PedidoDTO elemento = Iterador.next();
+			if(elemento.getEstado().compareTo("endelivery")==0)
+				result.add(elemento.getIdpedido());
+		}
+		return result;
+	}
+	private Integer costoItinerario(HojaItinerarioDTO hoja)
+	{
+		Iterator<PedidoDTO> Iterador=hoja.getPedidos().iterator();
+		Integer costo=0;
+		while(Iterador.hasNext())
+		{
+			PedidoDTO elemento = Iterador.next();
+			costo=costo+elemento.getTotal();
+		}
+		return costo;
+	}
+	
+	// evento asociado a seleccionar un combo box
+	@Override
+	public void itemStateChanged(ItemEvent e)
+	{
+        if (e.getSource()==comboBox)
+        {
+            String seleccionado=(String)comboBox.getSelectedItem();
+            //completar autocomplete dependiendo del combox que aya seleccionado
+            if(seleccionado.compareTo("Itinerario")==0)
+            	AutoCompletar.addItems(buscarItinerarios());
+            else if(seleccionado.compareTo("Pedido")==0)
+            	AutoCompletar.addItems(buscarPedidos());
+        }
+	}
 }

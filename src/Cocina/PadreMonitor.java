@@ -2,6 +2,8 @@ package Cocina;
 
 import java.awt.Frame;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import modelo.Pedidos;
 import dto.ItemDTO;
 import dto.PedidoDTO;

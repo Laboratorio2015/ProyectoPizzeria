@@ -3,18 +3,24 @@ package Cocina;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+
 import dto.ItemDTO;
 import dto.PedidoDTO;
 import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 
 public class MonitorThread extends Thread {
 
 	private JFrame frame;
-	private PadreMonitor padre;
+	//private PadreMonitor padre;
 	//TABLAS
 	private JTable tablaPedidos;
 	private JTable tablaPizzas;
@@ -24,43 +30,40 @@ public class MonitorThread extends Thread {
 	private DefaultTableModel modeloPizzasFaltantes;
 	private DefaultTableModel modeloEmpanadasFaltantes;
 	private final JLabel fondo = new JLabel("");
-	
-	@SuppressWarnings("serial")
+	//private DefaultTableCellRenderer alinearCentro;
+	@SuppressWarnings({ "serial", "static-access" })
 	public MonitorThread() {
 
-		this.padre = padre;
-		
+		//this.padre = padre;
 		/// GENERO FRAME Y LABEL CONTENIDO
 				frame = new JFrame();
 				frame.getContentPane().setBackground(Color.LIGHT_GRAY);
-				frame.setBounds(250, 150, 1100, 630);
+				frame.setBounds(250, 150, 1221, 630);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.getContentPane().setLayout(null);
 				
 				JScrollPane scrollPane = new JScrollPane();
 				scrollPane.setBackground(new Color(204, 153, 102));
-				scrollPane.setBounds(47, 78, 973, 164);
+				scrollPane.setBounds(47, 99, 536, 468);
 				frame.getContentPane().add(scrollPane);
 				
 				//TABLA Y MODELO DE PEDIDOS
 				tablaPedidos = new JTable();
-				tablaPedidos.setShowGrid(false);
+				tablaPedidos.setShowHorizontalLines(false);
 				tablaPedidos.setRowSelectionAllowed(false);
-				//tablaPedidos.setFont(new Font("Verdana", Font.PLAIN, 14));
 				tablaPedidos.setForeground(new Color(0, 0, 0));
-				tablaPedidos.setBackground(new Color(204, 153, 102));
+				tablaPedidos.setBackground(Color.LIGHT_GRAY);
 				modeloPedidos = new DefaultTableModel(
 						new Object[][] {
 						},
 						new String[] {
-							"Nro. Pedido", "Producto", "Cantidad", "Comentario"
+							"Nº Pedido", "Producto", "Cantidad", "Comentario"
 						}
 					) {
 						@SuppressWarnings("rawtypes")
 						Class[] columnTypes = new Class[] {
 							String.class, String.class, Integer.class, String.class
 						};
-						@Override
 						@SuppressWarnings({ "unchecked", "rawtypes" })
 						public Class getColumnClass(int columnIndex) {
 							return columnTypes[columnIndex];
@@ -68,88 +71,130 @@ public class MonitorThread extends Thread {
 						boolean[] columnEditables = new boolean[] {
 							false, false, false, false
 						};
-						@Override
 						public boolean isCellEditable(int row, int column) {
 							return columnEditables[column];
 						}
 				};
+
+				 JTableHeader headerPedidos = tablaPedidos.getTableHeader();
+				 headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+				 headerPedidos.setForeground(new Color(0).RED);
+				 headerPedidos.setBackground(new Color(0).gray);
+				//
 				tablaPedidos.setModel(modeloPedidos);
-				tablaPedidos.getColumnModel().getColumn(0).setPreferredWidth(69);
-				tablaPedidos.getColumnModel().getColumn(1).setResizable(false);
-				tablaPedidos.getColumnModel().getColumn(1).setPreferredWidth(82);
-				tablaPedidos.getColumnModel().getColumn(2).setResizable(false);
-				tablaPedidos.getColumnModel().getColumn(3).setResizable(false);
+				tablaPedidos.getColumnModel().getColumn(0).setMaxWidth(68);
+				tablaPedidos.getColumnModel().getColumn(1).setMaxWidth(200);
+				tablaPedidos.getColumnModel().getColumn(2).setMaxWidth(55);
+				tablaPedidos.getColumnModel().getColumn(3).setMaxWidth(300);
+				tablaPedidos.setFont(new Font("Verdana", Font.BOLD, 17));
+				//Centrat texto
+				DefaultTableCellRenderer alinearCentro = new DefaultTableCellRenderer();
+		         alinearCentro.setHorizontalAlignment(SwingConstants.CENTER);
+		         tablaPedidos.getColumnModel().getColumn(0).setCellRenderer(alinearCentro);
+		         tablaPedidos.getColumnModel().getColumn(2).setCellRenderer(alinearCentro);
+				//	
 				scrollPane.setViewportView(tablaPedidos);
 				////
 				
 				//// TABLA Y MODELO DE PIZZA
 				JScrollPane scrollPane_1 = new JScrollPane();
 				scrollPane_1.setBackground(new Color(204, 153, 102));
-				scrollPane_1.setBounds(55, 352, 430, 215);
+				scrollPane_1.setBounds(886, 140, 284, 415);
 				frame.getContentPane().add(scrollPane_1);
 				tablaPizzas = new JTable();
-				tablaPizzas.setShowGrid(false);
+				tablaPizzas.setShowHorizontalLines(false);
 				tablaPizzas.setRowSelectionAllowed(false);
-				//tablaPizzas.setFont(new Font("Verdana", Font.PLAIN, 14));
 				tablaPizzas.setForeground(new Color(0, 0, 0));
-				tablaPizzas.setBackground(new Color(204, 153, 102));
+				tablaPizzas.setBackground(Color.LIGHT_GRAY);
 				modeloPizzasFaltantes = new DefaultTableModel(
 						new Object[][] {
 						},
 						new String[] {
-								"Producto", "Cantidad", "Comentario", "cantComentarios"
+								"Producto", "Cantidad", "Coment.?", "#Coment."
 						}
 						) {
 					@SuppressWarnings("rawtypes")
 					Class[] columnTypes = new Class[] {
-							String.class, Integer.class, String.class, Integer.class
+						String.class, Integer.class, String.class, Integer.class
 					};
-					@Override
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					public Class getColumnClass(int columnIndex) {
 						return columnTypes[columnIndex];
 					}
 				};
-				//tablaPizzas.getColumnModel().getColumn(3).setPreferredWidth(123);
-				scrollPane_1.setViewportView(tablaPizzas);
-//				JScrollPane scrollPane_2 = new JScrollPane();
-//				scrollPane_2.setBounds(462, 250, 378, 195);
-//				frame.getContentPane().add(scrollPane_2);
+				
+				 JTableHeader headerPizzas = tablaPizzas.getTableHeader();
+				 headerPizzas.setFont(new Font("Tahoma", Font.BOLD, 13));
+				 headerPizzas.setForeground(new Color(0).RED);
+				 headerPizzas.setBackground(new Color(0).gray);
+				
 				tablaPizzas.setModel(modeloPizzasFaltantes);
-				//
+				tablaPizzas.getColumnModel().getColumn(0).setMaxWidth(200);
+				tablaPizzas.getColumnModel().getColumn(1).setMaxWidth(55);
+				tablaPizzas.getColumnModel().getColumn(2).setMaxWidth(60);
+				tablaPizzas.getColumnModel().getColumn(3).setWidth(0);
+				tablaPizzas.getColumnModel().getColumn(3).setMinWidth(0);
+				tablaPizzas.getColumnModel().getColumn(3).setMaxWidth(2);
+				tablaPizzas.setFont(new Font("Verdana", Font.BOLD, 17));
+				//Centrar texto
+				alinearCentro = new DefaultTableCellRenderer();
+				alinearCentro.setHorizontalAlignment(SwingConstants.CENTER);
+				tablaPizzas.getColumnModel().getColumn(1).setCellRenderer(alinearCentro);
+				tablaPizzas.getColumnModel().getColumn(2).setCellRenderer(alinearCentro);
+				tablaPizzas.getColumnModel().getColumn(3).setCellRenderer(alinearCentro);
+				//	
+				scrollPane_1.setViewportView(tablaPizzas);
+	
 				//// TABLA Y MODELO DE EMPANADAS	
 				JScrollPane scrollPane_21 = new JScrollPane();
 				scrollPane_21.setBackground(new Color(204, 153, 102));
-				scrollPane_21.setBounds(590, 352, 430, 215);
+				scrollPane_21.setBounds(598, 140, 284, 415);
 				frame.getContentPane().add(scrollPane_21);
 				tablaEmpanadas = new JTable();
-				tablaEmpanadas.setShowGrid(false);
+				tablaEmpanadas.setShowHorizontalLines(false);
 				tablaEmpanadas.setRowSelectionAllowed(false);
-				//tablaEmpanadas.setFont(new Font("Verdana", Font.PLAIN, 14));
+				tablaEmpanadas.setFont(new Font("Verdana", Font.BOLD, 17));
 				tablaEmpanadas.setForeground(new Color(0, 0, 0));
-				tablaEmpanadas.setBackground(new Color(204, 153, 102));
+				tablaEmpanadas.setBackground(Color.LIGHT_GRAY);
 				modeloEmpanadasFaltantes = new DefaultTableModel(
 					new Object[][] {
 					},
 					new String[] {
-						"Producto", "Cantidad", "Comentario", "cantComentarios"
+						"Producto", "Cantidad", "Coment.?", "cantComentarios"
 					}
 				) {
 					@SuppressWarnings("rawtypes")
 					Class[] columnTypes = new Class[] {
 						String.class, Integer.class, String.class, Integer.class
 					};
-					@Override
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					public Class getColumnClass(int columnIndex) {
 						return columnTypes[columnIndex];
 					}
 				};
-				//tablaEmpanadas.getColumnModel().getColumn(3).setPreferredWidth(15);
-				scrollPane_21.setViewportView(tablaEmpanadas);
+				
+				 JTableHeader headerEmpanada = tablaEmpanadas.getTableHeader();
+				 headerEmpanada.setFont(new Font("Tahoma", Font.BOLD, 13));
+				 headerEmpanada.setForeground(new Color(0).RED);
+				 headerEmpanada.setBackground(new Color(0).gray);
+				
 				tablaEmpanadas.setModel(modeloEmpanadasFaltantes);
+				tablaEmpanadas.getColumnModel().getColumn(0).setMaxWidth(200);
+				tablaEmpanadas.getColumnModel().getColumn(1).setMaxWidth(55);
+				tablaEmpanadas.getColumnModel().getColumn(2).setMaxWidth(60);
+				tablaEmpanadas.getColumnModel().getColumn(3).setWidth(0);
+				tablaEmpanadas.getColumnModel().getColumn(3).setMinWidth(0);
+				tablaEmpanadas.getColumnModel().getColumn(3).setMaxWidth(2);
+				//Centrar texto
+				alinearCentro = new DefaultTableCellRenderer();
+				alinearCentro.setHorizontalAlignment(SwingConstants.CENTER);
+				tablaEmpanadas.getColumnModel().getColumn(1).setCellRenderer(alinearCentro);
+				tablaEmpanadas.getColumnModel().getColumn(2).setCellRenderer(alinearCentro);
+				tablaEmpanadas.getColumnModel().getColumn(3).setCellRenderer(alinearCentro);
+				scrollPane_21.setViewportView(tablaEmpanadas);
+				
 				fondo.setIcon(new ImageIcon("C:\\Users\\Yanina\\Documents\\Elab de constr de Soft\\tp pizzeria\\Gui\\Recursos\\Editados\\Ventanas\\fondoMonitor.png"));
-				fondo.setBounds(0, 0, 1084, 591);
+				fondo.setBounds(0, 0, 1205, 591);
 				frame.getContentPane().add(fondo);
 				//FIN/// 		
 		}
@@ -214,8 +259,11 @@ public class MonitorThread extends Thread {
 	}
 	
 	private void correguirComentarios(PedidoDTO pedido) {
-		for (int i = 0; i < pedido.getItems().size(); i++){		
-			pedido.getItems().get(i).setComentario(pedido.getItems().get(i).getComentario().trim());
+		for (int i = 0; i < pedido.getItems().size(); i++){	
+			if(pedido.getItems().get(i).getComentario()!=null)
+				pedido.getItems().get(i).setComentario(pedido.getItems().get(i).getComentario().trim());
+			else
+				pedido.getItems().get(i).setComentario(" ");
 		}
 	}
 

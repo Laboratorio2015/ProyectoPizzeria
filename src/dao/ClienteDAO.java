@@ -92,9 +92,26 @@ public class ClienteDAO
 			
 			while(resultSet.next())
 			{
+				String t= resultSet.getString("nombre");
+				String nombre="";
+				for (int i=0; i<t.length(); i++)
+				{
+					  if (t.charAt(i) != ' ' || (t.charAt(i)==' ' && t.charAt(i+1)!=' '))
+					    nombre += t.charAt(i);
+					  else if(t.charAt(i)==' ' && t.charAt(i+1)==' ')
+						  break;
+				}
+				String ti= resultSet.getString("apellido");
+				String apellido="";
+				for (int i=0; i<ti.length(); i++)
+				{
+					  if (ti.charAt(i) != ' ' || (ti.charAt(i)==' ' && ti.charAt(i+1)!=' '))
+					    apellido += ti.charAt(i);
+					  else if(ti.charAt(i)==' ' && ti.charAt(i+1)==' ')
+						  break;
+				}
 				clientes.add(new ClienteDTO(resultSet.getInt("idcliente"),resultSet.getInt("dni"),
-						resultSet.getString("nombre"),resultSet.getString("apellido"),
-						resultSet.getString("calle"),resultSet.getString("numeracion"),
+						nombre,apellido,resultSet.getString("calle"),resultSet.getString("numeracion"),
 						resultSet.getString("telefono"),resultSet.getString("entrecalle1"),
 						resultSet.getString("entrecalle2"), resultSet.getString("codpostal"),
 						resultSet.getString("email"), resultSet.getString("comentario"),

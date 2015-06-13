@@ -115,7 +115,7 @@ public class PedidoDAO
 					    estadoPedido += y.charAt(i);
 				}
 				Clientes cli=new Clientes();
-				ClienteDTO lab=cli.buscarCliente(resultSet.getInt("cliente"));
+				ClienteDTO lab=cli.buscarClientePorID(resultSet.getInt("cliente"));
 				Items ite=new Items();
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
 				Ofertas ofe=new Ofertas();

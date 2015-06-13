@@ -30,6 +30,8 @@ public class registroDeCliente extends JDialog {
 	private Controlador control;
 	private JTextField tfEmail;
 	private JButton btnRegistrar;
+	private JTextField tfTelefono;
+	private JTextField tfComentario;
 	
 	public registroDeCliente(seleccionDeCliente padre, Controlador control)
 	{
@@ -38,14 +40,14 @@ public class registroDeCliente extends JDialog {
 		this.control=control;
 		_this=this;
 		setMinimumSize(new Dimension(700, 600));
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 700, 639);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		tfdni = new JTextField();
-		tfdni.setBounds(127, 162, 173, 22);
+		tfdni.setBounds(127, 160, 173, 25);
 		contentPanel.add(tfdni);
 		tfdni.setColumns(10);
 		
@@ -88,16 +90,26 @@ public class registroDeCliente extends JDialog {
 		tfEmail.setColumns(10);
 		tfEmail.setBounds(463, 415, 173, 22);
 		contentPanel.add(tfEmail);
+		
+		tfTelefono = new JTextField();
+		tfTelefono.setColumns(10);
+		tfTelefono.setBounds(460, 160, 175, 25);
+		contentPanel.add(tfTelefono);
+		
+		tfComentario = new JTextField();
+		tfComentario.setBounds(152, 457, 485, 50);
+		contentPanel.add(tfComentario);
+		tfComentario.setColumns(10);
 		{
 			JLabel label = new JLabel("");
 			label.setBounds(0, 0, 684, 600);
 			contentPanel.add(label);
-			label.setIcon(new ImageIcon(registroDeCliente.class.getResource("/prototipos/registro de cliente.png")));
+			label.setIcon(new ImageIcon(registroDeCliente.class.getResource("/prototipos/Alta de cliente.png")));
 		}
 		{
 			btnRegistrar= new JButton("Registrar");
 			btnRegistrar.setOpaque(false);
-			btnRegistrar.setBounds(181, 520, 198, 34);
+			btnRegistrar.setBounds(165, 534, 198, 34);
 			contentPanel.add(btnRegistrar);
 			btnRegistrar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnRegistrar);
@@ -113,7 +125,7 @@ public class registroDeCliente extends JDialog {
 				}
 			});
 			btnCancelar.setOpaque(false);
-			btnCancelar.setBounds(401, 520, 164, 34);
+			btnCancelar.setBounds(382, 534, 164, 34);
 			contentPanel.add(btnCancelar);
 			btnCancelar.setActionCommand("Cancel");
 		}
@@ -174,6 +186,38 @@ public class registroDeCliente extends JDialog {
 	public void setTfNumeracion(JTextField tfNumeracion) {
 		this.tfNumeracion = tfNumeracion;
 	}
+	
+	public seleccionDeCliente get_padre() {
+		return _padre;
+	}
+
+	public void set_padre(seleccionDeCliente _padre) {
+		this._padre = _padre;
+	}
+
+	public Controlador getControl() {
+		return control;
+	}
+
+	public void setControl(Controlador control) {
+		this.control = control;
+	}
+
+	public JTextField getTfTelefono() {
+		return tfTelefono;
+	}
+
+	public void setTfTelefono(JTextField tfTelefono) {
+		this.tfTelefono = tfTelefono;
+	}
+
+	public JTextField getTfComentario() {
+		return tfComentario;
+	}
+
+	public void setTfComentario(JTextField tfComentario) {
+		this.tfComentario = tfComentario;
+	}
 
 	public JTextField getTfCodPostal() {
 		return tfCodPostal;
@@ -198,5 +242,4 @@ public class registroDeCliente extends JDialog {
 	public void setBtnRegistrar(JButton btnRegistrar) {
 		this.btnRegistrar = btnRegistrar;
 	}
-	
 }

@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import modelo.Itinerarios;
 
 import presentacion.controlador.Controlador;
+import presentacion.reportes.Itinerario;
 
 import dto.HojaItinerarioDTO;
 import dto.PedidoDTO;
@@ -79,7 +80,7 @@ public class seleccionarRepartidor extends JDialog {
 					hojaItinerario=new HojaItinerarioDTO();
 					hojaItinerario.setIdHojaItinerario(control.getItinerario().obtenerItinerarios().size()+1);
 					hojaItinerario.setFueeliminado(false);
-					hojaItinerario.setRepartidor(control.getRepartidor().buscarRepartidor(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString())));
+					hojaItinerario.setRepartidor(control.getRepartidor().buscarRepartidorPorDni(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString())));
 					hojaItinerario.setPedidos(pedidos);
 					control.getItinerario().agregarItinerario(hojaItinerario);
 					for(int i=0; i<numfila.length;i++)
@@ -97,6 +98,8 @@ public class seleccionarRepartidor extends JDialog {
 						control.getPedido().quitarPedido(elemento);
 						control.getPedido().agregarPedido(elemento);
 					}
+					//Itinerario aux= new Itinerario(pedido);
+					//generarItinerario()
 					dispose();
 				}
 			});

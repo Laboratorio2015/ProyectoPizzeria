@@ -21,6 +21,7 @@ import presentacion.controlador.Controlador;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JComboBox;
 
 public class proveedorBajaModificacion extends JDialog {
 
@@ -37,16 +38,18 @@ public class proveedorBajaModificacion extends JDialog {
 	private String[] nombreColumnasMatPrimas = {"Nombre"};
 	private JButton btnQuitar ;
 	private JButton btnGuardar;
+	private JTextField tfNombreContacto;
+	private JTable table;
 
 	public proveedorBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 766, 895);
+		setBounds(100, 100, 766, 863);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 121, 237, 310);
+		scrollPane.setBounds(36, 196, 237, 310);
 		contentPanel.add(scrollPane);
 		this.control=control;
 		model = new DefaultTableModel(null,nombreColumnasProveedor);
@@ -71,24 +74,40 @@ public class proveedorBajaModificacion extends JDialog {
 		
 		tfDenominacion = new JTextField();
 		tfDenominacion.setEditable(false);
-		tfDenominacion.setBounds(352, 150, 174, 22);
+		tfDenominacion.setBounds(352, 225, 174, 22);
 		contentPanel.add(tfDenominacion);
 		tfDenominacion.setColumns(10);
 		
 		tfTelefono = new JTextField();
 		tfTelefono.setColumns(10);
-		tfTelefono.setBounds(352, 207, 174, 22);
+		tfTelefono.setBounds(352, 282, 174, 22);
 		contentPanel.add(tfTelefono);
 		
 		tfEmail = new JTextField();
 		tfEmail.setColumns(10);
-		tfEmail.setBounds(352, 320, 290, 22);
+		tfEmail.setBounds(352, 395, 290, 22);
 		contentPanel.add(tfEmail);
 		
 		tfDireccion = new JTextField();
 		tfDireccion.setColumns(10);
-		tfDireccion.setBounds(352, 261, 290, 22);
+		tfDireccion.setBounds(352, 336, 290, 22);
 		contentPanel.add(tfDireccion);
+		
+		tfNombreContacto = new JTextField();
+		tfNombreContacto.setBounds(536, 225, 186, 22);
+		contentPanel.add(tfNombreContacto);
+		tfNombreContacto.setColumns(10);
+		
+		JComboBox<String> comboBoxCategorias = new JComboBox();
+		comboBoxCategorias.setBounds(536, 281, 186, 22);
+		contentPanel.add(comboBoxCategorias);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(361, 545, 359, 62);
+		contentPanel.add(scrollPane_1);
+		
+		table = new JTable();
+		scrollPane_1.setViewportView(table);
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(proveedorBajaModificacion.class.getResource("/prototipos/baja-modif de Proveedor.png")));
@@ -103,7 +122,7 @@ public class proveedorBajaModificacion extends JDialog {
 				}
 			});
 			btnFinalizar.setOpaque(false);
-			btnFinalizar.setBounds(442, 525, 151, 36);
+			btnFinalizar.setBounds(271, 706, 151, 36);
 			contentPanel.add(btnFinalizar);
 			btnFinalizar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnFinalizar);
@@ -111,7 +130,7 @@ public class proveedorBajaModificacion extends JDialog {
 		{
 			btnQuitar= new JButton("Cancel");
 			btnQuitar.setOpaque(false);
-			btnQuitar.setBounds(36, 482, 53, 49);
+			btnQuitar.setBounds(36, 544, 53, 49);
 			contentPanel.add(btnQuitar);
 			btnQuitar.addActionListener(new ActionListener() {
 				@Override
@@ -123,7 +142,7 @@ public class proveedorBajaModificacion extends JDialog {
 		
 		btnGuardar = new JButton("New button");
 		btnGuardar.setOpaque(false);
-		btnGuardar.setBounds(382, 420, 64, 49);
+		btnGuardar.setBounds(447, 633, 64, 49);
 		contentPanel.add(btnGuardar);
 	}
 
@@ -226,5 +245,4 @@ public class proveedorBajaModificacion extends JDialog {
 	public void setBtnGuardar(JButton btnGuardar) {
 		this.btnGuardar = btnGuardar;
 	}
-	
 }

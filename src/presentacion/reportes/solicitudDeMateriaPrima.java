@@ -1,6 +1,7 @@
 package presentacion.reportes;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.itextpdf.text.BaseColor;

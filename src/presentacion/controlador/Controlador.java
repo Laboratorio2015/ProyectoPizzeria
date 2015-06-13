@@ -63,6 +63,7 @@ import presentacion.vista.repartidorAlta;
 import presentacion.vista.repartidorBajaModificacion;
 import presentacion.vista.seleccionDeCliente;
 import presentacion.vista.seleccionarRepartidor;
+import presentacion.vista.selectorMatPrima;
 
 
 public class Controlador implements ActionListener
@@ -94,6 +95,9 @@ public class Controlador implements ActionListener
 	private PadreMonitor monitorCocina;
 	private pedidoMenu ventanamenu;
 	private registroDeCliente ventanaRegistrarCliente;
+	private selectorMatPrima ventanaSeleccionMatPrima;
+	
+
 
 	//modelo
 	private Productos producto;
@@ -108,6 +112,7 @@ public class Controlador implements ActionListener
 	private MatPrimas materiasPrimas;
 	private ItemMateriasPrimas itemsMateriaPrima;
 	private Itinerarios itinerario;
+	
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
@@ -131,14 +136,13 @@ public class Controlador implements ActionListener
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
 		this.ventana.getBtnPedMatPrima().addActionListener(this);
 		this.ventana.getBtnReportes().addActionListener(this);
-		//this.monitorCocina = new PadreMonitor(pedido);
 	}
 
 
 	public void inicializar()
 	{
 		this.ventana.show();
-		//this.monitorCocina=new PadreMonitor(pedido);
+		this.monitorCocina=new PadreMonitor(pedido);
 		
 	}
 
@@ -157,11 +161,9 @@ public class Controlador implements ActionListener
 		}
 		else if(e.getSource() == this.ventana.getBtnPedidosPendientes())
 		{
-			System.out.println("entro");
 			ventanaPedPendiente=new pedidosPendientes(ventana, this);
 			ventanaPedPendiente.llenarTabla();
 			this.ventanaPedPendiente.setVisible(true);
-			
 		}
 
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
@@ -339,13 +341,12 @@ public class Controlador implements ActionListener
 			nuevoPedido.setFecha(fecha);
 			nuevoPedido.setHora(hora);
 			nuevoPedido.setFueeliminado(false);
+			this.monitorCocina.nuevoPedido(nuevoPedido);
 			this.ventanaCliente=new seleccionDeCliente(this,nuevoPedido);
 			this.ventanaCliente.getBtnAgregarCliente().addActionListener(this);
 			this.ventanaCliente.getBtnEditarCliente().addActionListener(this);
-			this.ventanaCliente.setVisible(true);
-			vaciarFormulario();
 			this.ventanaPedido.dispose();
-			
+			this.ventanaCliente.setVisible(true);			
 		}
 		else if (this.ventanaPedido!= null && e.getSource()==this.ventanaPedido.getBtnVerEmpanadas())
 		{
@@ -655,11 +656,15 @@ public class Controlador implements ActionListener
 		else if (this.ventanaRegistrarCliente!= null && e.getSource()==this.ventanaRegistrarCliente.getBtnRegistrar())
 		{
 			ClienteDTO nuevo= new ClienteDTO();
+			nuevo.setIdcliente(this.cliente.obtenerClientes().size()+1);
 			nuevo.setDni(Integer.parseInt(ventanaRegistrarCliente.getTfdni().getText().toString()));
 			nuevo.setApellido(ventanaRegistrarCliente.getTfApellido().getText().toString());
 			nuevo.setNombre(ventanaRegistrarCliente.getTfNombre().getText().toString());
 			nuevo.setCalle(ventanaRegistrarCliente.getTfCalle().getText().toString());
 			nuevo.setNumeracion(ventanaRegistrarCliente.getTfNumeracion().getText().toString());
+			nuevo.setTelefono(ventanaRegistrarCliente.getTfTelefono().getText().toString());
+			nuevo.setComentario(ventanaRegistrarCliente.getTfComentario().getText().toString());
+			nuevo.setFueeliminado(false);
 			nuevo.setEntrecalle1(ventanaRegistrarCliente.getTfEntreCalle1().getText().toString());
 			nuevo.setEntrecalle2(ventanaRegistrarCliente.getTfEntreCalle2().getText().toString());
 			nuevo.setCodPostal(ventanaRegistrarCliente.getTfCodPostal().getText().toString());
@@ -676,18 +681,23 @@ public class Controlador implements ActionListener
 		{
 			if(ventanaCliente.getTfAgregarDNI().getText().length()>7)
 			{
-				ventanaRegistrarCliente=new registroDeCliente(ventanaCliente, this);
-				ClienteDTO aux=cliente.buscarCliente(Integer.parseInt(ventanaCliente.getTfAgregarDNI().getText().toString()));
-				ventanaRegistrarCliente.getTfdni().setText(aux.getDni().toString());
-				ventanaRegistrarCliente.getTfNombre().setText(aux.getNombre());
-				ventanaRegistrarCliente.getTfApellido().setText(aux.getApellido());
-				ventanaRegistrarCliente.getTfCalle().setText(aux.getCalle());
-				ventanaRegistrarCliente.getTfNumeracion().setText(aux.getNumeracion());
-				ventanaRegistrarCliente.getTfEntreCalle1().setText(aux.getEntrecalle1());
-				ventanaRegistrarCliente.getTfEntreCalle2().setText(aux.getEntrecalle2());
-				ventanaRegistrarCliente.getTfCodPostal().setText(aux.getCodPostal());
-				ventanaRegistrarCliente.getTfEmail().setText(aux.getEmail());
-				ventanaRegistrarCliente.setVisible(true);
+				ventanaCliente.setModal(false);
+				ventanaModificacionCliente=new clienteBajaModificacion(ventanaCliente, this);
+				ClienteDTO aux=cliente.buscarClientePorDNI(Integer.parseInt(ventanaCliente.getTfAgregarDNI().getText().toString()));
+				ventanaModificacionCliente.getTfDni().setText(aux.getDni().toString());
+				ventanaModificacionCliente.getTfNombre().setText(aux.getNombre());
+				ventanaModificacionCliente.getTfApellido().setText(aux.getApellido());
+				ventanaModificacionCliente.getTfCalle().setText(aux.getCalle());
+				ventanaModificacionCliente.getTfNumeracion().setText(aux.getNumeracion());
+				ventanaModificacionCliente.getTfEntreCalle1().setText(aux.getEntrecalle1());
+				ventanaModificacionCliente.getTfEntreCalle2().setText(aux.getEntrecalle2());
+				ventanaModificacionCliente.getTfCodPostal().setText(aux.getCodPostal());
+				ventanaModificacionCliente.getTfTelefono().setText(aux.getTelefono());
+				ventanaModificacionCliente.getTfComentario().setText(aux.getComentario());
+				ventanaModificacionCliente.getTfEmail().setText(aux.getEmail());
+				llenarTablaCliente();
+				ventanaModificacionCliente.setVisible(true);
+				
 			}
 			else
 				JOptionPane.showMessageDialog(null, "Error el debe haber un dni registrado para poder editarlo");
@@ -864,7 +874,7 @@ public class Controlador implements ActionListener
 		{
 			if(producto.buscaNombresProductos(this.ventanaPedido.getModel().getValueAt(i, 0).toString())!=null)
 			{
-				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)this.ventanaPedido.getModel().getValueAt(i, 3),false);
+				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)(this.ventanaPedido.getModel().getValueAt(i, 3)),false);
 				item.agregarItem(aux);
 				listaAux.add(aux);
 			}
@@ -1144,6 +1154,19 @@ public class Controlador implements ActionListener
 				Object[] fila = {elemento.getNombre(), elemento.getPrecio()};
 				this.ventanamenu.getModel().addRow(fila);			
 			}
+		}
+	}
+	private void llenarTablaCliente()
+	{
+		this.ventanaModificacionCliente.getModel().setRowCount(0);
+		this.ventanaModificacionCliente.getModel().setColumnCount(0);
+		this.ventanaModificacionCliente.getModel().setColumnIdentifiers(this.ventanaModificacionCliente.getNombreColumnas());
+		Iterator<ClienteDTO> Iterador = this.cliente.obtenerClientes().iterator();
+		while(Iterador.hasNext())
+		{
+			ClienteDTO elemento = Iterador.next();
+			Object[] fila = {elemento.getDni(),elemento.getApellido(),elemento.getApellido()};
+			this.ventanaModificacionCliente.getModel().addRow(fila);			
 		}
 	}
 	private void llenarTablaProveedor()

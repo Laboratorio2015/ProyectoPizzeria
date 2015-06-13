@@ -14,11 +14,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import dto.MateriaPrimaDTO;
+
+
 import presentacion.controlador.Controlador;
 
 public class selectorMatPrima extends JDialog {
@@ -26,20 +29,21 @@ public class selectorMatPrima extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Controlador controlador;
+	@SuppressWarnings("unused")
 	private VentanaPrincipal ventanaPrincipal;
 	private JButton btnSeleccionarMateriaPrima;
 	//TABLA
 	private JTable tablaMateriasPrimas;
 	private DefaultTableModel modeloMateriasPrimas;
 
-	
-	@SuppressWarnings("serial")
+
+	@SuppressWarnings({ "serial", "static-access" })
 	public selectorMatPrima(VentanaPrincipal ventanaPrincipal, Controlador controlador) {
 		this.ventanaPrincipal = ventanaPrincipal;
 		this.controlador = controlador;
 
 
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setBounds(100, 100, 345, 534);
@@ -47,7 +51,7 @@ public class selectorMatPrima extends JDialog {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(31, 103, 264, 318);
 		contentPane.add(scrollPane);
@@ -63,43 +67,40 @@ public class selectorMatPrima extends JDialog {
 		tablaMateriasPrimas.setForeground(Color.WHITE);
 		tablaMateriasPrimas.setBackground(new Color(51, 102, 153));
 		scrollPane.setViewportView(tablaMateriasPrimas);	
-		
+
 		JLabel fondo = new JLabel("");
 		fondo.setHorizontalAlignment(SwingConstants.CENTER);
 		fondo.setIcon(new ImageIcon(buscadorProveedor.class.getResource("/prototipos/verMateriasPrimas.png")));
 		fondo.setBounds(0, 0, 334, 501);
 		contentPane.add(fondo);
-		
+
 		this.modeloMateriasPrimas = new DefaultTableModel(
 				new Object[][] {
 				},
 				new String[] {
-					"Nombre"
+						"Producto"
 				}
-			) {
-				@SuppressWarnings("rawtypes")
-				Class[] columnTypes = new Class[] {
-					String.class
-				};
-				@Override
-				@SuppressWarnings({ "unchecked", "rawtypes" })
-				public Class getColumnClass(int columnIndex) {
-					return columnTypes[columnIndex];
-				}
+				) {
+			@SuppressWarnings("rawtypes")
+			Class[] columnTypes = new Class[] {
+				String.class
 			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		};
+		JTableHeader header = tablaMateriasPrimas.getTableHeader();
+		header.setFont(new Font("Tahoma", Font.BOLD, 13));
+		header.setForeground(new Color(0).GRAY);
 		this.tablaMateriasPrimas.setModel(modeloMateriasPrimas);
-		
-//		JButton btnFinalizar = new JButton("Finalizar");
-//		btnFinalizar.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent arg0) {
-//				dispose();
-//			}
-//		});
-//		btnFinalizar.setOpaque(false);
-//		btnFinalizar.setBounds(340, 537, 150, 32);
-//		contentPane.add(btnFinalizar);
-		
+		//
+
+		//
+		DefaultTableCellRenderer alinearCentro = new DefaultTableCellRenderer();
+		alinearCentro.setHorizontalAlignment(SwingConstants.CENTER);
+		tablaMateriasPrimas.getColumnModel().getColumn(0).setCellRenderer(alinearCentro);
+
 		btnSeleccionarMateriaPrima = new JButton("SeleccionarProveedor");
 		btnSeleccionarMateriaPrima.setOpaque(false);
 		btnSeleccionarMateriaPrima.setBounds(98, 432, 137, 23);
