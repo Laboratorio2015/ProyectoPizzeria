@@ -15,7 +15,7 @@ import dto.ProveedorDTO;
 
 public class OrdenPedidoMatPrimaDAO
 {
-	private static final String insert = "INSERT INTO ordenpedidomatprima(idcompra, proveedor,itemmatprima,estado,fueeliminado) VALUES(?,?,?,?,?)";
+	private static final String insert = "INSERT INTO ordenpedidomatprima(idcompra, proveedor,itemmatprima,estado,fecha,costo,enviado,fueeliminado) VALUES(?,?,?,?,?)";
 	private static final String delete = "DELETE FROM ordenpedidomatprima WHERE idcompra = ?";
 	private static final String readall = "SELECT * FROM ordenpedidomatprima ";
 	
@@ -33,7 +33,10 @@ public class OrdenPedidoMatPrimaDAO
 			statement.setInt(2, orden.getProveedor().getIdproveedor());
 			statement.setString(3, idordenes);
 			statement.setString(4, orden.getEstado());
-			statement.setBoolean(5,orden.getFueeliminado());
+			statement.setString(5, orden.getFecha());
+			statement.setInt(6, orden.getCosto());
+			statement.setBoolean(7,orden.getEnviado());
+			statement.setBoolean(8,orden.getFueeliminado());
 
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
@@ -100,7 +103,9 @@ public class OrdenPedidoMatPrimaDAO
 				Proveedores prov=new Proveedores();
 				ProveedorDTO proveedor=prov.buscarProveedorPorId(resultSet.getInt("proveedor"));
 				ofertas.add(new OrdenPedidoMatPrimaDTO(resultSet.getInt("idcompra"),proveedor,
-						listaItems,resultSet.getString("estado"),resultSet.getBoolean("fueeliminado")));
+						listaItems,resultSet.getString("estado"),resultSet.getString("fecha"),
+						resultSet.getInt("costo"),resultSet.getBoolean("enviado"),
+						resultSet.getBoolean("fueeliminado")));
 
 			}
 		} 

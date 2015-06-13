@@ -8,16 +8,23 @@ public class OrdenPedidoMatPrimaDTO
 	private ProveedorDTO proveedor;
 	private ArrayList<ItemMateriaPrimaDTO> listadoCompra;
 	private String estado;
+	private String fecha;
+	private Integer costo;
+	private Boolean enviado;
 	private Boolean fueeliminado;
 	
 	
 	public OrdenPedidoMatPrimaDTO(Integer idCompra, ProveedorDTO proveedor,
-			ArrayList<ItemMateriaPrimaDTO> listadoCompra, String estado, Boolean fueeliminado) {
+			ArrayList<ItemMateriaPrimaDTO> listadoCompra, String estado,
+			String fecha, Integer costo,Boolean enviado,Boolean fueeliminado) {
 		super();
 		this.idCompra = idCompra;
 		this.proveedor = proveedor;
 		this.listadoCompra = listadoCompra;
 		this.estado=estado;
+		this.fecha=fecha;
+		this.costo=costo;
+		this.enviado=enviado;
 		this.fueeliminado=fueeliminado;
 	}
 	
@@ -45,6 +52,29 @@ public class OrdenPedidoMatPrimaDTO
 		return proveedor;
 	}
 
+	public String getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+
+	public Integer getCosto() {
+		return costo;
+	}
+
+	public void setCosto(Integer costo) {
+		this.costo = costo;
+	}
+
+	public Boolean getEnviado() {
+		return enviado;
+	}
+
+	public void setEnviado(Boolean enviado) {
+		this.enviado = enviado;
+	}
 
 	public void setProveedor(ProveedorDTO proveedor) {
 		this.proveedor = proveedor;

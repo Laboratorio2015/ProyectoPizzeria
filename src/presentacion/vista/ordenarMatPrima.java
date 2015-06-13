@@ -133,7 +133,7 @@ public class ordenarMatPrima extends JDialog  {
 		
 		JLabel label = new JLabel("");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setIcon(new ImageIcon("C:\\Users\\Yanina\\Documents\\Elab de constr de Soft\\tp pizzeria\\Gui\\Recursos\\Editados\\Ventanas\\orden de materia prima.png"));
+		label.setIcon(new ImageIcon(ordenarMatPrima.class.getResource("/prototipos/orden de materia prima.png")));
 		label.setBounds(0, 11, 882, 600);
 		contentPane.add(label);
 		
