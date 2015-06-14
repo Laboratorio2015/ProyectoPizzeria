@@ -32,6 +32,11 @@ public class Productos
 		return this.producto.readAll();
 	}
 	
+	public List<ProductoDTO> obtenerTodoProducto()
+	{
+		return this.producto.readAlli();
+	}
+	
 	public ProductoDTO buscarProductoPorNombre(String nombre)
 	{
 		List<ProductoDTO> productos=this.obtenerProducto();
@@ -74,7 +79,7 @@ public class Productos
 	public int ultimoProducto()
 	{
 		Integer ultimo=0;
-		List<ProductoDTO> productos=this.producto.readAll();
+		List<ProductoDTO> productos=this.producto.readAlli();
 		Iterator<ProductoDTO> Iterador = productos.iterator();
 		while(Iterador.hasNext())
 		{

@@ -13,7 +13,7 @@ import conexion.Conexion;
 public class ProductoDAO 
 {
 	private static final String insert = "INSERT INTO productos(idproducto, nombre,precio,tipo,fueeliminado) VALUES(?,?, ?, ?,?)";
-	private static final String delete = "DELETE FROM productos WHERE idproducto = ?";
+	private static final String delete = "update productos set fueeliminado=true WHERE idproducto = ?";
 	private static final String readall = "SELECT * FROM productos";
 	private static final String buscar="SELECT * from productos where idproducto= ?";
 	private static final Conexion conexion = Conexion.getConexion();
@@ -86,6 +86,52 @@ public class ProductoDAO
 			
 			while(resultSet.next())
 			{
+				if(resultSet.getBoolean("fueeliminado")==false)
+				{
+					String y= resultSet.getString("nombre");
+					String nombreProducto="";
+					for (int i=0; i<y.length(); i++)
+					{
+						  if (y.charAt(i) != ' ')
+						    nombreProducto += y.charAt(i);
+					}
+					
+					String t= resultSet.getString("tipo");
+					String tipoProducto="";
+					for (int i=0; i<t.length(); i++)
+					{
+						  if (t.charAt(i) != ' ')
+						    tipoProducto += t.charAt(i);
+					}
+					
+					productos.add(new ProductoDTO(resultSet.getInt("idproducto"),nombreProducto,
+							resultSet.getInt("precio"),tipoProducto,resultSet.getBoolean("fueeliminado")));
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return productos;
+	}
+	
+	public List<ProductoDTO> readAlli()
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<ProductoDTO> productos = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(readall);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
 				String y= resultSet.getString("nombre");
 				String nombreProducto="";
 				for (int i=0; i<y.length(); i++)
@@ -116,30 +162,4 @@ public class ProductoDAO
 		}
 		return productos;
 	}
-	/*
-	public ProductoDTO buscarProducto(int num)
-	{
-		PreparedStatement statement;
-		ResultSet resultSet; //Guarda el resultado de la query
-		try 
-		{
-			statement = conexion.getSQLConexion().prepareStatement(buscar+ num);
-			//statement.setInt(1, num);
-			resultSet = statement.executeQuery();
-			ProductoDTO producto= new ProductoDTO(resultSet.getInt("idproducto"), resultSet.getString("nombre"), resultSet.getInt("precio"));
-			return producto;
-			
-		} 
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-		finally //Se ejecuta siempre
-		{
-			conexion.cerrarConexion();
-		}
-		return null;
-	}
-	*/
-
 }

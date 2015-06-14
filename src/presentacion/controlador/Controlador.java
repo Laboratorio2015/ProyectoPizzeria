@@ -711,10 +711,13 @@ public class Controlador implements ActionListener
 			nuevo.setIdproducto(this.producto.ultimoProducto()+1);
 			nuevo.setNombre(ventanaAgregarProducto.getTfDenominacion().getText().toString());
 			nuevo.setPrecio(Integer.parseInt(ventanaAgregarProducto.getTfPrecio().getText().toString()));
-			System.out.println(ventanaAgregarProducto.getCbTipo().getSelectedItem().toString());
+			nuevo.setFueeliminado(false);
 			nuevo.setTipo(ventanaAgregarProducto.getCbTipo().getSelectedItem().toString());
 			producto.agregarProducto(nuevo);
 			llenarTablaProductos();
+			ventanaAgregarProducto.getTfDenominacion().setText("");
+			ventanaAgregarProducto.getTfPrecio().setText("");
+			ventanaAgregarProducto.getCbTipo().setSelectedIndex(0);
 		}
 
 		//acciones asocidas a editar productos

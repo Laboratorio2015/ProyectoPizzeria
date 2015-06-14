@@ -62,7 +62,7 @@ public class productoBajaModificacion extends JDialog {
 		contentPanel.add(cbTipo);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 146, 186, 355);
+		scrollPane.setBounds(36, 206, 186, 295);
 		contentPanel.add(scrollPane);
 		
 		table = new JTable(model);
