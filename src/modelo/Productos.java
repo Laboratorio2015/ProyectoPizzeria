@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import dao.ProductoDAO;
 import dto.ProductoDTO;
+import dto.RepartidorDTO;
 
 
 public class Productos 
@@ -36,7 +37,12 @@ public class Productos
 	{
 		return this.producto.readAlli();
 	}
-	
+	//actualiza un producto/////////////////////////////
+	public void actualizarProducto(ProductoDTO producto)
+	{
+		this.producto.actualizarProducto(producto);
+	}
+	//////////////////////////////////////////////////////////
 	public ProductoDTO buscarProductoPorNombre(String nombre)
 	{
 		List<ProductoDTO> productos=this.obtenerProducto();

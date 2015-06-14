@@ -727,28 +727,51 @@ public class Controlador implements ActionListener
 			ventanaEditarProducto=new productoBajaModificacion(this);
 			ventanaEditarProducto.getBtnGuardar().addActionListener(this);
 			ventanaEditarProducto.getBtnQuitar().addActionListener(this);
-			llenarTablaProductosEditados();
+			ventanaEditarProducto.getCbTipoTabla().addActionListener(this);
+			llenarTablaProductosEditados("todos");
 			ventanaEditarProducto.setVisible(true);
+		}
+		//llenar tabla de productos en relacion al tipo  de producto seleccionado
+		else if(this.ventanaEditarProducto!= null && e.getSource()==this.ventanaEditarProducto.getCbTipoTabla())
+		{
+			String tipoProducto = (String) ventanaEditarProducto.getCbTipoTabla().getSelectedItem().toString();
+			if (tipoProducto!= "")
+			{
+				llenarTablaProductosEditados(tipoProducto);
+			}
 		}
 		//quitar productos
 		else if(this.ventanaEditarProducto!= null && e.getSource()==this.ventanaEditarProducto.getBtnQuitar())
 		{
+			Component a= new Component() {};
+			int opcion = JOptionPane.showConfirmDialog(a, "¿Esta seguro que desea quitar el producto de la lista?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			if( opcion==0)
+			{
 			ProductoDTO nuevo= this.producto.buscarProductoPorNombre(ventanaEditarProducto.getTable().getValueAt(this.ventanaEditarProducto.getTable().getSelectedRow(), 0).toString());
 			this.producto.quitarProducto(nuevo);
-			llenarTablaProductosEditados();
+			}
+			ventanaEditarProducto.getCbTipoTabla().setSelectedIndex(0);
+			ventanaEditarProducto.getCbTipo().setSelectedIndex(0);
+			llenarTablaProductosEditados("todos");
 			ventanaEditarProducto.getTfNombre().setText("");
 			ventanaEditarProducto.getTfPrecio().setText("");
 		}
 		//modificar producto
 		else if(this.ventanaEditarProducto!= null && e.getSource()==this.ventanaEditarProducto.getBtnGuardar())
 		{
+			Component a= new Component() {};
+			int opcion = JOptionPane.showConfirmDialog(a, "¿Desea guardar los cambios realizados?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			if( opcion==0)
+			{
 			ProductoDTO nuevo= this.producto.buscarProductoPorNombre(ventanaEditarProducto.getTable().getValueAt(this.ventanaEditarProducto.getTable().getSelectedRow(), 0).toString());
 			nuevo.setNombre(ventanaEditarProducto.getTfNombre().getText().toString());
 			nuevo.setPrecio(Integer.parseInt(ventanaEditarProducto.getTfPrecio().getText().toString()));
 			nuevo.setTipo(ventanaEditarProducto.getCbTipo().getSelectedItem().toString());
-			this.producto.quitarProducto(nuevo);
-			this.producto.agregarProducto(nuevo);
-			llenarTablaProductosEditados();
+			this.producto.actualizarProducto(nuevo);
+			}
+			ventanaEditarProducto.getCbTipoTabla().setSelectedIndex(0);
+			llenarTablaProductosEditados("todos");
+			ventanaEditarProducto.getCbTipo().setSelectedIndex(0);
 			ventanaEditarProducto.getTfNombre().setText("");
 			ventanaEditarProducto.getTfPrecio().setText("");			
 		}
@@ -817,7 +840,7 @@ public class Controlador implements ActionListener
 		{
 			Component a= new Component() {
 			};
-			int opcion = JOptionPane.showConfirmDialog(a, "Desea seguir ejecutando la aplicación?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			int opcion = JOptionPane.showConfirmDialog(a, "¿Esta seguro que desea eliminar el repartidor?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
 			if( opcion==0)
 			{
 				RepartidorDTO nuevo= this.repartidor.buscarRepartidorPorDni(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
@@ -839,7 +862,7 @@ public class Controlador implements ActionListener
 		{
 			Component a= new Component() {
 			};
-			int opcion = JOptionPane.showConfirmDialog(a, "Desea seguir ejecutando la aplicación?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			int opcion = JOptionPane.showConfirmDialog(a, "¿Desea guardar los cambios realizados?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
 			if( opcion==0)
 			{
 				RepartidorDTO rep= this.repartidor.buscarRepartidorPorDni(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
@@ -1595,7 +1618,7 @@ public class Controlador implements ActionListener
 		}
 	}
 
-	private void llenarTablaProductosEditados()
+	private void llenarTablaProductosEditados(String tipo)
 	{
 		this.ventanaEditarProducto.getModel().setRowCount(0);
 		this.ventanaEditarProducto.getModel().setColumnCount(0);
@@ -1604,8 +1627,16 @@ public class Controlador implements ActionListener
 		while(Iterador.hasNext())
 		{
 			ProductoDTO elemento = Iterador.next();
-			Object[] fila = {elemento.getNombre(), elemento.getPrecio(), elemento.getTipo()};
-			this.ventanaEditarProducto.getModel().addRow(fila);			
+			if(elemento.getTipo().compareTo(tipo)==0)
+			{
+				Object[] fila = {elemento.getNombre(), elemento.getPrecio(), elemento.getTipo()};
+				this.ventanaEditarProducto.getModel().addRow(fila);
+			}
+			else if (tipo.compareTo("todos")==0)
+			{
+				Object[] fila = {elemento.getNombre(), elemento.getPrecio(), elemento.getTipo()};
+				this.ventanaEditarProducto.getModel().addRow(fila);
+			}
 		}
 	}
 	public PadreMonitor getMonitor(){

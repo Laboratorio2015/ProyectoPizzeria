@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.ProductoDTO;
+import dto.RepartidorDTO;
 import conexion.Conexion;
 
 
@@ -15,7 +16,7 @@ public class ProductoDAO
 	private static final String insert = "INSERT INTO productos(idproducto, nombre,precio,tipo,fueeliminado) VALUES(?,?, ?, ?,?)";
 	private static final String delete = "update productos set fueeliminado=true WHERE idproducto = ?";
 	private static final String readall = "SELECT * FROM productos";
-	private static final String buscar="SELECT * from productos where idproducto= ?";
+	private static final String actualizarDatos="Update productos Set nombre=?, precio=?, tipo=?,fueeliminado=? where idproducto=?";
 	private static final Conexion conexion = Conexion.getConexion();
 	
 	public boolean insert(ProductoDTO producto)
@@ -161,5 +162,38 @@ public class ProductoDAO
 			conexion.cerrarConexion();
 		}
 		return productos;
+	}
+	
+	//actualiza los datos de un producto
+	public boolean actualizarProducto(ProductoDTO ProductoActualizar)
+	{
+		PreparedStatement statement;
+		int chequeoUpdate=0;
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(actualizarDatos);
+			//actializar los datos
+			statement.setString(1, ProductoActualizar.getNombre());
+			statement.setInt(2, ProductoActualizar.getPrecio());
+			statement.setString(3, ProductoActualizar.getTipo());
+			statement.setBoolean(4, ProductoActualizar.getFueeliminado());
+			statement.setInt(5, ProductoActualizar.getIdproducto());
+			chequeoUpdate = statement.executeUpdate();
+			if(chequeoUpdate > 0)
+			{
+				System.out.println("Actualizacion exitosa de producto");
+				return true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			System.out.println("Actualizacion fallida de producto");
+			e.printStackTrace();
+		}
+		finally
+		{
+			conexion.cerrarConexion();
+		}
+		return false;
 	}
 }
