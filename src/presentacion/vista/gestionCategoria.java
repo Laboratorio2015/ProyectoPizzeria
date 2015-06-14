@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import dto.CategoriaDTO;
+
 public class gestionCategoria extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -21,46 +23,60 @@ public class gestionCategoria extends JDialog {
 	private JButton btnAgregarCategoria;
 	private JButton btnQuitarCategoria;
 	private JButton btnEditarCategoria;
+	private JButton btnGuardarModificacion;
 	private JScrollPane scrollPane;
-	private JTable table;
-	private  String[] nombreColumnas = {"Numero","Categoria"};
-	private DefaultTableModel model;
+	private String[] nombreColumnas = {"IdCategoria","Categoria"};
+	private JTable tablacategorias;
+	private DefaultTableModel modeloCategorias;
 
+
+	@SuppressWarnings("serial")
 	public gestionCategoria() {
-		setBounds(100, 100, 667, 537);
+		setBounds(100, 100, 667, 544);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
 			tfDenominacion = new JTextField();
-			tfDenominacion.setBounds(168, 241, 176, 22);
+			tfDenominacion.setBounds(168, 246, 176, 22);
 			contentPanel.add(tfDenominacion);
 			tfDenominacion.setColumns(10);
 		}
+		
+		btnGuardarModificacion = new JButton("guardar Modificacion");
+		btnGuardarModificacion.setBounds(104, 284, 198, 42);
+		contentPanel.add(btnGuardarModificacion);
 		{
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(370, 153, 186, 246);
+			scrollPane.setBounds(372, 161, 186, 246);
 			contentPanel.add(scrollPane);
-			{
-				model = new DefaultTableModel(null,nombreColumnas);
-				table = new JTable(model)
-				{
-				    @Override
-					public boolean isCellEditable(int rowIndex, int colIndex) {
-				    	if (colIndex==1) {
-				            return true;  //La columna 1 y 3 son editables.
-				        }
-				        return false;  //El resto de celdas no son editables.
-				    }
-				};
-				scrollPane.setViewportView(table);
-			}
 		}
+		tablacategorias = new JTable();
+		modeloCategorias = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Categor\u00EDa", "IdCategoria"
+				}
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			};
+		tablacategorias.setModel(modeloCategorias);
+				
+		
+		tablacategorias.getColumnModel().getColumn(1).setPreferredWidth(15);
+		tablacategorias.getColumnModel().getColumn(1).setMaxWidth(15);
+		scrollPane.setViewportView(tablacategorias);
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(gestionCategoria.class.getResource("/prototipos/Gestor de categorias.png")));
-			label.setBounds(0, 0, 650, 500);
+			label.setBounds(0, 0, 650, 510);
 			contentPanel.add(label);
 		}
 		{
@@ -79,21 +95,21 @@ public class gestionCategoria extends JDialog {
 			getRootPane().setDefaultButton(btnFinalizar);
 		}
 		{
-			btnAgregarCategoria= new JButton("Cancel");
+			btnAgregarCategoria= new JButton("agregarCategoria");
 			btnAgregarCategoria.setOpaque(false);
-			btnAgregarCategoria.setBounds(112, 324, 39, 36);
+			btnAgregarCategoria.setBounds(112, 332, 39, 36);
 			contentPanel.add(btnAgregarCategoria);
 			btnAgregarCategoria.setActionCommand("Cancel");
 		}
 		{
-			btnQuitarCategoria= new JButton("Cancel");
+			btnQuitarCategoria= new JButton("borrarCat");
 			btnQuitarCategoria.setOpaque(false);
 			btnQuitarCategoria.setActionCommand("Cancel");
 			btnQuitarCategoria.setBounds(584, 287, 39, 36);
 			contentPanel.add(btnQuitarCategoria);
 		}
 		{
-			btnEditarCategoria= new JButton("Cancel");
+			btnEditarCategoria= new JButton("editarCat");
 			btnEditarCategoria.setOpaque(false);
 			btnEditarCategoria.setActionCommand("Cancel");
 			btnEditarCategoria.setBounds(584, 217, 31, 36);
@@ -101,6 +117,9 @@ public class gestionCategoria extends JDialog {
 		}
 	}
 
+	public void addCategoriaTabla(CategoriaDTO categoria){
+		modeloCategorias.addRow(new Object [] {categoria.getDenominacion().trim(), categoria.getIdCategoria()});
+	}
 	public JTextField getTfDenominacion() {
 		return tfDenominacion;
 	}
@@ -133,14 +152,6 @@ public class gestionCategoria extends JDialog {
 		this.btnEditarCategoria = btnEditarCategoria;
 	}
 
-	public JTable getTable() {
-		return table;
-	}
-
-	public void setTable(JTable table) {
-		this.table = table;
-	}
-
 	public String[] getNombreColumnas() {
 		return nombreColumnas;
 	}
@@ -149,11 +160,42 @@ public class gestionCategoria extends JDialog {
 		this.nombreColumnas = nombreColumnas;
 	}
 
-	public DefaultTableModel getModel() {
-		return model;
+	public JTable getTablacategorias() {
+		return tablacategorias;
 	}
 
-	public void setModel(DefaultTableModel model) {
-		this.model = model;
-	}	
+	public void setTablacategorias(JTable tablacategorias) {
+		this.tablacategorias = tablacategorias;
+	}
+
+	public DefaultTableModel getModeloCategorias() {
+		return modeloCategorias;
+	}
+
+	@SuppressWarnings("serial")
+	public void resetearModelo() {
+		modeloCategorias = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Categor\u00EDa", "IdCategoria"
+				}
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			};
+		tablacategorias.setModel(modeloCategorias);
+	}
+
+	public JButton getBtnGuardarModificacion() {
+		return btnGuardarModificacion;
+	}
+
+	public void setBtnGuardarModificacion(JButton btnGuardarModificacion) {
+		this.btnGuardarModificacion = btnGuardarModificacion;
+	}
 }

@@ -113,7 +113,7 @@ public class opcionesDeConfiguracion extends JDialog {
 		btnGestionarCategorias.setToolTipText("Gestionar Categorias");
 		btnGestionarCategorias.setOpaque(false);
 		btnGestionarCategorias.setActionCommand("OK");
-		btnGestionarCategorias.setBounds(716, 357, 100, 108);
+		btnGestionarCategorias.setBounds(716, 346, 100, 119);
 		contentPanel.add(btnGestionarCategorias);
 		
 		btnEditarCliente= new JButton("OK");

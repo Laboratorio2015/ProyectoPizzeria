@@ -31,10 +31,6 @@ public class Categorias {
 		return this.categoria.readAll();
 	}
 
-	
-	
-	
-	
 	public CategoriaDTO buscarCategoria(int idcategoria) 
 	{
 		List<CategoriaDTO> categorias=this.obtenerCategorias();
@@ -84,5 +80,19 @@ public class Categorias {
 				  break;
 		}
 		return result;
+	}
+	
+//	public Integer getNvoId(){
+//		
+//	}
+	public boolean contiene(String nomCategoria){
+		Iterator<CategoriaDTO> Iterador = obtenerCategorias().iterator();
+		while(Iterador.hasNext())
+		{
+			CategoriaDTO elemento = Iterador.next();
+			if (elemento.getDenominacion().trim().compareTo(nomCategoria)==0 && !elemento.getFueEliminado())
+				return true;
+		}
+		return false;
 	}
 }

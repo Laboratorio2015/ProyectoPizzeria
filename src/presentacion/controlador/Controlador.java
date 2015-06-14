@@ -483,6 +483,69 @@ public class Controlador implements ActionListener
 			ventanaSeleccionProveedor.borrarDetalles();
 			accionParaCambioFiltroCategoria();
 		}
+		/////////////////////ABM CATEORIAS///////////////////////////////
+		//VENTANA CONFIGURACION > Abrir ventana abm categoria
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnGestionarCategorias())
+		{
+			ventanaGestionCategoria=new gestionCategoria();
+			ventanaGestionCategoria.setVisible(true);
+			ventanaGestionCategoria.getBtnAgregarCategoria().addActionListener(this);
+			ventanaGestionCategoria.getBtnEditarCategoria().addActionListener(this);
+			ventanaGestionCategoria.getBtnQuitarCategoria().addActionListener(this);
+			ventanaGestionCategoria.getBtnGuardarModificacion().addActionListener(this);
+			cargarListadoCategorias();
+		}
+		///VENTANA ABM CATEGORIAS> Agregar Categoria
+		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnAgregarCategoria())
+		{
+			if (ventanaGestionCategoria.getTfDenominacion().getText().toString().compareTo("") != 0 &&
+					!categoria.contiene(ventanaGestionCategoria.getTfDenominacion().getText().toString())){
+				CategoriaDTO nuevaCategoria = new CategoriaDTO(categoria.obtenerCategorias().size()+1, ventanaGestionCategoria.getTfDenominacion().getText().toString(), false);
+				categoria.agregarCategoria(nuevaCategoria);
+				ventanaGestionCategoria.addCategoriaTabla(nuevaCategoria);
+				ventanaGestionCategoria.getTablacategorias().setModel(ventanaGestionCategoria.getModeloCategorias());
+				ventanaGestionCategoria.getTfDenominacion().setText("");
+			}
+		}
+		//VENTANA ABM CATEGORIAS> Borrar Categoria
+		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnQuitarCategoria())
+		{
+			Integer intCategoriaSelecc = ventanaGestionCategoria.getTablacategorias().getSelectedRow();
+			if (intCategoriaSelecc>-1){
+				CategoriaDTO categoriaAborrar = categoria.buscarCategoria(Integer.parseInt(ventanaGestionCategoria.getTablacategorias().getValueAt(intCategoriaSelecc,1).toString()));
+				categoria.quitarCategoria(categoriaAborrar);
+				categoriaAborrar.setFueEliminado(true);
+				categoria.agregarCategoria(categoriaAborrar);
+				ventanaGestionCategoria.resetearModelo();
+				cargarListadoCategorias();
+			}
+		}
+		//VENTANA ABM CATEGORIAS> Habilitar edicion Categoria
+		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnEditarCategoria())
+		{
+			Integer intCategoriaSelecc = ventanaGestionCategoria.getTablacategorias().getSelectedRow();
+			if (intCategoriaSelecc>-1){
+				ventanaGestionCategoria.getTfDenominacion().setText(ventanaGestionCategoria.getTablacategorias().getValueAt(intCategoriaSelecc, 0).toString());
+			}
+		}
+		//VENTANA ABM CATEGORIAS> guardar edicion Categoria
+		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnGuardarModificacion())
+		{
+			if ( categoria.contiene(ventanaGestionCategoria.getTfDenominacion().getText().toString().trim()))
+			{
+				JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+			}
+			else{
+				CategoriaDTO categoriaModificada = categoria.buscarCategoria(Integer.parseInt(ventanaGestionCategoria.getTablacategorias()
+						.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 1).toString()));
+				categoria.quitarCategoria(categoriaModificada);
+				categoriaModificada.setDenominacion(ventanaGestionCategoria.getTfDenominacion().getText().toString().trim());
+				categoria.agregarCategoria(categoriaModificada);
+				ventanaGestionCategoria.resetearModelo();
+				cargarListadoCategorias();
+			}
+				
+		}
 		///////////////////////////////////FIN//////CodigoJuliet/////////////////////////////////////////////////
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
 		{
@@ -821,12 +884,7 @@ public class Controlador implements ActionListener
 			ventanaModificacionCliente=new clienteBajaModificacion();
 			ventanaModificacionCliente.setVisible(true);
 		}
-		//ventana de configuraciones para gestionar una categoria
-		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnGestionarCategorias())
-		{
-			ventanaGestionCategoria=new gestionCategoria();
-			ventanaGestionCategoria.setVisible(true);
-		}
+
 		//generar ventana para dar de alta a cliente
 		else if (this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnAgregarCliente())
 		{
@@ -883,6 +941,17 @@ public class Controlador implements ActionListener
 			else
 				JOptionPane.showMessageDialog(null, "Error el debe haber un dni registrado para poder editarlo");
 		}
+	}
+
+	private void cargarListadoCategorias() {
+		Iterator<CategoriaDTO> Iterador = categoria.obtenerCategorias().iterator();
+		while(Iterador.hasNext())
+		{
+			CategoriaDTO elemento = Iterador.next();
+			if (!elemento.getFueEliminado())
+				this.ventanaGestionCategoria.addCategoriaTabla(elemento);
+		}
+		ventanaGestionCategoria.getTablacategorias().setModel(ventanaGestionCategoria.getModeloCategorias());
 	}
 
 	private void filtrarBusquedaOrdenes() {
