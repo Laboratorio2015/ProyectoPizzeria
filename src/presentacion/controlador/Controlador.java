@@ -1005,6 +1005,7 @@ public class Controlador implements ActionListener
 	{
 		generarListadoCompra();
 		Integer id = this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size();
+		System.out.println("nvo nro de orden mat prim designado> " + id);
 		ventanaOrdenMatPrima.setNuevaOrden(new OrdenPedidoMatPrimaDTO(id,ventanaOrdenMatPrima.getProvSeleccionado(),
 			ventanaOrdenMatPrima.getListadoItemsOrdenados(),enviado));
 		ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
@@ -1018,11 +1019,15 @@ public class Controlador implements ActionListener
 	}
 	private void generarListadoCompra() {
 		ArrayList<ItemMateriaPrimaDTO> listadoCompra = new ArrayList<ItemMateriaPrimaDTO>();
+		MateriaPrimaDTO materiaPrima;
+		ItemMateriaPrimaDTO itemMatPrima;
 		for (int i=0; i < ventanaOrdenMatPrima.getModeloItemsSolicitados().getRowCount(); i++){
 			//Este metodo genera un array list de items se materia prima, por lo cual recorre la tabla creada.
-			MateriaPrimaDTO materiaPrima = getMatPrimaSeleccionada(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i,0).toString());
-			ItemMateriaPrimaDTO itemMatPrima = new ItemMateriaPrimaDTO(this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size()+1, materiaPrima,
+			materiaPrima = getMatPrimaSeleccionada(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i,0).toString());
+			Integer idAsignadoItemMarPrima = this.itemsMateriaPrima.getNuevoId();
+			itemMatPrima = new ItemMateriaPrimaDTO(idAsignadoItemMarPrima+i, materiaPrima,
 					Integer.parseInt(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i,1).toString()), false);
+			System.out.println("NRO DE ITEM DESIGNADO> " + this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size());
 			this.itemsMateriaPrima.agregarItemMatPrima(itemMatPrima);
 			listadoCompra.add(itemMatPrima);
 		}

@@ -15,7 +15,7 @@ import dto.ProveedorDTO;
 
 public class OrdenPedidoMatPrimaDAO
 {
-	private static final String insert = "INSERT INTO ordenpedidomatprima(idcompra, proveedor,itemmatprima,estado,fecha,costo,enviado,fueeliminado) VALUES(?,?,?,?,?)";
+	private static final String insert = "INSERT INTO ordenpedidomatprima(idcompra, proveedor,itemmatprima,estado,fecha,costo,enviado,fueeliminado) VALUES(?,?,?,?,?,?,?,?)";
 	private static final String delete = "DELETE FROM ordenpedidomatprima WHERE idcompra = ?";
 	private static final String readall = "SELECT * FROM ordenpedidomatprima ";
 	

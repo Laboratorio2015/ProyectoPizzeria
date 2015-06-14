@@ -85,6 +85,16 @@ private ItemMateriaPrimaDAO itemMatPrima;
 		return result;
 	}
 
-	
+	public Integer getNuevoId(){
+		Iterator<ItemMateriaPrimaDTO> Iterador = obtenerItemMatPrima().iterator();
+		Integer ultimoId = 0;
+		while(Iterador.hasNext())
+		{
+			ItemMateriaPrimaDTO elemento = Iterador.next();
+			if(elemento.getIdItemMatPrima()>ultimoId)
+				ultimoId=elemento.getIdItemMatPrima();
+		}
+		return ultimoId+1;
+	}
 
 }
