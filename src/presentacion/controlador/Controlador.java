@@ -66,8 +66,8 @@ import presentacion.vista.repartidorBajaModificacion;
 import presentacion.vista.seleccionDeCliente;
 import presentacion.vista.seleccionarRepartidor;
 import presentacion.vista.selectorMatPrima;
-//import presentacion.vista.selectorOpcionesOrdenMatPrima;
-//import presentacion.vista.gestionarOrdenesMatPrima;
+import presentacion.vista.selectorOpcionesOrdenMatPrima;
+import presentacion.vista.gestionarOrdenesMatPrima;
 
 
 public class Controlador implements ActionListener
@@ -79,8 +79,8 @@ public class Controlador implements ActionListener
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
 	//moficiaciones
-	//private selectorOpcionesOrdenMatPrima ventanaSelectorOpcOrdenMatPrima;
-	//private gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
+	private selectorOpcionesOrdenMatPrima ventanaSelectorOpcOrdenMatPrima;
+	private gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
 	//
 	private buscadorProveedor ventanaSeleccionProveedor;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
@@ -176,7 +176,7 @@ public class Controlador implements ActionListener
 		}
 		/////////////////////////////////////////CodigoJuliet/////////////////////////////////////////////////
 
-/*
+
 		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
@@ -316,9 +316,10 @@ public class Controlador implements ActionListener
 				}
 			}
 		//REGISTRO PAGO ORDEN MAT PRIMA> Registrar pago y recepci[on de orden
-		else if(this.ventanaRegistrarPagoOrdenMatPrima!= null && e.getSource()==this.ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro())
+/*		else if(this.ventanaRegistrarPagoOrdenMatPrima!= null && e.getSource()==this.ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro())
 			{
-			if (!ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().isEmpty()){
+			if (!ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().isEmpty())
+			{
 				ordenesMatPrimas.quitarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
 				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setCosto(Integer.parseInt(ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().toString()));
 				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setEstado("pagado");
@@ -327,10 +328,10 @@ public class Controlador implements ActionListener
 				filtrarBusquedaOrdenes();//para q actualice los estados de las ordenes y no haya problema con la busq x 
 				JOptionPane.showMessageDialog(null, "Se ha registrado correctamente la recepción y pago de la orden de materia prima", "Confirmación",JOptionPane.WARNING_MESSAGE); 
 				ventanaRegistrarPagoOrdenMatPrima.dispose();
-					}
-				}
-				break;
 			}
+				
+			break;
+			
 			case("Ordenes rechazadas"):
 			{
 				while (iteradorOrdenes.hasNext()){
@@ -343,11 +344,11 @@ public class Controlador implements ActionListener
 				}
 				break;
 			}
-			}
+			
 			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
 			this.gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 		}
-		*/
+*/		
 		//ORDEN MATERIA PRIMA> COMBO LISTA PROVEEDORES
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getComboListaProveedores())
 		{
@@ -1269,6 +1270,10 @@ public class Controlador implements ActionListener
 			comboBox.addItem(listaProveedores.get(i).getNombre());
 		}
 	}
+	
+	/////////////////////////////Metodos //////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	
 	private void mostrarArray(ArrayList<ProveedorDTO> obtenerProveedor) {
 		System.out.println("categorias>");
 
@@ -1371,7 +1376,8 @@ public class Controlador implements ActionListener
 		return listaAux;
 	}
 
-	public Repartidores getRepartidor() {
+	public Repartidores getRepartidor() 
+	{
 		return repartidor;
 	}
 
