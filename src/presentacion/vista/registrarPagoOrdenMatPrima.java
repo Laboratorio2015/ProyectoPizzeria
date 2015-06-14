@@ -34,6 +34,8 @@ public class registrarPagoOrdenMatPrima extends JDialog {
 	JButton btnRegistrarcobro;
 	
 
+	
+	
 	@SuppressWarnings("serial")
 	public registrarPagoOrdenMatPrima (VentanaPrincipal ventanaPrincipal, Controlador controlador){
 		this.ventanaPrincipal = ventanaPrincipal;
