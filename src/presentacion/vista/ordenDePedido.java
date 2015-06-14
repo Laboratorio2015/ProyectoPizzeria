@@ -52,7 +52,8 @@ public class ordenDePedido extends JDialog {
 	private pedidoMenu ventanamenu;
 	
 	//check box
-	private JCheckBox checkBoxDelivery;
+	//private JCheckBox checkBoxDelivery;
+	//check box del segundo
 	private JCheckBox checkBoxRepartidor;
 	
 	//botones
@@ -90,9 +91,11 @@ public class ordenDePedido extends JDialog {
 	private JTextField tfUnidadOtro;
 	private JTextField tfSubTotalOtro;
 	private JTextField tfTotal;
+	private JTextField textField;
 	
-	
-
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ordenDePedido(VentanaPrincipal padre,final Controlador control) 
 	{
 		setModal(true);
@@ -339,10 +342,10 @@ public class ordenDePedido extends JDialog {
 		tfPrecioUniPromocion.setBounds(502, 370, 48, 25);
 		contentPanel.add(tfPrecioUniPromocion);
 		
-		checkBoxDelivery= new JCheckBox("");
-		checkBoxDelivery.setBackground(new Color(204, 204, 0));
-		checkBoxDelivery.setBounds(789, 477, 27, 33);
-		contentPanel.add(checkBoxDelivery);
+		//checkBoxDelivery= new JCheckBox("");
+		//checkBoxDelivery.setBackground(new Color(204, 204, 0));
+		//checkBoxDelivery.setBounds(789, 477, 27, 33);
+		//contentPanel.add(checkBoxDelivery);
 		{
 			scrollPane_1 = new JScrollPane();
 			scrollPane_1.setBounds(112, 472, 561, 109);
@@ -372,6 +375,15 @@ public class ordenDePedido extends JDialog {
 		
 			scrollPane_1.setViewportView(tablaItems);
 		}
+		
+		textField = new JTextField();
+		textField.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		textField.setBackground(new Color(204, 204, 0));
+		textField.setEnabled(false);
+		textField.setEditable(false);
+		textField.setBounds(707, 470, 127, 34);
+		contentPanel.add(textField);
+		textField.setColumns(10);
 		{
 			JLabel label = new JLabel("");
 			label.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
@@ -565,9 +577,7 @@ public class ordenDePedido extends JDialog {
 	/////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////
-	/**
-	 * @wbp.parser.constructor
-	 */
+
 	public ordenDePedido(VentanaPrincipal padre,final PedidoDTO pedidoCambiar,final Controlador control) 
 	{
 		setModal(true);
@@ -1109,6 +1119,8 @@ public class ordenDePedido extends JDialog {
 
 	public void llenarTabla(PedidoDTO pedido)
 	{
+		if(pedido.getLlevaDelivery())
+			checkBoxRepartidor.setSelected(true);
 		Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
 		while(Iterador.hasNext())
 		{
@@ -1282,9 +1294,9 @@ public class ordenDePedido extends JDialog {
 		this.btnVerPizzas = btnVerPizzas;
 	}
 
-	public JCheckBox getCheckBoxDelivery() {
-		return checkBoxDelivery;
-	}
+//  public JCheckBox getCheckBoxDelivery() {
+//		return checkBoxDelivery;
+//	}
 
 
 	public JButton getBtnVerPromociones() {
@@ -1295,7 +1307,15 @@ public class ordenDePedido extends JDialog {
 	public void setBtnVerPromociones(JButton btnVerPromociones) {
 		this.btnVerPromociones = btnVerPromociones;
 	}
+	
 
+	public JCheckBox getCheckBoxRepartidor() {
+		return checkBoxRepartidor;
+	}
+
+	public void setCheckBoxRepartidor(JCheckBox checkBoxRepartidor) {
+		this.checkBoxRepartidor = checkBoxRepartidor;
+	}
 
 	public void validarTexto(KeyEvent evt, JTextField a)
 	{

@@ -597,10 +597,6 @@ public class Controlador implements ActionListener
 			nuevoPedido.setIdpedido(this.pedido.ultimoPedido()+1);
 			nuevoPedido.set_estado("solicitado");
 			nuevoPedido.setTotal(Integer.parseInt(this.ventanaPedido.getTfTotal().getText()));
-			if(ventanaPedido.getCheckBoxDelivery().isSelected())
-				nuevoPedido.setLlevaDelivery(true);
-			else
-				nuevoPedido.setLlevaDelivery(false);
 			nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 			nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 			nuevoPedido.setProductos(generarListaItems());

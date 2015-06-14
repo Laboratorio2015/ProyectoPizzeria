@@ -19,6 +19,8 @@ import com.mxrck.autocompleter.TextAutoCompleter;
 import dto.ClienteDTO;
 import dto.PedidoDTO;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+
 import presentacion.controlador.Controlador;
 import presentacion.reportes.Comanda;
 import presentacion.reportes.Ticket;
@@ -28,7 +30,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import javax.swing.JCheckBox;
+import java.awt.Font;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class seleccionDeCliente extends JDialog {
 
@@ -44,15 +51,18 @@ public class seleccionDeCliente extends JDialog {
 	private JButton btnEditarCliente;
 	private JButton btnAgregarCliente;
 	private Controlador control;
+	private JCheckBox CheckBoxDelivery;
+	private JTable table;
+	private DefaultTableModel model;
+	private  String[] nombreColumnas = {"DNI","Apellido","Nombre","Calle","Num","Telefono"};
 	
 	public seleccionDeCliente(final Controlador control,final PedidoDTO pedido)
 	{
-		setModal(true);
 		this.pedido=pedido;
 		_this=this;
 		this.control=control;
 		setMinimumSize(new Dimension(700, 600));
-		setBounds(500, 100, 700, 611);
+		setBounds(500, 100, 700, 638);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -78,7 +88,7 @@ public class seleccionDeCliente extends JDialog {
 				}
 			}
 		});
-		tfAgregarDNI.setBounds(91, 165, 174, 23);
+		tfAgregarDNI.setBounds(43, 198, 209, 23);
 		contentPanel.add(tfAgregarDNI);
 		tfAgregarDNI.setColumns(10);
 		
@@ -89,26 +99,59 @@ public class seleccionDeCliente extends JDialog {
 		
 		{
 			tfDireccionTelefono = new JTextField();
+			tfDireccionTelefono.setFont(new Font("Calibri", Font.BOLD, 15));
+			tfDireccionTelefono.setForeground(Color.DARK_GRAY);
 			tfDireccionTelefono.setBackground(new Color(204, 204, 0));
 			tfDireccionTelefono.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfDireccionTelefono.setEditable(false);
 			tfDireccionTelefono.setColumns(10);
-			tfDireccionTelefono.setBounds(348, 166, 301, 20);
+			tfDireccionTelefono.setBounds(275, 184, 277, 20);
 			contentPanel.add(tfDireccionTelefono);
 		}
+		
+		CheckBoxDelivery= new JCheckBox("");
+		CheckBoxDelivery.setBackground(new Color(204, 204, 0));
+		CheckBoxDelivery.setBounds(386, 280, 28, 23);
+		contentPanel.add(CheckBoxDelivery);
 		{
 			tfNombrApellido = new JTextField();
+			tfNombrApellido.setForeground(Color.DARK_GRAY);
+			tfNombrApellido.setFont(new Font("Calibri", Font.BOLD, 15));
 			tfNombrApellido.setBackground(new Color(204, 204, 0));
 			tfNombrApellido.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
 			tfNombrApellido.setEditable(false);
-			tfNombrApellido.setBounds(348, 146, 301, 20);
+			tfNombrApellido.setBounds(275, 157, 277, 20);
 			contentPanel.add(tfNombrApellido);
 			tfNombrApellido.setColumns(10);
 		}
+		
+		JLabel lblListadoDeTodos = new JLabel("Listado de Clientes");
+		lblListadoDeTodos.setForeground(Color.DARK_GRAY);
+		lblListadoDeTodos.setFont(new Font("Calibri", Font.BOLD, 17));
+		lblListadoDeTodos.setBounds(31, 316, 277, 23);
+		contentPanel.add(lblListadoDeTodos);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(43, 366, 607, 139);
+		contentPanel.add(scrollPane);
+		
+		model = new DefaultTableModel(null,nombreColumnas);
+		table = new JTable(model);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) 
+			{
+				ClienteDTO auxi=control.getCliente().buscarClientePorDNI(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
+				tfNombrApellido.setText("Apellido y Nombre: "+auxi.getApellido()+" "+ auxi.getNombre());
+				tfDireccionTelefono.setText("Direccion: "+auxi.getDireccion()+""+auxi.getNumeracion());
+			}
+		});
+		scrollPane.setViewportView(table);
+		llenarTablaCliente();
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(seleccionDeCliente.class.getResource("/prototipos/seleccion de cliente.png")));
-			label.setBounds(0, 0, 684, 572);
+			label.setBounds(0, 0, 684, 600);
 			contentPanel.add(label);
 		}
 		{
@@ -120,8 +163,20 @@ public class seleccionDeCliente extends JDialog {
 				@Override
 				public void mouseClicked(MouseEvent arg0)
 				{
-					cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText()));
-					pedido.setCliente(cliente);
+					try
+					{
+						cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText()));
+						pedido.setCliente(cliente);
+					}
+					catch(Exception e)
+					{
+						cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
+						pedido.setCliente(cliente);
+					}
+					if(CheckBoxDelivery.isSelected())
+						pedido.setLlevaDelivery(true);
+					else
+						pedido.setLlevaDelivery(false);
 					control.getPedido().agregarPedido(pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
 					//control.getMonitorCocina().nuevoPedido(pedido);
@@ -137,7 +192,7 @@ public class seleccionDeCliente extends JDialog {
 				}
 			});
 			btnSeleccionar.setOpaque(false);
-			btnSeleccionar.setBounds(118, 527, 168, 34);
+			btnSeleccionar.setBounds(161, 530, 168, 34);
 			contentPanel.add(btnSeleccionar);
 			btnSeleccionar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnSeleccionar);
@@ -145,7 +200,7 @@ public class seleccionDeCliente extends JDialog {
 		{
 			JButton btnCancelar = new JButton("Cancel");
 			btnCancelar.setOpaque(false);
-			btnCancelar.setBounds(334, 527, 161, 34);
+			btnCancelar.setBounds(378, 530, 161, 34);
 			contentPanel.add(btnCancelar);
 			btnCancelar.addActionListener(new ActionListener() 
 			{
@@ -160,15 +215,16 @@ public class seleccionDeCliente extends JDialog {
 		{
 			btnAgregarCliente= new JButton("New button");
 			btnAgregarCliente.setOpaque(false);
-			btnAgregarCliente.setBounds(287, 330, 82, 85);
+			btnAgregarCliente.setBounds(540, 226, 123, 95);
 			contentPanel.add(btnAgregarCliente);
 		}
 		{
 			btnEditarCliente= new JButton("New button");
 			btnEditarCliente.setOpaque(false);
-			btnEditarCliente.setBounds(571, 114, 78, 29);
+			btnEditarCliente.setBounds(572, 146, 78, 34);
 			contentPanel.add(btnEditarCliente);
 		}
+		
 
 	}
 
@@ -266,6 +322,20 @@ public class seleccionDeCliente extends JDialog {
 		return btnSeleccionar;
 	}
 
+	private void llenarTablaCliente()
+	{
+		model.setRowCount(0);
+		model.setColumnCount(0);
+		model.setColumnIdentifiers(nombreColumnas);
+		Iterator<ClienteDTO> Iterador = control.getCliente().obtenerClientes().iterator();
+		while(Iterador.hasNext())
+		{
+			ClienteDTO elemento = Iterador.next();
+			Object[] fila = {elemento.getDni(),elemento.getApellido(),elemento.getNombre(),elemento.getCalle(), elemento.getNumeracion(),elemento.getTelefono()};
+			model.addRow(fila);			
+		}
+	}
+	
 	private void validarNumerosDNI(KeyEvent evt, JTextField a)
 	{
 		char car = evt.getKeyChar();
