@@ -173,6 +173,7 @@ public class Controlador implements ActionListener
 			ventanaPedPendiente.llenarTabla();
 			this.ventanaPedPendiente.setVisible(true);
 		}
+		/////////////////////////////////////////CodigoJuliet/////////////////////////////////////////////////
 
 		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
@@ -252,6 +253,7 @@ public class Controlador implements ActionListener
 			}
 			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
 		}
+		//GESTOR ORDENES MAT PRIMA> Accion para filtro de busqeda
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getComboBoxFiltroOrdenes())
 		{
 			this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().removeAllItems();
@@ -396,16 +398,20 @@ public class Controlador implements ActionListener
 		//ORDEN MATERIA PRIMA>ENVIAR ORDEN X MAIL, PDF.
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnEnviarform())
 		{
-			generarPDFyPersistir();
+			persistirOrdenMatPrima(true);
+			generarPDFOrdenMatPrima();
 			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra y fue enviado con por e-mail a su proveedor.", "Confirmación", JOptionPane.WARNING_MESSAGE);
-			borrarTodo();
+			//borrarTodo();
+			ventanaOrdenMatPrima.dispose();
 		}
-		//ORDEN MATERIA PRIMA> GENERAR PDF Y PERSISTIR ORDEN
+		//ORDEN MATERIA PRIMA> SOLO GUARDAR, GENERAR PDF Y PERSISTIR ORDEN
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnGuardarform())
 		{
-			generarPDFyPersistir();
+			persistirOrdenMatPrima(false);
+			generarPDFOrdenMatPrima();
 			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra", "Confirmación", JOptionPane.WARNING_MESSAGE);
-			borrarTodo();
+			//borrarTodo();
+			ventanaOrdenMatPrima.dispose();
 		}
 		//ORDEN MATERIA PRIMA> CANCELAR ORDEN
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnCancelar())
@@ -464,8 +470,7 @@ public class Controlador implements ActionListener
 			ventanaSeleccionProveedor.borrarDetalles();
 			accionParaCambioFiltroCategoria();
 		}
-
-
+		///////////////////////////////////FIN//////CodigoJuliet/////////////////////////////////////////////////
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
 		{
 			ventanaConfiguraciones=new opcionesDeConfiguracion();
@@ -989,19 +994,24 @@ public class Controlador implements ActionListener
 		});
 		ventanaOrdenMatPrima.actualizarModelo();
 	}
-	private void generarPDFyPersistir() {
-		generarListadoCompra();
-		Integer id = 98;
-		ventanaOrdenMatPrima.setNuevaOrden(new OrdenPedidoMatPrimaDTO(id,ventanaOrdenMatPrima.getProvSeleccionado(),
-				ventanaOrdenMatPrima.getListadoItemsOrdenados()));
-		this.ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
-		ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
+	private void generarPDFOrdenMatPrima() {
 		try {
 			solicitudDeMateriaPrima ordenPDF = new solicitudDeMateriaPrima(ventanaOrdenMatPrima.getNuevaOrden());
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}		
 	}
+	private void persistirOrdenMatPrima(boolean enviado)
+	{
+		generarListadoCompra();
+		Integer id = this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size();
+		ventanaOrdenMatPrima.setNuevaOrden(new OrdenPedidoMatPrimaDTO(id,ventanaOrdenMatPrima.getProvSeleccionado(),
+			ventanaOrdenMatPrima.getListadoItemsOrdenados(),enviado));
+		ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
+		//this.ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
+	
+	}
+	
 	private void limpiarCampos() {
 		ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().setText("");
 		ventanaOrdenMatPrima.getTextFieldCantMatPrima().setText("");
@@ -1011,8 +1021,9 @@ public class Controlador implements ActionListener
 		for (int i=0; i < ventanaOrdenMatPrima.getModeloItemsSolicitados().getRowCount(); i++){
 			//Este metodo genera un array list de items se materia prima, por lo cual recorre la tabla creada.
 			MateriaPrimaDTO materiaPrima = getMatPrimaSeleccionada(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i,0).toString());
-			ItemMateriaPrimaDTO itemMatPrima = new ItemMateriaPrimaDTO(this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size(), materiaPrima,
+			ItemMateriaPrimaDTO itemMatPrima = new ItemMateriaPrimaDTO(this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size()+1, materiaPrima,
 					Integer.parseInt(ventanaOrdenMatPrima.getModeloItemsSolicitados().getValueAt(i,1).toString()), false);
+			this.itemsMateriaPrima.agregarItemMatPrima(itemMatPrima);
 			listadoCompra.add(itemMatPrima);
 		}
 		ventanaOrdenMatPrima.setListadoItemsOrdenados(listadoCompra);

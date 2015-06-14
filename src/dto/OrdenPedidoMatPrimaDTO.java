@@ -28,12 +28,15 @@ public class OrdenPedidoMatPrimaDTO
 		this.fueeliminado=fueeliminado;
 	}
 	
-	public OrdenPedidoMatPrimaDTO(Integer idCompra, ProveedorDTO proveedor,ArrayList<ItemMateriaPrimaDTO> listadoCompra) {
+	public OrdenPedidoMatPrimaDTO(Integer idCompra, ProveedorDTO proveedor,ArrayList<ItemMateriaPrimaDTO> listadoCompra,boolean enviado) {
 		super();
 		this.idCompra = idCompra;
 		this.proveedor = proveedor;
 		this.listadoCompra = listadoCompra;
 		this.estado="guardado";
+		this.fecha = "12122015";
+		this.costo=0;
+		this.enviado = false;
 		this.fueeliminado=false;
 	}
 	

@@ -37,8 +37,6 @@ public class OrdenPedidoMatPrimaDAO
 			statement.setInt(6, orden.getCosto());
 			statement.setBoolean(7,orden.getEnviado());
 			statement.setBoolean(8,orden.getFueeliminado());
-
-			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
 			{
 				System.out.println("inserccion exitosa de orden de materia prima");
