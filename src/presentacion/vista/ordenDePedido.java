@@ -29,11 +29,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JScrollPane;
-import presentacion.controlador.Controlador;
 import javax.swing.JCheckBox;
 import javax.swing.ListSelectionModel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import presentacion.controlador.Controlador;
 
 @SuppressWarnings("serial")
 public class ordenDePedido extends JDialog {

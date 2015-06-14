@@ -188,6 +188,22 @@ public class ClienteDTO
 		}
 		return null;
 	}
+
+	public String sinEspacio(String comentario)
+	{
+		String coment="";
+		if(comentario!=null)
+		{
+			for (int i=0; i<comentario.length(); i++)
+			{
+				  if (comentario.charAt(i) != ' ' || (comentario.charAt(i)==' ' && comentario.charAt(i+1)!=' '))
+				    coment += comentario.charAt(i);
+				  else if(comentario.charAt(i)==' ' && comentario.charAt(i+1)==' ')
+					  break;
+			}
+		}
+		return coment;
+	}
 	
 
 }

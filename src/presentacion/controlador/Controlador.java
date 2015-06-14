@@ -1,6 +1,7 @@
 package presentacion.controlador;
 
 import java.awt.Component;
+import java.awt.dnd.Autoscroll;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -14,6 +15,8 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;import com.itextpdf.text.log.SysoCounter;
+import com.mxrck.autocompleter.TextAutoCompleter;
+
 import Cocina.PadreMonitor;
 import modelo.Categorias;
 import modelo.Clientes;
@@ -95,7 +98,6 @@ public class Controlador implements ActionListener
 	private promocionAlta ventanaAgregarPromocion;
 	private promocionBajaModificacion ventanaEditarPromocion;
 	private gestionCategoria ventanaGestionCategoria;
-	private clienteBajaModificacion ventanaModificacionCliente;
 	private calendario ventanaCalendario;
 	private registrarCobroDePedido ventanaRegCobroPedido;
 	private registrarCobroManualmente ventanaRegCobroManual;
@@ -103,6 +105,7 @@ public class Controlador implements ActionListener
 	private PadreMonitor monitorCocina;
 	private pedidoMenu ventanamenu;
 	private registroDeCliente ventanaRegistrarCliente;
+	private clienteBajaModificacion ventanaModificacionCliente;
 	private selectorMatPrima ventanaSeleccionMatPrima;
 
 
@@ -939,8 +942,101 @@ public class Controlador implements ActionListener
 		//ventana de configuracion para editar un cliente
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarCliente())
 		{
-			ventanaModificacionCliente=new clienteBajaModificacion();
+			ventanaModificacionCliente=new clienteBajaModificacion(this);
+			llenarTablaCliente();
+			ventanaModificacionCliente.getBtnGuardar().addActionListener(this);
+			ventanaModificacionCliente.getBtnBorrarCliente().addActionListener(this);
+			ventanaModificacionCliente.getCbClientes().addActionListener(this);
 			ventanaModificacionCliente.setVisible(true);
+			
+		}
+		//llenar autocompletar de clientes en relacion al tipo de filtro seleccionado
+				else if(this.ventanaModificacionCliente!= null && e.getSource()==this.ventanaModificacionCliente.getCbClientes())
+				{
+					String tipoDeFiltro = (String) ventanaModificacionCliente.getCbClientes().getSelectedItem().toString();
+					switch (tipoDeFiltro)
+					{
+					case"DNI":
+					{
+						TextAutoCompleter autoCompletar=new TextAutoCompleter(ventanaModificacionCliente.getTfBusquedaCliente());
+						autoCompletar.setCaseSensitive(false);
+						autoCompletar.addItems(this.cliente.dniClientes()); break;
+					}
+					case"Apellido":
+					{
+						TextAutoCompleter autoCompletar=new TextAutoCompleter(ventanaModificacionCliente.getTfBusquedaCliente());
+						autoCompletar.setCaseSensitive(false);
+						autoCompletar.addItems(this.cliente.ApellidoClientes()); break;
+					}
+					case"Nombre":
+					{
+						TextAutoCompleter autoCompletar=new TextAutoCompleter(ventanaModificacionCliente.getTfBusquedaCliente());
+						autoCompletar.setCaseSensitive(false);
+						autoCompletar.addItems(this.cliente.NombreClientes()); break;
+					}
+					}
+				}
+		//mofificar un cliente
+		else if(this.ventanaModificacionCliente!=null && e.getSource()==this.ventanaModificacionCliente.getBtnGuardar())
+		{
+			Component a= new Component() {};
+			int opcion = JOptionPane.showConfirmDialog(a, "¿Desea guardar los cambios realizados?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			if( opcion==0)
+				{
+					
+					ClienteDTO actu=this.cliente.buscarClientePorDNI(Integer.parseInt(ventanaModificacionCliente.getModel().getValueAt(ventanaModificacionCliente.getTable().getSelectedRow(), 0).toString()));
+					actu.setDni(Integer.parseInt(ventanaModificacionCliente.getTfDni().getText().toString()));
+					actu.setNombre(ventanaModificacionCliente.getTfNombre().getText().toString());
+					actu.setApellido(ventanaModificacionCliente.getTfApellido().getText().toString());
+					actu.setCalle(ventanaModificacionCliente.getTfCalle().getText().toString());
+					actu.setNumeracion(ventanaModificacionCliente.getTfNumeracion().getText().toString());
+					actu.setEntrecalle1(ventanaModificacionCliente.getTfEntreCalle1().getText().toString());
+					actu.setEntrecalle2(ventanaModificacionCliente.getTfEntreCalle2().getText().toString());
+					actu.setCodPostal(ventanaModificacionCliente.getTfCodPostal().getText().toString());
+					actu.setTelefono(ventanaModificacionCliente.getTfTelefono().getText().toString());
+					actu.setComentario(ventanaModificacionCliente.getTfComentario().getText().toString());
+					actu.setEmail(ventanaModificacionCliente.getTfEmail().getText().toString());
+					actu.setFueeliminado(false);
+					this.cliente.actualizarCliente(actu);
+				}
+			ventanaModificacionCliente.getTfApellido().setText("");
+			ventanaModificacionCliente.getTfBusquedaCliente().setText("");
+			ventanaModificacionCliente.getTfCalle().setText("");
+			ventanaModificacionCliente.getTfCodPostal().setText("");
+			ventanaModificacionCliente.getTfComentario().setText("");
+			ventanaModificacionCliente.getTfDni().setText("");
+			ventanaModificacionCliente.getTfEmail().setText("");
+			ventanaModificacionCliente.getTfEntreCalle1().setText("");
+			ventanaModificacionCliente.getTfEntreCalle2().setText("");
+			ventanaModificacionCliente.getTfNombre().setText("");
+			ventanaModificacionCliente.getTfNumeracion().setText("");
+			ventanaModificacionCliente.getTfTelefono().setText("");
+			llenarTablaCliente();
+		}
+		
+		//borrar un cliente
+		else if(this.ventanaModificacionCliente!=null && e.getSource()==this.ventanaModificacionCliente.getBtnBorrarCliente())
+		{
+			Component a= new Component() {};
+			int opcion = JOptionPane.showConfirmDialog(a, "¿Esta seguro que desea eliminar el cliente?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			if( opcion==0)
+				{
+				ClienteDTO actu=this.cliente.buscarClientePorDNI(Integer.parseInt(ventanaModificacionCliente.getModel().getValueAt(ventanaModificacionCliente.getTable().getSelectedRow(), 0).toString()));
+				this.cliente.quitarCliente(actu);
+				}
+			ventanaModificacionCliente.getTfApellido().setText("");
+			ventanaModificacionCliente.getTfBusquedaCliente().setText("");
+			ventanaModificacionCliente.getTfCalle().setText("");
+			ventanaModificacionCliente.getTfCodPostal().setText("");
+			ventanaModificacionCliente.getTfComentario().setText("");
+			ventanaModificacionCliente.getTfDni().setText("");
+			ventanaModificacionCliente.getTfEmail().setText("");
+			ventanaModificacionCliente.getTfEntreCalle1().setText("");
+			ventanaModificacionCliente.getTfEntreCalle2().setText("");
+			ventanaModificacionCliente.getTfNombre().setText("");
+			ventanaModificacionCliente.getTfNumeracion().setText("");
+			ventanaModificacionCliente.getTfTelefono().setText("");
+			llenarTablaCliente();
 		}
 
 		//generar ventana para dar de alta a cliente
@@ -954,7 +1050,7 @@ public class Controlador implements ActionListener
 		else if (this.ventanaRegistrarCliente!= null && e.getSource()==this.ventanaRegistrarCliente.getBtnRegistrar())
 		{
 			ClienteDTO nuevo= new ClienteDTO();
-			nuevo.setIdcliente(this.cliente.obtenerClientes().size()+1);
+			nuevo.setIdcliente(this.cliente.obtenerTodoClientes().size()+1);
 			nuevo.setDni(Integer.parseInt(ventanaRegistrarCliente.getTfdni().getText().toString()));
 			nuevo.setApellido(ventanaRegistrarCliente.getTfApellido().getText().toString());
 			nuevo.setNombre(ventanaRegistrarCliente.getTfNombre().getText().toString());
@@ -979,7 +1075,6 @@ public class Controlador implements ActionListener
 		{
 			if(ventanaCliente.getTfAgregarDNI().getText().length()>7)
 			{
-				ventanaCliente.setModal(false);
 				ventanaModificacionCliente=new clienteBajaModificacion(ventanaCliente, this);
 				ClienteDTO aux=cliente.buscarClientePorDNI(Integer.parseInt(ventanaCliente.getTfAgregarDNI().getText().toString()));
 				ventanaModificacionCliente.getTfDni().setText(aux.getDni().toString());
@@ -1572,7 +1667,7 @@ public class Controlador implements ActionListener
 		while(Iterador.hasNext())
 		{
 			ClienteDTO elemento = Iterador.next();
-			Object[] fila = {elemento.getDni(),elemento.getApellido(),elemento.getApellido()};
+			Object[] fila = {elemento.getDni(),elemento.getApellido(),elemento.getNombre()};
 			this.ventanaModificacionCliente.getModel().addRow(fila);			
 		}
 	}

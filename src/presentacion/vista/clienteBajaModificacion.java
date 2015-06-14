@@ -17,6 +17,15 @@ import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+
+import dto.ClienteDTO;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class clienteBajaModificacion extends JDialog {
 
@@ -34,18 +43,26 @@ public class clienteBajaModificacion extends JDialog {
 	private JTextField tfComentario;
 	private JTextField tfBusquedaCliente;
 	private JScrollPane scrollPane;
+	private DefaultTableModel model;
+	private  String[] nombreColumnas = {"DNI","Apellido","Nombre"};
 	private JTable table;
 	private Controlador control;
 	private seleccionDeCliente ventanaPadre;
-	private DefaultTableModel model;
-	private  String[] nombreColumnas = {"DNI","Apellido","Nombre"};
+	private JComboBox cbClientes;
+	private JButton btnGuardar;
+	private JButton btnBorrarCliente;
+	
 
-	public clienteBajaModificacion() {
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public clienteBajaModificacion(final Controlador control) {
 		setModal(true);
 		setBounds(100, 100, 857, 640);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		this.control=control;
 		contentPanel.setLayout(null);
 		{
 			tfDni = new JTextField();
@@ -114,14 +131,8 @@ public class clienteBajaModificacion extends JDialog {
 			contentPanel.add(tfComentario);
 		}
 		{
-			tfBusquedaCliente = new JTextField();
-			tfBusquedaCliente.setBounds(31, 150, 202, 22);
-			contentPanel.add(tfBusquedaCliente);
-			tfBusquedaCliente.setColumns(10);
-		}
-		{
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(31, 216, 207, 306);
+			scrollPane.setBounds(21, 128, 217, 394);
 			contentPanel.add(scrollPane);
 			{
 				model = new DefaultTableModel(null,nombreColumnas);
@@ -133,6 +144,14 @@ public class clienteBajaModificacion extends JDialog {
 				        return false; //desabilita la edicion de las celdas
 				    }
 				};
+				table.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent e)
+					{
+						ClienteDTO auxi=control.getCliente().buscarClientePorDNI(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
+						agregarDatos(auxi);
+					}
+				});
 				scrollPane.setViewportView(table);
 			}
 		}
@@ -143,14 +162,57 @@ public class clienteBajaModificacion extends JDialog {
 			contentPanel.add(lblNewLabel);
 		}
 		{
-			JButton btnGuardar = new JButton("Cancel");
+			tfBusquedaCliente = new JTextField();
+			tfBusquedaCliente.setOpaque(false);
+			tfBusquedaCliente.setEditable(false);
+			tfBusquedaCliente.setEnabled(false);
+			tfBusquedaCliente.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent arg0) 
+				{
+					if(tfBusquedaCliente.getText().length()>2)
+					{
+					try
+					{	
+						ClienteDTO aux=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfBusquedaCliente.getText().toString()));
+						agregarDatos(aux);
+					}
+					catch(Exception e)
+					{
+						ClienteDTO aux=control.getCliente().buscarClientePorNombre((tfBusquedaCliente.getText().toString()));
+						if(aux!=null)
+						agregarDatos(aux);
+						else
+						{
+						aux=control.getCliente().buscarClientePorApellido((tfBusquedaCliente.getText().toString()));
+						agregarDatos(aux);
+						}
+					}
+					tfBusquedaCliente.setText("");
+					}
+				}
+			});
+			tfBusquedaCliente.setBounds(31, 178, 202, 22);
+			contentPanel.add(tfBusquedaCliente);
+			tfBusquedaCliente.setColumns(10);
+		}
+		{
+			cbClientes = new JComboBox();
+			cbClientes.setOpaque(false);
+			cbClientes.setEnabled(false);
+			cbClientes.setModel(new DefaultComboBoxModel(new String[] {"(Ingrese Filtro para Busqueda)", "DNI", "Apellido", "Nombre"}));
+			cbClientes.setBounds(31, 150, 202, 22);
+			contentPanel.add(cbClientes);
+		}
+		{
+			btnGuardar= new JButton("Cancel");
 			btnGuardar.setOpaque(false);
 			btnGuardar.setBounds(331, 489, 54, 45);
 			contentPanel.add(btnGuardar);
 			btnGuardar.setActionCommand("Cancel");
 		}
 		{
-			JButton btnBorrarCliente = new JButton("OK");
+			btnBorrarCliente= new JButton("OK");
 			btnBorrarCliente.setOpaque(false);
 			btnBorrarCliente.setBounds(52, 532, 41, 40);
 			contentPanel.add(btnBorrarCliente);
@@ -268,8 +330,10 @@ public class clienteBajaModificacion extends JDialog {
 				        return false; //desabilita la edicion de las celdas
 				    }
 				};
+
 				scrollPane.setViewportView(table);
 			}
+			scrollPane.setVisible(false);
 		}
 		{
 			JLabel lblNewLabel = new JLabel("New label");
@@ -439,4 +503,41 @@ public class clienteBajaModificacion extends JDialog {
 		this.ventanaPadre = ventanaPadre;
 	}
 
+	public JComboBox getCbClientes() {
+		return cbClientes;
+	}
+
+	public void setCbClientes(JComboBox cbClientes) {
+		this.cbClientes = cbClientes;
+	}
+
+	public JButton getBtnGuardar() {
+		return btnGuardar;
+	}
+
+	public void setBtnGuardar(JButton btnGuardar) {
+		this.btnGuardar = btnGuardar;
+	}
+
+	public JButton getBtnBorrarCliente() {
+		return btnBorrarCliente;
+	}
+
+	public void setBtnBorrarCliente(JButton btnBorrarCliente) {
+		this.btnBorrarCliente = btnBorrarCliente;
+	}
+	public void agregarDatos(ClienteDTO aux)
+	{
+		tfDni.setText(aux.getDni().toString());
+		tfNombre.setText(aux.getNombre());
+		tfApellido.setText(aux.getApellido());
+		tfCalle.setText(aux.getCalle());
+		tfNumeracion.setText(aux.getNumeracion());
+		tfComentario.setText(aux.sinEspacio(aux.getComentario()));
+		tfCodPostal.setText(aux.getCodPostal());
+		tfEmail.setText(aux.getEmail());
+		tfEntreCalle1.setText(aux.getEntrecalle1());
+		tfEntreCalle2.setText(aux.getEntrecalle2());
+		tfTelefono.setText(aux.getTelefono());
+	}
 }
