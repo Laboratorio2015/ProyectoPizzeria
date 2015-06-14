@@ -5,6 +5,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import presentacion.controlador.Controlador;
 
@@ -28,6 +30,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
+import javax.swing.ListSelectionModel;
 
 public class gestionarOrdenesMatPrima extends JDialog {
 
@@ -41,8 +44,11 @@ public class gestionarOrdenesMatPrima extends JDialog {
 	private JButton btnBorrarorden;
 	private JButton btnPagarorden;
 	private JButton btnEnviarmailorden;
+	private JButton btnImprimirOrden;
 	private JButton btnFinalizar; 
 	private JButton btnBuscar; 
+	private JLabel lblOcultarOpcEliminar;
+	private JLabel lblocultarOpcPago;
 
 	private JTextField textFieldBuscadorNombre;
 	private JTable tableOrdenesMatPrimas;
@@ -51,6 +57,7 @@ public class gestionarOrdenesMatPrima extends JDialog {
 	private JComboBox<String> comboBoxFiltroOrdenes;
 	private TextAutoCompleter textAutoAcompleter;
 	private JTable tableItemsSolicitados;
+	private JLabel lblOcultarEnviarOrden;
 	
 	private OrdenPedidoMatPrimaDTO ordenSeleccionada; 
 	
@@ -80,10 +87,11 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		textAutoAcompleter = new TextAutoCompleter( textFieldBuscadorNombre );
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(48, 265, 259, 321);
+		scrollPane.setBounds(48, 263, 259, 321);
 		contentPane.add(scrollPane);
 
 		tableOrdenesMatPrimas = new JTable();
+		tableOrdenesMatPrimas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		modeloOrdenesMatPrimas = new DefaultTableModel(
 				new Object[][] {
 				},
@@ -98,12 +106,31 @@ public class gestionarOrdenesMatPrima extends JDialog {
 				return columnTypes[columnIndex];
 			}
 		};
-		tableOrdenesMatPrimas.setModel(modeloOrdenesMatPrimas);
+		tableOrdenesMatPrimas.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"New column", "New column", "New column"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				Integer.class, String.class, String.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
 		tableOrdenesMatPrimas.setTableHeader(null);
 		scrollPane.setViewportView(tableOrdenesMatPrimas);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(423, 178, 247, 335);
+		scrollPane_1.setBounds(422, 178, 247, 342);
 		contentPane.add(scrollPane_1);
 		
 		tableItemsSolicitados = new JTable();	
@@ -123,18 +150,47 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		};
 		tableItemsSolicitados.setTableHeader(null);
 		tableItemsSolicitados.setModel(modeloItemsSolicitdos);
+
+		tableItemsSolicitados.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            // do some actions here, for example
+	            // print first column value from selected row
+	            System.out.println(tableItemsSolicitados.getValueAt(tableItemsSolicitados.getSelectedRow(), 0).toString());
+	        }
+	    });
+		
+		
 		scrollPane_1.setViewportView(tableItemsSolicitados);
 		
-		btnBuscar = new JButton("buscar");
-		btnBuscar.setIcon(null);
-		btnBuscar.setBackground(new Color(255, 255, 0));
-		btnBuscar.setBounds(311, 201, 89, 23);
-		contentPane.add(btnBuscar);
+		lblocultarOpcPago = new JLabel("");
+		lblocultarOpcPago.setOpaque(true);
+		lblocultarOpcPago.setBackground(Color.ORANGE);
+		lblocultarOpcPago.setBounds(691, 349, 203, 43);
+		contentPane.add(lblocultarOpcPago);
+		
+		lblOcultarEnviarOrden = new JLabel("");
+		lblOcultarEnviarOrden.setOpaque(true);
+		lblOcultarEnviarOrden.setBackground(Color.ORANGE);
+		lblOcultarEnviarOrden.setBounds(690, 406, 162, 49);
+		contentPane.add(lblOcultarEnviarOrden);
+		
+		lblOcultarOpcEliminar = new JLabel("");
+		lblOcultarOpcEliminar.setOpaque(true);
+		lblOcultarOpcEliminar.setBackground(Color.ORANGE);
+		lblOcultarOpcEliminar.setBounds(680, 289, 172, 49);
+		contentPane.add(lblOcultarOpcEliminar);
 		
 		JLabel lblFondo = new JLabel("fondo");
 		lblFondo.setIcon(new ImageIcon(gestionarOrdenesMatPrima.class.getResource("/prototipos/gestor Ordenes de Pedido.png")));
 		lblFondo.setBounds(10, 11, 893, 601);
 		contentPane.add(lblFondo);
+		
+		btnBuscar = new JButton("buscar");
+		btnBuscar.setOpaque(false);
+		btnBuscar.setIcon(null);
+		btnBuscar.setBackground(new Color(255, 255, 0));
+		btnBuscar.setBounds(305, 201, 82, 23);
+		contentPane.add(btnBuscar);
 		
 		btnCargarorden = new JButton("cargarOrden");
 		btnCargarorden.setOpaque(false);
@@ -167,8 +223,29 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		btnFinalizar.setBounds(713, 551, 151, 35);
 		contentPane.add(btnFinalizar);
 		
+		btnImprimirOrden = new JButton("imprimir orden");
+		btnImprimirOrden.setOpaque(false);
+		btnImprimirOrden.setBounds(691, 223, 161, 43);
+		contentPane.add(btnImprimirOrden);
+		
 	}
 
+	public void ocultarOpcPagoBorrarEnviar(Boolean ocultarPago,Boolean ocultarEliminar, boolean ocultarEnviar){
+		this.lblocultarOpcPago.setVisible(ocultarPago);
+		this.lblOcultarOpcEliminar.setVisible(ocultarEliminar);
+		this.lblOcultarEnviarOrden.setVisible(ocultarEnviar);
+		
+		
+		
+//		this.lblocultarOpcPago.setOpaque(ocultarPago);
+//		this.lblOcultarOpcEliminar.setOpaque(ocultarEliminar);
+		
+		
+		this.btnBorrarorden.setEnabled(!ocultarEliminar);
+		this.btnPagarorden.setEnabled(!ocultarPago);
+		this.btnEnviarmailorden.setEnabled(!ocultarEnviar);
+	}
+	
 	public void agregarFilaOrden(OrdenPedidoMatPrimaDTO ordenAagregar){
 		modeloOrdenesMatPrimas.addRow(new Object[] {ordenAagregar.getIdCompra(), ordenAagregar.getFecha(),ordenAagregar.getProveedor().getNombre()});
 	}
@@ -338,5 +415,13 @@ public class gestionarOrdenesMatPrima extends JDialog {
 
 	public void setOrdenSeleccionada(OrdenPedidoMatPrimaDTO ordenSeleccionada) {
 		this.ordenSeleccionada = ordenSeleccionada;
+	}
+
+	public JButton getBtnImprimirOrden() {
+		return btnImprimirOrden;
+	}
+
+	public void setBtnImprimirOrden(JButton btnImprimirOrden) {
+		this.btnImprimirOrden = btnImprimirOrden;
 	}
 }

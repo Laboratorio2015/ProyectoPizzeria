@@ -44,4 +44,18 @@ private OrdenPedidoMatPrimaDAO ordenMatPrima;
 		}
 		return null;
 	}
+
+	public Integer generarNvoId() {
+		
+		Iterator<OrdenPedidoMatPrimaDTO> Iterador = obtenerOrdenPedidoMatPrima().iterator();
+		Integer NvoId=0;
+		while(Iterador.hasNext())
+		{
+			OrdenPedidoMatPrimaDTO elemento = Iterador.next();
+			if (elemento.getIdCompra()>0)
+				NvoId=elemento.getIdCompra()+1;
+		}
+		return NvoId;
+				
+	}
 }
