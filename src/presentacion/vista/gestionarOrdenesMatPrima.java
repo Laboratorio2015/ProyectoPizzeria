@@ -27,6 +27,7 @@ import dto.OrdenPedidoMatPrimaDTO;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Color;
 
 public class gestionarOrdenesMatPrima extends JDialog {
 
@@ -50,6 +51,8 @@ public class gestionarOrdenesMatPrima extends JDialog {
 	private JComboBox<String> comboBoxFiltroOrdenes;
 	private TextAutoCompleter textAutoAcompleter;
 	private JTable tableItemsSolicitados;
+	
+	private OrdenPedidoMatPrimaDTO ordenSeleccionada; 
 	
 	@SuppressWarnings("serial")
 	public gestionarOrdenesMatPrima (VentanaPrincipal ventanaPrincipal, Controlador controlador){
@@ -122,6 +125,12 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		tableItemsSolicitados.setModel(modeloItemsSolicitdos);
 		scrollPane_1.setViewportView(tableItemsSolicitados);
 		
+		btnBuscar = new JButton("buscar");
+		btnBuscar.setIcon(null);
+		btnBuscar.setBackground(new Color(255, 255, 0));
+		btnBuscar.setBounds(311, 201, 89, 23);
+		contentPane.add(btnBuscar);
+		
 		JLabel lblFondo = new JLabel("fondo");
 		lblFondo.setIcon(new ImageIcon(gestionarOrdenesMatPrima.class.getResource("/prototipos/gestor Ordenes de Pedido.png")));
 		lblFondo.setBounds(10, 11, 893, 601);
@@ -157,10 +166,6 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		btnFinalizar.setOpaque(false);
 		btnFinalizar.setBounds(713, 551, 151, 35);
 		contentPane.add(btnFinalizar);
-		
-		btnBuscar = new JButton("buscar");
-		btnBuscar.setBounds(311, 201, 89, 23);
-		contentPane.add(btnBuscar);
 		
 	}
 
@@ -322,6 +327,16 @@ public class gestionarOrdenesMatPrima extends JDialog {
 	}
 
 	public void agregarFilaItem(ItemMateriaPrimaDTO elementoItem) {
-		modeloItemsSolicitdos.addRow(new Object [] {elementoItem.getItemMatPrima().getNombre(),elementoItem.getCantidad()});
+		String nombreMatPrima = elementoItem.getItemMatPrima().getNombre().trim();
+		nombreMatPrima = nombreMatPrima.replace("_", " ");
+		modeloItemsSolicitdos.addRow(new Object [] {nombreMatPrima,elementoItem.getCantidad()});
+	}
+
+	public OrdenPedidoMatPrimaDTO getOrdenSeleccionada() {
+		return ordenSeleccionada;
+	}
+
+	public void setOrdenSeleccionada(OrdenPedidoMatPrimaDTO ordenSeleccionada) {
+		this.ordenSeleccionada = ordenSeleccionada;
 	}
 }

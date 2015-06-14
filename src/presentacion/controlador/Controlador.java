@@ -60,6 +60,7 @@ import presentacion.vista.proveedorAlta;
 import presentacion.vista.proveedorBajaModificacion;
 import presentacion.vista.registrarCobroDePedido;
 import presentacion.vista.registrarCobroManualmente;
+import presentacion.vista.registrarPagoOrdenMatPrima;
 import presentacion.vista.registroDeCliente;
 import presentacion.vista.repartidorAlta;
 import presentacion.vista.repartidorBajaModificacion;
@@ -120,6 +121,7 @@ public class Controlador implements ActionListener
 	private MatPrimas materiasPrimas;
 	private ItemMateriasPrimas itemsMateriaPrima;
 	private Itinerarios itinerario;
+	private registrarPagoOrdenMatPrima ventanaRegistrarPagoOrdenMatPrima;
 
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
@@ -222,14 +224,18 @@ public class Controlador implements ActionListener
 			this.gestorOrdenesMateriasPrimas.getBtnPagarorden().addActionListener(this);
 			this.gestorOrdenesMateriasPrimas.getComboBoxFiltroOrdenes().addActionListener(this);
 			this.gestorOrdenesMateriasPrimas.getBtnBuscar().addActionListener(this);
+			filtrarBusquedaOrdenes();
 			this.ventanaSelectorOpcOrdenMatPrima.dispose();
 		}
-		//SELECTOR OPC ORDENES MAT PRIMA> Cargar items de determinada orden
+		//GESTOR MAT PRIMA> Cargar items de determinada orden
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnCargarorden())
 		{
+			gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 			Integer intRowSelected = this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
 			if (intRowSelected >=0){
-				OrdenPedidoMatPrimaDTO ordenSeleccionada = getOrden(Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intRowSelected, 0).toString()));
+				OrdenPedidoMatPrimaDTO ordenSeleccionada = getOrden(Integer.parseInt
+
+						(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intRowSelected, 0).toString()));
 				Iterator<ItemMateriaPrimaDTO> iterItems = ordenSeleccionada.getListadoCompra().iterator();
 				while (iterItems.hasNext()){
 					ItemMateriaPrimaDTO elementoItem = iterItems.next();
@@ -238,12 +244,14 @@ public class Controlador implements ActionListener
 			}
 			gestorOrdenesMateriasPrimas.gettableItemsSolicitados().setModel(gestorOrdenesMateriasPrimas.getmodeloItemsSolicitdos());
 		}
-		//SELECTOR OPC ORDENES MAT PRIMA> BUSCAR POR NOMBRE DE PROV LAS ORDENES 
+		//GESTOR MAT PRIMA>> BUSCAR POR NOMBRE DE PROV LAS ORDENES 
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnBuscar())
 		{
 			this.gestorOrdenesMateriasPrimas.resetearModeloOrdenesPedido();
 			if (this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().getItemSelected().toString().compareTo("")!=0){
-				String nomProvSeleccionado = this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().getItemSelected().toString().trim();
+				String nomProvSeleccionado = this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().getItemSelected().toString
+
+						().trim();
 				Iterator<OrdenPedidoMatPrimaDTO> iteradorOrdenes = ordenesMatPrimas.obtenerOrdenPedidoMatPrima().iterator();
 				while (iteradorOrdenes.hasNext()){
 					OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
@@ -251,80 +259,76 @@ public class Controlador implements ActionListener
 						this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
 				}
 			}
-			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
+			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel
+
+			(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
 		}
 		//GESTOR ORDENES MAT PRIMA> Accion para filtro de busqeda
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getComboBoxFiltroOrdenes())
 		{
 			this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().removeAllItems();
 			this.gestorOrdenesMateriasPrimas.resetearModeloOrdenesPedido();
-			//String filtroSeleccionado = this.gestorOrdenesMateriasPrimas.getComboBoxFiltroOrdenes().getSelectedItem().toString();
-			Iterator<OrdenPedidoMatPrimaDTO> iteradorOrdenes = ordenesMatPrimas.obtenerOrdenPedidoMatPrima().iterator();
-			switch(this.gestorOrdenesMateriasPrimas.getComboBoxFiltroOrdenes().getSelectedItem().toString())
-			{
-			case("Todas las ordenes"):
-			{
-				while (iteradorOrdenes.hasNext()){
-					OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
-					this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
-					if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
-						this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
-				}
-				break;
-			}
-			case("Ordenes guardadas"):
-			{
-				while (iteradorOrdenes.hasNext()){
-					OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
-					if (elementoOrden.getEstado().trim().compareTo("guardado")==0){
-						this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
-						if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
-							this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
-					}
-				}
-				break;
-			}
-			case("Ordenes enviadas pendientes de pago"):
-			{
-				while (iteradorOrdenes.hasNext()){
-					OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
-					if (elementoOrden.getEstado().trim().compareTo("enviado")==0){
-						this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
-						if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
-							this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
-					}
-				}
-				break;
-			}
-			case("Ordenes pagadas"):
-			{
-				while (iteradorOrdenes.hasNext()){
-					OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
-					if (elementoOrden.getEstado().trim().compareTo("pagado")==0){
-						this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
-						if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
-							this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
-					}
-				}
-				break;
-			}
-			case("Ordenes rechazadas"):
-			{
-				while (iteradorOrdenes.hasNext()){
-					OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
-					if (elementoOrden.getEstado().trim().compareTo("rechazado")==0){
-						this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
-						if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
-							this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
-					}
-				}
-				break;
-			}
-			}
-			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
+			filtrarBusquedaOrdenes();
+			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel
+
+			(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
 			this.gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 		}
-		
+		//GESTOR MAT PRIMA> ABRIR VENTANA DE Registrar pago y recepci[on de orden
+		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnPagarorden())
+		{
+			//Se debe obtener el objeto seleccionado,en base al nro de id correspondiente. Realizar metodo
+			Integer intFilaSeleccionada = gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
+			if (intFilaSeleccionada >-1){
+				Integer idOrdenSeleccionada = Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt
+						(intFilaSeleccionada, 0).toString());			
+				gestorOrdenesMateriasPrimas.setOrdenSeleccionada(ordenesMatPrimas.buscarOrdenPedidoMatPrima( Integer.parseInt
+
+						(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intFilaSeleccionada, 0).toString())));
+
+				ventanaRegistrarPagoOrdenMatPrima = new registrarPagoOrdenMatPrima(ventana, this);
+				ventanaRegistrarPagoOrdenMatPrima.setVisible(true);
+
+				ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro().addActionListener(this);
+				ventanaRegistrarPagoOrdenMatPrima.cargarDatosOrden(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Primero debe seleccionar una orden de la tabla.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+		}
+		//GESTOR MAT PRIMA> BORRAR ORDEN DE MATERIA PRIMA.
+		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnBorrarorden())
+		{
+			
+			//Se asume que la orden seleccionada es de estado> GUARDADO 
+			Integer intFilaSeleccionada = gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
+			if (intFilaSeleccionada >-1){
+				int seleccion = JOptionPane.showOptionDialog(gestorOrdenesMateriasPrimas,"¿Confirma el borrado de la orden de materia prima seleccionada?",
+						"Advertencia!", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[] { "Confirmar", "Cancelar"},"Si");
+				if (seleccion == 0){
+					Integer idOrdenSeleccionada = Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intFilaSeleccionada, 0).toString());			
+					gestorOrdenesMateriasPrimas.setOrdenSeleccionada(ordenesMatPrimas.buscarOrdenPedidoMatPrima( Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intFilaSeleccionada, 0).toString())));
+					ordenesMatPrimas.quitarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
+					gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setFueeliminado(true);
+					gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setEstado("rechazado");
+					ordenesMatPrimas.agregarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
+					filtrarBusquedaOrdenes();
+				}
+			}
+		}
+		//REGISTRO PAGO ORDEN MAT PRIMA> Registrar pago y recepci[on de orden
+		else if(this.ventanaRegistrarPagoOrdenMatPrima!= null && e.getSource()==this.ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro())
+		{
+			if (!ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().isEmpty()){
+				ordenesMatPrimas.quitarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
+				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setCosto(Integer.parseInt(ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().toString()));
+				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setEstado("pagado");
+				//gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setFecha(obtenerfechahoy);
+				ordenesMatPrimas.agregarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
+				filtrarBusquedaOrdenes();//para q actualice los estados de las ordenes y no haya problema con la busq x 
+				JOptionPane.showMessageDialog(null, "Se ha registrado correctamente la recepción y pago de la orden de materia prima", "Confirmación",JOptionPane.WARNING_MESSAGE); 
+				ventanaRegistrarPagoOrdenMatPrima.dispose();
+			}		
+		}
 		//ORDEN MATERIA PRIMA> COMBO LISTA PROVEEDORES
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getComboListaProveedores())
 		{
@@ -333,13 +337,11 @@ public class Controlador implements ActionListener
 			generarArrayMatPrimaProveed();
 			prepararMatPrimaParaBusqXCategoria();
 			limpiarCampos();
-			System.out.println("prov seleccionado>  " + ventanaOrdenMatPrima.getProvSeleccionado().getNombre());
 		}
 		//ORDEN MATERIA PRIMA> CATEGORIAS MATERIA PRIMA
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getComboListaCategorias())
 		{
 			if ( ventanaOrdenMatPrima.getComboListaCategorias().getSelectedItem()!=null){
-				System.out.println("categoria seleccionada" + ventanaOrdenMatPrima.getComboListaCategorias().getSelectedItem().toString());
 				prepararMatPrimaParaBusqXCategoria();
 				limpiarCampos();
 			}
@@ -363,21 +365,18 @@ public class Controlador implements ActionListener
 			ventanaSeleccionMatPrima.setVisible(true);
 			ventanaSeleccionMatPrima.cargarMatPrima(ventanaOrdenMatPrima.getComboListaCategorias().getSelectedItem().toString());
 			ventanaSeleccionMatPrima.getBtnSeleccionarMateriaPrima().addActionListener(this);
-
 		}
 		//ORDEN MATERIA PRIMA> AGREGAR ITEM MATERIA PRIMA
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getButtonAgregarMateriaPrima())
-			//accion para Agregar item Mat Prima
 		{
-			System.out.println("item agregado");
 			if (ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString().compareTo("")!=0 && ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString().compareTo("")!=0){
 				if (ventanaOrdenMatPrima.getProvBloqueado() == false){
 					ventanaOrdenMatPrima.getComboListaProveedores().setEnabled(false);
 					ventanaOrdenMatPrima.setProvBloqueado(true);
 				}
 				Integer idItem = itemsMateriaPrima.obtenerItemMatPrima().size();
-				ItemMateriaPrimaDTO itemSeleccionado = new ItemMateriaPrimaDTO(idItem, getMatPrimaSeleccionada(ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString()),
-						Integer.parseInt(ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString()), false);
+				ItemMateriaPrimaDTO itemSeleccionado = new ItemMateriaPrimaDTO(idItem, getMatPrimaSeleccionada
+						(ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().getText().toString()),Integer.parseInt(ventanaOrdenMatPrima.getTextFieldCantMatPrima().getText().toString()),false);
 				agregarItemTabla(itemSeleccionado);
 				limpiarCampos();
 			}
@@ -409,7 +408,9 @@ public class Controlador implements ActionListener
 		{
 			persistirOrdenMatPrima(false);
 			generarPDFOrdenMatPrima();
-			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra", "Confirmación", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra", "Confirmación", 
+
+					JOptionPane.WARNING_MESSAGE);
 			//borrarTodo();
 			ventanaOrdenMatPrima.dispose();
 		}
@@ -422,7 +423,9 @@ public class Controlador implements ActionListener
 		else if(this.ventanaSeleccionMatPrima!= null && e.getSource()==this.ventanaSeleccionMatPrima.getBtnSeleccionarMateriaPrima())
 		{
 			System.out.println("Se presiona boton de seleccion mat prima");
-			String nomMatPrimaSeleccionada = this.ventanaSeleccionMatPrima.getModeloMateriasPrimas().getValueAt(ventanaSeleccionMatPrima.getTablaMateriasPrimas().getSelectedRow(), 0).toString();
+			String nomMatPrimaSeleccionada = this.ventanaSeleccionMatPrima.getModeloMateriasPrimas().getValueAt
+
+					(ventanaSeleccionMatPrima.getTablaMateriasPrimas().getSelectedRow(), 0).toString();
 			ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().setText(nomMatPrimaSeleccionada);
 			ventanaSeleccionMatPrima.dispose();
 		}
@@ -431,7 +434,9 @@ public class Controlador implements ActionListener
 		{
 			if (ventanaSeleccionProveedor.getComboBoxCategorias().isVisible() || ventanaSeleccionProveedor.getComboFiltroBusqueda().getSelectedItem().toString().compareTo("Todos")==0 && 
 					ventanaSeleccionProveedor.getResultadoBusquedaProv().getSelectedRow()>=0 ){
-				String nomProvSeleccionado = (String) ventanaSeleccionProveedor.getResultadoBusquedaProv().getValueAt(ventanaSeleccionProveedor.getResultadoBusquedaProv().getSelectedRow(), 0);
+				String nomProvSeleccionado = (String) ventanaSeleccionProveedor.getResultadoBusquedaProv().getValueAt
+
+						(ventanaSeleccionProveedor.getResultadoBusquedaProv().getSelectedRow(), 0);
 				System.out.println("prov seleccionado de taba " + nomProvSeleccionado);
 				ventanaOrdenMatPrima.getComboListaProveedores().setSelectedItem(nomProvSeleccionado);
 				ventanaSeleccionProveedor.dispose();
@@ -439,7 +444,9 @@ public class Controlador implements ActionListener
 			else if ( ventanaSeleccionProveedor.getTextAutoAcompleter().getItemSelected().toString().compareTo("")!=0 && 
 					ventanaSeleccionProveedor.getComboFiltroBusqueda().getSelectedItem().toString().compareTo("Nombre")==0)
 			{
-				ventanaOrdenMatPrima.getComboListaProveedores().setSelectedItem(ventanaSeleccionProveedor.getTextAutoAcompleter().getItemSelected().toString());
+				ventanaOrdenMatPrima.getComboListaProveedores().setSelectedItem
+
+				(ventanaSeleccionProveedor.getTextAutoAcompleter().getItemSelected().toString());
 				ventanaSeleccionProveedor.dispose();
 			}		
 		}
@@ -447,13 +454,19 @@ public class Controlador implements ActionListener
 		else if(this.ventanaSeleccionProveedor!= null && e.getSource()==this.ventanaSeleccionProveedor.getBtnDetallesproveedor())
 		{
 			ProveedorDTO provSeleccionado;
-			if(ventanaSeleccionProveedor.getResultadoBusquedaProv().getSelectedRow()>=0 && ventanaSeleccionProveedor.getComboFiltroBusqueda().getSelectedItem().toString().compareTo("Nombre")!=0){
+			if(ventanaSeleccionProveedor.getResultadoBusquedaProv().getSelectedRow()>=0 && 
+
+					ventanaSeleccionProveedor.getComboFiltroBusqueda().getSelectedItem().toString().compareTo("Nombre")!=0){
 				int intRowSelected = ventanaSeleccionProveedor.getResultadoBusquedaProv().getSelectedRow();
-				provSeleccionado = getProveedor(ventanaSeleccionProveedor.getResultadoBusquedaProv().getValueAt(intRowSelected, 0).toString());
+				provSeleccionado = getProveedor(ventanaSeleccionProveedor.getResultadoBusquedaProv().getValueAt
+
+						(intRowSelected, 0).toString());
 				mostrarDetallesProv(provSeleccionado);
 			}
 			else if (ventanaSeleccionProveedor.getTextAutoAcompleter().getItemSelected().toString().compareTo("")!=0){
-				provSeleccionado = getProveedor(ventanaSeleccionProveedor.getTextAutoAcompleter().getItemSelected().toString());
+				provSeleccionado = getProveedor(ventanaSeleccionProveedor.getTextAutoAcompleter().getItemSelected
+
+						().toString());
 				mostrarDetallesProv(provSeleccionado);
 			}
 		}
@@ -808,7 +821,6 @@ public class Controlador implements ActionListener
 			ventanaModificacionCliente=new clienteBajaModificacion();
 			ventanaModificacionCliente.setVisible(true);
 		}
-
 		//ventana de configuraciones para gestionar una categoria
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnGestionarCategorias())
 		{
@@ -867,11 +879,80 @@ public class Controlador implements ActionListener
 				ventanaModificacionCliente.getTfEmail().setText(aux.getEmail());
 				llenarTablaCliente();
 				ventanaModificacionCliente.setVisible(true);
-
 			}
 			else
 				JOptionPane.showMessageDialog(null, "Error el debe haber un dni registrado para poder editarlo");
 		}
+	}
+
+	private void filtrarBusquedaOrdenes() {
+		this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().removeAllItems();
+		this.gestorOrdenesMateriasPrimas.resetearModeloOrdenesPedido();
+		//String filtroSeleccionado = this.gestorOrdenesMateriasPrimas.getComboBoxFiltroOrdenes().getSelectedItem().toString();
+		Iterator<OrdenPedidoMatPrimaDTO> iteradorOrdenes = ordenesMatPrimas.obtenerOrdenPedidoMatPrima().iterator();
+		switch(this.gestorOrdenesMateriasPrimas.getComboBoxFiltroOrdenes().getSelectedItem().toString())
+		{
+		case("Todas las ordenes"):
+		{
+			while (iteradorOrdenes.hasNext()){
+				OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
+				this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
+				if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
+					this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
+			}
+			break;
+		}
+		case("Ordenes guardadas"):
+		{
+			while (iteradorOrdenes.hasNext()){
+				OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
+				if (elementoOrden.getEstado().trim().compareTo("guardado")==0){
+					this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
+					if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
+						this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
+				}
+			}
+			break;
+		}
+		case("Ordenes enviadas pendientes de pago"):
+		{
+			while (iteradorOrdenes.hasNext()){
+				OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
+				if (elementoOrden.getEstado().trim().compareTo("enviado")==0){
+					this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
+					if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
+						this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
+				}
+			}
+			break;
+		}
+		case("Ordenes pagadas"):
+		{
+			while (iteradorOrdenes.hasNext()){
+				OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
+				if (elementoOrden.getEstado().trim().compareTo("pagado")==0){
+					this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
+					if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
+						this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
+				}
+			}
+			break;
+		}
+		case("Ordenes rechazadas"):
+		{
+			while (iteradorOrdenes.hasNext()){
+				OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
+				if (elementoOrden.getEstado().trim().compareTo("rechazado")==0){
+					this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
+					if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
+						this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
+				}
+			}
+			break;
+		}
+		}
+		this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
+		this.gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 	}
 
 
@@ -1007,12 +1088,12 @@ public class Controlador implements ActionListener
 		Integer id = this.ordenesMatPrimas.obtenerOrdenPedidoMatPrima().size();
 		System.out.println("nvo nro de orden mat prim designado> " + id);
 		ventanaOrdenMatPrima.setNuevaOrden(new OrdenPedidoMatPrimaDTO(id,ventanaOrdenMatPrima.getProvSeleccionado(),
-			ventanaOrdenMatPrima.getListadoItemsOrdenados(),enviado));
+				ventanaOrdenMatPrima.getListadoItemsOrdenados(),enviado));
 		ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
 		//this.ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
-	
+
 	}
-	
+
 	private void limpiarCampos() {
 		ventanaOrdenMatPrima.getTextFieldBuscadorMatPrima().setText("");
 		ventanaOrdenMatPrima.getTextFieldCantMatPrima().setText("");
