@@ -1,5 +1,6 @@
 package presentacion.controlador;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -39,12 +40,10 @@ import dto.ProveedorDTO;
 import dto.RepartidorDTO;
 import presentacion.reportes.solicitudDeMateriaPrima;
 import presentacion.vista.VentanaPrincipal;
-
 import presentacion.vista.buscadorProveedor;
 import presentacion.vista.calendario;
 import presentacion.vista.clienteBajaModificacion;
 import presentacion.vista.gestionCategoria;
-import presentacion.vista.gestionarOrdenesMatPrima;
 import presentacion.vista.matPrimaAlta;
 import presentacion.vista.matPrimaBajaModificacion;
 import presentacion.vista.opcionesDeConfiguracion;
@@ -67,8 +66,8 @@ import presentacion.vista.repartidorBajaModificacion;
 import presentacion.vista.seleccionDeCliente;
 import presentacion.vista.seleccionarRepartidor;
 import presentacion.vista.selectorMatPrima;
-import presentacion.vista.selectorOpcionesOrdenMatPrima;
-
+//import presentacion.vista.selectorOpcionesOrdenMatPrima;
+//import presentacion.vista.gestionarOrdenesMatPrima;
 
 
 public class Controlador implements ActionListener
@@ -80,8 +79,8 @@ public class Controlador implements ActionListener
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
 	//moficiaciones
-	private presentacion.vista.selectorOpcionesOrdenMatPrima ventanaSelectorOpcOrdenMatPrima;
-	private presentacion.vista.gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
+	//private selectorOpcionesOrdenMatPrima ventanaSelectorOpcOrdenMatPrima;
+	//private gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
 	//
 	private buscadorProveedor ventanaSeleccionProveedor;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
@@ -177,6 +176,7 @@ public class Controlador implements ActionListener
 		}
 		/////////////////////////////////////////CodigoJuliet/////////////////////////////////////////////////
 
+/*
 		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
@@ -273,10 +273,10 @@ public class Controlador implements ActionListener
 
 			(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
 			this.gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
-		}
+				}
 		//GESTOR MAT PRIMA> ABRIR VENTANA DE Registrar pago y recepci[on de orden
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnPagarorden())
-		{
+			{
 			//Se debe obtener el objeto seleccionado,en base al nro de id correspondiente. Realizar metodo
 			Integer intFilaSeleccionada = gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
 			if (intFilaSeleccionada >-1){
@@ -291,13 +291,13 @@ public class Controlador implements ActionListener
 
 				ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro().addActionListener(this);
 				ventanaRegistrarPagoOrdenMatPrima.cargarDatosOrden(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
-			}
+					}
 			else
 				JOptionPane.showMessageDialog(null, "Primero debe seleccionar una orden de la tabla.", "Confirmación",JOptionPane.WARNING_MESSAGE);
-		}
+				}
 		//GESTOR MAT PRIMA> BORRAR ORDEN DE MATERIA PRIMA.
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnBorrarorden())
-		{
+			{
 			
 			//Se asume que la orden seleccionada es de estado> GUARDADO 
 			Integer intFilaSeleccionada = gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
@@ -312,12 +312,12 @@ public class Controlador implements ActionListener
 					gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setEstado("rechazado");
 					ordenesMatPrimas.agregarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
 					filtrarBusquedaOrdenes();
+					}
 				}
 			}
-		}
 		//REGISTRO PAGO ORDEN MAT PRIMA> Registrar pago y recepci[on de orden
 		else if(this.ventanaRegistrarPagoOrdenMatPrima!= null && e.getSource()==this.ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro())
-		{
+			{
 			if (!ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().isEmpty()){
 				ordenesMatPrimas.quitarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
 				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setCosto(Integer.parseInt(ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().toString()));
@@ -327,8 +327,27 @@ public class Controlador implements ActionListener
 				filtrarBusquedaOrdenes();//para q actualice los estados de las ordenes y no haya problema con la busq x 
 				JOptionPane.showMessageDialog(null, "Se ha registrado correctamente la recepción y pago de la orden de materia prima", "Confirmación",JOptionPane.WARNING_MESSAGE); 
 				ventanaRegistrarPagoOrdenMatPrima.dispose();
-			}		
+					}
+				}
+				break;
+			}
+			case("Ordenes rechazadas"):
+			{
+				while (iteradorOrdenes.hasNext()){
+					OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenes.next();
+					if (elementoOrden.getEstado().trim().compareTo("rechazado")==0){
+						this.gestorOrdenesMateriasPrimas.agregarFilaOrden(elementoOrden);
+						if (!this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().itemExists(elementoOrden.getProveedor().getNombre()))
+							this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().addItem(elementoOrden.getProveedor().getNombre());
+					}
+				}
+				break;
+			}
+			}
+			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
+			this.gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 		}
+		*/
 		//ORDEN MATERIA PRIMA> COMBO LISTA PROVEEDORES
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getComboListaProveedores())
 		{
@@ -544,7 +563,7 @@ public class Controlador implements ActionListener
 				ventanaGestionCategoria.resetearModelo();
 				cargarListadoCategorias();
 			}
-				
+
 		}
 		///////////////////////////////////FIN//////CodigoJuliet/////////////////////////////////////////////////
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
@@ -792,9 +811,15 @@ public class Controlador implements ActionListener
 		//quitar un repartidor
 		else if (this.ventanaEditarRepartidor!= null && e.getSource()==this.ventanaEditarRepartidor.getBtnQuitar())
 		{
-			RepartidorDTO nuevo= this.repartidor.buscarRepartidor(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
-			this.repartidor.quitarRepartidor(nuevo);
-			llenarTablaRepartidor();
+			Component a= new Component() {
+			};
+			int opcion = JOptionPane.showConfirmDialog(a, "Desea seguir ejecutando la aplicación?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			if( opcion==0)
+			{
+				RepartidorDTO nuevo= this.repartidor.buscarRepartidorPorDni(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
+				this.repartidor.quitarRepartidor(nuevo);
+				llenarTablaRepartidor();
+			}
 			ventanaEditarRepartidor.getTfdni().setText("");
 			ventanaEditarRepartidor.getTfApellido().setText("");
 			ventanaEditarRepartidor.getTfCelular().setText("");
@@ -803,22 +828,28 @@ public class Controlador implements ActionListener
 			ventanaEditarRepartidor.getTfNombre().setText("");
 			ventanaEditarRepartidor.getTfComentario().setText("");
 			ventanaEditarRepartidor.getTfPatente().setText("");
-			ventanaEditarRepartidor.getTfDescripcion().setText("");
-
+			ventanaEditarRepartidor.getTfDescripcion().setText("");		
 		}
 		//modificar un repartidor
 		else if (this.ventanaEditarRepartidor!= null && e.getSource()==this.ventanaEditarRepartidor.getBtnGuardar())
 		{
-			RepartidorDTO rep= this.repartidor.buscarRepartidorPorDni(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
-			rep.setIdRepartidor(rep.getIdRepartidor());
-			rep.setNombre(ventanaEditarRepartidor.getTfNombre().getText().toString());
-			rep.setDni(Integer.parseInt(ventanaEditarRepartidor.getTfdni().getText().toString()));
-			rep.setApellido(ventanaEditarRepartidor.getTfApellido().getText().toString());
-			rep.setFechaDeNacimiento(ventanaEditarRepartidor.getTfFechaNacimiento().getText().toString());
-			rep.setTelefono(ventanaEditarRepartidor.getTfCelular().getText().toString());
-			rep.setEstado(null);
-			repartidor.actualizarRepartidor(rep);
-			llenarTablaRepartidor();
+			Component a= new Component() {
+			};
+			int opcion = JOptionPane.showConfirmDialog(a, "Desea seguir ejecutando la aplicación?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			if( opcion==0)
+			{
+				RepartidorDTO rep= this.repartidor.buscarRepartidorPorDni(Integer.parseInt(ventanaEditarRepartidor.getTable().getValueAt(this.ventanaEditarRepartidor.getTable().getSelectedRow(), 0).toString()));
+				rep.setIdRepartidor(rep.getIdRepartidor());
+				rep.setNombre(ventanaEditarRepartidor.getTfNombre().getText().toString());
+				rep.setDni(Integer.parseInt(ventanaEditarRepartidor.getTfdni().getText().toString()));
+				rep.setApellido(ventanaEditarRepartidor.getTfApellido().getText().toString());
+				rep.setFechaDeNacimiento(ventanaEditarRepartidor.getTfFechaNacimiento().getText().toString());
+				rep.setTelefono(ventanaEditarRepartidor.getTfCelular().getText().toString());
+				rep.setEstado(null);
+				repartidor.actualizarRepartidor(rep);
+				llenarTablaRepartidor();
+
+			}
 			ventanaEditarRepartidor.getTfdni().setText("");
 			ventanaEditarRepartidor.getTfApellido().setText("");
 			ventanaEditarRepartidor.getTfCelular().setText("");
@@ -850,7 +881,7 @@ public class Controlador implements ActionListener
 		else if (this.ventanaAgregarRepartidor!= null && e.getSource()==this.ventanaAgregarRepartidor.getBtnRegistrar())
 		{
 			RepartidorDTO rep= new RepartidorDTO();
-			rep.setIdRepartidor(repartidor.obtenerRepartidores().size()+1);
+			rep.setIdRepartidor(repartidor.obtenerTodosRepartidores().size()+1);
 			rep.setNombre(ventanaAgregarRepartidor.getTfNombre().getText().toString());
 			rep.setDni(Integer.parseInt((ventanaAgregarRepartidor.getTfDni().getText().toString())));
 			rep.setApellido(ventanaAgregarRepartidor.getTfApellido().getText().toString());
@@ -1640,5 +1671,4 @@ public class Controlador implements ActionListener
 		}
 		}
 	}		
-
 }

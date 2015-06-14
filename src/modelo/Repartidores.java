@@ -1,5 +1,6 @@
 package modelo;
 
+import java.awt.Component;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,6 +37,11 @@ public class Repartidores {
 		return this.repartidor.readAll();
 	}
 	
+	public List<RepartidorDTO> obtenerTodosRepartidores()
+	{
+		return this.repartidor.readAlli();
+	}
+	
 	public RepartidorDTO buscarRepartidor(Integer dni)
 	{
 		List<RepartidorDTO> productos=this.obtenerRepartidores();
@@ -61,5 +67,4 @@ public class Repartidores {
 		}
 		return null;		
 	}
-
 }

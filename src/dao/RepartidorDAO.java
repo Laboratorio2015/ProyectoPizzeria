@@ -11,8 +11,7 @@ import conexion.Conexion;
 public class RepartidorDAO 
 {
 		private static final String insert = "INSERT INTO repartidores(idrepartidor,dni,nombre,apellido,fechaNacimiento,vehiculo,patente,telefono,estado,comentario,fueeliminado) VALUES(?, ?, ?, ?, ?, ?,?,?,?,?,?)";
-		//mirar como funca
-		private static final String delete = "update FROM repartidores fueeliminado=true WHERE idrepartidor = ?";
+		private static final String delete = "update repartidores set fueeliminado=true WHERE idrepartidor = ?";
 		private static final String readall = "SELECT * FROM repartidores";
 		private static final String actualizarDatos="Update repartidores Set dni=?, nombre=?, apellido=?, fechaNacimiento=?,vehiculo=?, patente=?, telefono=?, estado=?,comentario=?,fueeliminado=? where idrepartidor=?";
 		private static final Conexion conexion = Conexion.getConexion();
@@ -83,7 +82,7 @@ public class RepartidorDAO
 			return false;
 		}
 
-		public List<RepartidorDTO> readAll()
+	public List<RepartidorDTO> readAll()
 		{
 			PreparedStatement statement;
 			ResultSet resultSet; //Guarda el resultado de la query
@@ -94,6 +93,57 @@ public class RepartidorDAO
 				resultSet = statement.executeQuery();
 				
 				while(resultSet.next())
+				{
+					if(resultSet.getBoolean("fueeliminado")==false)
+					{
+						String t= resultSet.getString("nombre");
+						String nombre="";
+						for (int i=0; i<t.length(); i++)
+						{
+							  if (t.charAt(i) != ' ' || (t.charAt(i)==' ' && t.charAt(i+1)!=' '))
+							    nombre += t.charAt(i);
+							  else if(t.charAt(i)==' ' && t.charAt(i+1)==' ')
+								  break;
+						}					
+						String e= resultSet.getString("apellido");
+						String apellido="";
+						for (int i=0; i<e.length(); i++)
+						{
+							  if (e.charAt(i) != ' ' || (e.charAt(i)==' ' && e.charAt(i+1)!=' '))
+							    apellido += e.charAt(i);
+							  else if(e.charAt(i)==' ' && e.charAt(i+1)==' ')
+								  break;
+						}
+						repartidores.add(new RepartidorDTO(resultSet.getInt("idrepartidor"), resultSet.getInt("dni"),nombre,
+						apellido, resultSet.getString("fechanacimiento"),resultSet.getString("vehiculo"),
+						resultSet.getString("patente"), resultSet.getString("telefono"),
+						resultSet.getString("estado"),resultSet.getString("comentario"),resultSet.getBoolean("fueeliminado")));
+					}
+				}
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+			finally //Se ejecuta siempre
+			{
+				conexion.cerrarConexion();
+			}
+			return repartidores;
+		}
+	
+	public List<RepartidorDTO> readAlli()
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<RepartidorDTO> repartidores = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(readall);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
 				{
 					String t= resultSet.getString("nombre");
 					String nombre="";
@@ -118,17 +168,18 @@ public class RepartidorDAO
 					resultSet.getString("patente"), resultSet.getString("telefono"),
 					resultSet.getString("estado"),resultSet.getString("comentario"),resultSet.getBoolean("fueeliminado")));
 				}
-			} 
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
 			}
-			finally //Se ejecuta siempre
-			{
-				conexion.cerrarConexion();
-			}
-			return repartidores;
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
 		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return repartidores;
+	}
 	
 		public boolean actualizarRepartidor(RepartidorDTO repartidorActualizar)
 		{

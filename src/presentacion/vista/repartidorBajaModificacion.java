@@ -41,7 +41,7 @@ public class repartidorBajaModificacion extends JDialog {
 	private JTextField tfDescripcion;
 
 	public repartidorBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 695, 737);
+		setBounds(300, 20, 695, 737);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
