@@ -245,9 +245,7 @@ public class Controlador implements ActionListener
 			gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 			Integer intRowSelected = this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
 			if (intRowSelected >=0){
-				OrdenPedidoMatPrimaDTO ordenSeleccionada = getOrden(Integer.parseInt
-
-						(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intRowSelected, 0).toString()));
+				OrdenPedidoMatPrimaDTO ordenSeleccionada = getOrden(Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intRowSelected, 0).toString()));
 				Iterator<ItemMateriaPrimaDTO> iterItems = ordenSeleccionada.getListadoCompra().iterator();
 				while (iterItems.hasNext()){
 					ItemMateriaPrimaDTO elementoItem = iterItems.next();
@@ -1098,6 +1096,7 @@ public class Controlador implements ActionListener
 	}
 
 	protected void validarHabilitacionBotonesOrdenesMP() {
+		gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 		Integer indiceFilaOrdenMPSelecc = this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
 		if (indiceFilaOrdenMPSelecc>-1){
 			OrdenPedidoMatPrimaDTO ordenSeleccionada = this.ordenesMatPrimas.buscarOrdenPedidoMatPrima

@@ -89,7 +89,14 @@ public class ItemMateriaPrimaDAO
 				MatPrimas ite=new MatPrimas();
 				MateriaPrimaDTO item=ite.buscarMatPrima(resultSet.getInt("matprima"));
 				itemsmatprimas.add(new ItemMateriaPrimaDTO(resultSet.getInt("iditemmatprima"),
-						item,resultSet.getInt("matprima"),resultSet.getBoolean("fueeliminado")));
+						item,resultSet.getInt("cantidad"),resultSet.getBoolean("fueeliminado")));
+				
+//				statement.setInt(1, itemmatprima.getIdItemMatPrima());
+//				statement.setInt(2, itemmatprima.getItemMatPrima().getIdMatPrima());
+//				statement.setInt(3, itemmatprima.getCantidad());
+//				statement.setBoolean(4, itemmatprima.getFueEliminado());
+				
+				
 			}
 		} 
 		catch (SQLException e) 
