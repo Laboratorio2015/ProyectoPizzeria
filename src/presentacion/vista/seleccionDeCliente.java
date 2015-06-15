@@ -310,10 +310,36 @@ public class seleccionDeCliente extends JDialog {
 		return tfDireccionTelefono;
 	}
 
-
-
 	public Controlador getControl() {
 		return control;
+	}
+	
+	public JTable getTable() {
+		return table;
+	}
+
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+
+	public DefaultTableModel getModel() {
+		return model;
+	}
+
+	public void setModel(DefaultTableModel model) {
+		this.model = model;
+	}
+
+
+
+	public void setPedido(PedidoDTO pedido) {
+		this.pedido = pedido;
+	}
+
+
+
+	public void setCliente(ClienteDTO cliente) {
+		this.cliente = cliente;
 	}
 
 
@@ -322,7 +348,7 @@ public class seleccionDeCliente extends JDialog {
 		return btnSeleccionar;
 	}
 
-	private void llenarTablaCliente()
+	public void llenarTablaCliente()
 	{
 		model.setRowCount(0);
 		model.setColumnCount(0);

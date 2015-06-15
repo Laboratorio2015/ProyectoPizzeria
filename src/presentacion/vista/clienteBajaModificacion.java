@@ -1,6 +1,8 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -8,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,6 +29,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Color;
+import javax.swing.border.MatteBorder;
 
 public class clienteBajaModificacion extends JDialog {
 
@@ -52,10 +57,6 @@ public class clienteBajaModificacion extends JDialog {
 	private JButton btnGuardar;
 	private JButton btnBorrarCliente;
 	
-
-	/**
-	 * @wbp.parser.constructor
-	 */
 	public clienteBajaModificacion(final Controlador control) {
 		setModal(true);
 		setBounds(100, 100, 857, 640);
@@ -235,17 +236,22 @@ public class clienteBajaModificacion extends JDialog {
 	}
 	
 	//constructor para la modificacion dentro de un pedido
-	public clienteBajaModificacion(seleccionDeCliente padre, Controlador control) 
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public clienteBajaModificacion(final seleccionDeCliente padre, final Controlador control) 
 	{
 		setBounds(100, 100, 857, 640);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		this.control=control;
 		contentPanel.setLayout(null);
 		{
 			this.control=control;
 			this.ventanaPadre=padre;
 			tfDni = new JTextField();
+			tfDni.setEditable(false);
 			tfDni.setBounds(333, 174, 176, 22);
 			contentPanel.add(tfDni);
 			tfDni.setColumns(10);
@@ -312,7 +318,11 @@ public class clienteBajaModificacion extends JDialog {
 		}
 		{
 			tfBusquedaCliente = new JTextField();
-			tfBusquedaCliente.setBounds(31, 150, 202, 22);
+			tfBusquedaCliente.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+			tfBusquedaCliente.setBackground(new Color(204, 204, 0));
+			tfBusquedaCliente.setEnabled(false);
+			tfBusquedaCliente.setEditable(false);
+			tfBusquedaCliente.setBounds(10, 82, 245, 498);
 			contentPanel.add(tfBusquedaCliente);
 			tfBusquedaCliente.setColumns(10);
 		}
@@ -343,6 +353,30 @@ public class clienteBajaModificacion extends JDialog {
 		}
 		{
 			JButton btnGuardar = new JButton("Cancel");
+			btnGuardar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e)
+				{
+					Component a= new Component() {};
+					int opcion = JOptionPane.showConfirmDialog(a, "¿Desea guardar los cambios realizados?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+					if( opcion==0)
+						{
+							ClienteDTO actu=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfDni.getText().toString()));
+							actu.setDni(Integer.parseInt(tfDni.getText().toString()));
+							actu.setNombre(tfNombre.getText().toString());
+							actu.setApellido(tfApellido.getText().toString());
+							actu.setCalle(tfCalle.getText().toString());
+							actu.setNumeracion(tfNumeracion.getText().toString());
+							actu.setEntrecalle1(tfEntreCalle1.getText().toString());
+							actu.setEntrecalle2(tfEntreCalle2.getText().toString());
+							actu.setCodPostal(tfCodPostal.getText().toString());
+							actu.setTelefono(tfTelefono.getText().toString());
+							actu.setComentario(tfComentario.getText().toString());
+							actu.setEmail(tfEmail.getText().toString());
+							actu.setFueeliminado(false);
+							control.getCliente().actualizarCliente(actu);
+						}
+				}
+			});
 			btnGuardar.setOpaque(false);
 			btnGuardar.setBounds(331, 489, 54, 45);
 			contentPanel.add(btnGuardar);
@@ -350,6 +384,7 @@ public class clienteBajaModificacion extends JDialog {
 		}
 		{
 			JButton btnBorrarCliente = new JButton("OK");
+			btnBorrarCliente.setEnabled(false);
 			btnBorrarCliente.setOpaque(false);
 			btnBorrarCliente.setBounds(52, 532, 41, 40);
 			contentPanel.add(btnBorrarCliente);
@@ -358,6 +393,15 @@ public class clienteBajaModificacion extends JDialog {
 		}
 		{
 			JButton btnFinalizar = new JButton("Cancel");
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e)
+				{
+					padre.getTfNombrApellido().setText(tfApellido.getText().toString()+" "+tfNombre.getText().toString());
+					padre.getTfDireccionTelefono().setText(tfCalle.getText().toString()+" "+tfNumeracion.getText().toString());
+					padre.llenarTablaCliente();
+					dispose();
+				}
+			});
 			btnFinalizar.setOpaque(false);
 			btnFinalizar.setActionCommand("Cancel");
 			btnFinalizar.setBounds(661, 546, 151, 34);

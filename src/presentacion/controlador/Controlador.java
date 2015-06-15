@@ -1155,10 +1155,34 @@ public class Controlador implements ActionListener
 		//editar cliente
 		else if(this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnEditarCliente())
 		{
+			Integer dniCliente=Integer.parseInt(ventanaCliente.getModel().getValueAt(ventanaCliente.getTable().getSelectedRow(), 0).toString());
 			if(ventanaCliente.getTfAgregarDNI().getText().length()>7)
 			{
 				ventanaModificacionCliente=new clienteBajaModificacion(ventanaCliente, this);
 				ClienteDTO aux=cliente.buscarClientePorDNI(Integer.parseInt(ventanaCliente.getTfAgregarDNI().getText().toString()));
+				ventanaModificacionCliente.getTfDni().setText(aux.getDni().toString());
+				ventanaModificacionCliente.getTfNombre().setText(aux.getNombre());
+				ventanaModificacionCliente.getTfApellido().setText(aux.getApellido());
+				ventanaModificacionCliente.getTfCalle().setText(aux.getCalle());
+				ventanaModificacionCliente.getTfNumeracion().setText(aux.getNumeracion());
+				ventanaModificacionCliente.getTfEntreCalle1().setText(aux.getEntrecalle1());
+				ventanaModificacionCliente.getTfEntreCalle2().setText(aux.getEntrecalle2());
+				ventanaModificacionCliente.getTfCodPostal().setText(aux.getCodPostal());
+				ventanaModificacionCliente.getTfTelefono().setText(aux.getTelefono());
+				ventanaModificacionCliente.getTfComentario().setText(aux.getComentario());
+				ventanaModificacionCliente.getTfEmail().setText(aux.getEmail());
+				llenarTablaCliente();
+				ventanaModificacionCliente.setVisible(true);
+			}
+			else if(this.ventanaCliente!= null && e.getSource()==this.ventanaCliente.getBtnEditarCliente())
+			{
+				
+			}
+			
+			else if(ventanaCliente.getTfAgregarDNI().getText().compareTo("")==0 && !dniCliente.equals(0))
+			{
+				ventanaModificacionCliente=new clienteBajaModificacion(ventanaCliente, this);
+				ClienteDTO aux=cliente.buscarClientePorDNI(dniCliente);
 				ventanaModificacionCliente.getTfDni().setText(aux.getDni().toString());
 				ventanaModificacionCliente.getTfNombre().setText(aux.getNombre());
 				ventanaModificacionCliente.getTfApellido().setText(aux.getApellido());
