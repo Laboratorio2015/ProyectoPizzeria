@@ -93,9 +93,7 @@ public class ordenDePedido extends JDialog {
 	private JTextField tfTotal;
 	private JTextField textField;
 	
-	/**
-	 * @wbp.parser.constructor
-	 */
+
 	public ordenDePedido(VentanaPrincipal padre,final Controlador control) 
 	{
 		setModal(true);
@@ -578,11 +576,15 @@ public class ordenDePedido extends JDialog {
 	/////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ordenDePedido(VentanaPrincipal padre,final PedidoDTO pedidoCambiar,final Controlador control) 
 	{
-		setModal(true);
+		setModal(false);
 		padre=_padre;
 		this.control=control;
+		this.pedidoCambiar=pedidoCambiar;
 		_this=this;
 		setMinimumSize(new Dimension(700, 680));
 		setBounds(300, 10, 876, 716);
@@ -844,6 +846,24 @@ public class ordenDePedido extends JDialog {
 		}
 		
 		checkBoxRepartidor= new JCheckBox("");
+		checkBoxRepartidor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0)
+			{
+				if(pedidoCambiar.getCliente().getDni().equals(0))
+				{	
+					Component a= new Component() {};
+					int opcion = JOptionPane.showConfirmDialog(a, "Para solicitar Delivery debe tener disponibles los datos del Cliente", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+					if( opcion==0)
+					{
+						seleccionDeCliente al=new seleccionDeCliente(control, pedidoCambiar, "agregarCliente");
+						al.setVisible(true);
+					}
+					else
+						checkBoxRepartidor.setSelected(false);
+				}
+			}
+		});
 		checkBoxRepartidor.setBackground(new Color(204, 204, 0));
 		checkBoxRepartidor.setBounds(789, 474, 30, 33);
 		contentPanel.add(checkBoxRepartidor);
