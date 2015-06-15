@@ -10,10 +10,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import dto.CategoriaDTO;
+import javax.swing.table.DefaultTableModel;
 
 public class proveedorAlta extends JDialog {
 
@@ -24,10 +30,13 @@ public class proveedorAlta extends JDialog {
 	private JTextField tfDireccion;
 	private JButton btnCancelar;
 	private JButton btnRegistrar;
+	private JButton btnaddCategoria;
 	private JTextField tfComentario;
-	private JTable table;
+	private JTable tableCategorias;
+	private DefaultTableModel modeloCategorias;
 	private JTextField tfNombreContacto;
-	private JComboBox comboBoxCategorias;
+	private JComboBox<String> comboBoxCategorias;
+	private JButton btnQuitarcateg;
 
 
 	public proveedorAlta() {
@@ -76,11 +85,36 @@ public class proveedorAlta extends JDialog {
 		contentPanel.add(tfNombreContacto);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(37, 483, 434, 62);
+		scrollPane.setBounds(37, 483, 391, 62);
 		contentPanel.add(scrollPane);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		tableCategorias = new JTable();
+		modeloCategorias = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Categor\u00EDa", "idCategoria"
+				}
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+				boolean[] columnEditables = new boolean[] {
+					false, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			};
+		tableCategorias.setModel(modeloCategorias);
+		scrollPane.setViewportView(tableCategorias);
+		
+		btnQuitarcateg = new JButton("QuitarCateg");
+		btnQuitarcateg.setBounds(438, 507, 89, 23);
+		contentPanel.add(btnQuitarcateg);
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(proveedorAlta.class.getResource("/prototipos/alta de Proveedor.png")));
@@ -96,7 +130,7 @@ public class proveedorAlta extends JDialog {
 			getRootPane().setDefaultButton(btnRegistrar);
 		}
 		{
-			btnCancelar = new JButton("OK");
+			btnCancelar = new JButton("cancelar");
 			btnCancelar.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0)
@@ -109,6 +143,11 @@ public class proveedorAlta extends JDialog {
 			btnCancelar.setBounds(330, 575, 108, 35);
 			contentPanel.add(btnCancelar);
 		}
+		
+		btnaddCategoria = new JButton("addCategoria");
+		btnaddCategoria.setOpaque(false);
+		btnaddCategoria.setBounds(445, 209, 31, 23);
+		contentPanel.add(btnaddCategoria);
 	}
 
 
@@ -175,5 +214,56 @@ public class proveedorAlta extends JDialog {
 
 	public void setBtnRegistrar(JButton btnRegistrar) {
 		this.btnRegistrar = btnRegistrar;
+	}
+
+
+	public void cargarCategorias(List<CategoriaDTO> obtenerCategorias) {
+		Iterator<CategoriaDTO> iterador = obtenerCategorias.iterator();
+		while (iterador.hasNext()){
+			CategoriaDTO elemento = iterador.next();
+			if (!elemento.getFueEliminado())
+				this.comboBoxCategorias.addItem(elemento.getDenominacion());
+		}
+	}
+
+
+	public JButton getBtnQuitarcateg() {
+		return btnQuitarcateg;
+	}
+
+
+	public void setBtnQuitarcateg(JButton btnQuitarcateg) {
+		this.btnQuitarcateg = btnQuitarcateg;
+	}
+
+
+	public JTable getTablaCategorias() {
+		return tableCategorias;
+	}
+
+
+	public JButton getBtnaddCategoria() {
+		return btnaddCategoria;
+	}
+
+
+	public void setBtnaddCategoria(JButton btnaddCategoria) {
+		this.btnaddCategoria = btnaddCategoria;
+	}
+
+
+	public JComboBox<String> getComboBoxCategorias() {
+		return comboBoxCategorias;
+	}
+
+
+	public void setComboBoxCategorias(JComboBox<String> comboBoxCategorias) {
+		this.comboBoxCategorias = comboBoxCategorias;
+	}
+
+
+	public void agregarCategoria(CategoriaDTO categoria) {
+		modeloCategorias.addRow(new Object[] {categoria.getDenominacion(),categoria.getIdCategoria()});
+		tableCategorias.setModel(modeloCategorias);
 	}
 }

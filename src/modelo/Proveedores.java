@@ -15,7 +15,7 @@ public class Proveedores
 		proveedor=new ProveedorDAO();
 	}
 	
-	public void agregarProveedor(ProveedorDTO proveedorAgregar)
+	public void agregarProveedor(ProveedorDTO proveedorAgregar)	
 	{
 		this.proveedor.insert(proveedorAgregar);
 	}

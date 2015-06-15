@@ -9,7 +9,7 @@ public class ProveedorDTO
 {
 	private Integer idproveedor;
 	private String nombre;
-	private ArrayList<CategoriaDTO> categoria;
+	private ArrayList<CategoriaDTO> categorias;
 	private String nombrecontacto;
 	private String telefono;
 	private String direccion;
@@ -24,7 +24,7 @@ public class ProveedorDTO
 		this.idproveedor = identificador;
 		this.nombre = nombre;
 		this.nombrecontacto=nombrecontact;
-		this.categoria=categoria;
+		this.categorias=categoria;
 		this.telefono=telefono;
 		this.email=email;
 		this.direccion=direccion;
@@ -33,7 +33,7 @@ public class ProveedorDTO
 	}
 	public ProveedorDTO()
 	{
-		
+		categorias = new ArrayList<CategoriaDTO>();
 	}
 	
 	public Integer getId() {
@@ -71,11 +71,11 @@ public class ProveedorDTO
 	}
 	
 	public ArrayList<CategoriaDTO> getCategoria() {
-		return categoria;
+		return categorias;
 	}
 
 	public void setCategoria(ArrayList<CategoriaDTO> categoria) {
-		this.categoria = categoria;
+		this.categorias = categoria;
 	}
 
 	public String getEmail() {
@@ -128,13 +128,12 @@ public class ProveedorDTO
 	{
 		return (this.idproveedor+ "  " + this.nombre + "  " +  this.direccion + "  " + this.telefono);
 	}
-	public Component getCategorias() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<CategoriaDTO> getCategorias() {
+		return categorias;
 	}
 	public boolean isCategoria(String nomCategoria) {
 		nomCategoria = nomCategoria.trim();
-		Iterator<CategoriaDTO> Iterador = categoria.iterator();
+		Iterator<CategoriaDTO> Iterador = categorias.iterator();
 		while(Iterador.hasNext())
 		{
 			CategoriaDTO elementoCategoria = Iterador.next();
@@ -143,5 +142,8 @@ public class ProveedorDTO
 			}
 		}
 		return false;
+	}
+	public void addCategoria(CategoriaDTO Categoria) {
+		categorias.add(Categoria);		
 	}
 }

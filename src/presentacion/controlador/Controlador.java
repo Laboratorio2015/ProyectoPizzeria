@@ -566,32 +566,39 @@ public class Controlador implements ActionListener
 				Si la denominacion ya existe en las categorias con estado fueeliminado:false
 					Arrojar cartel de error de categoría existente.
 				Si la denominacion ya existe en las categorias con estado fueeliminado:true
-					Se debe actualizar el valor fueeliminado en false, desde la bd.
+					Se debe actualizar el valor fueeliminado en false, desde la bd. y la q se abandona se pregunta si existe
+					la relacion con materias primas o proveedores. si hay dependencia, solo pongo su estado en eliminado:true
+					y sino dependen, directamente lo elimino de la bd.
 				Si la denominacion no existe en categorias con estado fueeliminado:false ni en las fueeliminado:true
 					Debo preguntar si la que estoy reemplazando no tienen relacionadas proveed o materias primas
 						si tienen, debo actualizar esa categoria con fueeliminado:true y Agregar la nueva denominacion como una cat nueva.
-					Si no tiene relacion con ninguna de las dos, directamente la elimino de la bd.	
+						Si no tiene relacion con ninguna de las dos, directamente la elimino de la bd.	
 		 */
 			if (ventanaGestionCategoria.getTfDenominacion().getText().compareTo("")!=0){
 				String viejaCategoria = ventanaGestionCategoria.getTablacategorias()
 						.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 0).toString();
 				String nvaDenominacionSinEsp = ventanaGestionCategoria.getTfDenominacion().getText().trim();
 				System.out.println("Nva denominacion: " + nvaDenominacionSinEsp);
+				
+				
 				if (categoria.contieneEnHabilitadas(nvaDenominacionSinEsp))
 					JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre.", "Confirmación",JOptionPane.WARNING_MESSAGE);
 				else if (categoria.contieneEnRechazadas(nvaDenominacionSinEsp)){
-					categoria.actualizarEliminado(Integer.parseInt(ventanaGestionCategoria.getTablacategorias()
-							.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 1).toString()), false);
+					categoria.actualizarEliminado( categoria.buscarCategoria(nvaDenominacionSinEsp).getIdCategoria(), false);						
+					if ( proveedor.contienenCategoria(categoria.buscarCategoria(viejaCategoria).getDenominacion()) || materiasPrimas.contienenCategoria(viejaCategoria))
+						categoria.actualizarEliminado( categoria.buscarCategoria(viejaCategoria).getIdCategoria(), true);
+					else{
+						categoria.quitarCategoria(categoria.buscarCategoria(viejaCategoria));
+					}
 				}
+				
 				else{
-					//String viejaCategoria = ventanaGestionCategoria.getTablacategorias()
-					//		.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 0).toString();
-					System.out.println("Denominacion dejada: " + viejaCategoria);
+
 					if (proveedor.contienenCategoria(viejaCategoria) || materiasPrimas.contienenCategoria(viejaCategoria)){
 						categoria.actualizarEliminado(categoria.buscarCategoria(viejaCategoria).getIdCategoria(), true);
 					}
 					else{
-						categoria.quitarCategoria(categoria.buscarCategoria(nvaDenominacionSinEsp));
+						categoria.quitarCategoria(categoria.buscarCategoria(viejaCategoria));
 					}
 					CategoriaDTO nvaCategoria = new CategoriaDTO(categoria.getNvoId(), nvaDenominacionSinEsp, false);
 					categoria.agregarCategoria(nvaCategoria);
@@ -630,6 +637,43 @@ public class Controlador implements ActionListener
 			ventanaGestionCategoria.getTfDenominacion().setText(ventanaGestionCategoria.getTablacategorias()
 					.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 0).toString());
 			ventanaGestionCategoria.ocultarBtnGuardarMod(false);
+		}
+		////
+		//VENTANA CONFIGURACION Abrir alta proveedor
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarProveedor())
+		{
+			ventanaAgregarProveedor=new proveedorAlta();
+			ventanaAgregarProveedor.getBtnRegistrar().addActionListener(this);
+			ventanaAgregarProveedor.getBtnQuitarcateg().addActionListener(this);
+			ventanaAgregarProveedor.getBtnaddCategoria().addActionListener(this);
+			ventanaAgregarProveedor.setVisible(true);
+			
+			ventanaAgregarProveedor.cargarCategorias(categoria.obtenerCategorias());
+		}
+		//VENTANA  ALTA PROVEEDOR Agregar categoria elegida
+		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnaddCategoria())
+		{
+			ventanaAgregarProveedor.agregarCategoria(categoria.buscarCategoria(ventanaAgregarProveedor.getComboBoxCategorias().getSelectedItem().toString().trim()));
+		}
+		//VENTANA ALTA PROVEEDOR Btn Registrar Proveedor
+		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnRegistrar())
+		{
+			ProveedorDTO nuevo= new ProveedorDTO();
+			nuevo.setId(proveedor.ultimoProveedor()+1);
+			nuevo.setNombre(ventanaAgregarProveedor.getTfDenominacion().getText());
+			nuevo.setNombrecontacto(ventanaAgregarProveedor.getTfNombreContacto().getText());
+			nuevo.setComentario(ventanaAgregarProveedor.getTfComentario().getText());
+			nuevo.setFueeliminado(false);
+			//agregar la lista de categorias
+			//nuevo.setCategoria(categoria.pasarDeStringAArray(ventanaAgregarProveedor.getTfCategoria().getText()));
+			for (int i = 0; i < this.ventanaAgregarProveedor.getTablaCategorias().getRowCount();i++){
+				nuevo.addCategoria(categoria.buscarCategoria(ventanaAgregarProveedor.getTablaCategorias().getValueAt(i, 0).toString()));
+			}
+			nuevo.setDireccion(ventanaAgregarProveedor.getTfDireccion().getText());
+			nuevo.setEmail(ventanaAgregarProveedor.getTfEmail().getText());
+			nuevo.setTelefono(ventanaAgregarProveedor.getTfTelefono().getText());
+			proveedor.agregarProveedor(nuevo);
+			ventanaAgregarProveedor.dispose();
 		}
 		///////////////////////////////////FIN//////CodigoJuliet/////////////////////////////////////////////////
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
@@ -748,13 +792,9 @@ public class Controlador implements ActionListener
 			ventanaAgregarProducto.setVisible(true);
 		}
 
-		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarProveedor())
-		{
-			ventanaAgregarProveedor=new proveedorAlta();
-			ventanaAgregarProveedor.getBtnRegistrar().addActionListener(this);
-			ventanaAgregarProveedor.setVisible(true);
-		}
+		
 
+		
 
 
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarRepartidor())
@@ -836,23 +876,7 @@ public class Controlador implements ActionListener
 			ventanaEditarProducto.getTfNombre().setText("");
 			ventanaEditarProducto.getTfPrecio().setText("");			
 		}
-		//crear un proveedor
-		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnRegistrar())
-		{
-			ProveedorDTO nuevo= new ProveedorDTO();
-			nuevo.setId(proveedor.ultimoProveedor()+1);
-			nuevo.setNombre(ventanaAgregarProveedor.getTfDenominacion().getText());
-			nuevo.setNombrecontacto(ventanaAgregarProveedor.getTfNombreContacto().getText());
-			nuevo.setComentario(ventanaAgregarProveedor.getTfComentario().getText());
-			nuevo.setFueeliminado(false);
-			//agregar la lista de categorias
-			//nuevo.setCategoria(categoria.pasarDeStringAArray(ventanaAgregarProveedor.getTfCategoria().getText()));
-			nuevo.setDireccion(ventanaAgregarProveedor.getTfDireccion().getText());
-			nuevo.setEmail(ventanaAgregarProveedor.getTfEmail().getText());
-			nuevo.setTelefono(ventanaAgregarProveedor.getTfTelefono().getText());
-			proveedor.agregarProveedor(nuevo);
-			ventanaAgregarProveedor.dispose();
-		}
+
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarProveedor())
 		{
 			ventanaEditarProveedor=new proveedorBajaModificacion(this);
