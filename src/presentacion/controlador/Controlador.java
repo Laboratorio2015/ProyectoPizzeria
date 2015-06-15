@@ -519,29 +519,107 @@ public class Controlador implements ActionListener
 			ventanaGestionCategoria.getBtnEditarCategoria().addActionListener(this);
 			ventanaGestionCategoria.getBtnQuitarCategoria().addActionListener(this);
 			ventanaGestionCategoria.getBtnGuardarModificacion().addActionListener(this);
+			this.ventanaGestionCategoria.getTablacategorias().getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+		        public void valueChanged(ListSelectionEvent event) {
+		            ventanaGestionCategoria.limpiarCampos();
+		        }
+		    });
 			cargarListadoCategorias();
 		}
 		///VENTANA ABM CATEGORIAS> Agregar Categoria
 		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnAgregarCategoria())
 		{
-			if (ventanaGestionCategoria.getTfDenominacion().getText().toString().compareTo("") != 0 &&
-					!categoria.contiene(ventanaGestionCategoria.getTfDenominacion().getText().toString())){
-				CategoriaDTO nuevaCategoria = new CategoriaDTO(categoria.obtenerCategorias().size()+1, ventanaGestionCategoria.getTfDenominacion().getText().toString(), false);
-				categoria.agregarCategoria(nuevaCategoria);
-				ventanaGestionCategoria.addCategoriaTabla(nuevaCategoria);
-				ventanaGestionCategoria.getTablacategorias().setModel(ventanaGestionCategoria.getModeloCategorias());
-				ventanaGestionCategoria.getTfDenominacion().setText("");
+			/*
+			Alta de Categoria.
+			Si es que no existe tanto en los eliminados como en los habilitados-Considerar el UPPERCASE y TRIM
+				Se debe agrega a la bd, y se actualiza el modelo de la tabla
+			Si es una categoria que ya existe con estado fueeliminado:false -Considerar el UPPERCASE y TRIM
+				Debe arrojar la ventana de advertencia que ya existe
+			Si es una categoria que ya existe con estado fueelminado:true - -Considerar el UPPERCASE y TRIM
+				Debe modificar el campo fueeliminado y dejarlo en false.
+			 */
+			
+			if (ventanaGestionCategoria.getTfDenominacion().getText().toString().compareTo("") != 0){
+				String nvaDenominacion = ventanaGestionCategoria.getTfDenominacion().getText().toString().trim();
+				if (categoria.contieneEnHabilitadas(nvaDenominacion)){ //
+					JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+				}
+				else if (categoria.contieneEnRechazadas(nvaDenominacion)){
+					//Integer intFilaCatSelecc = this.ventanaGestionCategoria.getTablacategorias().getSelectedRow(); 
+					CategoriaDTO categoriaAmodificar = categoria.buscarCategoria(nvaDenominacion);
+					categoria.actualizarEliminado(categoriaAmodificar.getIdCategoria(), false);
+				}
+				else{//No existe ni en eliminados ni habilitados
+					CategoriaDTO nuevaCategoria = new CategoriaDTO(categoria.getNvoId(),nvaDenominacion, false);
+					categoria.agregarCategoria(nuevaCategoria);
+				}
+				ventanaGestionCategoria.resetearModelo();
+				ventanaGestionCategoria.limpiarCampos();
+				cargarListadoCategorias();
 			}
 		}
+		///VENTANA ABM CATEGORIAS> Guardar Modifcaciones
+		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnGuardarModificacion())
+		{
+			/*
+			* MODIFICACION de Categoria
+				Si la denominacion ya existe en las categorias con estado fueeliminado:false
+					Arrojar cartel de error de categoría existente.
+				Si la denominacion ya existe en las categorias con estado fueeliminado:true
+					Se debe actualizar el valor fueeliminado en false, desde la bd.
+				Si la denominacion no existe en categorias con estado fueeliminado:false ni en las fueeliminado:true
+					Debo preguntar si la que estoy reemplazando no tienen relacionadas proveed o materias primas
+						si tienen, debo actualizar esa categoria con fueeliminado:true y Agregar la nueva denominacion como una cat nueva.
+					Si no tiene relacion con ninguna de las dos, directamente la elimino de la bd.	
+		 */
+			if (ventanaGestionCategoria.getTfDenominacion().getText().compareTo("")!=0){
+				String viejaCategoria = ventanaGestionCategoria.getTablacategorias()
+						.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 0).toString();
+				String nvaDenominacionSinEsp = ventanaGestionCategoria.getTfDenominacion().getText().trim();
+				System.out.println("Nva denominacion: " + nvaDenominacionSinEsp);
+				if (categoria.contieneEnHabilitadas(nvaDenominacionSinEsp))
+					JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+				else if (categoria.contieneEnRechazadas(nvaDenominacionSinEsp)){
+					categoria.actualizarEliminado(Integer.parseInt(ventanaGestionCategoria.getTablacategorias()
+							.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 1).toString()), false);
+				}
+				else{
+					//String viejaCategoria = ventanaGestionCategoria.getTablacategorias()
+					//		.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 0).toString();
+					System.out.println("Denominacion dejada: " + viejaCategoria);
+					if (proveedor.contienenCategoria(viejaCategoria) || materiasPrimas.contienenCategoria(viejaCategoria)){
+						categoria.actualizarEliminado(categoria.buscarCategoria(viejaCategoria).getIdCategoria(), true);
+					}
+					else{
+						categoria.quitarCategoria(categoria.buscarCategoria(nvaDenominacionSinEsp));
+					}
+					CategoriaDTO nvaCategoria = new CategoriaDTO(categoria.getNvoId(), nvaDenominacionSinEsp, false);
+					categoria.agregarCategoria(nvaCategoria);
+				}
+				ventanaGestionCategoria.resetearModelo();
+				cargarListadoCategorias();
+			}
+		}
+		
 		//VENTANA ABM CATEGORIAS> Borrar Categoria
 		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnQuitarCategoria())
 		{
+			/*
+			 * BAJA de Categoria
+				Si la Categoria tiene dependencia en la tabla de Proveedores o en la tabla de Materia Prima
+					Debe setearse el valor fueeliminado:true de dicha categoria.
+				Si no tiene relacion con alguna de esas dos tablas
+					Se debe eliminar permanentemente de la bd
+			 */
 			Integer intCategoriaSelecc = ventanaGestionCategoria.getTablacategorias().getSelectedRow();
 			if (intCategoriaSelecc>-1){
 				CategoriaDTO categoriaAborrar = categoria.buscarCategoria(Integer.parseInt(ventanaGestionCategoria.getTablacategorias().getValueAt(intCategoriaSelecc,1).toString()));
-				categoria.quitarCategoria(categoriaAborrar);
-				categoriaAborrar.setFueEliminado(true);
-				categoria.agregarCategoria(categoriaAborrar);
+				if ( proveedor.contienenCategoria(categoriaAborrar.getDenominacion().trim()) || materiasPrimas.contienenCategoria(categoriaAborrar.getDenominacion().trim())){
+					categoria.actualizarEliminado(categoriaAborrar.getIdCategoria(), true);
+				}
+				else{
+					categoria.quitarCategoria(categoriaAborrar);
+				}
 				ventanaGestionCategoria.resetearModelo();
 				cargarListadoCategorias();
 			}
@@ -549,28 +627,9 @@ public class Controlador implements ActionListener
 		//VENTANA ABM CATEGORIAS> Habilitar edicion Categoria
 		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnEditarCategoria())
 		{
-			Integer intCategoriaSelecc = ventanaGestionCategoria.getTablacategorias().getSelectedRow();
-			if (intCategoriaSelecc>-1){
-				ventanaGestionCategoria.getTfDenominacion().setText(ventanaGestionCategoria.getTablacategorias().getValueAt(intCategoriaSelecc, 0).toString());
-			}
-		}
-		//VENTANA ABM CATEGORIAS> guardar edicion Categoria
-		else if(this.ventanaGestionCategoria!= null && e.getSource()==this.ventanaGestionCategoria.getBtnGuardarModificacion())
-		{
-			if ( categoria.contiene(ventanaGestionCategoria.getTfDenominacion().getText().toString().trim()))
-			{
-				JOptionPane.showMessageDialog(null, "Ya existe una categoría con ese nombre.", "Confirmación",JOptionPane.WARNING_MESSAGE);
-			}
-			else{
-				CategoriaDTO categoriaModificada = categoria.buscarCategoria(Integer.parseInt(ventanaGestionCategoria.getTablacategorias()
-						.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 1).toString()));
-				categoria.quitarCategoria(categoriaModificada);
-				categoriaModificada.setDenominacion(ventanaGestionCategoria.getTfDenominacion().getText().toString().trim());
-				categoria.agregarCategoria(categoriaModificada);
-				ventanaGestionCategoria.resetearModelo();
-				cargarListadoCategorias();
-			}
-
+			ventanaGestionCategoria.getTfDenominacion().setText(ventanaGestionCategoria.getTablacategorias()
+					.getValueAt(ventanaGestionCategoria.getTablacategorias().getSelectedRow(), 0).toString());
+			ventanaGestionCategoria.ocultarBtnGuardarMod(false);
 		}
 		///////////////////////////////////FIN//////CodigoJuliet/////////////////////////////////////////////////
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())

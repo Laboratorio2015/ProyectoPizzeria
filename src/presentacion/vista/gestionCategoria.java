@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import dto.CategoriaDTO;
+import java.awt.Color;
+import javax.swing.UIManager;
 
 public class gestionCategoria extends JDialog {
 
@@ -28,6 +30,7 @@ public class gestionCategoria extends JDialog {
 	private String[] nombreColumnas = {"IdCategoria","Categoria"};
 	private JTable tablacategorias;
 	private DefaultTableModel modeloCategorias;
+	private final JLabel lblOcultarBtnGuardarMod = new JLabel("");
 
 
 	@SuppressWarnings("serial")
@@ -39,17 +42,13 @@ public class gestionCategoria extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			tfDenominacion = new JTextField();
-			tfDenominacion.setBounds(168, 246, 176, 22);
+			tfDenominacion.setBounds(169, 243, 176, 22);
 			contentPanel.add(tfDenominacion);
 			tfDenominacion.setColumns(10);
 		}
-		
-		btnGuardarModificacion = new JButton("guardar Modificacion");
-		btnGuardarModificacion.setBounds(104, 284, 198, 42);
-		contentPanel.add(btnGuardarModificacion);
 		{
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(372, 161, 186, 246);
+			scrollPane.setBounds(373, 155, 186, 246);
 			contentPanel.add(scrollPane);
 		}
 		tablacategorias = new JTable();
@@ -73,10 +72,16 @@ public class gestionCategoria extends JDialog {
 		tablacategorias.getColumnModel().getColumn(1).setPreferredWidth(15);
 		tablacategorias.getColumnModel().getColumn(1).setMaxWidth(15);
 		scrollPane.setViewportView(tablacategorias);
+		lblOcultarBtnGuardarMod.setVisible(false);
+		
+		lblOcultarBtnGuardarMod.setOpaque(true);
+		lblOcultarBtnGuardarMod.setBackground(UIManager.getColor("ComboBox.buttonDarkShadow"));
+		lblOcultarBtnGuardarMod.setBounds(63, 295, 109, 83);
+		contentPanel.add(lblOcultarBtnGuardarMod);
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(gestionCategoria.class.getResource("/prototipos/Gestor de categorias.png")));
-			label.setBounds(0, 0, 650, 510);
+			label.setBounds(0, 0, 650, 505);
 			contentPanel.add(label);
 		}
 		{
@@ -89,6 +94,11 @@ public class gestionCategoria extends JDialog {
 					dispose();
 				}
 			});
+			
+			btnGuardarModificacion = new JButton("guardar Modificacion");
+			btnGuardarModificacion.setOpaque(false);
+			btnGuardarModificacion.setBounds(63, 295, 109, 83);
+			contentPanel.add(btnGuardarModificacion);
 			btnFinalizar.setBounds(240, 434, 150, 36);
 			contentPanel.add(btnFinalizar);
 			btnFinalizar.setActionCommand("OK");
@@ -97,7 +107,7 @@ public class gestionCategoria extends JDialog {
 		{
 			btnAgregarCategoria= new JButton("agregarCategoria");
 			btnAgregarCategoria.setOpaque(false);
-			btnAgregarCategoria.setBounds(112, 332, 39, 36);
+			btnAgregarCategoria.setBounds(218, 295, 84, 83);
 			contentPanel.add(btnAgregarCategoria);
 			btnAgregarCategoria.setActionCommand("Cancel");
 		}
@@ -117,6 +127,10 @@ public class gestionCategoria extends JDialog {
 		}
 	}
 
+	public void ocultarBtnGuardarMod(boolean ocultar){
+		this.lblOcultarBtnGuardarMod.setVisible(ocultar);
+		this.btnGuardarModificacion.setEnabled(!ocultar);
+	}
 	public void addCategoriaTabla(CategoriaDTO categoria){
 		modeloCategorias.addRow(new Object [] {categoria.getDenominacion().trim(), categoria.getIdCategoria()});
 	}
@@ -197,5 +211,10 @@ public class gestionCategoria extends JDialog {
 
 	public void setBtnGuardarModificacion(JButton btnGuardarModificacion) {
 		this.btnGuardarModificacion = btnGuardarModificacion;
+	}
+
+	public void limpiarCampos() {
+		this.tfDenominacion.setText("");
+		ocultarBtnGuardarMod(true);
 	}
 }

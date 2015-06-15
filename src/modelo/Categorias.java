@@ -81,18 +81,67 @@ public class Categorias {
 		}
 		return result;
 	}
-	
-//	public Integer getNvoId(){
-//		
-//	}
+
+
 	public boolean contiene(String nomCategoria){
 		Iterator<CategoriaDTO> Iterador = obtenerCategorias().iterator();
 		while(Iterador.hasNext())
 		{
 			CategoriaDTO elemento = Iterador.next();
-			if (elemento.getDenominacion().trim().compareTo(nomCategoria)==0 && !elemento.getFueEliminado())
+			if (elemento.getDenominacion().trim().toUpperCase().compareTo(nomCategoria.toUpperCase())==0 && !elemento.getFueEliminado())
 				return true;
 		}
 		return false;
 	}
+	
+	public void actualizarEliminado(Integer idCategoria, boolean eliminado){
+		categoria.cambiarEstadoEliminado(idCategoria,eliminado);
+	}
+
+	public Integer getNvoId() {
+		Iterator<CategoriaDTO> Iterador = obtenerCategorias().iterator();
+		Integer nvoId = 0;
+		while(Iterador.hasNext())
+		{
+			CategoriaDTO elemento = Iterador.next();
+			if (nvoId < elemento.getIdCategoria())
+				nvoId = elemento.getIdCategoria();
+		}
+		return nvoId+1;
+	}
+
+	public boolean contieneEnHabilitadas(String nomCategoria) {
+		Iterator<CategoriaDTO> Iterador = obtenerCategorias().iterator();
+		while(Iterador.hasNext())
+		{
+			CategoriaDTO elemento = Iterador.next();
+			if (elemento.getDenominacion().trim().toUpperCase().compareTo(nomCategoria.toUpperCase())==0 && !elemento.getFueEliminado())
+				return true;
+		}
+		return false;
+	}
+
+	public boolean contieneEnRechazadas(String nomCategoria) {
+		Iterator<CategoriaDTO> Iterador = obtenerCategorias().iterator();
+		while(Iterador.hasNext())
+		{
+			CategoriaDTO elemento = Iterador.next();
+			if (elemento.getDenominacion().trim().toUpperCase().compareTo(nomCategoria.toUpperCase())==0 && elemento.getFueEliminado())
+				return true;
+		}
+		return false;
+	}
+
+	public CategoriaDTO buscarCategoria(String nvaDenominacion) {
+		Iterator<CategoriaDTO> Iterador = obtenerCategorias().iterator();
+		while(Iterador.hasNext())
+		{
+			CategoriaDTO elemento = Iterador.next();
+			if (elemento.getDenominacion().trim().toUpperCase().compareTo(nvaDenominacion.toUpperCase())==0)
+				return elemento;
+		}
+		return null;
+	}
+	
+	
 }

@@ -48,4 +48,20 @@ public class MatPrimas {
 		return null;
 	}
 
+	public boolean contienenCategoria(String nomCategoria) {
+		boolean existeCat = false;
+		List<MateriaPrimaDTO> matprima=this.obtenerMatPrimas();
+		Iterator<MateriaPrimaDTO> Iterador = matprima.iterator();
+		while(Iterador.hasNext())
+		{
+			MateriaPrimaDTO elemento = Iterador.next();
+			if(elemento.getCategoria().getDenominacion().trim().toUpperCase().compareTo(nomCategoria.toUpperCase()) == 0){
+				existeCat = true;
+				break;
+			}
+		}
+		return existeCat;
+				
+	}
+
 }

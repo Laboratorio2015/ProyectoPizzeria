@@ -133,11 +133,12 @@ public class ProveedorDTO
 		return null;
 	}
 	public boolean isCategoria(String nomCategoria) {
+		nomCategoria = nomCategoria.trim();
 		Iterator<CategoriaDTO> Iterador = categoria.iterator();
 		while(Iterador.hasNext())
 		{
 			CategoriaDTO elementoCategoria = Iterador.next();
-			if (elementoCategoria.getDenominacion().compareTo(nomCategoria)==0){
+			if (elementoCategoria.getDenominacion().trim().compareTo(nomCategoria)==0){
 				return true;
 			}
 		}

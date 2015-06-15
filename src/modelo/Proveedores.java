@@ -67,5 +67,20 @@ public class Proveedores
 		return ultimo;
 	}
 
+	public boolean contienenCategoria(String nomCategoria) {
+		Boolean existeCategoria = false;
+		List<ProveedorDTO> proveedores=this.proveedor.readAll();
+		Iterator<ProveedorDTO> Iterador = proveedores.iterator();
+		while(Iterador.hasNext())
+		{
+			ProveedorDTO elemento = Iterador.next();
+			if(elemento.isCategoria(nomCategoria)){
+				existeCategoria =true;
+				break;
+			}
+		}
+		return existeCategoria;
+	}
+
 	
 }

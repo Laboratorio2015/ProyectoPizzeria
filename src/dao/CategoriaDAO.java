@@ -14,6 +14,8 @@ public class CategoriaDAO
 	private static final String insert = "INSERT INTO categorias(idcategoria,nombre, fueeliminado) VALUES(?,?,?)";
 	private static final String delete = "DELETE FROM categorias WHERE idcategoria = ?";
 	private static final String readall = "SELECT * FROM categorias";
+	private static final String updateValorEliminado = "UPDATE categorias SET fueeliminado=";
+
 	private static final Conexion conexion = Conexion.getConexion();
 	
 	public boolean insert(CategoriaDTO categoria)
@@ -96,5 +98,35 @@ public class CategoriaDAO
 			conexion.cerrarConexion();
 		}
 		return categorias;
+	}
+	
+	public boolean cambiarEstadoEliminado(Integer idCategoria, boolean eliminado){
+		//el elemento con dicho id debe cambiar su campo 'fue eliminado' a true.
+		PreparedStatement statement;
+		int chequeoUpdate=0;
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(updateValorEliminado + eliminado + " where idcategoria=" +idCategoria+";" );
+			//	private static final String updateValorEliminado = "UPDATE categorias SET fueeliminado=";
+			//"UPDATE categorias SET fueeliminado=true where idcategoria='Federicolopez';"
+			//statement.setInt(1, categoria_a_eliminar.getIdCategoria());
+			chequeoUpdate = statement.executeUpdate();
+			if(chequeoUpdate > 0)
+			{
+				System.out.println("Actualizacion de categoria exitosa");
+				return true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			System.out.println("Actualizacion de categoria fallo");
+			e.printStackTrace();
+		}
+		finally
+		{
+			conexion.cerrarConexion();
+		}
+		return false;
+		
 	}
 }
