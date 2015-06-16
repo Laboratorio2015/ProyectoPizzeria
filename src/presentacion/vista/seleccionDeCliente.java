@@ -370,6 +370,7 @@ public class seleccionDeCliente extends JDialog {
 						pedido.setLlevaDelivery(true);
 					else
 						pedido.setLlevaDelivery(false);
+					control.getPedido().quitarPedido(pedido);
 					control.getPedido().agregarPedido(pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
 					//control.getMonitorCocina().nuevoPedido(pedido);
