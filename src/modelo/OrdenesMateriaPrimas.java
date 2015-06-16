@@ -52,10 +52,10 @@ private OrdenPedidoMatPrimaDAO ordenMatPrima;
 		while(Iterador.hasNext())
 		{
 			OrdenPedidoMatPrimaDTO elemento = Iterador.next();
-			if (elemento.getIdCompra()>0)
-				NvoId=elemento.getIdCompra()+1;
+			if (elemento.getIdCompra()>NvoId)
+				NvoId=elemento.getIdCompra();
 		}
-		return NvoId;
+		return (NvoId+1);
 				
 	}
 

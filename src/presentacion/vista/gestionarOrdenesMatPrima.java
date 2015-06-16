@@ -164,19 +164,19 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		
 		lblocultarOpcPago = new JLabel("");
 		lblocultarOpcPago.setOpaque(true);
-		lblocultarOpcPago.setBackground(Color.ORANGE);
+		lblocultarOpcPago.setBackground(new Color(204, 204, 0));
 		lblocultarOpcPago.setBounds(691, 349, 203, 43);
 		contentPane.add(lblocultarOpcPago);
 		
 		lblOcultarEnviarOrden = new JLabel("");
 		lblOcultarEnviarOrden.setOpaque(true);
-		lblOcultarEnviarOrden.setBackground(Color.ORANGE);
-		lblOcultarEnviarOrden.setBounds(690, 406, 162, 49);
+		lblOcultarEnviarOrden.setBackground(new Color(204, 204, 0));
+		lblOcultarEnviarOrden.setBounds(690, 403, 162, 52);
 		contentPane.add(lblOcultarEnviarOrden);
 		
 		lblOcultarOpcEliminar = new JLabel("");
 		lblOcultarOpcEliminar.setOpaque(true);
-		lblOcultarOpcEliminar.setBackground(Color.ORANGE);
+		lblOcultarOpcEliminar.setBackground(new Color(204, 204, 0));
 		lblOcultarOpcEliminar.setBounds(680, 289, 172, 49);
 		contentPane.add(lblOcultarOpcEliminar);
 		
