@@ -15,64 +15,88 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Iterator;
+
+import javax.swing.table.DefaultTableModel;
+
+import presentacion.controlador.Controlador;
+
+import dto.CategoriaDTO;
+import dto.MateriaPrimaDTO;
+
+import javax.swing.DefaultComboBoxModel;
 
 public class matPrimaBajaModificacion extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField tfDenominacion;
-	private JTable table;
-	private JTextField tfPrecio;
-	private JComboBox comboBoxCategoriasTabla;
-	private JComboBox comboBoxCategoriaUnObjeto;
+	private JComboBox<String> comboBoxCategoriasFiltro;
+	private JComboBox<String> comboBoxCategorias;
 	private JButton btnGuardarUnCambio;
 	private JButton btnGuardar;
 	private JButton btnEditar;
 	private JButton btnEliminar;
+	private DefaultTableModel modeloMatPrima;
+	private Controlador controlador;
+	private JTable tablaMateriasPrimas;
 
-	public matPrimaBajaModificacion() {
+	@SuppressWarnings("serial")
+	public matPrimaBajaModificacion(Controlador controlador) {
+		this.controlador = controlador;
 		setBounds(100, 100, 745, 653);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			comboBoxCategoriasTabla = new JComboBox();
-			comboBoxCategoriasTabla.setBounds(31, 175, 239, 22);
-			contentPanel.add(comboBoxCategoriasTabla);
+			comboBoxCategoriasFiltro = new JComboBox<String>();
+			comboBoxCategoriasFiltro.setModel(new DefaultComboBoxModel<String>(new String[] {"Ver todas"}));
+			comboBoxCategoriasFiltro.setBounds(31, 187, 239, 22);
+			contentPanel.add(comboBoxCategoriasFiltro);
 		}
 		{
-			comboBoxCategoriaUnObjeto = new JComboBox();
-			comboBoxCategoriaUnObjeto.setBounds(466, 279, 174, 22);
-			contentPanel.add(comboBoxCategoriaUnObjeto);
+			comboBoxCategorias = new JComboBox<String>();
+			comboBoxCategorias.setBounds(466, 279, 174, 22);
+			contentPanel.add(comboBoxCategorias);
 		}
 		{
 			tfDenominacion = new JTextField();
-			tfDenominacion.setBounds(466, 239, 174, 22);
+			tfDenominacion.setBounds(466, 227, 174, 22);
 			contentPanel.add(tfDenominacion);
 			tfDenominacion.setColumns(10);
 		}
 		{
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(31, 227, 239, 257);
-			contentPanel.add(scrollPane);
 			{
-				table = new JTable();
-				scrollPane.setViewportView(table);
+				modeloMatPrima = new DefaultTableModel(
+						new Object[][] {
+						},
+						new String[] {
+							"Materia Prima", "Categoria"
+						}
+					) {
+						Class[] columnTypes = new Class[] {
+							String.class, String.class
+						};
+						public Class getColumnClass(int columnIndex) {
+							return columnTypes[columnIndex];
+						}
+						boolean[] columnEditables = new boolean[] {
+							false, false
+						};
+						public boolean isCellEditable(int row, int column) {
+							return columnEditables[column];
+						}
+					};
 			}
 		}
-		{
-			tfPrecio = new JTextField();
-			tfPrecio.setColumns(10);
-			tfPrecio.setBounds(466, 312, 174, 22);
-			contentPanel.add(tfPrecio);
-		}
-		{
-			JLabel lblPrecio = new JLabel("Precio");
-			lblPrecio.setFont(new Font("Calibri", Font.BOLD, 15));
-			lblPrecio.setForeground(Color.WHITE);
-			lblPrecio.setBounds(349, 315, 46, 14);
-			contentPanel.add(lblPrecio);
-		}
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(24, 227, 239, 274);
+		contentPanel.add(scrollPane);
+		
+		tablaMateriasPrimas = new JTable();
+		scrollPane.setViewportView(tablaMateriasPrimas);
+		tablaMateriasPrimas.setModel(modeloMatPrima);
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(matPrimaBajaModificacion.class.getResource("/prototipos/baja-modif de Materia Prima.png")));
@@ -81,7 +105,7 @@ public class matPrimaBajaModificacion extends JDialog {
 		{
 			btnGuardarUnCambio= new JButton("Cancel");
 			btnGuardarUnCambio.setOpaque(false);
-			btnGuardarUnCambio.setBounds(334, 348, 38, 40);
+			btnGuardarUnCambio.setBounds(360, 361, 296, 40);
 			contentPanel.add(btnGuardarUnCambio);
 			btnGuardarUnCambio.setActionCommand("Cancel");
 		}
@@ -111,17 +135,88 @@ public class matPrimaBajaModificacion extends JDialog {
 			btnEditar= new JButton("Cancel");
 			btnEditar.setOpaque(false);
 			btnEditar.setActionCommand("Cancel");
-			btnEditar.setBounds(78, 512, 33, 34);
+			btnEditar.setBounds(67, 524, 33, 34);
 			contentPanel.add(btnEditar);
 		}
 		{
 			btnEliminar= new JButton("Cancel");
 			btnEliminar.setOpaque(false);
 			btnEliminar.setActionCommand("Cancel");
-			btnEliminar.setBounds(180, 512, 38, 34);
+			btnEliminar.setBounds(173, 524, 38, 34);
 			contentPanel.add(btnEliminar);
 		}
 	}
+
+	public void cargarCategoriasFiltro(){
+		comboBoxCategorias.removeAllItems();
+		Iterator<CategoriaDTO> iterador = this.controlador.getCategoria().obtenerCategorias().iterator();
+		while (iterador.hasNext()){
+			CategoriaDTO elemento = iterador.next();
+			comboBoxCategoriasFiltro.addItem(elemento.getDenominacion());
+		}
+	}
+	
+	public void filtrarTabla(String nomCategoria){
+		
+		resetearModeloMp();
+		if (nomCategoria.compareTo("Ver todas")!=0){
+			Iterator<MateriaPrimaDTO> iterador = this.controlador.getMateriasPrimas().obtenerMatPrimas().iterator();
+			while (iterador.hasNext()){
+				MateriaPrimaDTO elemento = iterador.next();
+				if (!elemento.getFueeliminado() && elemento.getCategoria().getDenominacion().trim().compareTo(nomCategoria)==0){
+					getModeloMatPrima().addRow(new Object[] {elemento.getNombre().replace("_", " ").trim(), elemento.getCategoria().getDenominacion().trim()});
+				}
+			}
+		}
+		else{
+			resetearModeloMp();
+			Iterator<MateriaPrimaDTO> iterador = this.controlador.getMateriasPrimas().obtenerMatPrimas().iterator();
+			while (iterador.hasNext()){
+				MateriaPrimaDTO elemento = iterador.next();
+				if (!elemento.getFueeliminado())
+					this.modeloMatPrima.addRow(new Object[] {elemento.getNombre().replace("_", " ").trim(), elemento.getCategoria().getDenominacion().trim()});
+			}
+		}
+		tablaMateriasPrimas.setModel(modeloMatPrima);
+	}
+
+	public void cargarCategorias(String catMPSelecc){
+		//Carga el combobox con categorias q no sean iguales a la de la materia prima seleccionada.
+		comboBoxCategorias.removeAllItems();
+		Iterator<CategoriaDTO> iterador = this.controlador.getCategoria().obtenerCategorias().iterator();
+		while (iterador.hasNext()){
+			CategoriaDTO elemento = iterador.next();{
+				comboBoxCategorias.addItem(elemento.getDenominacion().trim());
+			}
+		}
+		comboBoxCategorias.setSelectedItem(catMPSelecc);
+	}
+	
+	@SuppressWarnings("serial")
+	private void resetearModeloMp() {
+		modeloMatPrima = new DefaultTableModel(
+		new Object[][] {
+		},
+		new String[] {
+			"Materia Prima", "Categoria"
+		}
+	) {
+		Class[] columnTypes = new Class[] {
+			String.class, String.class
+		};
+		public Class getColumnClass(int columnIndex) {
+			return columnTypes[columnIndex];
+		}
+		boolean[] columnEditables = new boolean[] {
+			false, false
+		};
+		public boolean isCellEditable(int row, int column) {
+			return columnEditables[column];
+		}
+	};
+	tablaMateriasPrimas.setModel(modeloMatPrima);
+}
+		
 
 	public JTextField getTfDenominacion() {
 		return tfDenominacion;
@@ -132,35 +227,28 @@ public class matPrimaBajaModificacion extends JDialog {
 	}
 
 	public JTable getTable() {
-		return table;
+		return tablaMateriasPrimas;
 	}
 
 	public void setTable(JTable table) {
-		this.table = table;
+		this.tablaMateriasPrimas = table;
 	}
 
-	public JTextField getTfPrecio() {
-		return tfPrecio;
-	}
-
-	public void setTfPrecio(JTextField tfPrecio) {
-		this.tfPrecio = tfPrecio;
-	}
 
 	public JComboBox getComboBoxCategoriasTabla() {
-		return comboBoxCategoriasTabla;
+		return comboBoxCategoriasFiltro;
 	}
 
 	public void setComboBoxCategoriasTabla(JComboBox comboBoxCategoriasTabla) {
-		this.comboBoxCategoriasTabla = comboBoxCategoriasTabla;
+		this.comboBoxCategoriasFiltro = comboBoxCategoriasTabla;
 	}
 
 	public JComboBox getComboBoxCategoriaUnObjeto() {
-		return comboBoxCategoriaUnObjeto;
+		return comboBoxCategorias;
 	}
 
 	public void setComboBoxCategoriaUnObjeto(JComboBox comboBoxCategoriaUnObjeto) {
-		this.comboBoxCategoriaUnObjeto = comboBoxCategoriaUnObjeto;
+		this.comboBoxCategorias = comboBoxCategoriaUnObjeto;
 	}
 
 	public JButton getBtnGuardarUnCambio() {
@@ -194,5 +282,41 @@ public class matPrimaBajaModificacion extends JDialog {
 	public void setBtnEliminar(JButton btnEliminar) {
 		this.btnEliminar = btnEliminar;
 	}
-	
+
+	public JTable getTableMatPrimas() {
+		return tablaMateriasPrimas;
+	}
+
+	public void setTableMatPrimas(JTable tableMatPrimas) {
+		this.tablaMateriasPrimas = tableMatPrimas;
+	}
+
+	public JComboBox getComboBoxCategoriasFiltro() {
+		return comboBoxCategoriasFiltro;
+	}
+
+	public void setComboBoxCategoriasFiltro(JComboBox comboBoxCategoriasFiltro) {
+		this.comboBoxCategoriasFiltro = comboBoxCategoriasFiltro;
+	}
+
+	public JComboBox<String> getComboBoxCategorias() {
+		return comboBoxCategorias;
+	}
+
+	public void setComboBoxCategorias(JComboBox<String> comboBoxCategorias) {
+		this.comboBoxCategorias = comboBoxCategorias;
+	}
+
+	public DefaultTableModel getModeloMatPrima() {
+		return modeloMatPrima;
+	}
+
+	public void setModeloMatPrima(DefaultTableModel modeloMatPrima) {
+		this.modeloMatPrima = modeloMatPrima;
+	}
+
+	public void cargarMateriasPrimasFiltradas(String string) {
+		
+		
+	}
 }

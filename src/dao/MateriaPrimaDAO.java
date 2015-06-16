@@ -13,10 +13,13 @@ import dto.MateriaPrimaDTO;
 
 public class MateriaPrimaDAO 
 {
-	private static final String insert = "INSERT INTO matprimas(idmatprima,nombre, categoria,precio ,fueeliminado) VALUES(?, ?,?,?)";
+	private static final String insert = "INSERT INTO matprimas(idmatprima,nombre, categoria,precio ,fueeliminado) VALUES(?,?,?,?,?)";
 	private static final String delete = "DELETE FROM matprimas WHERE idmatprima = ?";
 	private static final String readall = "SELECT * FROM matprimas";
 	private static final String obtenerlistamatprimas="select idmatprima,i.nombre from proveedores P join matprimas I on p.matprima=i.idmatprima and p.idproveedor= ?;";
+	private static final String updateCategoria = "UPDATE matprimas SET categoria=";
+	private static final String updateFueEliminado= "UPDATE matprimas SET fueeliminado=";
+	
 	private static final Conexion conexion = Conexion.getConexion();
 	
 	
@@ -135,6 +138,37 @@ public class MateriaPrimaDAO
 			conexion.cerrarConexion();
 		}
 		return matprimas;
+	}
+
+	public boolean actualizarDatos(MateriaPrimaDTO rehabilitarMatPrima) {
+		
+		PreparedStatement statement;
+		int chequeoUpdate=0;
+		try 
+		{
+			//longQuery + updateEmail + provActualizado.getEmail().trim() + "' where idproveedor=" +provActualizado.getId()+";";
+			String query = updateCategoria + rehabilitarMatPrima.getCategoria().getIdCategoria() + " where idmatprima=" + rehabilitarMatPrima.getIdMatPrima()+";";
+			query = query + updateFueEliminado + rehabilitarMatPrima.getFueeliminado() + " where idmatprima=" + rehabilitarMatPrima.getIdMatPrima()+";";
+			System.out.println(query);
+			statement = conexion.getSQLConexion().prepareStatement(query);
+			chequeoUpdate = statement.executeUpdate();
+			if(chequeoUpdate > 0)
+			{
+				System.out.println("Se rehabilito una materia prima ok");
+				return true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			System.out.println("Se rehabilito una materia prima>fallido");
+			e.printStackTrace();
+		}
+		finally
+		{
+			conexion.cerrarConexion();
+		}
+		return false;
+		
 	}
 
 }

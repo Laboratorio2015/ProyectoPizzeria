@@ -3,6 +3,7 @@ package modelo;
 import java.util.Iterator;
 import java.util.List;
 
+import dto.CategoriaDTO;
 import dto.MateriaPrimaDTO;
 import dao.MateriaPrimaDAO;
 
@@ -64,4 +65,65 @@ public class MatPrimas {
 				
 	}
 
+	public boolean contieneEnHabilitadas(String nomNvaMatPrima) {
+		
+		boolean repetida = false;
+		List<MateriaPrimaDTO> matprima=this.obtenerMatPrimas();
+		Iterator<MateriaPrimaDTO> Iterador = matprima.iterator();
+		while(Iterador.hasNext())
+		{
+			MateriaPrimaDTO elemento = Iterador.next();
+			if(!elemento.getFueeliminado() && elemento.getNombre().trim().toUpperCase().compareTo(nomNvaMatPrima.toUpperCase()) == 0){
+				repetida = true;
+				break;
+			}
+		}
+		return repetida;
+	}
+
+	public boolean contieneEnRechazadas(String nomNvaMatPrima) {
+		boolean repetida = false;
+		List<MateriaPrimaDTO> matprima=this.obtenerMatPrimas();
+		Iterator<MateriaPrimaDTO> Iterador = matprima.iterator();
+		while(Iterador.hasNext())
+		{
+			MateriaPrimaDTO elemento = Iterador.next();
+			if(elemento.getFueeliminado() &&  elemento.getNombre().trim().toUpperCase().compareTo(nomNvaMatPrima.toUpperCase()) == 0){
+				repetida = true;
+				break;
+			}
+		}
+		return repetida;
+	}
+
+	public MateriaPrimaDTO buscarMatPrima(String nomNvaMatPrima) {
+		List<MateriaPrimaDTO> matprima=this.obtenerMatPrimas();
+		Iterator<MateriaPrimaDTO> Iterador = matprima.iterator();
+		while(Iterador.hasNext())
+		{
+			MateriaPrimaDTO elemento = Iterador.next();
+			if(elemento.getNombre().trim().toUpperCase().compareTo(nomNvaMatPrima.toUpperCase()) == 0){
+				return elemento;
+			}
+		}
+		return null;
+	}
+
+	public void actualizarMatPrima(MateriaPrimaDTO rehabilitarMatPrima) {
+		matPrima.actualizarDatos(rehabilitarMatPrima);
+	}
+
+	public Integer getNvoId() {
+		Iterator<MateriaPrimaDTO> Iterador = obtenerMatPrimas().iterator();
+		Integer nvoId = 0;
+		while(Iterador.hasNext())
+		{
+			MateriaPrimaDTO elemento = Iterador.next();
+			if (nvoId < elemento.getIdMatPrima() )
+				nvoId = elemento.getIdMatPrima();
+		}
+		return nvoId+1;
+	}
 }
+
+

@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -12,20 +13,36 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import presentacion.controlador.Controlador;
+
+import dto.CategoriaDTO;
+import dto.MateriaPrimaDTO;
+import dto.ProveedorDTO;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Iterator;
 
 public class matPrimaAlta extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField tfNombre;
-	private JTextField tfPrecio;
-	private JTable table;
+	private JTable tablaMateriasPrimas;
+	private DefaultTableModel modeloMatPrima;
 	private JButton btnGuardar;
 	private JButton btnAgregarMatPrima;
-	private JComboBox comboBoxCategoria;
+	private JButton buttonEditarMP;
+	private JButton buttonBorrarMatPrima;
+	private JComboBox<String> comboBoxCategoria;
+	private Controlador controlador;
 	
-	public matPrimaAlta() {
+	@SuppressWarnings("serial")
+	public matPrimaAlta(Controlador controlador) {
+		this.controlador = controlador;
+		
 		setBounds(100, 100, 734, 588);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(597, 0, 1, 482);
@@ -51,11 +68,6 @@ public class matPrimaAlta extends JDialog {
 			getContentPane().add(tfNombre);
 			tfNombre.setColumns(10);
 		}
-		
-		tfPrecio = new JTextField();
-		tfPrecio.setColumns(10);
-		tfPrecio.setBounds(125, 318, 222, 22);
-		getContentPane().add(tfPrecio);
 		{
 		comboBoxCategoria= new JComboBox();
 		comboBoxCategoria.setBounds(125, 285, 222, 22);
@@ -66,31 +78,57 @@ public class matPrimaAlta extends JDialog {
 		scrollPane.setBounds(385, 167, 243, 259);
 		getContentPane().add(scrollPane);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		tablaMateriasPrimas = new JTable();
+		modeloMatPrima = new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Materia Prima", "Categoria"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				String.class, String.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		};
+		tablaMateriasPrimas.setModel(modeloMatPrima);
+		tablaMateriasPrimas.addMouseListener(new MouseAdapter() 
+		{
+			@Override
+			public void mousePressed(MouseEvent arg0) 
+			{
+				//evento al hacer click en la tabla.
+			}
+		});
 		
-		JLabel lblPrecio = new JLabel("Precio");
-		lblPrecio.setFont(new Font("Calibri", Font.BOLD, 15));
-		lblPrecio.setForeground(Color.WHITE);
-		lblPrecio.setBackground(Color.WHITE);
-		lblPrecio.setBounds(45, 327, 46, 14);
-		getContentPane().add(lblPrecio);
+		scrollPane.setViewportView(tablaMateriasPrimas);
 		{
 			JLabel label = new JLabel("");
-			label.setIcon(new ImageIcon(matPrimaAlta.class.getResource("/prototipos/Alta de Materia Prima.png")));
+			label.setIcon(new ImageIcon(matPrimaAlta.class.getResource("/prototipos/Carga de Materia Prima.png")));
 			label.setBounds(0, 0, 719, 550);
 			getContentPane().add(label);
 		}
 		
 		btnAgregarMatPrima= new JButton("");
-		btnAgregarMatPrima.setBounds(92, 352, 51, 30);
+		btnAgregarMatPrima.setOpaque(false);
+		btnAgregarMatPrima.setBounds(92, 352, 215, 30);
 		getContentPane().add(btnAgregarMatPrima);
 		
 		btnGuardar= new JButton("");
+		btnGuardar.setOpaque(false);
 		btnGuardar.setBounds(392, 481, 109, 36);
 		getContentPane().add(btnGuardar);
 		
 		JButton btnCancelar = new JButton("");
+		btnCancelar.setOpaque(false);
 		btnCancelar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
@@ -100,22 +138,75 @@ public class matPrimaAlta extends JDialog {
 		});
 		btnCancelar.setBounds(548, 481, 109, 36);
 		getContentPane().add(btnCancelar);
+		
+		buttonEditarMP = new JButton("");
+		buttonEditarMP.setOpaque(false);
+		buttonEditarMP.setBounds(651, 254, 33, 30);
+		getContentPane().add(buttonEditarMP);
+		
+		buttonBorrarMatPrima = new JButton("");
+		buttonBorrarMatPrima.setOpaque(false);
+		buttonBorrarMatPrima.setBounds(651, 316, 41, 43);
+		getContentPane().add(buttonBorrarMatPrima);
+	}
+	
+	public void cargarOpcCategorias(MateriaPrimaDTO matPrimaSelecc){
+		//Carga el combobox con categorias q no sean iguales a la de la materia prima seleccionada.
+		comboBoxCategoria.removeAllItems();
+		String catMPSelecc = matPrimaSelecc.getCategoria().getDenominacion();
+		Iterator<CategoriaDTO> iterador = this.controlador.getCategoria().obtenerCategorias().iterator();
+		while (iterador.hasNext()){
+			CategoriaDTO elemento = iterador.next();
+			if (elemento.getDenominacion().compareTo(catMPSelecc)!=0){
+				comboBoxCategoria.addItem(elemento.getDenominacion());
+			}
+		}
 	}
 
+	public void cargarOpcCategorias(){
+		//Carga el combobox con categorias q no sean iguales a la de la materia prima seleccionada.
+		comboBoxCategoria.removeAllItems();
+		Iterator<CategoriaDTO> iterador = this.controlador.getCategoria().obtenerCategorias().iterator();
+		while (iterador.hasNext()){
+			CategoriaDTO elemento = iterador.next();
+			comboBoxCategoria.addItem(elemento.getDenominacion());
+		}
+	}
+
+	@SuppressWarnings("serial")
+	public void resetearTablaMatPrimas(){
+		modeloMatPrima = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Materia Prima", "Categoria"
+				}
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, String.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+				boolean[] columnEditables = new boolean[] {
+					false, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			};
+			tablaMateriasPrimas.setModel(modeloMatPrima);
+	}
+	
+	public void limpiarCampo(){
+		tfNombre.setText("");
+	}
 	public JTextField getTfNombre() {
 		return tfNombre;
 	}
 
 	public void setTfNombre(JTextField tfNombre) {
 		this.tfNombre = tfNombre;
-	}
-
-	public JTextField getTfPrecio() {
-		return tfPrecio;
-	}
-
-	public void setTfPrecio(JTextField tfPrecio) {
-		this.tfPrecio = tfPrecio;
 	}
 
 	public JButton getBtnGuardar() {
@@ -134,11 +225,57 @@ public class matPrimaAlta extends JDialog {
 		this.btnAgregarMatPrima = btnAgregarMatPrima;
 	}
 
-	public JComboBox getComboBoxCategoria() {
+	public JComboBox<String> getComboBoxCategoria() {
 		return comboBoxCategoria;
 	}
 
-	public void setComboBoxCategoria(JComboBox comboBoxCategoria) {
+
+	public JButton getButtonEditarMP() {
+		return buttonEditarMP;
+	}
+
+	public void setButtonEditarMP(JButton buttonEditarMP) {
+		this.buttonEditarMP = buttonEditarMP;
+	}
+
+	public JButton getButtonBorrarCat() {
+		return buttonBorrarMatPrima;
+	}
+
+	public void setButtonBorrarCat(JButton buttonBorrarCat) {
+		this.buttonBorrarMatPrima = buttonBorrarCat;
+	}
+
+	public void setComboBoxCategoria(JComboBox<String> comboBoxCategoria) {
 		this.comboBoxCategoria = comboBoxCategoria;
+	}
+
+	public JTable getTablaMateriasPrimas() {
+		return tablaMateriasPrimas;
+	}
+
+	public void setTablaMateriasPrimas(JTable tablaMateriasPrimas) {
+		this.tablaMateriasPrimas = tablaMateriasPrimas;
+	}
+
+	public void cargarMateriasPrimas() {
+		resetearTablaMatPrimas();
+		resetearTablaMatPrimas();
+		Iterator<MateriaPrimaDTO> iterador = this.controlador.getMateriasPrimas().obtenerMatPrimas().iterator();
+		while (iterador.hasNext()){
+			MateriaPrimaDTO elemento = iterador.next();
+			if (!elemento.getFueeliminado())
+				this.modeloMatPrima.addRow(new Object[] {elemento.getNombre().replace("_", " ").trim(), elemento.getCategoria().getDenominacion()});
+		}
+		tablaMateriasPrimas.setModel(modeloMatPrima);
+		limpiarCampo();
+	}
+
+	public JButton getButtonBorrarMatPrima() {
+		return buttonBorrarMatPrima;
+	}
+
+	public void setButtonBorrarMatPrima(JButton buttonBorrarMatPrima) {
+		this.buttonBorrarMatPrima = buttonBorrarMatPrima;
 	}
 }

@@ -9,6 +9,15 @@ public class MateriaPrimaDTO
 	private Boolean fueeliminado;
 
 	
+	public MateriaPrimaDTO(Integer identificador, String nombre, CategoriaDTO categoria,Boolean fueliminado)
+	{
+		this.idMatPrima = identificador;
+		this.nombre = nombre;
+		this.categoria=categoria;
+		this.precio=0;
+		this.fueeliminado=fueliminado;
+	}
+	
 	public MateriaPrimaDTO(Integer identificador, String nombre, CategoriaDTO categoria,Integer precio ,Boolean fueliminado)
 	{
 		this.idMatPrima = identificador;

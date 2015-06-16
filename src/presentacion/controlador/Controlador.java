@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -160,6 +162,7 @@ public class Controlador implements ActionListener
 
 	}
 
+	@SuppressWarnings("serial")
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
@@ -801,15 +804,171 @@ public class Controlador implements ActionListener
 			}
 		}
 		//VENTANA BAJA MODIF PROVEEDOR> Quitar Categoria
-				else if (this.ventanaEditarProveedor!= null && e.getSource()==this.ventanaEditarProveedor.getBtnQuitarcat())
-				{
-					Integer intFilaCatSelecc = ventanaEditarProveedor.getTablaCategorias().getSelectedRow();
-					if (intFilaCatSelecc > -1){
-						ventanaEditarProveedor.getComboBoxCategorias().addItem(ventanaEditarProveedor.getTablaCategorias().getValueAt(intFilaCatSelecc, 0).toString());
-						ventanaEditarProveedor.getModeloCategorias().removeRow(intFilaCatSelecc);
-					}
+		else if (this.ventanaEditarProveedor!= null && e.getSource()==this.ventanaEditarProveedor.getBtnQuitarcat())
+		{
+			Integer intFilaCatSelecc = ventanaEditarProveedor.getTablaCategorias().getSelectedRow();
+			if (intFilaCatSelecc > -1){
+				ventanaEditarProveedor.getComboBoxCategorias().addItem(ventanaEditarProveedor.getTablaCategorias().getValueAt(intFilaCatSelecc, 0).toString());
+				ventanaEditarProveedor.getModeloCategorias().removeRow(intFilaCatSelecc);
+			}
+		}
+		//VENTANA CONFIGURACION> Abrir ventana alta materia prima
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarMatPrima())
+		{
+			ventanaAgregarMatPrima=new matPrimaAlta(this);
+			ventanaAgregarMatPrima.setVisible(true);
+			ventanaAgregarMatPrima.getBtnAgregarMatPrima().addActionListener(this);
+			ventanaAgregarMatPrima.getBtnGuardar().addActionListener(this);
+			ventanaAgregarMatPrima.getButtonBorrarCat().addActionListener(this);
+			ventanaAgregarMatPrima.getButtonEditarMP().addActionListener(this);
+			ventanaAgregarMatPrima.cargarOpcCategorias();
+			ventanaAgregarMatPrima.cargarMateriasPrimas();
+//			ventanaAgregarMatPrima.getTablaMateriasPrimas().addMouseListener(new MouseAdapter()
+//			{
+//				@Override
+//				public void mousePressed(MouseEvent arg0) 
+//				{
+//					//					Integer filaSelecc = ventanaAgregarMatPrima.getTablaMateriasPrimas().getSelectedRow();
+//					//					if (filaSelecc > -1){
+//					//						String nomMatPrima = ventanaAgregarMatPrima.getTablaMateriasPrimas().getValueAt(filaSelecc, 0).toString();
+//					//						ventanaAgregarMatPrima.cargarOpcCategorias(materiasPrimas.buscarMatPrima(nomMatPrima));
+//					//						
+//					//					}
+//				}
+//			});
+		}
+		//VENTANA ALTA MAT PRIMA> Guardar Nva Mat Prima
+		else if (this.ventanaAgregarMatPrima!= null && e.getSource()==this.ventanaAgregarMatPrima.getBtnAgregarMatPrima())
+		{
+			/*
+			 * Si el nombre de la materia prima no existe
+			 * 	agregar directamente a la bd
+			 * Si el nombre de la mat prima existe en las mat primas habilitadas
+			 * 	arrojo cartel que el nombre ya existe, y se debe elegir otro
+			 * Si el nombre de la mat prima existe en las mat primas borradas
+			 *	actualizo el campo de fueeliminado a false de dicha mat prima
+			 *y tmb actualizo segun la cat nva designada
+			 */
+			
+			String nomNvaMatPrima = ventanaAgregarMatPrima.getTfNombre().getText().trim();
+			if (materiasPrimas.contieneEnHabilitadas(nomNvaMatPrima)){
+				JOptionPane.showMessageDialog(null, "El nombre de la materia prima ya existe, indique otro para continuar", "Confirmación",JOptionPane.WARNING_MESSAGE);
+			}
+			else if (materiasPrimas.contieneEnRechazadas(nomNvaMatPrima)){
+				///actualizado fueeliminado false
+				//actualizar categoria segun seleccion del cliente.
+				MateriaPrimaDTO rehabilitarMatPrima =  materiasPrimas.buscarMatPrima(nomNvaMatPrima);
+				rehabilitarMatPrima.setFueeliminado(false);
+				rehabilitarMatPrima.setCategoria( categoria.buscarCategoria( ventanaAgregarMatPrima.getComboBoxCategoria().getSelectedItem().toString() ) );
+				materiasPrimas.actualizarMatPrima(rehabilitarMatPrima);//metodo busca x id recibido y reemplaza 
+			}
+			else{
+				MateriaPrimaDTO nvaMatPrima =  new MateriaPrimaDTO(materiasPrimas.getNvoId(),nomNvaMatPrima,
+						categoria.buscarCategoria(ventanaAgregarMatPrima.getComboBoxCategoria().getSelectedItem().toString()),false);
+				materiasPrimas.agregarMatPrima(nvaMatPrima);
+			}
+			ventanaAgregarMatPrima.cargarMateriasPrimas();
+		}
+		//VENTANA ALTA MAT PRIMA> Borrar Materia Prima
+		else if (this.ventanaAgregarMatPrima!= null && e.getSource()==this.ventanaAgregarMatPrima.getButtonBorrarMatPrima())
+		{
+			//directamente toco el valor de fue eliminado o no
+			Integer intFilaCatSelecc = ventanaAgregarMatPrima.getTablaMateriasPrimas().getSelectedRow();
+			if (intFilaCatSelecc > -1){
+				MateriaPrimaDTO mpAborar = materiasPrimas.buscarMatPrima(ventanaAgregarMatPrima.getTablaMateriasPrimas().getValueAt(intFilaCatSelecc, 0).toString());
+				mpAborar.setFueeliminado(true);
+				materiasPrimas.actualizarMatPrima(mpAborar);
+			}
+			ventanaAgregarMatPrima.cargarMateriasPrimas();
+		}
+		//VENTANA ALTA MAT PRIMA> Editar Mat Prima
+		else if (this.ventanaAgregarMatPrima!= null && e.getSource()==this.ventanaAgregarMatPrima.getButtonEditarMP())
+		{
+			Integer indice = ventanaAgregarMatPrima.getTablaMateriasPrimas().getSelectedRow();
+			if (indice > -1){
+				MateriaPrimaDTO matSelecc = materiasPrimas.buscarMatPrima(ventanaAgregarMatPrima.getTablaMateriasPrimas().getValueAt(indice, 0).toString());
+				ventanaAgregarMatPrima.getTfNombre().setText(matSelecc.getNombre());
+				ventanaAgregarMatPrima.getComboBoxCategoria().setSelectedItem(matSelecc.getCategoria().getDenominacion());
+			}
+			
+		}
+		//VENTANA ALTA MAT PRIMA> Guardar modificaciones
+		else if (this.ventanaAgregarMatPrima!= null && e.getSource()==this.ventanaAgregarMatPrima.getBtnGuardar())
+		{
+			Integer intFilaCatSelecc = ventanaAgregarMatPrima.getTablaMateriasPrimas().getSelectedRow();
+			if (intFilaCatSelecc > -1){
+				MateriaPrimaDTO mpAmodificar = materiasPrimas.buscarMatPrima(ventanaAgregarMatPrima.getTablaMateriasPrimas().getValueAt(intFilaCatSelecc, 0).toString());
+				mpAmodificar.setNombre(ventanaAgregarMatPrima.getTfNombre().getText().trim());
+				mpAmodificar.setCategoria(categoria.buscarCategoria(ventanaAgregarMatPrima.getComboBoxCategoria().getSelectedItem().toString()));
+				materiasPrimas.actualizarMatPrima(mpAmodificar);
+				ventanaAgregarMatPrima.cargarMateriasPrimas();
+			}
+		}
+		//CONFIGURACION> ABRIR VENTANA BAJA MODIF MAT PRIMA
+		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarMatPrima())
+		{
+			ventanaEditarMatPrima=new matPrimaBajaModificacion(this);
+			ventanaEditarMatPrima.setVisible(true);
+			
+			ventanaEditarMatPrima.getBtnEditar().addActionListener(this);
+			ventanaEditarMatPrima.getBtnEliminar().addActionListener(this);
+			ventanaEditarMatPrima.getBtnGuardar().addActionListener(this);
+			ventanaEditarMatPrima.getBtnGuardarUnCambio().addActionListener(this);
+			ventanaEditarMatPrima.getComboBoxCategoriasFiltro().addActionListener(this);
+			ventanaEditarMatPrima.getComboBoxCategoriaUnObjeto().addActionListener(this);
+			ventanaEditarMatPrima.getTfDenominacion().addActionListener(this);
+
+			ventanaEditarMatPrima.cargarCategoriasFiltro();
+			ventanaEditarMatPrima.filtrarTabla(ventanaEditarMatPrima.getComboBoxCategoriasFiltro().getSelectedItem().toString());
+
+		}
+		//VENTANA MODFI BAJA MAT PRIMA> Cambiar Filtro Mp
+		else if (this.ventanaEditarMatPrima!= null && e.getSource()==this.ventanaEditarMatPrima.getComboBoxCategoriasFiltro())
+		{
+			ventanaEditarMatPrima.filtrarTabla(ventanaEditarMatPrima.getComboBoxCategoriasFiltro().getSelectedItem().toString());
+		}
+		//VENTANA MODFI BAJA MAT PRIMA> Boton Editar Mp
+		else if (this.ventanaEditarMatPrima!= null && e.getSource()==this.ventanaEditarMatPrima.getBtnEditar())
+		{
+			Integer intFilaCatSelecc = ventanaEditarMatPrima.getTableMatPrimas().getSelectedRow();
+			if (intFilaCatSelecc > -1){
+				ventanaEditarMatPrima.getTfDenominacion().setText(ventanaEditarMatPrima.getTableMatPrimas().getValueAt(intFilaCatSelecc, 0).toString());
+				ventanaEditarMatPrima.cargarCategorias(ventanaEditarMatPrima.getTableMatPrimas().getValueAt(intFilaCatSelecc, 1).toString());
+			}
+		}
+		//VENTANA MODFI BAJA MAT PRIMA> Guardar modificaciones
+		else if (this.ventanaEditarMatPrima!= null && e.getSource()==this.ventanaEditarMatPrima.getBtnGuardarUnCambio())
+		{
+			Integer intFilaCatSelecc = ventanaEditarMatPrima.getTableMatPrimas().getSelectedRow();
+			if (intFilaCatSelecc > -1){
+				MateriaPrimaDTO mpAmodificar = materiasPrimas.buscarMatPrima(ventanaEditarMatPrima.getTableMatPrimas().getValueAt(intFilaCatSelecc, 0).toString());
+				mpAmodificar.setNombre(ventanaEditarMatPrima.getTfDenominacion().getText().trim());
+				mpAmodificar.setCategoria(categoria.buscarCategoria(ventanaEditarMatPrima.getComboBoxCategorias().getSelectedItem().toString()));
+				materiasPrimas.actualizarMatPrima(mpAmodificar);
+				ventanaEditarMatPrima.getComboBoxCategoriasFiltro().setSelectedItem(mpAmodificar.getCategoria().getDenominacion().trim());
+				ventanaEditarMatPrima.filtrarTabla(mpAmodificar.getCategoria().getDenominacion().trim());
+				ventanaEditarMatPrima.getTfDenominacion().setText("");
+				ventanaEditarMatPrima.getComboBoxCategorias().removeAllItems();
+			}	
+		}
+		//VENTANA MODFI BAJA MAT PRIMA> Boton Borrar MP
+		else if (this.ventanaEditarMatPrima!= null && e.getSource()==this.ventanaEditarMatPrima.getBtnEliminar())
+		{
+			Integer intFilaCatSelecc = ventanaEditarMatPrima.getTableMatPrimas().getSelectedRow();
+			if (intFilaCatSelecc > -1){
+				MateriaPrimaDTO matABorrar = materiasPrimas.buscarMatPrima(ventanaEditarMatPrima.getTableMatPrimas().getValueAt(intFilaCatSelecc, 0).toString());
+				Component a= new Component() {};
+				int opcion = JOptionPane.showConfirmDialog(a, "¿Confirma la eliminación de la materia prima: " + matABorrar.getNombre().trim() + "?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+				if (opcion==0){
+					matABorrar.setFueeliminado(true);
+					materiasPrimas.actualizarMatPrima(matABorrar);
+					ventanaEditarMatPrima.getModeloMatPrima().removeRow(intFilaCatSelecc);
+					ventanaEditarMatPrima.getTableMatPrimas().setModel(ventanaEditarMatPrima.getModeloMatPrima());
 				}
-		
+//				ventanaEditarMatPrima.cargarMateriasPrimasFiltradas(ventanaEditarMatPrima.getComboBoxCategoriasFiltro().getSelectedItem().toString());
+			}
+		}
+
 		///////////////////////////////////FIN//////CodigoJuliet/////////////////////////////////////////////////
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
 		{
@@ -1069,16 +1228,8 @@ public class Controlador implements ActionListener
 			ventanaEditarRepartidor.getTfPatente().setText("");
 			ventanaEditarRepartidor.getTfDescripcion().setText("");
 		}
-		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnAgregarMatPrima())
-		{
-			ventanaAgregarMatPrima=new matPrimaAlta();
-			ventanaAgregarMatPrima.setVisible(true);
-		}
-		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarMatPrima())
-		{
-			ventanaEditarMatPrima=new matPrimaBajaModificacion();
-			ventanaEditarMatPrima.setVisible(true);
-		}
+		
+		
 
 		//acciones asociadas el alta de repartidores
 		else if (this.ventanaAgregarRepartidor!= null && e.getSource()==this.ventanaAgregarRepartidor.getBtnCalendario())
