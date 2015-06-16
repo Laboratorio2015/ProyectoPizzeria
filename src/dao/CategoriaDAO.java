@@ -85,7 +85,16 @@ public class CategoriaDAO
 			
 			while(resultSet.next())
 			{
-				categorias.add(new CategoriaDTO(resultSet.getInt("idcategoria"),resultSet.getString("nombre"),
+				String t= resultSet.getString("nombre");
+				String nombre="";
+				for (int i=0; i<t.length(); i++)
+				{
+					  if (t.charAt(i) != ' ' || (t.charAt(i)==' ' && t.charAt(i+1)!=' '))
+					    nombre += t.charAt(i);
+					  else if(t.charAt(i)==' ' && t.charAt(i+1)==' ')
+						  break;
+				}
+				categorias.add(new CategoriaDTO(resultSet.getInt("idcategoria"),nombre,
 						resultSet.getBoolean("fueeliminado")));
 			}
 		} 
