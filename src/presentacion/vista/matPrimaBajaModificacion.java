@@ -51,17 +51,17 @@ public class matPrimaBajaModificacion extends JDialog {
 		{
 			comboBoxCategoriasFiltro = new JComboBox<String>();
 			comboBoxCategoriasFiltro.setModel(new DefaultComboBoxModel<String>(new String[] {"Ver todas"}));
-			comboBoxCategoriasFiltro.setBounds(31, 187, 239, 22);
+			comboBoxCategoriasFiltro.setBounds(24, 177, 239, 22);
 			contentPanel.add(comboBoxCategoriasFiltro);
 		}
 		{
 			comboBoxCategorias = new JComboBox<String>();
-			comboBoxCategorias.setBounds(466, 279, 174, 22);
+			comboBoxCategorias.setBounds(455, 280, 185, 22);
 			contentPanel.add(comboBoxCategorias);
 		}
 		{
 			tfDenominacion = new JTextField();
-			tfDenominacion.setBounds(466, 227, 174, 22);
+			tfDenominacion.setBounds(455, 232, 185, 22);
 			contentPanel.add(tfDenominacion);
 			tfDenominacion.setColumns(10);
 		}
@@ -91,7 +91,7 @@ public class matPrimaBajaModificacion extends JDialog {
 		}
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(24, 227, 239, 274);
+		scrollPane.setBounds(24, 210, 239, 291);
 		contentPanel.add(scrollPane);
 		
 		tablaMateriasPrimas = new JTable();
@@ -111,8 +111,9 @@ public class matPrimaBajaModificacion extends JDialog {
 		}
 		{
 			btnGuardar= new JButton("OK");
+			btnGuardar.setVisible(false);
 			btnGuardar.setOpaque(false);
-			btnGuardar.setBounds(341, 536, 154, 40);
+			btnGuardar.setBounds(565, 485, 154, 40);
 			contentPanel.add(btnGuardar);
 			btnGuardar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnGuardar);
@@ -128,7 +129,7 @@ public class matPrimaBajaModificacion extends JDialog {
 			});
 			btnCancelar.setOpaque(false);
 			btnCancelar.setActionCommand("OK");
-			btnCancelar.setBounds(536, 536, 154, 40);
+			btnCancelar.setBounds(426, 536, 154, 40);
 			contentPanel.add(btnCancelar);
 		}
 		{

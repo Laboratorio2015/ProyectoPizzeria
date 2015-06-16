@@ -689,6 +689,7 @@ public class Controlador implements ActionListener
 				nuevo.setEmail(ventanaAgregarProveedor.getTfEmail().getText());
 				nuevo.setTelefono(ventanaAgregarProveedor.getTfTelefono().getText());
 				proveedor.agregarProveedor(nuevo);
+				JOptionPane.showMessageDialog(null, "Se ha registrado con éxito el proveedor: " + nuevo.getNombre(), "Confirmación",JOptionPane.WARNING_MESSAGE);
 				ventanaAgregarProveedor.dispose();
 			}
 			else
@@ -823,19 +824,7 @@ public class Controlador implements ActionListener
 			ventanaAgregarMatPrima.getButtonEditarMP().addActionListener(this);
 			ventanaAgregarMatPrima.cargarOpcCategorias();
 			ventanaAgregarMatPrima.cargarMateriasPrimas();
-//			ventanaAgregarMatPrima.getTablaMateriasPrimas().addMouseListener(new MouseAdapter()
-//			{
-//				@Override
-//				public void mousePressed(MouseEvent arg0) 
-//				{
-//					//					Integer filaSelecc = ventanaAgregarMatPrima.getTablaMateriasPrimas().getSelectedRow();
-//					//					if (filaSelecc > -1){
-//					//						String nomMatPrima = ventanaAgregarMatPrima.getTablaMateriasPrimas().getValueAt(filaSelecc, 0).toString();
-//					//						ventanaAgregarMatPrima.cargarOpcCategorias(materiasPrimas.buscarMatPrima(nomMatPrima));
-//					//						
-//					//					}
-//				}
-//			});
+
 		}
 		//VENTANA ALTA MAT PRIMA> Guardar Nva Mat Prima
 		else if (this.ventanaAgregarMatPrima!= null && e.getSource()==this.ventanaAgregarMatPrima.getBtnAgregarMatPrima())
@@ -886,8 +875,9 @@ public class Controlador implements ActionListener
 		{
 			Integer indice = ventanaAgregarMatPrima.getTablaMateriasPrimas().getSelectedRow();
 			if (indice > -1){
-				MateriaPrimaDTO matSelecc = materiasPrimas.buscarMatPrima(ventanaAgregarMatPrima.getTablaMateriasPrimas().getValueAt(indice, 0).toString());
-				ventanaAgregarMatPrima.getTfNombre().setText(matSelecc.getNombre());
+				System.out.println(ventanaAgregarMatPrima.getTablaMateriasPrimas().getValueAt(indice, 0).toString().trim());
+				MateriaPrimaDTO matSelecc = materiasPrimas.buscarMatPrima(ventanaAgregarMatPrima.getTablaMateriasPrimas().getValueAt(indice, 0).toString().trim());
+				ventanaAgregarMatPrima.getTfNombre().setText(matSelecc.getNombre().replace("_", " ").trim());
 				ventanaAgregarMatPrima.getComboBoxCategoria().setSelectedItem(matSelecc.getCategoria().getDenominacion());
 			}
 			

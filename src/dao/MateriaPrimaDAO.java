@@ -19,8 +19,9 @@ public class MateriaPrimaDAO
 	private static final String obtenerlistamatprimas="select idmatprima,i.nombre from proveedores P join matprimas I on p.matprima=i.idmatprima and p.idproveedor= ?;";
 	private static final String updateCategoria = "UPDATE matprimas SET categoria=";
 	private static final String updateFueEliminado= "UPDATE matprimas SET fueeliminado=";
-	
+	private String updateNombreMp = "UPDATE matprimas SET nombre='"; 
 	private static final Conexion conexion = Conexion.getConexion();
+
 	
 	
 	public boolean insert(MateriaPrimaDTO materiaPrima)
@@ -149,6 +150,7 @@ public class MateriaPrimaDAO
 			//longQuery + updateEmail + provActualizado.getEmail().trim() + "' where idproveedor=" +provActualizado.getId()+";";
 			String query = updateCategoria + rehabilitarMatPrima.getCategoria().getIdCategoria() + " where idmatprima=" + rehabilitarMatPrima.getIdMatPrima()+";";
 			query = query + updateFueEliminado + rehabilitarMatPrima.getFueeliminado() + " where idmatprima=" + rehabilitarMatPrima.getIdMatPrima()+";";
+			query = query + updateNombreMp + rehabilitarMatPrima.getNombre().trim() + "' where idmatprima=" + rehabilitarMatPrima.getIdMatPrima()+";";;
 			System.out.println(query);
 			statement = conexion.getSQLConexion().prepareStatement(query);
 			chequeoUpdate = statement.executeUpdate();

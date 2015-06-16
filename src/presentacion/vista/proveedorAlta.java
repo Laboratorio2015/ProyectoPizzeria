@@ -39,53 +39,54 @@ public class proveedorAlta extends JDialog {
 	private JButton btnQuitarcateg;
 
 
+	@SuppressWarnings("serial")
 	public proveedorAlta() {
-		setBounds(100, 100, 563, 688);
+		setBounds(100, 100, 695, 620);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
 			tfDenominacion = new JTextField();
-			tfDenominacion.setBounds(187, 171, 289, 22);
+			tfDenominacion.setBounds(177, 170, 289, 22);
 			contentPanel.add(tfDenominacion);
 			tfDenominacion.setColumns(10);
 		}
 		{
 			tfTelefono = new JTextField();
 			tfTelefono.setColumns(10);
-			tfTelefono.setBounds(187, 283, 289, 22);
+			tfTelefono.setBounds(177, 282, 289, 22);
 			contentPanel.add(tfTelefono);
 		}
 		{
 			tfEmail = new JTextField();
 			tfEmail.setColumns(10);
-			tfEmail.setBounds(185, 356, 291, 22);
+			tfEmail.setBounds(176, 356, 291, 22);
 			contentPanel.add(tfEmail);
 		}
 		
 		tfDireccion = new JTextField();
-		tfDireccion.setBounds(187, 320, 289, 22);
+		tfDireccion.setBounds(177, 318, 289, 22);
 		contentPanel.add(tfDireccion);
 		tfDireccion.setColumns(10);
 		
 		comboBoxCategorias= new JComboBox();
 		comboBoxCategorias.setModel(new DefaultComboBoxModel(new String[] {"(Agregar Categorias)"}));
-		comboBoxCategorias.setBounds(186, 209, 249, 22);
+		comboBoxCategorias.setBounds(176, 208, 249, 22);
 		contentPanel.add(comboBoxCategorias);
 		
 		tfComentario = new JTextField();
-		tfComentario.setBounds(184, 393, 292, 54);
+		tfComentario.setBounds(175, 393, 292, 54);
 		contentPanel.add(tfComentario);
 		tfComentario.setColumns(10);
 		
 		tfNombreContacto = new JTextField();
 		tfNombreContacto.setColumns(10);
-		tfNombreContacto.setBounds(186, 246, 289, 22);
+		tfNombreContacto.setBounds(176, 245, 289, 22);
 		contentPanel.add(tfNombreContacto);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(37, 483, 391, 62);
+		scrollPane.setBounds(496, 194, 174, 200);
 		contentPanel.add(scrollPane);
 		
 		tableCategorias = new JTable();
@@ -109,22 +110,23 @@ public class proveedorAlta extends JDialog {
 					return columnEditables[column];
 				}
 			};
+
 		tableCategorias.setModel(modeloCategorias);
-		scrollPane.setViewportView(tableCategorias);
+		tableCategorias.getColumnModel().getColumn(1).setMinWidth(0);
+		tableCategorias.getColumnModel().getColumn(1).setWidth(0);
+		tableCategorias.getColumnModel().getColumn(1).setMaxWidth(0);
 		
-		btnQuitarcateg = new JButton("QuitarCateg");
-		btnQuitarcateg.setBounds(438, 507, 89, 23);
-		contentPanel.add(btnQuitarcateg);
+		scrollPane.setViewportView(tableCategorias);
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(proveedorAlta.class.getResource("/prototipos/alta de Proveedor.png")));
-			label.setBounds(0, 0, 550, 650);
+			label.setBounds(0, 0, 679, 580);
 			contentPanel.add(label);
 		}
 		{
 			btnRegistrar= new JButton("OK");
 			btnRegistrar.setOpaque(false);
-			btnRegistrar.setBounds(100, 575, 165, 35);
+			btnRegistrar.setBounds(201, 499, 165, 35);
 			contentPanel.add(btnRegistrar);
 			btnRegistrar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnRegistrar);
@@ -138,15 +140,20 @@ public class proveedorAlta extends JDialog {
 					dispose();
 				}
 			});
+			
+			btnQuitarcateg = new JButton("QuitarCateg");
+			btnQuitarcateg.setOpaque(false);
+			btnQuitarcateg.setBounds(504, 405, 150, 30);
+			contentPanel.add(btnQuitarcateg);
 			btnCancelar.setOpaque(false);
 			btnCancelar.setActionCommand("OK");
-			btnCancelar.setBounds(330, 575, 108, 35);
+			btnCancelar.setBounds(430, 499, 108, 35);
 			contentPanel.add(btnCancelar);
 		}
 		
 		btnaddCategoria = new JButton("addCategoria");
 		btnaddCategoria.setOpaque(false);
-		btnaddCategoria.setBounds(445, 209, 31, 23);
+		btnaddCategoria.setBounds(435, 208, 31, 23);
 		contentPanel.add(btnaddCategoria);
 	}
 

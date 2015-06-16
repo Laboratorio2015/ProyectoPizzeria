@@ -27,8 +27,6 @@ import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
 public class matPrimaAlta extends JDialog {
-
-	private final JPanel contentPanel = new JPanel();
 	private JTextField tfNombre;
 	private JTable tablaMateriasPrimas;
 	private DefaultTableModel modeloMatPrima;
@@ -45,23 +43,6 @@ public class matPrimaAlta extends JDialog {
 		
 		setBounds(100, 100, 734, 588);
 		getContentPane().setLayout(null);
-		contentPanel.setBounds(597, 0, 1, 482);
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel);
-		contentPanel.setLayout(null);
-		{
-			JButton okButton = new JButton("OK");
-			okButton.setBounds(378, 448, 47, 23);
-			contentPanel.add(okButton);
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
-		}
-		{
-			JButton cancelButton = new JButton("Cancel");
-			cancelButton.setBounds(430, 448, 65, 23);
-			contentPanel.add(cancelButton);
-			cancelButton.setActionCommand("Cancel");
-		}
 		{
 			tfNombre = new JTextField();
 			tfNombre.setBounds(125, 244, 222, 22);
@@ -119,12 +100,12 @@ public class matPrimaAlta extends JDialog {
 		
 		btnAgregarMatPrima= new JButton("");
 		btnAgregarMatPrima.setOpaque(false);
-		btnAgregarMatPrima.setBounds(92, 352, 215, 30);
+		btnAgregarMatPrima.setBounds(228, 352, 97, 63);
 		getContentPane().add(btnAgregarMatPrima);
 		
 		btnGuardar= new JButton("");
 		btnGuardar.setOpaque(false);
-		btnGuardar.setBounds(392, 481, 109, 36);
+		btnGuardar.setBounds(55, 340, 109, 75);
 		getContentPane().add(btnGuardar);
 		
 		JButton btnCancelar = new JButton("");
@@ -136,7 +117,7 @@ public class matPrimaAlta extends JDialog {
 				dispose();
 			}
 		});
-		btnCancelar.setBounds(548, 481, 109, 36);
+		btnCancelar.setBounds(272, 485, 156, 36);
 		getContentPane().add(btnCancelar);
 		
 		buttonEditarMP = new JButton("");

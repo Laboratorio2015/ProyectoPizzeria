@@ -102,7 +102,7 @@ public class MatPrimas {
 		while(Iterador.hasNext())
 		{
 			MateriaPrimaDTO elemento = Iterador.next();
-			if(elemento.getNombre().trim().toUpperCase().compareTo(nomNvaMatPrima.toUpperCase()) == 0){
+			if(elemento.getNombre().trim().toUpperCase().replace("_", " ").compareTo(nomNvaMatPrima.toUpperCase()) == 0){
 				return elemento;
 			}
 		}

@@ -53,14 +53,14 @@ public class proveedorBajaModificacion extends JDialog {
 
 	@SuppressWarnings("serial")
 	public proveedorBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 809, 772);
+		setBounds(100, 100, 919, 741);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(36, 196, 237, 310);
+		scrollPane.setBounds(36, 198, 237, 352);
 		contentPanel.add(scrollPane);
 		this.control=control;
 		model = new DefaultTableModel(null,nombreColumnasProveedor);
@@ -85,45 +85,40 @@ public class proveedorBajaModificacion extends JDialog {
 		
 		tfDenominacion = new JTextField();
 		tfDenominacion.setEditable(true);
-		tfDenominacion.setBounds(352, 225, 174, 22);
+		tfDenominacion.setBounds(352, 252, 174, 22);
 		contentPanel.add(tfDenominacion);
 		tfDenominacion.setColumns(10);
 		
 		tfTelefono = new JTextField();
 		tfTelefono.setColumns(10);
-		tfTelefono.setBounds(352, 282, 174, 22);
+		tfTelefono.setBounds(352, 309, 174, 22);
 		contentPanel.add(tfTelefono);
 		
 		tfEmail = new JTextField();
 		tfEmail.setColumns(10);
-		tfEmail.setBounds(352, 395, 290, 22);
+		tfEmail.setBounds(352, 422, 290, 22);
 		contentPanel.add(tfEmail);
 		
 		tfDireccion = new JTextField();
 		tfDireccion.setColumns(10);
-		tfDireccion.setBounds(352, 336, 290, 22);
+		tfDireccion.setBounds(352, 362, 290, 22);
 		contentPanel.add(tfDireccion);
 		
 		tfNombreContacto = new JTextField();
-		tfNombreContacto.setBounds(536, 225, 186, 22);
+		tfNombreContacto.setBounds(536, 252, 186, 22);
 		contentPanel.add(tfNombreContacto);
 		tfNombreContacto.setColumns(10);
 		
 		comboBoxCategorias = new JComboBox<String>();
-		comboBoxCategorias.setBounds(536, 281, 186, 22);
+		comboBoxCategorias.setBounds(536, 308, 186, 22);
 		contentPanel.add(comboBoxCategorias);
 		
 		textPaneComentario = new JTextPane();
-		textPaneComentario.setBounds(352, 442, 290, 49);
+		textPaneComentario.setBounds(352, 466, 290, 55);
 		contentPanel.add(textPaneComentario);
 		
-		btnQuitarcat = new JButton("quitarCat");
-		btnQuitarcat.setOpaque(false);
-		btnQuitarcat.setBounds(317, 557, 38, 23);
-		contentPanel.add(btnQuitarcat);
-		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(361, 545, 359, 62);
+		scrollPane_1.setBounds(682, 387, 186, 141);
 		contentPanel.add(scrollPane_1);
 		
 		tablaCategorias = new JTable();
@@ -146,7 +141,7 @@ public class proveedorBajaModificacion extends JDialog {
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(proveedorBajaModificacion.class.getResource("/prototipos/baja-modif de Proveedor.png")));
-		label.setBounds(0, 0, 960, 749);
+		label.setBounds(0, 0, 960, 700);
 		contentPanel.add(label);
 		{
 			JButton btnFinalizar = new JButton("OK");
@@ -157,15 +152,20 @@ public class proveedorBajaModificacion extends JDialog {
 				}
 			});
 			btnFinalizar.setOpaque(false);
-			btnFinalizar.setBounds(271, 706, 151, 36);
+			btnFinalizar.setBounds(426, 639, 151, 36);
 			contentPanel.add(btnFinalizar);
 			btnFinalizar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnFinalizar);
 		}
+		
+		btnQuitarcat = new JButton("quitarCat");
+		btnQuitarcat.setOpaque(false);
+		btnQuitarcat.setBounds(701, 557, 151, 23);
+		contentPanel.add(btnQuitarcat);
 		{
 			btnQuitar= new JButton("Cancel");
 			btnQuitar.setOpaque(false);
-			btnQuitar.setBounds(36, 544, 53, 49);
+			btnQuitar.setBounds(36, 564, 237, 49);
 			contentPanel.add(btnQuitar);
 			btnQuitar.addActionListener(new ActionListener() {
 				@Override
@@ -177,11 +177,12 @@ public class proveedorBajaModificacion extends JDialog {
 		
 		btnGuardar = new JButton("guardar modificaciones");
 		btnGuardar.setOpaque(false);
-		btnGuardar.setBounds(447, 633, 258, 49);
+		btnGuardar.setBounds(360, 544, 258, 49);
 		contentPanel.add(btnGuardar);
 		
 		btnAddcategoria = new JButton("addCategoria");
-		btnAddcategoria.setBounds(725, 282, 43, 23);
+		btnAddcategoria.setOpaque(false);
+		btnAddcategoria.setBounds(730, 309, 138, 23);
 		contentPanel.add(btnAddcategoria);
 	}
 
