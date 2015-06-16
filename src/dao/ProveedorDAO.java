@@ -16,6 +16,13 @@ public class ProveedorDAO {
 	private static final String delete = "DELETE FROM proveedores WHERE idproveedor = ?";
 	private static final String readall = "SELECT * FROM proveedores";
 	private static final Conexion conexion = Conexion.getConexion();
+	private static final String updateValorEliminado = "UPDATE proveedores SET fueeliminado=";
+	private static final String updateNombreContacto = "UPDATE proveedores SET nombrecontacto='";
+	private String updateDireccion = "UPDATE proveedores SET direccion='";
+	private String updateTelefono = "UPDATE proveedores SET telefono='";
+	private String updateEmail = "UPDATE proveedores SET email='";
+	private String updateComentario = "UPDATE proveedores SET comentario='";
+	private String updateCategorias = "UPDATE proveedores SET categoria='";
 	
 	public boolean insert(ProveedorDTO proveedor)
 	{
@@ -127,5 +134,70 @@ public class ProveedorDAO {
 		return proveedores;
 	}
 	
+	public boolean cambiarEstadoEliminado(Integer idProveedor, boolean eliminado){
+		//el elemento con dicho id debe cambiar su campo 'fue eliminado' a true.
+		PreparedStatement statement;
+		int chequeoUpdate=0;
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(updateValorEliminado + eliminado + " where idproveedor=" +idProveedor+";" );
+			//	private static final String updateValorEliminado = "UPDATE categorias SET fueeliminado=";
+			//"UPDATE categorias SET fueeliminado=true where idcategoria='Federicolopez';"
+			//statement.setInt(1, categoria_a_eliminar.getIdCategoria());
+			chequeoUpdate = statement.executeUpdate();
+			if(chequeoUpdate > 0)
+			{
+				System.out.println("Actualizacion de categoria exitosa");
+				return true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			System.out.println("Actualizacion de categoria fallo");
+			e.printStackTrace();
+		}
+		finally
+		{
+			conexion.cerrarConexion();
+		}
+		return false;
+	}
+	
+	public boolean actualizarDatos(ProveedorDTO provActualizado){
+		PreparedStatement statement;
+		int chequeoUpdate=0;
+		try 
+		{
+			Categorias cat=new Categorias();
+			String idcategorias= cat.iditemsCategorias(provActualizado);
+			
+			//System.out.println(updateNombreContacto + provActualizado.getNombrecontacto().trim() + "' where idproveedor=" +provActualizado.getId()+";");
+			String longQuery = updateNombreContacto + provActualizado.getNombrecontacto().trim() + "' where idproveedor=" +provActualizado.getId()+";";
+			longQuery = longQuery + updateDireccion  + provActualizado.getDireccion().trim() + "' where idproveedor=" +provActualizado.getId()+";";
+			longQuery = longQuery + updateTelefono + provActualizado.getTelefono().trim() + "' where idproveedor=" +provActualizado.getId()+";";
+			longQuery = longQuery + updateEmail + provActualizado.getEmail().trim() + "' where idproveedor=" +provActualizado.getId()+";";
+			longQuery = longQuery + updateComentario + provActualizado.getComentario().trim() + "' where idproveedor=" +provActualizado.getId()+";";
+			longQuery = longQuery + updateCategorias + idcategorias + "' where idproveedor=" +provActualizado.getId()+";";
+
+			
+			statement = conexion.getSQLConexion().prepareStatement(longQuery);
+			chequeoUpdate = statement.executeUpdate();
+			if(chequeoUpdate > 0)
+			{
+				System.out.println("Actualizacion de datos de proveedor exitosa");
+				return true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			System.out.println("Actualizacion de datos de proveedor fallo");
+			e.printStackTrace();
+		}
+		finally
+		{
+			conexion.cerrarConexion();
+		}
+		return false;
+	}
 
 }

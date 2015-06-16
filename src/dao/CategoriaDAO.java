@@ -127,6 +127,5 @@ public class CategoriaDAO
 			conexion.cerrarConexion();
 		}
 		return false;
-		
 	}
 }

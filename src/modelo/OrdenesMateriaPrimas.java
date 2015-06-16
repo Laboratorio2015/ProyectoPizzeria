@@ -5,6 +5,7 @@ import java.util.List;
 
 import dao.OrdenPedidoMatPrimaDAO;
 import dto.OrdenPedidoMatPrimaDTO;
+import dto.ProveedorDTO;
 
 public class OrdenesMateriaPrimas 
 {
@@ -46,7 +47,6 @@ private OrdenPedidoMatPrimaDAO ordenMatPrima;
 	}
 
 	public Integer generarNvoId() {
-		
 		Iterator<OrdenPedidoMatPrimaDTO> Iterador = obtenerOrdenPedidoMatPrima().iterator();
 		Integer NvoId=0;
 		while(Iterador.hasNext())
@@ -57,5 +57,19 @@ private OrdenPedidoMatPrimaDAO ordenMatPrima;
 		}
 		return NvoId;
 				
+	}
+
+	public boolean dependeDe(ProveedorDTO aux) {
+		boolean depende =false;
+		Iterator<OrdenPedidoMatPrimaDTO> Iterador = obtenerOrdenPedidoMatPrima().iterator();
+		while(Iterador.hasNext())
+		{
+			OrdenPedidoMatPrimaDTO elemento = Iterador.next();
+			if (elemento.getProveedor().getId() == aux.getId()){
+				depende = true;
+				break;
+			}
+		}
+		return depende;
 	}
 }

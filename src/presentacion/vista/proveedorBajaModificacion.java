@@ -15,13 +15,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import dto.CategoriaDTO;
 import dto.ProveedorDTO;
 
 import presentacion.controlador.Controlador;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
+
 import javax.swing.JComboBox;
+import javax.swing.JTextPane;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
 
 public class proveedorBajaModificacion extends JDialog {
 
@@ -33,16 +38,22 @@ public class proveedorBajaModificacion extends JDialog {
 	private JTextField tfDireccion;
 	private DefaultTableModel model;
 	private DefaultTableModel model1;
+	private JTextPane textPaneComentario;
+	private JComboBox<String> comboBoxCategorias;
+	private JButton btnQuitarcat;
 	private Controlador control;
 	private  String[] nombreColumnasProveedor = {"Nombre"};
 	private String[] nombreColumnasMatPrimas = {"Nombre"};
 	private JButton btnQuitar ;
 	private JButton btnGuardar;
 	private JTextField tfNombreContacto;
-	private JTable table;
+	private JTable tablaCategorias;
+	private DefaultTableModel modeloCategorias;
+	private JButton btnAddcategoria;
 
+	@SuppressWarnings("serial")
 	public proveedorBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 766, 863);
+		setBounds(100, 100, 809, 772);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -73,7 +84,7 @@ public class proveedorBajaModificacion extends JDialog {
 		scrollPane.setViewportView(tableProveedor);
 		
 		tfDenominacion = new JTextField();
-		tfDenominacion.setEditable(false);
+		tfDenominacion.setEditable(true);
 		tfDenominacion.setBounds(352, 225, 174, 22);
 		contentPanel.add(tfDenominacion);
 		tfDenominacion.setColumns(10);
@@ -98,16 +109,40 @@ public class proveedorBajaModificacion extends JDialog {
 		contentPanel.add(tfNombreContacto);
 		tfNombreContacto.setColumns(10);
 		
-		JComboBox<String> comboBoxCategorias = new JComboBox();
+		comboBoxCategorias = new JComboBox<String>();
 		comboBoxCategorias.setBounds(536, 281, 186, 22);
 		contentPanel.add(comboBoxCategorias);
+		
+		textPaneComentario = new JTextPane();
+		textPaneComentario.setBounds(352, 442, 290, 49);
+		contentPanel.add(textPaneComentario);
+		
+		btnQuitarcat = new JButton("quitarCat");
+		btnQuitarcat.setOpaque(false);
+		btnQuitarcat.setBounds(317, 557, 38, 23);
+		contentPanel.add(btnQuitarcat);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(361, 545, 359, 62);
 		contentPanel.add(scrollPane_1);
 		
-		table = new JTable();
-		scrollPane_1.setViewportView(table);
+		tablaCategorias = new JTable();
+		modeloCategorias = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Categoria", "idCategoria"
+				}
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			};
+		tablaCategorias.setModel(modeloCategorias);	
+		scrollPane_1.setViewportView(tablaCategorias);
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(proveedorBajaModificacion.class.getResource("/prototipos/baja-modif de Proveedor.png")));
@@ -140,10 +175,14 @@ public class proveedorBajaModificacion extends JDialog {
 			btnQuitar.setActionCommand("Cancel");
 		}
 		
-		btnGuardar = new JButton("New button");
+		btnGuardar = new JButton("guardar modificaciones");
 		btnGuardar.setOpaque(false);
-		btnGuardar.setBounds(447, 633, 64, 49);
+		btnGuardar.setBounds(447, 633, 258, 49);
 		contentPanel.add(btnGuardar);
+		
+		btnAddcategoria = new JButton("addCategoria");
+		btnAddcategoria.setBounds(725, 282, 43, 23);
+		contentPanel.add(btnAddcategoria);
 	}
 
 	public JTable getTableProveedor() {
@@ -222,12 +261,20 @@ public class proveedorBajaModificacion extends JDialog {
 	
 	public void agregarDatos(ProveedorDTO aux)
 	{
-		
-		
 		tfDenominacion.setText(aux.getNombre());
 		tfDireccion.setText(aux.getDireccion());
 		tfEmail.setText(aux.getEmail());
 		tfTelefono.setText(aux.getTelefono());
+		tfNombreContacto.setText(aux.getNombrecontacto());
+		textPaneComentario.setText(aux.getComentario());
+		
+		resetearModelo();
+		Iterator<CategoriaDTO> iterador = aux.getCategoria().iterator();
+		while (iterador.hasNext()){
+			CategoriaDTO elemento = iterador.next();
+			modeloCategorias.addRow(new Object[] {elemento.getDenominacion(), elemento.getIdCategoria()});
+		}
+		tablaCategorias.setModel(modeloCategorias);
 	}
 
 	public JButton getBtnQuitar() {
@@ -244,5 +291,90 @@ public class proveedorBajaModificacion extends JDialog {
 
 	public void setBtnGuardar(JButton btnGuardar) {
 		this.btnGuardar = btnGuardar;
+	}
+
+	public JTextPane getTextPaneComentario() {
+		return textPaneComentario;
+	}
+
+	public void setTextPaneComentario(JTextPane textPaneComentario) {
+		this.textPaneComentario = textPaneComentario;
+	}
+
+	public JComboBox<String> getComboBoxCategorias() {
+		return comboBoxCategorias;
+	}
+
+	public void setComboBoxCategorias(JComboBox<String> comboBoxCategorias) {
+		this.comboBoxCategorias = comboBoxCategorias;
+	}
+
+	public JButton getBtnQuitarcat() {
+		return btnQuitarcat;
+	}
+
+	public void setBtnQuitarcat(JButton btnQuitarcat) {
+		this.btnQuitarcat = btnQuitarcat;
+	}
+
+	public JTextField getTfNombreContacto() {
+		return tfNombreContacto;
+	}
+
+	public void setTfNombreContacto(JTextField tfNombreContacto) {
+		this.tfNombreContacto = tfNombreContacto;
+	}
+
+	public JTable getTablaCategorias() {
+		return tablaCategorias;
+	}
+
+	public void setTablaCategorias(JTable tablaCategorias) {
+		this.tablaCategorias = tablaCategorias;
+	}
+
+	public DefaultTableModel getModeloCategorias() {
+		return modeloCategorias;
+	}
+
+	public void setModeloCategorias(DefaultTableModel modeloCategorias) {
+		this.modeloCategorias = modeloCategorias;
+	}
+
+	@SuppressWarnings("serial")
+	public void resetearModelo() {
+		modeloCategorias = new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"Categoria", "idCategoria"
+				}
+				) {
+			Class[] columnTypes = new Class[] {
+					String.class, Integer.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		};
+		tablaCategorias.setModel(modeloCategorias);
+	}
+
+	public void limpiarCampos() {
+		getTfDenominacion().setText("");
+		getTfDireccion().setText("");
+		getTfEmail().setText("");
+		getTfTelefono().setText("");
+		resetearModelo();
+		getTfNombreContacto().setText("");
+		getTextPaneComentario().setText("");
+	}
+
+	public JButton getBtnAddcategoria() {
+		return btnAddcategoria;
+	}
+
+	public void setBtnAddcategoria(JButton btnAddcategoria) {
+		this.btnAddcategoria = btnAddcategoria;
 	}
 }

@@ -31,12 +31,13 @@ public class Proveedores
 	
 	public ProveedorDTO buscarProveedor(String nombre)
 	{
+		nombre = nombre.toUpperCase();
 		List<ProveedorDTO> productos=this.obtenerProveedor();
 		Iterator<ProveedorDTO> Iterador = productos.iterator();
 		while(Iterador.hasNext())
 		{
 			ProveedorDTO elemento = Iterador.next();
-			if(elemento.getNombre().compareTo(nombre)==0)
+			if(elemento.getNombre().toUpperCase().compareTo(nombre)==0)
 				return elemento;
 		}
 		return null;		
@@ -82,5 +83,42 @@ public class Proveedores
 		return existeCategoria;
 	}
 
+	public void actualizarEliminado(Integer idProveedor, boolean eliminado){
+		proveedor.cambiarEstadoEliminado(idProveedor,eliminado);
+	}
+
+	public boolean existeEnHabilitados(String nvaDenominacion) {
+		boolean existe =false;
+		List<ProveedorDTO> proveedores=this.proveedor.readAll();
+		Iterator<ProveedorDTO> Iterador = proveedores.iterator();
+		while(Iterador.hasNext())
+		{
+			ProveedorDTO elemento = Iterador.next();
+			if(!elemento.getFueeliminado() && elemento.getNombre().toUpperCase().compareTo(nvaDenominacion.toUpperCase())==0){
+				existe = true;
+				break;
+			}
+		}
+		return existe;
+	}
+
+	public boolean existeEnEliminados(String nvaDenominacion) {
+		boolean existe =false;
+		List<ProveedorDTO> proveedores=this.proveedor.readAll();
+		Iterator<ProveedorDTO> Iterador = proveedores.iterator();
+		while(Iterador.hasNext())
+		{
+			ProveedorDTO elemento = Iterador.next();
+			if(elemento.getFueeliminado() && elemento.getNombre().toUpperCase().compareTo(nvaDenominacion.toUpperCase())==0){
+				existe = true;
+				break;
+			}
+		}
+		return existe;
+	}
+
+	public void actualizarDatos(ProveedorDTO provSeleccionado) {
+		proveedor.actualizarDatos(provSeleccionado);
+	}
 	
 }
