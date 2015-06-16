@@ -266,4 +266,14 @@ public class proveedorAlta extends JDialog {
 		modeloCategorias.addRow(new Object[] {categoria.getDenominacion(),categoria.getIdCategoria()});
 		tableCategorias.setModel(modeloCategorias);
 	}
+
+
+	public DefaultTableModel getModeloCategorias() {
+		return modeloCategorias;
+	}
+
+
+	public void setModeloCategorias(DefaultTableModel modeloCategorias) {
+		this.modeloCategorias = modeloCategorias;
+	}
 }

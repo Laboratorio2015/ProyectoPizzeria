@@ -132,12 +132,12 @@ public class Categorias {
 		return false;
 	}
 
-	public CategoriaDTO buscarCategoria(String nvaDenominacion) {
+	public CategoriaDTO buscarCategoria(String Denominacion) {
 		Iterator<CategoriaDTO> Iterador = obtenerCategorias().iterator();
 		while(Iterador.hasNext())
 		{
 			CategoriaDTO elemento = Iterador.next();
-			if (elemento.getDenominacion().trim().toUpperCase().compareTo(nvaDenominacion.toUpperCase())==0)
+			if (elemento.getDenominacion().trim().toUpperCase().compareTo(Denominacion.trim().toUpperCase())==0)
 				return elemento;
 		}
 		return null;

@@ -653,7 +653,23 @@ public class Controlador implements ActionListener
 		//VENTANA  ALTA PROVEEDOR Agregar categoria elegida
 		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnaddCategoria())
 		{
-			ventanaAgregarProveedor.agregarCategoria(categoria.buscarCategoria(ventanaAgregarProveedor.getComboBoxCategorias().getSelectedItem().toString().trim()));
+			//agregar fila en la tabla, incluir id.
+			CategoriaDTO catSelecc = categoria.buscarCategoria(ventanaAgregarProveedor.getComboBoxCategorias().getSelectedItem().toString());
+			ventanaAgregarProveedor.agregarCategoria(catSelecc);
+			ventanaAgregarProveedor.getComboBoxCategorias().removeItem(catSelecc.getDenominacion());
+			//ventanaAgregarProveedor.agregarCategoria(ventanaAgregarProveedor.getComboBoxCategorias().getSelectedItem().toString());
+		}
+		//VENTANA  ALTA PROVEEDOR Quitar categoria
+		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnQuitarcateg())
+		{
+			Integer indiceCatSelecc = ventanaAgregarProveedor.getTablaCategorias().getSelectedRow();
+			if (indiceCatSelecc>-1){
+				ventanaAgregarProveedor.getComboBoxCategorias().addItem(ventanaAgregarProveedor.getTablaCategorias().getValueAt(indiceCatSelecc, 0).toString());
+				ventanaAgregarProveedor.getModeloCategorias().removeRow(indiceCatSelecc);
+				ventanaAgregarProveedor.getTablaCategorias().setModel(ventanaAgregarProveedor.getModeloCategorias());
+				
+			}
+			
 		}
 		//VENTANA ALTA PROVEEDOR Btn Registrar Proveedor
 		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnRegistrar())
@@ -666,9 +682,12 @@ public class Controlador implements ActionListener
 			nuevo.setFueeliminado(false);
 			//agregar la lista de categorias
 			//nuevo.setCategoria(categoria.pasarDeStringAArray(ventanaAgregarProveedor.getTfCategoria().getText()));
+			ArrayList<CategoriaDTO> categorias = new ArrayList<CategoriaDTO>();
 			for (int i = 0; i < this.ventanaAgregarProveedor.getTablaCategorias().getRowCount();i++){
-				nuevo.addCategoria(categoria.buscarCategoria(ventanaAgregarProveedor.getTablaCategorias().getValueAt(i, 0).toString()));
+				System.out.println(categoria.buscarCategoria(ventanaAgregarProveedor.getTablaCategorias().getValueAt(i, 0).toString()).getDenominacion());
+				categorias.add(categoria.buscarCategoria(ventanaAgregarProveedor.getTablaCategorias().getValueAt(i, 0).toString()));
 			}
+			nuevo.setCategoria(categorias);
 			nuevo.setDireccion(ventanaAgregarProveedor.getTfDireccion().getText());
 			nuevo.setEmail(ventanaAgregarProveedor.getTfEmail().getText());
 			nuevo.setTelefono(ventanaAgregarProveedor.getTfTelefono().getText());
