@@ -77,7 +77,7 @@ public class repartidorBajaModificacion extends JDialog {
 		
 		tfApellido = new JTextField();
 		tfApellido.setColumns(10);
-		tfApellido.setBounds(464, 247, 178, 22);
+		tfApellido.setBounds(464, 248, 178, 22);
 		contentPanel.add(tfApellido);
 		
 		tfCelular = new JTextField();

@@ -240,6 +240,9 @@ public class seleccionDeCliente extends JDialog {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////// Se agrega el siguiente constructor para asignar al cliente 0, un cliente verdadero///////
 	///////////////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public seleccionDeCliente(final Controlador control,final PedidoDTO pedido, String otro)
 	{
 		this.pedido=pedido;
@@ -408,12 +411,65 @@ public class seleccionDeCliente extends JDialog {
 		}
 		{
 			btnAgregarCliente= new JButton("New button");
+			btnAgregarCliente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0)
+				{
+					registroDeCliente ventanaRegistrarCliente= new registroDeCliente(_this, control);
+					ventanaRegistrarCliente.getBtnRegistrar().addActionListener(this);
+					ventanaRegistrarCliente.setVisible(true);
+				}
+			});
 			btnAgregarCliente.setOpaque(false);
 			btnAgregarCliente.setBounds(540, 226, 123, 95);
 			contentPanel.add(btnAgregarCliente);
 		}
 		{
 			btnEditarCliente= new JButton("New button");
+			btnEditarCliente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) 
+				{					
+					Integer dniCliente=0;
+				if(tfAgregarDNI.getText().length()>7)
+				{
+					clienteBajaModificacion ventanaModificacionCliente=new clienteBajaModificacion(_this, control);
+					ClienteDTO aux=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText().toString()));
+					ventanaModificacionCliente.getTfDni().setText(aux.getDni().toString());
+					ventanaModificacionCliente.getTfNombre().setText(aux.getNombre());
+					ventanaModificacionCliente.getTfApellido().setText(aux.getApellido());
+					ventanaModificacionCliente.getTfCalle().setText(aux.getCalle());
+					ventanaModificacionCliente.getTfNumeracion().setText(aux.getNumeracion());
+					ventanaModificacionCliente.getTfEntreCalle1().setText(aux.getEntrecalle1());
+					ventanaModificacionCliente.getTfEntreCalle2().setText(aux.getEntrecalle2());
+					ventanaModificacionCliente.getTfCodPostal().setText(aux.getCodPostal());
+					ventanaModificacionCliente.getTfTelefono().setText(aux.getTelefono());
+					ventanaModificacionCliente.getTfComentario().setText(aux.getComentario());
+					ventanaModificacionCliente.getTfEmail().setText(aux.getEmail());
+					ventanaModificacionCliente.setVisible(true);
+				}
+					
+				else 
+					dniCliente=Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString());
+					if(tfAgregarDNI.getText().compareTo("")==0 && !dniCliente.equals(0))
+				{
+					clienteBajaModificacion ventanaModificacionCliente=new clienteBajaModificacion(_this, control);
+					ClienteDTO aux=control.getCliente().buscarClientePorDNI(dniCliente);
+					ventanaModificacionCliente.getTfDni().setText(aux.getDni().toString());
+					ventanaModificacionCliente.getTfNombre().setText(aux.getNombre());
+					ventanaModificacionCliente.getTfApellido().setText(aux.getApellido());
+					ventanaModificacionCliente.getTfCalle().setText(aux.getCalle());
+					ventanaModificacionCliente.getTfNumeracion().setText(aux.getNumeracion());
+					ventanaModificacionCliente.getTfEntreCalle1().setText(aux.getEntrecalle1());
+					ventanaModificacionCliente.getTfEntreCalle2().setText(aux.getEntrecalle2());
+					ventanaModificacionCliente.getTfCodPostal().setText(aux.getCodPostal());
+					ventanaModificacionCliente.getTfTelefono().setText(aux.getTelefono());
+					ventanaModificacionCliente.getTfComentario().setText(aux.getComentario());
+					ventanaModificacionCliente.getTfEmail().setText(aux.getEmail());
+					ventanaModificacionCliente.setVisible(true);
+				}
+				else
+					JOptionPane.showMessageDialog(null, "Error el debe haber un dni registrado para poder editarlo");
+				}	
+			});
 			btnEditarCliente.setOpaque(false);
 			btnEditarCliente.setBounds(572, 146, 78, 34);
 			contentPanel.add(btnEditarCliente);

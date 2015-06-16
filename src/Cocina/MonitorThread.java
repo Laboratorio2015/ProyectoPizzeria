@@ -386,7 +386,7 @@ public class MonitorThread extends Thread {
 				}
 				else{
 					modeloCorrespondiente.setValueAt(faltanteDescontado, indiceFaltante, 1);
-					if (item.getComentario().compareTo("")!= 0){ // si tiene comentarios
+					if (item.getComentario()!=null&&item.getComentario().compareTo("")!= 0){ // si tiene comentarios
 						modeloCorrespondiente.setValueAt((Integer)modeloCorrespondiente.getValueAt(indiceFaltante, 3) - 1, indiceFaltante, 3);
 						if ( (Integer) modeloCorrespondiente.getValueAt(indiceFaltante, 3) == 0){
 							modeloCorrespondiente.setValueAt("No", indiceFaltante, 2);

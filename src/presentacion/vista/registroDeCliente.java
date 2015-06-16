@@ -12,7 +12,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 
+import dto.ClienteDTO;
+
 import presentacion.controlador.Controlador;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class registroDeCliente extends JDialog {
 
@@ -33,10 +37,10 @@ public class registroDeCliente extends JDialog {
 	private JTextField tfTelefono;
 	private JTextField tfComentario;
 	
-	public registroDeCliente(seleccionDeCliente padre, Controlador control)
+	public registroDeCliente(final seleccionDeCliente padre, final Controlador control)
 	{
 		setModal(true);
-		padre=_padre;
+		_padre=padre;
 		this.control=control;
 		_this=this;
 		setMinimumSize(new Dimension(700, 600));
@@ -108,6 +112,31 @@ public class registroDeCliente extends JDialog {
 		}
 		{
 			btnRegistrar= new JButton("Registrar");
+			/*btnRegistrar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) 
+				{
+					ClienteDTO nuevo= new ClienteDTO();
+					nuevo.setIdcliente(control.getCliente().obtenerTodoClientes().size()+1);
+					nuevo.setDni(Integer.parseInt(tfdni.getText().toString()));
+					nuevo.setApellido(tfApellido.getText().toString());
+					nuevo.setNombre(tfNombre.getText().toString());
+					nuevo.setCalle(tfCalle.getText().toString());
+					nuevo.setNumeracion(tfNumeracion.getText().toString());
+					nuevo.setTelefono(tfTelefono.getText().toString());
+					nuevo.setComentario(tfComentario.getText().toString());
+					nuevo.setFueeliminado(false);
+					nuevo.setEntrecalle1(tfEntreCalle1.getText().toString());
+					nuevo.setEntrecalle2(tfEntreCalle2.getText().toString());
+					nuevo.setCodPostal(tfCodPostal.getText().toString());
+					nuevo.setEmail(tfEmail.getText().toString());
+					control.getCliente().agregarCliente(nuevo);
+					padre.getTfAgregarDNI().setText(nuevo.getDni().toString());
+					padre.llenarTablaCliente();
+					padre.getTfNombrApellido().setText("Apellido y Nombre: "+nuevo.getNombre()+" "+ nuevo.getApellido());
+					padre.getTfDireccionTelefono().setText("Direccion: "+nuevo.getCalle()+" "+nuevo.getNumeracion());
+					dispose();
+				}
+			});*/
 			btnRegistrar.setOpaque(false);
 			btnRegistrar.setBounds(165, 534, 198, 34);
 			contentPanel.add(btnRegistrar);
