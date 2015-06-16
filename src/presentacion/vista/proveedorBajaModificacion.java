@@ -267,12 +267,18 @@ public class proveedorBajaModificacion extends JDialog {
 		tfTelefono.setText(aux.getTelefono());
 		tfNombreContacto.setText(aux.getNombrecontacto());
 		textPaneComentario.setText(aux.getComentario());
-		
+		comboBoxCategorias.removeAllItems();
 		resetearModelo();
-		Iterator<CategoriaDTO> iterador = aux.getCategoria().iterator();
-		while (iterador.hasNext()){
-			CategoriaDTO elemento = iterador.next();
-			modeloCategorias.addRow(new Object[] {elemento.getDenominacion(), elemento.getIdCategoria()});
+		
+		Iterator<CategoriaDTO> iteradorCat = control.getCategoria().obtenerCategorias().iterator();
+		while (iteradorCat.hasNext()){
+			CategoriaDTO elemento = iteradorCat.next();
+			if (!aux.isCategoria(elemento.getDenominacion())){
+				comboBoxCategorias.addItem(elemento.getDenominacion());
+			}
+			else{
+				modeloCategorias.addRow(new Object[] {elemento.getDenominacion(), elemento.getIdCategoria()});
+			}
 		}
 		tablaCategorias.setModel(modeloCategorias);
 	}
