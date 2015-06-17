@@ -35,13 +35,13 @@ public class PromocionDAO {
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
 			{
-				System.out.println("inserccion exitosa de item");
+				System.out.println("inserccion exitosa de promocion");
 				return true;
 			}
 		} 
 		catch (SQLException e) 
 		{
-			System.out.println("insercion fallida de item");
+			System.out.println("insercion fallida de promocion");
 			e.printStackTrace();
 		}
 		finally 

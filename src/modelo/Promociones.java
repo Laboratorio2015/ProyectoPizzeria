@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dao.PromocionDAO;
+import dto.ItemDTO;
 import dto.PromocionDTO;
 import dto.PedidoDTO;
 
@@ -128,5 +129,19 @@ public class Promociones {
 				  break;
 		}
 		return result;
+	}
+
+	public Integer obtenerUltimoid()
+	{
+		Integer ultimo=0;
+		List<PromocionDTO> ofertas=this.oferta.readAlli();
+		Iterator<PromocionDTO> Iterador = ofertas.iterator();
+		while(Iterador.hasNext())
+		{
+			PromocionDTO elemento = Iterador.next();
+			if(elemento.getIdOferta()>ultimo)
+				ultimo=elemento.getIdOferta();
+		}
+		return ultimo;
 	}
 }

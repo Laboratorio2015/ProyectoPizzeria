@@ -43,7 +43,7 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 	private JTextField tfMuestraRepartidor;
 	private JTextField tfMontoPedido;
 	private JButton btnRegistrar;
-	private TextAutoCompleter AutoCompletar ;
+	private TextAutoCompleter AutoCompletar;
 	private JComboBox<String> comboBox;
 	private Controlador control;
 	
