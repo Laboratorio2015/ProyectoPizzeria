@@ -66,30 +66,30 @@ public class promocionAlta extends JDialog {
 			tfPrecioReal = new JTextField();
 			tfPrecioReal.setEditable(false);
 			tfPrecioReal.setColumns(10);
-			tfPrecioReal.setBounds(453, 168, 53, 25);
+			tfPrecioReal.setBounds(493, 417, 53, 25);
 			contentPanel.add(tfPrecioReal);
 		}
 		{
 			tfPrecioUnidad = new JTextField();
 			tfPrecioUnidad.setColumns(10);
-			tfPrecioUnidad.setBounds(330, 323, 38, 25);
+			tfPrecioUnidad.setBounds(65, 373, 38, 25);
 			contentPanel.add(tfPrecioUnidad);
 		}
 		{
 			tfSubtotal = new JTextField();
 			tfSubtotal.setColumns(10);
-			tfSubtotal.setBounds(458, 323, 53, 25);
+			tfSubtotal.setBounds(408, 417, 53, 25);
 			contentPanel.add(tfSubtotal);
 		}
 		{
 			tfCantidad = new JTextField();
 			tfCantidad.setColumns(10);
-			tfCantidad.setBounds(377, 324, 53, 25);
+			tfCantidad.setBounds(329, 323, 53, 25);
 			contentPanel.add(tfCantidad);
 		}
 		{
 			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(526, 135, 197, 262);
+			scrollPane.setBounds(424, 144, 197, 262);
 			contentPanel.add(scrollPane);
 			{
 				model = new DefaultTableModel(null,nombreColumnas);

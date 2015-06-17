@@ -9,16 +9,16 @@ import java.util.List;
 import modelo.Items;
 import conexion.Conexion;
 import dto.ItemDTO;
-import dto.OfertaDTO;
+import dto.PromocionDTO;
 
-public class OfertaDAO {
+public class PromocionDAO {
 	private static final String insert = "INSERT INTO ofertas(idoferta, nombre,precio,item,fueeliminado) VALUES(?,?,?,?,?)";
 	private static final String delete = "DELETE FROM ofertas WHERE idoferta = ?";
 	private static final String readall = "SELECT * FROM ofertas ";
 	
 	private static final Conexion conexion = Conexion.getConexion();
 	
-	public boolean insert(OfertaDTO oferta)
+	public boolean insert(PromocionDTO oferta)
 	{
 		PreparedStatement statement;
 		try 
@@ -51,7 +51,7 @@ public class OfertaDAO {
 		return false;
 	}
 	
-	public boolean delete(OfertaDTO oferta_a_eliminar)
+	public boolean delete(PromocionDTO oferta_a_eliminar)
 	{
 		PreparedStatement statement;
 		int chequeoUpdate=0;
@@ -78,11 +78,11 @@ public class OfertaDAO {
 		return false;
 	}
 
-	public List<OfertaDTO> readAll()
+	public List<PromocionDTO> readAll()
 	{
 		PreparedStatement statement;
 		ResultSet resultSet; //Guarda el resultado de la query
-		ArrayList<OfertaDTO> ofertas = new ArrayList<>();
+		ArrayList<PromocionDTO> ofertas = new ArrayList<>();
 		try 
 		{
 			statement = conexion.getSQLConexion().prepareStatement(readall);
@@ -92,7 +92,7 @@ public class OfertaDAO {
 			{
 				Items a=new Items();
 				ArrayList<ItemDTO>listaItems= a.pasarDeStringAArray(resultSet.getString("item"));
-				ofertas.add(new OfertaDTO(resultSet.getInt("idoferta"),resultSet.getString("nombre"),
+				ofertas.add(new PromocionDTO(resultSet.getInt("idoferta"),resultSet.getString("nombre"),
 						resultSet.getInt("precio"),listaItems,resultSet.getBoolean("fueeliminado")));
 
 			}

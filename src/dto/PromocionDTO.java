@@ -2,7 +2,7 @@ package dto;
 
 import java.util.ArrayList;
 
-public class OfertaDTO {
+public class PromocionDTO {
 
 	private Integer idOferta;
 	private String nombre;
@@ -10,7 +10,7 @@ public class OfertaDTO {
 	private Integer precio;
 	private Boolean fueeliminado;
 
-	public OfertaDTO (Integer nroOferta,String nombre, Integer precio,  ArrayList<ItemDTO> productosOfertados,Boolean fueeliminado)
+	public PromocionDTO (Integer nroOferta,String nombre, Integer precio,  ArrayList<ItemDTO> productosOfertados,Boolean fueeliminado)
 	{
 		this.idOferta = nroOferta;
 		this.nombre=nombre;
@@ -18,7 +18,7 @@ public class OfertaDTO {
 		this.precio = precio;
 		this.fueeliminado=fueeliminado;
 	}
-	public OfertaDTO()
+	public PromocionDTO()
 	{
 		
 	}

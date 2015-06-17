@@ -3,31 +3,31 @@ package modelo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import dao.OfertaDAO;
-import dto.OfertaDTO;
+import dao.PromocionDAO;
+import dto.PromocionDTO;
 import dto.PedidoDTO;
 
 
-public class Ofertas {
-	private OfertaDAO oferta;
+public class Promociones {
+	private PromocionDAO oferta;
 	
-	public Ofertas()
+	public Promociones()
 	{
-		oferta=new OfertaDAO();
+		oferta=new PromocionDAO();
 	}
 	
-	public Boolean agregarOferta(OfertaDTO agregarOferta)
+	public Boolean agregarOferta(PromocionDTO agregarOferta)
 	{
 		return this.oferta.insert(agregarOferta);
 		
 	}
 	
-	public void quitarItem(OfertaDTO quitarOferta)
+	public void quitarItem(PromocionDTO quitarOferta)
 	{
 		this.oferta.delete(quitarOferta);
 	}
 	
-	public List<OfertaDTO> obtenerOfertas()
+	public List<PromocionDTO> obtenerOfertas()
 	{
 		return this.oferta.readAll();
 	}
@@ -40,35 +40,35 @@ public class Ofertas {
 	public String idofertas(PedidoDTO pedido)
 	{
 		String listaId="";
-		Iterator<OfertaDTO> Iterador = pedido.getOfertas().iterator();
+		Iterator<PromocionDTO> Iterador = pedido.getOfertas().iterator();
 		while(Iterador.hasNext())
 		{
-			OfertaDTO elemento = Iterador.next();
+			PromocionDTO elemento = Iterador.next();
 			listaId=listaId +elemento.getIdOferta()+" ";
 		}
 		return listaId;
 	}
 	
-	public OfertaDTO buscarOferta(Integer idoferta)
+	public PromocionDTO buscarOferta(Integer idoferta)
 	{
-		List<OfertaDTO> productos=this.obtenerOfertas();
-		Iterator<OfertaDTO> Iterador = productos.iterator();
+		List<PromocionDTO> productos=this.obtenerOfertas();
+		Iterator<PromocionDTO> Iterador = productos.iterator();
 		while(Iterador.hasNext())
 		{
-			OfertaDTO elemento = Iterador.next();
+			PromocionDTO elemento = Iterador.next();
 			if(elemento.getIdOferta().equals(idoferta))
 				return elemento;
 		}
 		return null;
 	}
 	
-	public OfertaDTO buscarOfertaPorNombre(String nombre)
+	public PromocionDTO buscarOfertaPorNombre(String nombre)
 	{
-	List<OfertaDTO> productos=this.obtenerOfertas();
-	Iterator<OfertaDTO> Iterador = productos.iterator();
+	List<PromocionDTO> productos=this.obtenerOfertas();
+	Iterator<PromocionDTO> Iterador = productos.iterator();
 	while(Iterador.hasNext())
 	{
-		OfertaDTO elemento = Iterador.next();
+		PromocionDTO elemento = Iterador.next();
 		if(elemento.getNombre().compareTo(nombre)==0)
 			return elemento;
 	}
@@ -78,11 +78,11 @@ public class Ofertas {
 	public int ultimaOferta() 
 	{
 		Integer ultimo=0;
-		List<OfertaDTO> ofertas=this.oferta.readAll();
-		Iterator<OfertaDTO> Iterador = ofertas.iterator();
+		List<PromocionDTO> ofertas=this.oferta.readAll();
+		Iterator<PromocionDTO> Iterador = ofertas.iterator();
 		while(Iterador.hasNext())
 		{
-			OfertaDTO elemento = Iterador.next();
+			PromocionDTO elemento = Iterador.next();
 			if(elemento.getIdOferta()>ultimo)
 				ultimo=elemento.getIdOferta();
 		}
@@ -94,19 +94,19 @@ public class Ofertas {
 		String listaId="";
 		if(pedido.getOfertas()!=null)
 		{
-			Iterator<OfertaDTO> Iterador = pedido.getOfertas().iterator();
+			Iterator<PromocionDTO> Iterador = pedido.getOfertas().iterator();
 			while(Iterador.hasNext())
 			{
-				OfertaDTO elemento = Iterador.next();
+				PromocionDTO elemento = Iterador.next();
 				listaId=listaId +elemento.getIdOferta()+" ";
 			}
 		}
 		return listaId;
 	}
 
-	public ArrayList<OfertaDTO> pasarDeStringAArray(String listado) 
+	public ArrayList<PromocionDTO> pasarDeStringAArray(String listado) 
 	{
-		ArrayList<OfertaDTO> result=new ArrayList<OfertaDTO>();
+		ArrayList<PromocionDTO> result=new ArrayList<PromocionDTO>();
 		String a="";
 		for (int i=0; i<listado.length(); i++)
 		{
@@ -120,7 +120,7 @@ public class Ofertas {
 			  {
 				  a=a+listado.charAt(i);
 				  int elemento=Integer.parseInt(a);
-				  OfertaDTO item=this.buscarOferta(elemento);
+				  PromocionDTO item=this.buscarOferta(elemento);
 				  result.add(item);
 				  a="";
 			  }

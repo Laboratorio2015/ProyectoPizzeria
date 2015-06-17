@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dto.ItemDTO;
-import dto.OfertaDTO;
+import dto.PromocionDTO;
 import dto.PedidoDTO;
 import dao.ItemDAO;
 
@@ -52,7 +52,7 @@ public class Items
 	}
 	
 	//obtiene los items de una oferta y los agrupa en un string para subirlo a la DB
-	public String iditemsOfe(OfertaDTO oferta)
+	public String iditemsOfe(PromocionDTO oferta)
 	{
 		String listaId="";
 		Iterator<ItemDTO> Iterador = oferta.getProductosOfertados().iterator();

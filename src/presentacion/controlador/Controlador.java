@@ -28,7 +28,7 @@ import modelo.ItemMateriasPrimas;
 import modelo.Items;
 import modelo.Itinerarios;
 import modelo.MatPrimas;
-import modelo.Ofertas;
+import modelo.Promociones;
 import modelo.OrdenesMateriaPrimas;
 import modelo.Pedidos;
 import modelo.Productos;
@@ -39,7 +39,7 @@ import dto.ClienteDTO;
 import dto.ItemDTO;
 import dto.ItemMateriaPrimaDTO;
 import dto.MateriaPrimaDTO;
-import dto.OfertaDTO;
+import dto.PromocionDTO;
 import dto.OrdenPedidoMatPrimaDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;
@@ -121,7 +121,7 @@ public class Controlador implements ActionListener
 	private Clientes cliente;
 	private Items item;
 	private Repartidores repartidor;
-	private Ofertas oferta;
+	private Promociones oferta;
 	private Categorias categoria;
 	private OrdenesMateriaPrimas ordenesMatPrimas;
 	private MatPrimas materiasPrimas;
@@ -132,7 +132,7 @@ public class Controlador implements ActionListener
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
-			Repartidores repartidor,Ofertas oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario) 
+			Repartidores repartidor,Promociones oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -1886,14 +1886,14 @@ public class Controlador implements ActionListener
 	}
 	//FIN METODOS PARA VENTANA ORDEN DE MATERIA PRIMA
 
-	private ArrayList<OfertaDTO> generarListaOfertas() 
+	private ArrayList<PromocionDTO> generarListaOfertas() 
 	{
-		ArrayList<OfertaDTO> listaAux= new ArrayList<OfertaDTO>();
+		ArrayList<PromocionDTO> listaAux= new ArrayList<PromocionDTO>();
 		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
 		{
 			if((oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()))!=null)
 			{
-				OfertaDTO aux=oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 1).toString());
+				PromocionDTO aux=oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 1).toString());
 				aux.setIdOferta(this.oferta.ultimaOferta()+1);
 				aux.setNombre(aux.getNombre());
 				aux.setPrecio(aux.getPrecio());
@@ -1946,12 +1946,12 @@ public class Controlador implements ActionListener
 		this.item = item;
 	}
 
-	public Ofertas getOferta() {
+	public Promociones getOferta() {
 		return oferta;
 	}
 
 
-	public void setOferta(Ofertas oferta) {
+	public void setOferta(Promociones oferta) {
 		this.oferta = oferta;
 	}
 

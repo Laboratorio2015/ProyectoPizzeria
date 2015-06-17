@@ -9,10 +9,10 @@ import java.util.List;
 
 import modelo.Clientes;
 import modelo.Items;
-import modelo.Ofertas;
+import modelo.Promociones;
 import dto.ClienteDTO;
 import dto.ItemDTO;
-import dto.OfertaDTO;
+import dto.PromocionDTO;
 import dto.PedidoDTO;
 import conexion.Conexion;
 
@@ -35,7 +35,7 @@ public class PedidoDAO
 			
 			Items ite=new Items();
 			String iditems= ite.iditemsPed(pedido);
-			Ofertas ofe=new Ofertas();
+			Promociones ofe=new Promociones();
 			String idofertas= ofe.iditemsOferta(pedido);
 			statement = conexion.getSQLConexion().prepareStatement(insert);		
 				statement.setInt(1, pedido.getIdpedido());
@@ -118,8 +118,8 @@ public class PedidoDAO
 				ClienteDTO lab=cli.buscarClientePorID(resultSet.getInt("cliente"));
 				Items ite=new Items();
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
-				Ofertas ofe=new Ofertas();
-				ArrayList<OfertaDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				Promociones ofe=new Promociones();
+				ArrayList<PromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
 				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
@@ -163,8 +163,8 @@ public class PedidoDAO
 				Clientes cli=new Clientes();
 				Items ite=new Items();
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
-				Ofertas ofe=new Ofertas();
-				ArrayList<OfertaDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				Promociones ofe=new Promociones();
+				ArrayList<PromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
 				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),

@@ -6,7 +6,7 @@ import modelo.ItemMateriasPrimas;
 import modelo.Items;
 import modelo.Itinerarios;
 import modelo.MatPrimas;
-import modelo.Ofertas;
+import modelo.Promociones;
 import modelo.OrdenesMateriaPrimas;
 import modelo.Pedidos;
 import modelo.Productos;
@@ -23,7 +23,7 @@ public class Main
 		Pedidos pedido=new Pedidos();
 		Productos producto= new Productos();
 		Items item= new Items();
-		Ofertas oferta=new Ofertas();
+		Promociones oferta=new Promociones();
 		Proveedores proveedor=new Proveedores();
 		Repartidores repartidor=new Repartidores();
 		Categorias categoria= new Categorias();
