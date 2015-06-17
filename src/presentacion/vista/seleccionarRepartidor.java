@@ -3,6 +3,7 @@ package presentacion.vista;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -37,6 +38,7 @@ public class seleccionarRepartidor extends JDialog {
 	private DefaultTableModel model;
 	private Controlador control;
 	private int[] numfila;
+	private Itinerario iti;
 	private ArrayList<PedidoDTO> listaPedidos;
 	private HojaItinerarioDTO hojaItinerario;
 	private  String[] nombreColumnasRepartidor = {"DNI","Nombre","Apellido"};
@@ -82,6 +84,8 @@ public class seleccionarRepartidor extends JDialog {
 					hojaItinerario.setFueeliminado(false);
 					hojaItinerario.setRepartidor(control.getRepartidor().buscarRepartidorPorDni(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString())));
 					hojaItinerario.setPedidos(pedidos);
+					iti=new Itinerario(hojaItinerario);
+					iti.generarItinerario();
 					control.getItinerario().agregarItinerario(hojaItinerario);
 					for(int i=0; i<numfila.length;i++)
 					{
@@ -98,8 +102,7 @@ public class seleccionarRepartidor extends JDialog {
 						control.getPedido().quitarPedido(elemento);
 						control.getPedido().agregarPedido(elemento);
 					}
-					//Itinerario aux= new Itinerario(pedido);
-					//generarItinerario()
+					JOptionPane.showMessageDialog(null, "Se genero Hoja de Itinerario con el número: "+hojaItinerario.getIdHojaItinerario());
 					dispose();
 				}
 			});

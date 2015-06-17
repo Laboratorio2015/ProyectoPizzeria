@@ -414,8 +414,7 @@ public class seleccionDeCliente extends JDialog {
 			btnAgregarCliente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0)
 				{
-					registroDeCliente ventanaRegistrarCliente= new registroDeCliente(_this, control);
-					ventanaRegistrarCliente.getBtnRegistrar().addActionListener(this);
+					registroDeCliente ventanaRegistrarCliente= new registroDeCliente(_this, control,"otro");
 					ventanaRegistrarCliente.setVisible(true);
 				}
 			});

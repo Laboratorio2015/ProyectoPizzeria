@@ -15,22 +15,28 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import dto.HojaItinerarioDTO;
 import dto.ItemDTO;
 import dto.PedidoDTO;
 
 public class Itinerario 
 {
 	
-	private PedidoDTO pedido;
+	private HojaItinerarioDTO itinerario;
 	private static Document documento = new Document();
+	
+	public Itinerario (HojaItinerarioDTO itinerario)
+	{
+		this.itinerario = itinerario;
+	}
 	
 	public void generarItinerario()
 	{
 		try {
-			String FILE = "C:Users/leandro gabriel/Documents/reportes/Itinerario " + this.pedido.getIdpedido().toString() + ".pdf";
-		    PdfWriter.getInstance(documento, new FileOutputStream(FILE));
+			String FILE = "C:/Users/leandro gabriel/Documents/Itinerarios/Itinerario" + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
+			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
-		    addContentPage (documento,pedido);
+		    addContentPage (documento,itinerario);
 		    documento.close();
 		 } catch (Exception e) {
 	     e.printStackTrace();
@@ -38,13 +44,11 @@ public class Itinerario
 		
 	}
 	
-	public Itinerario (PedidoDTO pedido)
+	
+	
+	
+	private static void addEmptyLine (Document document, int n) throws DocumentException
 	{
-		this.pedido = pedido;
-	}
-	
-	
-	private static void addEmptyLine (Document document, int n) throws DocumentException{
 		for (int i=0; i<n; i++)
 		{
 			document.add(new Paragraph ("\n"));
@@ -65,33 +69,46 @@ public class Itinerario
 	    table.addCell(c1);
 	}
 	 
-	private static void addContentPage(Document document, PedidoDTO pedido) 
+	private static void addContentPage(Document document, HojaItinerarioDTO itinerario) 
 	throws DocumentException {
-	
-		//Añade Encabezado de Pizzería
-		documento.add(new Paragraph("Pizzeria 'WILD'", FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
-		documento.add(new Paragraph("Av. Corrientes 555", FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.DARK_GRAY)));
-		documento.add(new Paragraph("San Nicolás, Buenos Aires.", FontFactory.getFont("arial",8,Font.NORMAL, BaseColor.DARK_GRAY)));
+		
+		//Añade info de Intinerario
+		documento.add(new Paragraph("Itinerario n°: " + itinerario.getIdHojaItinerario().toString(), FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
+		
+		//Añade info de Repartidor
+		documento.add(new Paragraph("Repartidor: " + itinerario.getRepartidor().getDni().toString(), FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
 		
 		addEmptyLine (document, 2);
-		
 		//Añade Tabla de Pedido
-		 PdfPTable table = new PdfPTable(3);
+		 PdfPTable table = new PdfPTable(5);
 		 
-		 addHeaderCell(table, "Producto");
 		 addHeaderCell(table, "Cliente");
 		 addHeaderCell(table, "Dirección");
 		 addHeaderCell(table, "Entre Calles");
+		 addHeaderCell(table, "Pedido");
+		 addHeaderCell(table, "Total");
+		 
 		 table.setHeaderRows(1);
 		
-		 Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
+		 //Añade elementos a la tabla
+		 Iterator<PedidoDTO> Iterador = itinerario.getPedidos().iterator();
 			while(Iterador.hasNext())
 				{
-					ItemDTO elemento = Iterador.next();
+					PedidoDTO elemento = Iterador.next();
 					
-					addCell(table, elemento.getProducto().getNombre());
-					addCell(table, elemento.getCantidad().toString());
-					addCell(table, null);					
+					addCell(table, elemento.getCliente().getApellido()+" "+elemento.getCliente().getNombre());
+					addCell(table, elemento.getCliente().getCalle()+" "+elemento.getCliente().getNumeracion());
+					addCell(table, elemento.getCliente().getEntrecalle1()+" - "+elemento.getCliente().getEntrecalle2());
+					String items = "";
+					
+					for (ItemDTO i : elemento.getItems())
+					{	
+						items= items + i.getProducto().getNombre() + "($" + i.getProducto().getPrecio().toString() + ")" + "; \n" ;
+					}
+					
+					addCell(table, items);						
+					addCell(table,elemento.getTotal()+"");
+					
 				}
 		 document.add(table);
 	}
