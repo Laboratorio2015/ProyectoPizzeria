@@ -13,6 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class promocionBajaModificacion extends JDialog {
 
@@ -24,6 +26,12 @@ public class promocionBajaModificacion extends JDialog {
 	private JTextField tfBuscarProducto;
 	private JTextField tfUnidades;
 	private JTextField tfSubTotal;
+	private JComboBox comboBox ;
+	private JButton btnEliminarPromocion;
+	private JButton btnGuardarEdicionPromocion;
+	private JButton btnBorrarProducto;
+	private JButton btnReemplazarProducto;
+	private JButton btnGuardarCambios;
 
 
 	public promocionBajaModificacion() {
@@ -73,7 +81,7 @@ public class promocionBajaModificacion extends JDialog {
 		tfSubTotal.setBounds(653, 392, 49, 25);
 		contentPanel.add(tfSubTotal);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox= new JComboBox();
 		comboBox.setBounds(381, 112, 242, 25);
 		contentPanel.add(comboBox);
 		
@@ -82,34 +90,171 @@ public class promocionBajaModificacion extends JDialog {
 		label.setBounds(0, 0, 730, 630);
 		contentPanel.add(label);
 		
-		JButton btnEliminarPromocion = new JButton("New button");
+		btnEliminarPromocion= new JButton("New button");
 		btnEliminarPromocion.setOpaque(false);
 		btnEliminarPromocion.setBounds(54, 484, 45, 43);
 		contentPanel.add(btnEliminarPromocion);
 		
-		JButton btnGuardarEdicionPromocion = new JButton("New button");
+		btnGuardarEdicionPromocion= new JButton("New button");
 		btnGuardarEdicionPromocion.setOpaque(false);
 		btnGuardarEdicionPromocion.setBounds(347, 450, 50, 51);
 		contentPanel.add(btnGuardarEdicionPromocion);
 		
-		JButton btnBorrarProducto = new JButton("New button");
+		btnBorrarProducto= new JButton("New button");
 		btnBorrarProducto.setOpaque(false);
 		btnBorrarProducto.setBounds(541, 329, 29, 27);
 		contentPanel.add(btnBorrarProducto);
 		
-		JButton btnReemplazarProducto = new JButton("New button");
+		btnReemplazarProducto= new JButton("New button");
 		btnReemplazarProducto.setOpaque(false);
 		btnReemplazarProducto.setBounds(347, 329, 34, 27);
 		contentPanel.add(btnReemplazarProducto);
 		
-		JButton btnGuardarCambios = new JButton("New button");
+		btnGuardarCambios= new JButton("New button");
 		btnGuardarCambios.setOpaque(false);
 		btnGuardarCambios.setBounds(192, 569, 155, 35);
 		contentPanel.add(btnGuardarCambios);
 		
 		JButton btnCancelar = new JButton("New button");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				dispose();
+			}
+		});
 		btnCancelar.setOpaque(false);
 		btnCancelar.setBounds(390, 569, 155, 35);
 		contentPanel.add(btnCancelar);
 	}
+
+
+	public JTable getTable() {
+		return table;
+	}
+
+
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+
+
+	public JTextField getTfNombre() {
+		return tfNombre;
+	}
+
+
+	public void setTfNombre(JTextField tfNombre) {
+		this.tfNombre = tfNombre;
+	}
+
+
+	public JTextField getTfPrecioFinal() {
+		return tfPrecioFinal;
+	}
+
+
+	public void setTfPrecioFinal(JTextField tfPrecioFinal) {
+		this.tfPrecioFinal = tfPrecioFinal;
+	}
+
+
+	public JTextField getTfPrecioReal() {
+		return tfPrecioReal;
+	}
+
+
+	public void setTfPrecioReal(JTextField tfPrecioReal) {
+		this.tfPrecioReal = tfPrecioReal;
+	}
+
+
+	public JTextField getTfBuscarProducto() {
+		return tfBuscarProducto;
+	}
+
+
+	public void setTfBuscarProducto(JTextField tfBuscarProducto) {
+		this.tfBuscarProducto = tfBuscarProducto;
+	}
+
+
+	public JTextField getTfUnidades() {
+		return tfUnidades;
+	}
+
+
+	public void setTfUnidades(JTextField tfUnidades) {
+		this.tfUnidades = tfUnidades;
+	}
+
+
+	public JTextField getTfSubTotal() {
+		return tfSubTotal;
+	}
+
+
+	public void setTfSubTotal(JTextField tfSubTotal) {
+		this.tfSubTotal = tfSubTotal;
+	}
+
+
+	public JComboBox getComboBox() {
+		return comboBox;
+	}
+
+
+	public void setComboBox(JComboBox comboBox) {
+		this.comboBox = comboBox;
+	}
+
+
+	public JButton getBtnEliminarPromocion() {
+		return btnEliminarPromocion;
+	}
+
+
+	public void setBtnEliminarPromocion(JButton btnEliminarPromocion) {
+		this.btnEliminarPromocion = btnEliminarPromocion;
+	}
+
+
+	public JButton getBtnGuardarEdicionPromocion() {
+		return btnGuardarEdicionPromocion;
+	}
+
+
+	public void setBtnGuardarEdicionPromocion(JButton btnGuardarEdicionPromocion) {
+		this.btnGuardarEdicionPromocion = btnGuardarEdicionPromocion;
+	}
+
+
+	public JButton getBtnBorrarProducto() {
+		return btnBorrarProducto;
+	}
+
+
+	public void setBtnBorrarProducto(JButton btnBorrarProducto) {
+		this.btnBorrarProducto = btnBorrarProducto;
+	}
+
+
+	public JButton getBtnReemplazarProducto() {
+		return btnReemplazarProducto;
+	}
+
+
+	public void setBtnReemplazarProducto(JButton btnReemplazarProducto) {
+		this.btnReemplazarProducto = btnReemplazarProducto;
+	}
+
+
+	public JButton getBtnGuardarCambios() {
+		return btnGuardarCambios;
+	}
+
+
+	public void setBtnGuardarCambios(JButton btnGuardarCambios) {
+		this.btnGuardarCambios = btnGuardarCambios;
+	}
+	
 }

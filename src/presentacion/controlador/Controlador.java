@@ -120,6 +120,7 @@ public class Controlador implements ActionListener
 	private Pedidos pedido;
 	private Clientes cliente;
 	private Items item;
+	private Promociones promocion;
 	private Repartidores repartidor;
 	private Promociones oferta;
 	private Categorias categoria;
@@ -132,7 +133,8 @@ public class Controlador implements ActionListener
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
-			Repartidores repartidor,Promociones oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario) 
+			Repartidores repartidor,Promociones oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, 
+			MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario, Promociones promocion) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -143,6 +145,7 @@ public class Controlador implements ActionListener
 		this.repartidor=repartidor;
 		this.oferta=oferta;
 		this.categoria=categoria;
+		this.promocion=promocion;
 		this.itinerario=itinerario;
 		this.ordenesMatPrimas = ordenesMatPrimas;
 		this.materiasPrimas = matPrimas;
@@ -1256,6 +1259,7 @@ public class Controlador implements ActionListener
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarPromocion())
 		{
 			ventanaEditarPromocion=new promocionBajaModificacion();
+			cargarPromociones(ventanaEditarPromocion.getComboBox());
 			ventanaEditarPromocion.setVisible(true);
 		}
 
@@ -1802,6 +1806,15 @@ public class Controlador implements ActionListener
 
 	/////////////////////////////Metodos //////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
+	private void cargarPromociones(JComboBox<String> comboBox){
+		ArrayList<PromocionDTO> listaPromociones;// = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
+		listaPromociones = (ArrayList<PromocionDTO>) this.promocion.obtenerOfertas();
+		for (int i=0; i< listaPromociones.size();i++){
+			comboBox.addItem(listaPromociones.get(i).getNombre());
+		}
+	}
+	
+	
 
 	private void mostrarArray(ArrayList<ProveedorDTO> obtenerProveedor) {
 		System.out.println("categorias>");

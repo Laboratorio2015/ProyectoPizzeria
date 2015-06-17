@@ -90,6 +90,38 @@ public class PromocionDAO {
 			
 			while(resultSet.next())
 			{
+				if(resultSet.getBoolean("fueeliminado")==false)
+				{
+				Items a=new Items();
+				ArrayList<ItemDTO>listaItems= a.pasarDeStringAArray(resultSet.getString("item"));
+				ofertas.add(new PromocionDTO(resultSet.getInt("idoferta"),resultSet.getString("nombre"),
+						resultSet.getInt("precio"),listaItems,resultSet.getBoolean("fueeliminado")));
+				}
+
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return ofertas;
+	}
+	public List<PromocionDTO> readAlli()
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<PromocionDTO> ofertas = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(readall);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
 				Items a=new Items();
 				ArrayList<ItemDTO>listaItems= a.pasarDeStringAArray(resultSet.getString("item"));
 				ofertas.add(new PromocionDTO(resultSet.getInt("idoferta"),resultSet.getString("nombre"),
