@@ -1314,7 +1314,58 @@ public class Controlador implements ActionListener
 		{
 			ventanaEditarPromocion=new promocionBajaModificacion();
 			cargarPromociones(ventanaEditarPromocion.getComboBox());
+			ventanaEditarPromocion.getComboBox().addActionListener(this);
+			ventanaEditarPromocion.getBtnReemplazarProducto().addActionListener(this);
+			ventanaEditarPromocion.getBtnBorrarProducto().addActionListener(this);
+			ventanaEditarPromocion.getBtnEliminarPromocion().addActionListener(this);
+			ventanaEditarPromocion.getBtnGuardarCambios().addActionListener(this);
+			ventanaEditarPromocion.getTfBuscarProducto().setEnabled(false);
+			ventanaEditarPromocion.getTfUnidades().setEnabled(false);
+			ventanaEditarPromocion.getTfBuscarProducto().setVisible(false);
+			ventanaEditarPromocion.getTfSubTotal().setVisible(false);
+			ventanaEditarPromocion.getTfUnidades().setVisible(false);
+			ventanaEditarPromocion.getTfSubTotal().setEnabled(false);
+			
+			ventanaEditarPromocion.getTfOcullto().setVisible(true);
 			ventanaEditarPromocion.setVisible(true);
+		}
+		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getComboBox())
+		{
+			String promo=ventanaEditarPromocion.getComboBox().getSelectedItem().toString();
+			PromocionDTO promocion=this.promocion.buscarOfertaPorNombre(promo);
+			if(promocion!=null)
+			{
+				llenarTablaEditarPromo(promocion);
+				ventanaEditarPromocion.getTfNombre().setText(promocion.getNombre());
+				ventanaEditarPromocion.getTfPrecioFinal().setText(promocion.getPrecio()+"");
+				ventanaEditarPromocion.getTfPrecioReal().setText(calcularPrecioReal(promocion).toString());
+			}
+		}
+		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnReemplazarProducto())
+		{
+			ventanaEditarPromocion.getTfBuscarProducto().setEnabled(true);
+			ventanaEditarPromocion.getTfUnidades().setEnabled(true);
+			ventanaEditarPromocion.getTfSubTotal().setEnabled(true);
+			ventanaEditarPromocion.getTfUnidades().setVisible(true);
+			ventanaEditarPromocion.getTfBuscarProducto().setVisible(true);
+			ventanaEditarPromocion.getTfSubTotal().setVisible(true);
+			ventanaEditarPromocion.getTfOcullto().setVisible(false);
+			
+		}
+		//borra un producto
+		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnBorrarProducto())
+		{
+			
+		}
+		//elimina un apromocion
+		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnEliminarPromocion())
+		{
+			
+		}
+		//guarda los cambios
+		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnGuardarCambios())
+		{
+			
 		}
 
 		//ventana de configuracion para editar un cliente
@@ -1879,6 +1930,7 @@ public class Controlador implements ActionListener
 	private void cargarPromociones(JComboBox<String> comboBox){
 		ArrayList<PromocionDTO> listaPromociones;// = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
 		listaPromociones = (ArrayList<PromocionDTO>) this.promocion.obtenerOfertas();
+		comboBox.addItem("(Seleccine una promocion)");
 		for (int i=0; i< listaPromociones.size();i++){
 			comboBox.addItem(listaPromociones.get(i).getNombre());
 		}
@@ -2205,7 +2257,33 @@ public class Controlador implements ActionListener
 			this.ventanaAgregarProducto.getModel().addRow(fila);			
 		}
 	}
+	
+	private void llenarTablaEditarPromo(PromocionDTO promo)
+	{
+		this.ventanaEditarPromocion.getModel().setRowCount(0);
+		this.ventanaEditarPromocion.getModel().setColumnCount(0);
+		this.ventanaEditarPromocion.getModel().setColumnIdentifiers(this.ventanaEditarPromocion.getNombreColumnas());
+		Iterator<ItemDTO> Iterador = promo.getProductosOfertados().iterator();
+		while(Iterador.hasNext())
+		{
+			ItemDTO elemento = Iterador.next();
+			Object[] fila = {elemento.getProducto().getNombre(), elemento.getCantidad()};
+			this.ventanaEditarPromocion.getModel().addRow(fila);			
+		}
+	}
 
+	private Integer calcularPrecioReal(PromocionDTO promocion)
+	{
+		Iterator<ItemDTO> Iterador = promocion.getProductosOfertados().iterator();
+		Integer costoReal=0;
+		while(Iterador.hasNext())
+		{
+			ItemDTO elemento = Iterador.next();
+				costoReal=costoReal+(elemento.getProducto().getPrecio()*elemento.getCantidad());
+		}
+		return costoReal;
+	}
+	
 	private void llenarTablaProductosEditados(String tipo)
 	{
 		this.ventanaEditarProducto.getModel().setRowCount(0);

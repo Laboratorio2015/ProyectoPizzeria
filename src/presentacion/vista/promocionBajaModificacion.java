@@ -13,13 +13,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class promocionBajaModificacion extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
+	private DefaultTableModel model;
+	private  String[] nombreColumnas = {"Nombre","Cantidad"};
 	private JTextField tfNombre;
 	private JTextField tfPrecioFinal;
 	private JTextField tfPrecioReal;
@@ -30,8 +36,12 @@ public class promocionBajaModificacion extends JDialog {
 	private JButton btnEliminarPromocion;
 	private JButton btnGuardarEdicionPromocion;
 	private JButton btnBorrarProducto;
-	private JButton btnReemplazarProducto;
+	private JButton btnAgregarProducto;
 	private JButton btnGuardarCambios;
+	private JTextField tfOcullto;
+	private JTextField txtAgegar;
+	private JTextField textField;
+	
 
 
 	public promocionBajaModificacion() {
@@ -45,7 +55,13 @@ public class promocionBajaModificacion extends JDialog {
 		scrollPane.setBounds(68, 192, 185, 265);
 		contentPanel.add(scrollPane);
 		
-		table = new JTable();
+		model = new DefaultTableModel(null,nombreColumnas);
+		table = new JTable(model){
+		    @Override
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+		        return false; //desabilita la edicion de las celdas
+		    }
+		};
 		scrollPane.setViewportView(table);
 		
 		tfNombre = new JTextField();
@@ -85,6 +101,35 @@ public class promocionBajaModificacion extends JDialog {
 		comboBox.setBounds(381, 112, 242, 25);
 		contentPanel.add(comboBox);
 		
+		tfOcullto = new JTextField();
+		tfOcullto.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfOcullto.setBackground(new Color(102, 102, 102));
+		tfOcullto.setEnabled(false);
+		tfOcullto.setEditable(false);
+		tfOcullto.setBounds(322, 366, 389, 69);
+		contentPanel.add(tfOcullto);
+		tfOcullto.setColumns(10);
+		
+		txtAgegar = new JTextField();
+		txtAgegar.setForeground(new Color(204, 204, 204));
+		txtAgegar.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		txtAgegar.setBackground(new Color(102, 102, 102));
+		txtAgegar.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtAgegar.setFont(new Font("Calibri", Font.BOLD, 14));
+		txtAgegar.setText("Agregar");
+		txtAgegar.setBounds(391, 336, 71, 20);
+		contentPanel.add(txtAgegar);
+		txtAgegar.setColumns(10);
+		
+		textField = new JTextField();
+		textField.setEnabled(false);
+		textField.setEditable(false);
+		textField.setColumns(10);
+		textField.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		textField.setBackground(new Color(102, 102, 102));
+		textField.setBounds(322, 432, 389, 83);
+		contentPanel.add(textField);
+		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(promocionBajaModificacion.class.getResource("/prototipos/baja-modif de Promocion.png")));
 		label.setBounds(0, 0, 730, 630);
@@ -105,10 +150,10 @@ public class promocionBajaModificacion extends JDialog {
 		btnBorrarProducto.setBounds(541, 329, 29, 27);
 		contentPanel.add(btnBorrarProducto);
 		
-		btnReemplazarProducto= new JButton("New button");
-		btnReemplazarProducto.setOpaque(false);
-		btnReemplazarProducto.setBounds(347, 329, 34, 27);
-		contentPanel.add(btnReemplazarProducto);
+		btnAgregarProducto= new JButton("New button");
+		btnAgregarProducto.setOpaque(false);
+		btnAgregarProducto.setBounds(347, 329, 34, 27);
+		contentPanel.add(btnAgregarProducto);
 		
 		btnGuardarCambios= new JButton("New button");
 		btnGuardarCambios.setOpaque(false);
@@ -206,6 +251,35 @@ public class promocionBajaModificacion extends JDialog {
 	public void setComboBox(JComboBox comboBox) {
 		this.comboBox = comboBox;
 	}
+	
+	public JTextField getTfOcullto() {
+		return tfOcullto;
+	}
+
+
+	public void setTfOcullto(JTextField tfOcullto) {
+		this.tfOcullto = tfOcullto;
+	}
+
+
+	public DefaultTableModel getModel() {
+		return model;
+	}
+
+
+	public void setModel(DefaultTableModel model) {
+		this.model = model;
+	}
+
+
+	public String[] getNombreColumnas() {
+		return nombreColumnas;
+	}
+
+
+	public void setNombreColumnas(String[] nombreColumnas) {
+		this.nombreColumnas = nombreColumnas;
+	}
 
 
 	public JButton getBtnEliminarPromocion() {
@@ -239,12 +313,12 @@ public class promocionBajaModificacion extends JDialog {
 
 
 	public JButton getBtnReemplazarProducto() {
-		return btnReemplazarProducto;
+		return btnAgregarProducto;
 	}
 
 
 	public void setBtnReemplazarProducto(JButton btnReemplazarProducto) {
-		this.btnReemplazarProducto = btnReemplazarProducto;
+		this.btnAgregarProducto = btnReemplazarProducto;
 	}
 
 
@@ -256,5 +330,4 @@ public class promocionBajaModificacion extends JDialog {
 	public void setBtnGuardarCambios(JButton btnGuardarCambios) {
 		this.btnGuardarCambios = btnGuardarCambios;
 	}
-	
 }

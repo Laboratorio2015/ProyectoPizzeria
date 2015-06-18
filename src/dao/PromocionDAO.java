@@ -9,12 +9,14 @@ import java.util.List;
 import modelo.Items;
 import conexion.Conexion;
 import dto.ItemDTO;
+import dto.ProductoDTO;
 import dto.PromocionDTO;
 
 public class PromocionDAO {
 	private static final String insert = "INSERT INTO ofertas(idoferta, nombre,precio,item,fueeliminado) VALUES(?,?,?,?,?)";
 	private static final String delete = "DELETE FROM ofertas WHERE idoferta = ?";
 	private static final String readall = "SELECT * FROM ofertas ";
+	private static final String actualizarDatos="Update ofertas Set nombre=?, precio=?, item=?,fueeliminado=? where idoferta=?";
 	
 	private static final Conexion conexion = Conexion.getConexion();
 	
@@ -139,4 +141,39 @@ public class PromocionDAO {
 		}
 		return ofertas;
 	}
+	
+	//actualiza los datos de un producto
+		public boolean actualizarProducto(PromocionDTO PromocionActualizar)
+		{
+			PreparedStatement statement;
+			int chequeoUpdate=0;
+			try 
+			{
+				statement = conexion.getSQLConexion().prepareStatement(actualizarDatos);
+				//actializar los datos
+				Items ite=new Items();
+				String iditems= ite.iditemsOfe(PromocionActualizar);
+				statement.setString(1, PromocionActualizar.getNombre());
+				statement.setInt(2, PromocionActualizar.getPrecio());
+				statement.setString(3, iditems);
+				statement.setBoolean(4, PromocionActualizar.getFueeliminado());
+				statement.setInt(5, PromocionActualizar.getIdOferta());
+				chequeoUpdate = statement.executeUpdate();
+				if(chequeoUpdate > 0)
+				{
+					System.out.println("Actualizacion exitosa de promocion");
+					return true;
+				}
+			} 
+			catch (SQLException e) 
+			{
+				System.out.println("Actualizacion fallida de promocion");
+				e.printStackTrace();
+			}
+			finally
+			{
+				conexion.cerrarConexion();
+			}
+			return false;
+		}
 }
