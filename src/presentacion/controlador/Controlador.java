@@ -8,6 +8,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -162,7 +163,7 @@ public class Controlador implements ActionListener
 	{
 		this.ventana.show();
 		this.monitorCocina=new PadreMonitor(pedido);
-
+		System.out.println(getFechaActual());
 	}
 
 	@SuppressWarnings("serial")
@@ -235,6 +236,7 @@ public class Controlador implements ActionListener
 			this.gestorOrdenesMateriasPrimas.getBtnPagarorden().addActionListener(this);
 			this.gestorOrdenesMateriasPrimas.getComboBoxFiltroOrdenes().addActionListener(this);
 			this.gestorOrdenesMateriasPrimas.getBtnBuscar().addActionListener(this);
+			this.gestorOrdenesMateriasPrimas.getBtnImprimirOrden().addActionListener(this);
 			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 				public void valueChanged(ListSelectionEvent event) {
 					// do some actions here, for example
@@ -290,17 +292,40 @@ public class Controlador implements ActionListener
 			(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
 			this.gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 		}
+		//GESTOR MAT PRIMA> IMPRIMIR ORDEN 
+		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnImprimirOrden())
+		{
+			Integer intRowSelected = this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
+			if (intRowSelected >-1){
+				OrdenPedidoMatPrimaDTO ordenSeleccionada = ordenesMatPrimas.buscarOrdenPedidoMatPrima(Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow(),0).toString()));
+				if (ordenSeleccionada.getEstado().trim().compareTo("guardado") == 0){
+					ordenSeleccionada.setFecha(getFechaActual());
+					ordenSeleccionada.setEstado("enviado");
+					ordenSeleccionada.setEnviado(true);
+					gestorOrdenesMateriasPrimas.setOrdenSeleccionada(ordenSeleccionada);
+					ordenesMatPrimas.actualizarDatos(ordenSeleccionada);		
+					filtrarBusquedaOrdenes();
+				}
+				prepararParaSobreescribirPDF(ordenSeleccionada);
+				generarPDFOrdenMatPrima();
+				JOptionPane.showMessageDialog(null, "Se imprimio la orden de compra.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+
+			}
+		}
 		//GESTOR ORDENES MAT PRIMA> Enviar orden de mat prima x mail
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnEnviarmailorden())
 		{
-			//Integer idOrdenSelecc = Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow(),0).toString());
-			OrdenPedidoMatPrimaDTO ordenSeleccionada = ordenesMatPrimas.buscarOrdenPedidoMatPrima(Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow(),0).toString()));
-			ordenesMatPrimas.quitarOrdenPedidoMatPrima(ordenSeleccionada);
-			ordenSeleccionada.setEstado("enviado");
-			ordenSeleccionada.setEnviado(true);
-			//			ordenSeleccionada.setFecha(getfechaHoy);
-			ordenesMatPrimas.agregarOrdenPedidoMatPrima(ordenSeleccionada);
-			filtrarBusquedaOrdenes();
+			Integer intRowSelected = this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
+			if (intRowSelected >-1){
+				OrdenPedidoMatPrimaDTO ordenSeleccionada = ordenesMatPrimas.buscarOrdenPedidoMatPrima(Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow(),0).toString()));
+				ordenesMatPrimas.quitarOrdenPedidoMatPrima(ordenSeleccionada);
+				ordenSeleccionada.setEstado("enviado");
+				ordenSeleccionada.setEnviado(true);
+				ordenSeleccionada.setFecha(getFechaActual());
+				ordenesMatPrimas.agregarOrdenPedidoMatPrima(ordenSeleccionada);
+				JOptionPane.showMessageDialog(null, "Se envió exitosamente el email de solicitud de compra", "Confirmación",JOptionPane.WARNING_MESSAGE);
+				filtrarBusquedaOrdenes();
+			}
 		}
 		//GESTOR MAT PRIMA> ABRIR VENTANA DE Registrar pago y recepci[on de orden
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnPagarorden())
@@ -311,7 +336,6 @@ public class Controlador implements ActionListener
 				Integer idOrdenSeleccionada = Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt
 						(intFilaSeleccionada, 0).toString());			
 				gestorOrdenesMateriasPrimas.setOrdenSeleccionada(ordenesMatPrimas.buscarOrdenPedidoMatPrima( Integer.parseInt
-
 						(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intFilaSeleccionada, 0).toString())));
 
 				ventanaRegistrarPagoOrdenMatPrima = new registrarPagoOrdenMatPrima(ventana, this);
@@ -351,16 +375,14 @@ public class Controlador implements ActionListener
 				ordenesMatPrimas.quitarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
 				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setCosto(Integer.parseInt(ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().toString()));
 				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setEstado("pagado");
-				//gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setFecha(obtenerfechahoy);
+				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setFecha(getFechaActual());
 				ordenesMatPrimas.agregarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
 				filtrarBusquedaOrdenes();//para q actualice los estados de las ordenes y no haya problema con la busq x 
 				JOptionPane.showMessageDialog(null, "Se ha registrado correctamente la recepción y pago de la orden de materia prima", "Confirmación",JOptionPane.WARNING_MESSAGE); 
 				filtrarBusquedaOrdenes();
 				ventanaRegistrarPagoOrdenMatPrima.dispose();	
 			}
-
 		}
-
 		//ORDEN MATERIA PRIMA> COMBO LISTA PROVEEDORES
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getComboListaProveedores())
 		{
@@ -429,21 +451,17 @@ public class Controlador implements ActionListener
 		//ORDEN MATERIA PRIMA>ENVIAR ORDEN X MAIL, PDF.
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnEnviarform())
 		{
-			persistirOrdenMatPrima(true,"enviado");
+			persistirOrdenMatPrima(true,"enviado");			
 			generarPDFOrdenMatPrima();
 			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra y fue enviado con por e-mail a su proveedor.", "Confirmación", JOptionPane.WARNING_MESSAGE);
-			//borrarTodo();
 			ventanaOrdenMatPrima.dispose();
 		}
-		//ORDEN MATERIA PRIMA> SOLO GUARDAR, GENERAR PDF Y PERSISTIR ORDEN
+		//ORDEN MATERIA PRIMA> SOLO GUARDAR, GENERAR PDF Y PERSIST	ºIR ORDEN
 		else if(this.ventanaOrdenMatPrima!= null && e.getSource()==this.ventanaOrdenMatPrima.getBtnGuardarform())
 		{
 			persistirOrdenMatPrima(false,"guardado");
 			generarPDFOrdenMatPrima();
-			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra", "Confirmación", 
-
-					JOptionPane.WARNING_MESSAGE);
-			//borrarTodo();
+			JOptionPane.showMessageDialog(null, "Se ha creado un PDF con la orden de compra", "Confirmación", JOptionPane.WARNING_MESSAGE);
 			ventanaOrdenMatPrima.dispose();
 		}
 		//ORDEN MATERIA PRIMA> CANCELAR ORDEN
@@ -655,10 +673,11 @@ public class Controlador implements ActionListener
 		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnaddCategoria())
 		{
 			//agregar fila en la tabla, incluir id.
-			CategoriaDTO catSelecc = categoria.buscarCategoria(ventanaAgregarProveedor.getComboBoxCategorias().getSelectedItem().toString());
-			ventanaAgregarProveedor.agregarCategoria(catSelecc);
-			ventanaAgregarProveedor.getComboBoxCategorias().removeItem(catSelecc.getDenominacion());
-			//ventanaAgregarProveedor.agregarCategoria(ventanaAgregarProveedor.getComboBoxCategorias().getSelectedItem().toString());
+			if (ventanaAgregarProveedor.getComboBoxCategorias().getSelectedItem().toString().compareTo("(Agregar Categorias)")!= 0){
+				CategoriaDTO catSelecc = categoria.buscarCategoria(ventanaAgregarProveedor.getComboBoxCategorias().getSelectedItem().toString());
+				ventanaAgregarProveedor.agregarCategoria(catSelecc);
+				ventanaAgregarProveedor.getComboBoxCategorias().removeItem(catSelecc.getDenominacion());
+			}
 		}
 		//VENTANA  ALTA PROVEEDOR Quitar categoria
 		else if (this.ventanaAgregarProveedor!= null && e.getSource()==this.ventanaAgregarProveedor.getBtnQuitarcateg())
@@ -1564,6 +1583,16 @@ public class Controlador implements ActionListener
 				}
 	}
 
+	private void prepararParaSobreescribirPDF(OrdenPedidoMatPrimaDTO ordenSeleccionada) {
+		//String rutaFile = "D:/OrdenDePedidoNro" + ordenSeleccionada.getIdCompra() + ".pdf";
+		File fichero = new File("D:/OrdenDePedidoNro" + ordenSeleccionada.getIdCompra() + ".pdf");
+		if (fichero.delete())
+			   System.out.println("El fichero ha sido borrado satisfactoriamente");
+			else
+			   System.out.println("El fichero no puede ser borrado");
+	}
+
+
 	private ProveedorDTO guardarDatosProveedor(ProveedorDTO provModificado) {
 		provModificado.setDireccion(ventanaEditarProveedor.getTfDireccion().getText());
 		provModificado.setEmail(ventanaEditarProveedor.getTfEmail().getText());
@@ -1810,7 +1839,7 @@ public class Controlador implements ActionListener
 	}
 	private void generarPDFOrdenMatPrima() {
 		try {
-			solicitudDeMateriaPrima ordenPDF = new solicitudDeMateriaPrima(ventanaOrdenMatPrima.getNuevaOrden());
+			solicitudDeMateriaPrima orden = new solicitudDeMateriaPrima(ventanaOrdenMatPrima.getNuevaOrden());
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}		
@@ -1826,8 +1855,7 @@ public class Controlador implements ActionListener
 		 * 
 		 * */
 		ventanaOrdenMatPrima.setNuevaOrden(new OrdenPedidoMatPrimaDTO(id,ventanaOrdenMatPrima.getProvSeleccionado(),
-				ventanaOrdenMatPrima.getListadoItemsOrdenados(),estado,"12122016",0,enviado,false));
-
+				ventanaOrdenMatPrima.getListadoItemsOrdenados(),estado,getFechaActual(),0,enviado,false));
 		ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
 		//this.ordenesMatPrimas.agregarOrdenPedidoMatPrima(ventanaOrdenMatPrima.getNuevaOrden());
 
@@ -1936,17 +1964,6 @@ public class Controlador implements ActionListener
 		}
 	}
 	
-	
-
-	private void mostrarArray(ArrayList<ProveedorDTO> obtenerProveedor) {
-		System.out.println("categorias>");
-
-		for (int i = 0; i < obtenerProveedor.size();i++){
-			for (int x = 0; x < obtenerProveedor.size();x++){
-				System.out.println(obtenerProveedor.get(i).getCategoria().get(x).getDenominacion());
-			}
-		}
-	}
 	private ArrayList<ProveedorDTO> quitarEspacioArray(ArrayList<ProveedorDTO> listaProveedores) {
 		//ArrayList<ProveedorDTO> proveedoresArreglado = new ArrayList<ProveedorDTO>();
 
@@ -2386,5 +2403,20 @@ public class Controlador implements ActionListener
 			break;
 		}
 		}
-	}		
+	}
+	
+	private String getFechaActual(){
+		Calendar fecha = new GregorianCalendar();
+        int año = fecha.get(Calendar.YEAR);
+        int mes = fecha.get(Calendar.MONTH)+1;
+        int dia = fecha.get(Calendar.DAY_OF_MONTH);
+//        int hora = fecha.get(Calendar.HOUR_OF_DAY);
+//        int minuto = fecha.get(Calendar.MINUTE);
+//        int segundo = fecha.get(Calendar.SECOND);
+
+        //System.out.printf("Hora Actual: %02d:%02d:%02d %n",hora, minuto, segundo);
+        return String.format("%02d", dia)+ "/" + String.format("%02d", mes)+ "/" + año;// + " "
+        	//+ String.format("%02d", hora) + ":" + String.format("%02d", minuto) + ":" + String.format("%02d", segundo);           
+        
+	}
 }

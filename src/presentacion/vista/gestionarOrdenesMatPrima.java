@@ -18,6 +18,8 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultComboBoxModel;
 
@@ -77,107 +79,75 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		comboBoxFiltroOrdenes.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		comboBoxFiltroOrdenes.setModel(new DefaultComboBoxModel<String>(new String[] {"Todas las ordenes", "Ordenes guardadas", 
 				"Ordenes enviadas pendientes de pago", "Ordenes pagadas", "Ordenes rechazadas"}));
-		comboBoxFiltroOrdenes.setBounds(48, 129, 253, 27);
+		comboBoxFiltroOrdenes.setBounds(32, 128, 253, 27);
 		contentPane.add(comboBoxFiltroOrdenes);
 		
 		textFieldBuscadorNombre = new JTextField();
-		textFieldBuscadorNombre.setBounds(48, 199, 253, 27);
+		textFieldBuscadorNombre.setBounds(32, 196, 254, 27);
 		contentPane.add(textFieldBuscadorNombre);
 		textFieldBuscadorNombre.setColumns(10);
 		textAutoAcompleter = new TextAutoCompleter( textFieldBuscadorNombre );
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(48, 263, 259, 321);
+		scrollPane.setBounds(32, 262, 327, 324);
 		contentPane.add(scrollPane);
 
 		tableOrdenesMatPrimas = new JTable();
 		tableOrdenesMatPrimas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		modeloOrdenesMatPrimas = new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"New column", "New column", "New column"
-				}
-				) {
-			Class[] columnTypes = new Class[] {
-					Integer.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		};
-		tableOrdenesMatPrimas.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"New column", "New column", "New column"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				Integer.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
+		resetearModeloOrdenesPedido();
 		tableOrdenesMatPrimas.setTableHeader(null);
+		//DISEÑO TALBA ORDENES
+		tableOrdenesMatPrimas.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		tableOrdenesMatPrimas.setTableHeader(null);
+		tableOrdenesMatPrimas.setForeground(new Color(0, 0, 0));
+		tableOrdenesMatPrimas.setBackground(new Color(204,204,0));
+		scrollPane.getViewport().setBackground(new Color(204,204,0));
+		//
 		scrollPane.setViewportView(tableOrdenesMatPrimas);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(422, 178, 247, 342);
+		scrollPane_1.setBounds(422, 178, 249, 342);
 		contentPane.add(scrollPane_1);
 		
 		tableItemsSolicitados = new JTable();	
-		modeloItemsSolicitdos = new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"New column", "New column"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, Integer.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		};
+		resetearItemsOrdenesMatPrima();
+		//DISEÑO TALBA ITEMS
+		tableItemsSolicitados.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		tableItemsSolicitados.setTableHeader(null);
-		tableItemsSolicitados.setModel(modeloItemsSolicitdos);
-
-		tableItemsSolicitados.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent event) {
-	            // do some actions here, for example
-	            // print first column value from selected row
-	            System.out.println(tableItemsSolicitados.getValueAt(tableItemsSolicitados.getSelectedRow(), 0).toString());
-	        }
-	    });
-		
-		
+//		tableItemsSolicitados.setModel(modeloItemsSolicitdos);
+		tableItemsSolicitados.setForeground(new Color(0, 0, 0));
+		tableItemsSolicitados.setBackground(new Color(204,204,0));
+		scrollPane_1.getViewport().setBackground(new Color(204,204,0));
+		//
 		scrollPane_1.setViewportView(tableItemsSolicitados);
+		resetearItemsOrdenesMatPrima();
+//		hideColumnTable(tableOrdenesMatPrimas, new int []{0});
+//		tableItemsSolicitados.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+//	        public void valueChanged(ListSelectionEvent event) {
+//	            // do some actions here, for example
+//	            // print first column value from selected row
+//	            System.out.println(tableItemsSolicitados.getValueAt(tableItemsSolicitados.getSelectedRow(), 0).toString());
+//	        }
+//	    });
+		
+
 		
 		lblocultarOpcPago = new JLabel("");
 		lblocultarOpcPago.setOpaque(true);
 		lblocultarOpcPago.setBackground(new Color(204, 204, 0));
-		lblocultarOpcPago.setBounds(691, 349, 203, 43);
+		lblocultarOpcPago.setBounds(680, 349, 214, 43);
 		contentPane.add(lblocultarOpcPago);
 		
 		lblOcultarEnviarOrden = new JLabel("");
 		lblOcultarEnviarOrden.setOpaque(true);
 		lblOcultarEnviarOrden.setBackground(new Color(204, 204, 0));
-		lblOcultarEnviarOrden.setBounds(690, 403, 162, 52);
+		lblOcultarEnviarOrden.setBounds(699, 403, 195, 52);
 		contentPane.add(lblOcultarEnviarOrden);
 		
 		lblOcultarOpcEliminar = new JLabel("");
 		lblOcultarOpcEliminar.setOpaque(true);
 		lblOcultarOpcEliminar.setBackground(new Color(204, 204, 0));
-		lblOcultarOpcEliminar.setBounds(680, 289, 172, 49);
+		lblOcultarOpcEliminar.setBounds(689, 289, 205, 49);
 		contentPane.add(lblOcultarOpcEliminar);
 		
 		JLabel lblFondo = new JLabel("fondo");
@@ -194,22 +164,23 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		
 		btnCargarorden = new JButton("cargarOrden");
 		btnCargarorden.setOpaque(false);
-		btnCargarorden.setBounds(314, 359, 89, 80);
+		btnCargarorden.setBounds(363, 359, 50, 80);
 		contentPane.add(btnCargarorden);
 		
 		btnBorrarorden = new JButton("borrarOrden");
 		btnBorrarorden.setOpaque(false);
-		btnBorrarorden.setBounds(695, 277, 157, 37);
+		btnBorrarorden.setBounds(695, 293, 157, 37);
 		contentPane.add(btnBorrarorden);
 		
 		btnPagarorden = new JButton("pagarOrden");
 		btnPagarorden.setOpaque(false);
-		btnPagarorden.setBounds(694, 333, 186, 37);
+		btnPagarorden.setBounds(699, 349, 186, 37);
 		contentPane.add(btnPagarorden);
 		
 		btnEnviarmailorden = new JButton("enviarMailOrden");
+		btnEnviarmailorden.setToolTipText("Enviar por email");
 		btnEnviarmailorden.setOpaque(false);
-		btnEnviarmailorden.setBounds(693, 388, 159, 37);
+		btnEnviarmailorden.setBounds(693, 403, 159, 52);
 		contentPane.add(btnEnviarmailorden);
 		
 		btnFinalizar = new JButton("Finalizar");
@@ -226,50 +197,57 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		btnImprimirOrden = new JButton("imprimir orden");
 		btnImprimirOrden.setOpaque(false);
 		btnImprimirOrden.setBounds(691, 223, 161, 43);
-		contentPane.add(btnImprimirOrden);
-		
+		contentPane.add(btnImprimirOrden);		
 	}
 
 	public void ocultarOpcPagoBorrarEnviar(Boolean ocultarPago,Boolean ocultarEliminar, boolean ocultarEnviar){
 		this.lblocultarOpcPago.setVisible(ocultarPago);
 		this.lblOcultarOpcEliminar.setVisible(ocultarEliminar);
 		this.lblOcultarEnviarOrden.setVisible(ocultarEnviar);
-		
-		
-		
-//		this.lblocultarOpcPago.setOpaque(ocultarPago);
-//		this.lblOcultarOpcEliminar.setOpaque(ocultarEliminar);
-		
-		
+
 		this.btnBorrarorden.setEnabled(!ocultarEliminar);
 		this.btnPagarorden.setEnabled(!ocultarPago);
 		this.btnEnviarmailorden.setEnabled(!ocultarEnviar);
 	}
+
 	
 	public void agregarFilaOrden(OrdenPedidoMatPrimaDTO ordenAagregar){
-		modeloOrdenesMatPrimas.addRow(new Object[] {ordenAagregar.getIdCompra(), ordenAagregar.getFecha(),ordenAagregar.getProveedor().getNombre()});
+		modeloOrdenesMatPrimas.addRow(new Object[] {ordenAagregar.getIdCompra(), 
+				ordenAagregar.getFecha().trim(),ordenAagregar.getProveedor().getNombre().trim(), ordenAagregar.getEstado().trim()});
 	}
 	
 	@SuppressWarnings("serial")
 	public void resetearModeloOrdenesPedido(){
-		modeloOrdenesMatPrimas = new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-						"New column", "New column", "New column"
-				}
+		modeloOrdenesMatPrimas = new DefaultTableModel(new Object[][] {
+		},
+		new String[] {
+				"idOrden", "Fecha", "Proveedor", "Estado"
+		}
 				) {
-			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
-					Integer.class, String.class, String.class
+					Integer.class, String.class, String.class, Object.class
 			};
-			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 		};
+		
 		tableOrdenesMatPrimas.setModel(modeloOrdenesMatPrimas);
+
+		tableOrdenesMatPrimas.getColumnModel().getColumn(0).setMaxWidth(45);
+		tableOrdenesMatPrimas.getColumnModel().getColumn(0).setMinWidth(45);
+		tableOrdenesMatPrimas.getColumnModel().getColumn(0).setWidth(45);
+		
+		tableOrdenesMatPrimas.getColumnModel().getColumn(1).setMaxWidth(80);
+		tableOrdenesMatPrimas.getColumnModel().getColumn(1).setMinWidth(80);
+		tableOrdenesMatPrimas.getColumnModel().getColumn(1).setWidth(80);
+		
+		tableOrdenesMatPrimas.getColumnModel().getColumn(3).setMaxWidth(70);
+		tableOrdenesMatPrimas.getColumnModel().getColumn(3).setMinWidth(70);
+		tableOrdenesMatPrimas.getColumnModel().getColumn(3).setWidth(70);
 	}
+	
+
 	
 	@SuppressWarnings("serial")
 	public void resetearItemsOrdenesMatPrima(){
@@ -404,9 +382,8 @@ public class gestionarOrdenesMatPrima extends JDialog {
 	}
 
 	public void agregarFilaItem(ItemMateriaPrimaDTO elementoItem) {
-		String nombreMatPrima = elementoItem.getItemMatPrima().getNombre().trim();
-		nombreMatPrima = nombreMatPrima.replace("_", " ");
-		modeloItemsSolicitdos.addRow(new Object [] {nombreMatPrima,elementoItem.getCantidad()});
+
+		modeloItemsSolicitdos.addRow(new Object [] {elementoItem.getItemMatPrima().getNombre().trim(),elementoItem.getCantidad()});
 	}
 
 	public OrdenPedidoMatPrimaDTO getOrdenSeleccionada() {

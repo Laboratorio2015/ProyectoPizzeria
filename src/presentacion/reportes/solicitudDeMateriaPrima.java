@@ -32,12 +32,14 @@ public class solicitudDeMateriaPrima {
 
 		try {
 			//String FILE = "D:/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
-			String FILE = "C:/Users/leandro gabriel/Documents/Ordenes/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
+			String FILE = "D:/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 			documento.open();
 			addContentPage ();
 			documento.close();
+			System.out.println("Se genero exitosamente el pdf con nombre: " + "OrdenDePedidoNro" + nuevaOrden.getIdCompra());
 		} catch (Exception e) {
+			System.out.println("NO se pudo generar el pdf con nombre: " + "OrdenDePedidoNro" + nuevaOrden.getIdCompra());
 			e.printStackTrace();
 		}
 
@@ -45,6 +47,7 @@ public class solicitudDeMateriaPrima {
 
 	private void addContentPage() throws DocumentException {//Añade Encabezado de Pizzería
 		documento.add(new Paragraph("Pizzeria 'WILD'", FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
+		documento.add(new Paragraph("4785-4126", FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.DARK_GRAY)));
 		documento.add(new Paragraph("Av. Corrientes 555", FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.DARK_GRAY)));
 		documento.add(new Paragraph("San Nicolás, Buenos Aires.", FontFactory.getFont("arial",8,Font.NORMAL, BaseColor.DARK_GRAY)));
 		
@@ -52,7 +55,8 @@ public class solicitudDeMateriaPrima {
 		
 		//Añade Datos del Proveedor
 		
-		documento.add(new Paragraph("N° de Orden : "  + ordenDePedido.getIdCompra() , FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.BLACK)));
+		documento.add(new Paragraph("N° de Orden: "  + ordenDePedido.getIdCompra() , FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.BLACK)));
+		documento.add(new Paragraph("Fecha: "  + ordenDePedido.getFecha() , FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.BLACK)));
 		documento.add(new Paragraph("Proveedor: " + ordenDePedido.getProveedor().getNombre(), FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.BLACK)));
 		documento.add(new Paragraph("Domicilio: "+ ordenDePedido.getProveedor().getDireccion(), FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.BLACK)));
 		documento.add(new Paragraph("Tel: "+ ordenDePedido.getProveedor().getTelefono(), FontFactory.getFont("arial",11,Font.NORMAL, BaseColor.BLACK)));
@@ -63,7 +67,6 @@ public class solicitudDeMateriaPrima {
 		//Añade Tabla de Materias primas Solicitadas
 		 PdfPTable table = new PdfPTable(2);
 		 
-		 //addHeaderCell(table, "Código");
 		 addHeaderCell(table, "Materia Prima");
 		 addHeaderCell(table, "Cantidad");
 		 table.setHeaderRows(1);

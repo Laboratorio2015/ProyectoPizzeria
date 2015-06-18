@@ -19,6 +19,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class registrarPagoOrdenMatPrima extends JDialog {
 
@@ -69,6 +71,12 @@ public class registrarPagoOrdenMatPrima extends JDialog {
 		labelNomProveedor.setForeground(new Color(51, 102, 102));
 		labelNomProveedor.setBounds(118, 143, 217, 21);
 		contentPane.add(labelNomProveedor);
+		fondo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				dispose();
+			}
+		});
 		fondo.setIcon(new ImageIcon(registrarPagoOrdenMatPrima.class.getResource("/prototipos/registrarRecepci\u00F2nyPagoOrdenMatPrima.png")));
 		fondo.setBounds(0, 0, 390, 306);
 		contentPane.add(fondo);

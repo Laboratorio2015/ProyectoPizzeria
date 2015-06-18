@@ -1,7 +1,10 @@
 package presentacion.vista;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,8 +32,10 @@ import presentacion.controlador.Controlador;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
+import java.awt.Color;
 
 public class ordenarMatPrima extends JDialog  {
 
@@ -68,10 +73,13 @@ public class ordenarMatPrima extends JDialog  {
 	private OrdenPedidoMatPrimaDTO nuevaOrden;
 	private TextAutoCompleter textAutoAcompleter;
 	private String categoriaSeleccionada;
+	
+	private Calendar fecha = new GregorianCalendar();
 
 
 	
 	public ordenarMatPrima(VentanaPrincipal ventanaPrincipal, Controlador controlador) {
+
 		this.ventanaPrincipal = ventanaPrincipal;
 		this.controlador = controlador;
 		materiasPrimasFiltradas = new ArrayList<MateriaPrimaDTO>();
@@ -99,6 +107,12 @@ public class ordenarMatPrima extends JDialog  {
 		comboListaProveedores.setBounds(68, 143, 250, 25);
 		contentPane.add(comboListaProveedores);
 		
+		JLabel label_1 = new JLabel("");
+		label_1.setOpaque(true);
+		label_1.setBackground(Color.ORANGE);
+		label_1.setBounds(60, 176, 159, 59);
+		contentPane.add(label_1);
+		
 		comboListaCategorias = new JComboBox<String>();
 		comboListaCategorias.setBounds(63, 328, 299, 25);
 		contentPane.add(comboListaCategorias);
@@ -108,11 +122,12 @@ public class ordenarMatPrima extends JDialog  {
 		contentPane.add(scrollPane);
 		
 		tablaItemsMateriaPrima = new JTable();
+		tablaItemsMateriaPrima.setBackground(new Color(204,204,0) );
 		modeloItemsSolicitados = new DefaultTableModel(
 				new Object[][] {
 				},
 				new String[] {
-					"Materia Prima", "Cantidad"
+					"Materia Prima", "Cant."
 				}
 			) {
 				/**
@@ -127,10 +142,17 @@ public class ordenarMatPrima extends JDialog  {
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
-			};
-
+		};
+		actualizarModelo();
+		//
+		tablaItemsMateriaPrima.getColumnModel().getColumn(1).setMaxWidth(50);
+		JTableHeader headerPedidos = tablaItemsMateriaPrima.getTableHeader();
+		headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+		headerPedidos.setForeground(new Color(050,150,100));
+		headerPedidos.setBackground(new Color(0).GRAY);
+		scrollPane.getViewport().setBackground(new Color(204,204,0));
 		scrollPane.setViewportView(tablaItemsMateriaPrima);
-		
+		//
 		JLabel label = new JLabel("");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setIcon(new ImageIcon(ordenarMatPrima.class.getResource("/prototipos/orden de materia prima.png")));
@@ -183,29 +205,6 @@ public class ordenarMatPrima extends JDialog  {
 		textAutoAcompleter.setMode(0);
 		textAutoAcompleter.setCaseSensitive(false);
 	}
-	
-//	public ProveedorDTO getProveedorSeleccionado() {
-//		String nomProveedor = (String) comboListaProveedores.getSelectedItem();
-//		if (obtenerProveedor(nomProveedor)!= null){
-//			return obtenerProveedor(nomProveedor);
-//		}
-//		else{
-//			//throw new Exception("El proveedor recibido en nulo.");
-//			System.out.println("No se haya el proveedor");
-//			return null;
-//		}
-//	}
-//	
-//	public ProveedorDTO obtenerProveedor(String nomProveedor){
-//		for (int i= 0; i < listadoProveedores.size();i++){
-//			if (nomProveedor.compareTo(listadoProveedores.get(i).getNombre()) == 0){
-//				return listadoProveedores.get(i);
-//			}
-//		}
-//		return null;
-//	}
-
-	
 	
 	
 	//GETTERS AND SETTERS.

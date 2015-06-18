@@ -72,4 +72,9 @@ private OrdenPedidoMatPrimaDAO ordenMatPrima;
 		}
 		return depende;
 	}
+
+	public void actualizarDatos(OrdenPedidoMatPrimaDTO ordenSeleccionada) {
+		this.ordenMatPrima.actualizarDatos(ordenSeleccionada);
+		
+	}
 }

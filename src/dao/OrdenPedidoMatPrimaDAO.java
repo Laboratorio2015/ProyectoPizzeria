@@ -18,6 +18,11 @@ public class OrdenPedidoMatPrimaDAO
 	private static final String insert = "INSERT INTO ordenpedidomatprima(idcompra, proveedor,itemmatprima,estado,fecha,costo,enviado,fueeliminado) VALUES(?,?,?,?,?,?,?,?)";
 	private static final String delete = "DELETE FROM ordenpedidomatprima WHERE idcompra = ?";
 	private static final String readall = "SELECT * FROM ordenpedidomatprima ";
+	private String updateEstado = "UPDATE ordenpedidomatprima SET estado='";
+	private String updateEnviado = "UPDATE ordenpedidomatprima SET enviado=";
+	private String updateFecha = "UPDATE ordenpedidomatprima SET fecha='";
+
+
 	
 	private static final Conexion conexion = Conexion.getConexion();
 	
@@ -116,6 +121,37 @@ public class OrdenPedidoMatPrimaDAO
 			conexion.cerrarConexion();
 		}
 		return ofertas;
+	}
+
+	public boolean actualizarDatos(OrdenPedidoMatPrimaDTO ordenSeleccionada) {
+		//el elemento con dicho id debe cambiar su campo 'fue eliminado' a true.
+		PreparedStatement statement;
+		int chequeoUpdate=0;
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(updateEnviado + ordenSeleccionada.getEnviado() + " where idcompra=" +ordenSeleccionada.getIdCompra()+";"+
+		updateEstado + ordenSeleccionada.getEstado() + "' where idcompra=" +ordenSeleccionada.getIdCompra()+";"
+		+ updateFecha + ordenSeleccionada.getFecha() + "' where idcompra=" +ordenSeleccionada.getIdCompra()+";");
+			//	private static final String updateValorEliminado = "UPDATE categorias SET fueeliminado=";
+			//"UPDATE categorias SET fueeliminado=true where idcategoria='Federicolopez';"
+			//statement.setInt(1, categoria_a_eliminar.getIdCategoria());
+			chequeoUpdate = statement.executeUpdate();
+			if(chequeoUpdate > 0)
+			{
+				System.out.println("Actualizacion de categoria exitosa");
+				return true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			System.out.println("Actualizacion de categoria fallo");
+			e.printStackTrace();
+		}
+		finally
+		{
+			conexion.cerrarConexion();
+		}
+		return false;
 	}
 
 }
