@@ -1,6 +1,8 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -67,10 +69,18 @@ public class gestionCategoria extends JDialog {
 				}
 			};
 		tablacategorias.setModel(modeloCategorias);
-				
-		
-		tablacategorias.getColumnModel().getColumn(1).setPreferredWidth(15);
-		tablacategorias.getColumnModel().getColumn(1).setMaxWidth(15);
+		tablacategorias.getColumnModel().getColumn(1).setMaxWidth(0);
+		tablacategorias.getColumnModel().getColumn(1).setMinWidth(0);
+		tablacategorias.getColumnModel().getColumn(1).setPreferredWidth(0);
+		tablacategorias.getColumnModel().getColumn(1).setWidth(0);
+		//DISEÑO TALBA ORDENES
+		tablacategorias.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		tablacategorias.setTableHeader(null);
+		tablacategorias.setForeground(new Color(255,255,255));
+		tablacategorias.setBackground(new Color(66,66,66));
+			scrollPane.getViewport().setBackground(new Color(66,66,66));
+				//		
+
 		scrollPane.setViewportView(tablacategorias);
 		lblOcultarBtnGuardarMod.setVisible(false);
 		
@@ -202,7 +212,12 @@ public class gestionCategoria extends JDialog {
 					return columnTypes[columnIndex];
 				}
 			};
+			
 		tablacategorias.setModel(modeloCategorias);
+		tablacategorias.getColumnModel().getColumn(1).setMaxWidth(0);
+		tablacategorias.getColumnModel().getColumn(1).setMinWidth(0);
+		tablacategorias.getColumnModel().getColumn(1).setPreferredWidth(0);
+		tablacategorias.getColumnModel().getColumn(1).setWidth(0);
 	}
 
 	public JButton getBtnGuardarModificacion() {

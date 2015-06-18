@@ -1,6 +1,9 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -80,7 +83,14 @@ public class proveedorBajaModificacion extends JDialog {
 				agregarDatos(auxi);
 			}
 		});
-	    		
+	    
+		//DISEÑO TALBA ORDENES
+		tableProveedor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		tableProveedor.setTableHeader(null);
+		tableProveedor.setForeground(new Color(255,255,255));
+		tableProveedor.setBackground(new Color(66,66,66));
+		scrollPane.getViewport().setBackground(new Color(66,66,66));
+				//
 		scrollPane.setViewportView(tableProveedor);
 		
 		tfDenominacion = new JTextField();
@@ -135,7 +145,14 @@ public class proveedorBajaModificacion extends JDialog {
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
 				}
-			};
+		};
+		//DISEÑO TALBA ORDENES
+		tablaCategorias.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		tablaCategorias.setTableHeader(null);
+		tablaCategorias.setForeground(new Color(255,255,255));
+		tablaCategorias.setBackground(new Color(66,66,66));
+		scrollPane_1.getViewport().setBackground(new Color(66,66,66));
+		//
 		tablaCategorias.setModel(modeloCategorias);	
 		scrollPane_1.setViewportView(tablaCategorias);
 		
@@ -364,7 +381,12 @@ public class proveedorBajaModificacion extends JDialog {
 				return columnTypes[columnIndex];
 			}
 		};
+		
 		tablaCategorias.setModel(modeloCategorias);
+		tablaCategorias.getColumnModel().getColumn(1).setMaxWidth(0);
+		tablaCategorias.getColumnModel().getColumn(1).setMinWidth(0);
+		tablaCategorias.getColumnModel().getColumn(1).setPreferredWidth(0);
+		tablaCategorias.getColumnModel().getColumn(1).setWidth(0);
 	}
 
 	public void limpiarCampos() {

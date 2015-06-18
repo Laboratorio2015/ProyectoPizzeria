@@ -93,8 +93,15 @@ public class matPrimaBajaModificacion extends JDialog {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(24, 210, 239, 291);
 		contentPanel.add(scrollPane);
-		
+
 		tablaMateriasPrimas = new JTable();
+		//DISEÑO TALBA ORDENES
+		tablaMateriasPrimas.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		tablaMateriasPrimas.setTableHeader(null);
+		tablaMateriasPrimas.setForeground(new Color(255,255,255));
+		tablaMateriasPrimas.setBackground(new Color(66,66,66));
+		scrollPane.getViewport().setBackground(new Color(66,66,66));
+		//
 		scrollPane.setViewportView(tablaMateriasPrimas);
 		tablaMateriasPrimas.setModel(modeloMatPrima);
 		
@@ -216,6 +223,10 @@ public class matPrimaBajaModificacion extends JDialog {
 		}
 	};
 	tablaMateriasPrimas.setModel(modeloMatPrima);
+	tablaMateriasPrimas.getColumnModel().getColumn(1).setMaxWidth(90);
+	tablaMateriasPrimas.getColumnModel().getColumn(1).setMinWidth(90);
+	tablaMateriasPrimas.getColumnModel().getColumn(1).setPreferredWidth(90);
+	tablaMateriasPrimas.getColumnModel().getColumn(1).setWidth(90);
 }
 		
 

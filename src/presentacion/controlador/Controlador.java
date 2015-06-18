@@ -1780,8 +1780,8 @@ public class Controlador implements ActionListener
 			{
 				ProveedorDTO elementoProveedor = IteradorProveedores.next();
 				//"Proveedor", "Direcci\u00F3n", "Tel\u00E9fono", "E-mail"
-				ventanaSeleccionProveedor.getModeloResultados().addRow(new Object[] {elementoProveedor.getNombre(),elementoProveedor.getDireccion()
-						,elementoProveedor.getTelefono(),elementoProveedor.getEmail()});
+				ventanaSeleccionProveedor.getModeloResultados().addRow(new Object[] {elementoProveedor.getNombre().trim(),elementoProveedor.getDireccion().trim()
+						,elementoProveedor.getTelefono().trim(),elementoProveedor.getEmail().trim()});
 			}
 			ventanaSeleccionProveedor.setModeloResultados(ventanaSeleccionProveedor.getModeloResultados());
 			break;
@@ -1799,8 +1799,8 @@ public class Controlador implements ActionListener
 				ProveedorDTO elementoProveedor = IteradorProveedores.next();
 				if (elementoProveedor.isCategoria(ventanaSeleccionProveedor.getComboBoxCategorias().getSelectedItem().toString()));
 				{
-					ventanaSeleccionProveedor.getModeloResultados().addRow(new Object[] {elementoProveedor.getNombre(),elementoProveedor.getDireccion()
-							,elementoProveedor.getTelefono(),elementoProveedor.getEmail()});
+					ventanaSeleccionProveedor.getModeloResultados().addRow(new Object[] {elementoProveedor.getNombre().trim(),elementoProveedor.getDireccion().trim()
+							,elementoProveedor.getTelefono().trim(),elementoProveedor.getEmail().trim()});
 				}
 			}
 			ventanaSeleccionProveedor.setModeloResultados(ventanaSeleccionProveedor.getModeloResultados());

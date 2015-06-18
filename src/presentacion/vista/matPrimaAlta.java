@@ -81,16 +81,17 @@ public class matPrimaAlta extends JDialog {
 			}
 		};
 		tablaMateriasPrimas.setModel(modeloMatPrima);
-		tablaMateriasPrimas.addMouseListener(new MouseAdapter() 
-		{
-			@Override
-			public void mousePressed(MouseEvent arg0) 
-			{
-				//evento al hacer click en la tabla.
-			}
-		});
-		
 		scrollPane.setViewportView(tablaMateriasPrimas);
+
+		//DISEÑO TALBA ORDENES
+		tablaMateriasPrimas.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		tablaMateriasPrimas.setTableHeader(null);
+		tablaMateriasPrimas.setForeground(new Color(255,255,255));
+		tablaMateriasPrimas.setBackground(new Color(66,66,66));
+		scrollPane.getViewport().setBackground(new Color(66,66,66));
+		//
+		
+
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(matPrimaAlta.class.getResource("/prototipos/Carga de Materia Prima.png")));
@@ -177,6 +178,10 @@ public class matPrimaAlta extends JDialog {
 				}
 			};
 			tablaMateriasPrimas.setModel(modeloMatPrima);
+			tablaMateriasPrimas.getColumnModel().getColumn(1).setMaxWidth(90);
+			tablaMateriasPrimas.getColumnModel().getColumn(1).setMinWidth(90);
+			tablaMateriasPrimas.getColumnModel().getColumn(1).setPreferredWidth(90);
+			tablaMateriasPrimas.getColumnModel().getColumn(1).setWidth(90);
 	}
 	
 	public void limpiarCampo(){
