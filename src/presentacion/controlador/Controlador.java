@@ -112,7 +112,7 @@ public class Controlador implements ActionListener
 	private registroDeCliente ventanaRegistrarCliente;
 	private clienteBajaModificacion ventanaModificacionCliente;
 	private selectorMatPrima ventanaSeleccionMatPrima;
-
+	private boolean seleccionCte = false;
 
 
 	//modelo
@@ -1016,7 +1016,7 @@ public class Controlador implements ActionListener
 			nuevoPedido.setFecha(fecha);
 			nuevoPedido.setHora(hora);
 			nuevoPedido.setFueeliminado(false);
-			this.monitorCocina.nuevoPedido(nuevoPedido);
+			
 			this.ventanaCliente=new seleccionDeCliente(this,nuevoPedido);
 			this.ventanaCliente.getBtnAgregarCliente().addActionListener(this);
 			this.ventanaCliente.getBtnEditarCliente().addActionListener(this);
@@ -1618,6 +1618,11 @@ public class Controlador implements ActionListener
 		if (indiceFilaOrdenMPSelecc>-1){
 			OrdenPedidoMatPrimaDTO ordenSeleccionada = this.ordenesMatPrimas.buscarOrdenPedidoMatPrima
 					(Integer.parseInt(this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(indiceFilaOrdenMPSelecc,0).toString()));
+			if (ordenSeleccionada.getEstado().trim().compareTo("pagado")==0)
+				gestorOrdenesMateriasPrimas.mostrarCostos(ordenSeleccionada.getCosto());
+			else{
+				gestorOrdenesMateriasPrimas.ocultarCostos();
+			}
 			if (ordenSeleccionada.getFueeliminado()){
 				gestorOrdenesMateriasPrimas.ocultarOpcPagoBorrarEnviar(true,true,true);
 			}

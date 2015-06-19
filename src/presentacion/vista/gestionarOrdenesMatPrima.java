@@ -51,6 +51,8 @@ public class gestionarOrdenesMatPrima extends JDialog {
 	private JButton btnBuscar; 
 	private JLabel lblOcultarOpcEliminar;
 	private JLabel lblocultarOpcPago;
+	private JLabel ocultarCostoCompra;
+	private JLabel tfCostoCompra;
 
 	private JTextField textFieldBuscadorNombre;
 	private JTable tableOrdenesMatPrimas;
@@ -89,7 +91,7 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		textAutoAcompleter = new TextAutoCompleter( textFieldBuscadorNombre );
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(32, 262, 327, 324);
+		scrollPane.setBounds(32, 267, 327, 258);
 		contentPane.add(scrollPane);
 
 		tableOrdenesMatPrimas = new JTable();
@@ -150,8 +152,20 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		lblOcultarOpcEliminar.setBounds(689, 289, 205, 49);
 		contentPane.add(lblOcultarOpcEliminar);
 		
+		tfCostoCompra = new JLabel("");
+		tfCostoCompra.setFont(new Font("Tahoma", Font.BOLD, 14));
+		tfCostoCompra.setForeground(Color.DARK_GRAY);
+		tfCostoCompra.setBounds(186, 537, 46, 14);
+		contentPane.add(tfCostoCompra);
+		
+		ocultarCostoCompra = new JLabel("");
+		ocultarCostoCompra.setBackground(Color.ORANGE);
+		ocultarCostoCompra.setOpaque(true);
+		ocultarCostoCompra.setBounds(42, 536, 205, 15);
+		contentPane.add(ocultarCostoCompra);
+		
 		JLabel lblFondo = new JLabel("fondo");
-		lblFondo.setIcon(new ImageIcon(gestionarOrdenesMatPrima.class.getResource("/prototipos/gestor Ordenes de Pedido.png")));
+		lblFondo.setIcon(new ImageIcon(gestionarOrdenesMatPrima.class.getResource("/prototipos/gestorOrdenes de Pedido.png")));
 		lblFondo.setBounds(10, 11, 893, 601);
 		contentPane.add(lblFondo);
 		
@@ -210,6 +224,14 @@ public class gestionarOrdenesMatPrima extends JDialog {
 		this.btnEnviarmailorden.setEnabled(!ocultarEnviar);
 	}
 
+	public void mostrarCostos(Integer costo){
+		ocultarCostoCompra.setVisible(false);
+		tfCostoCompra.setText(costo.toString());
+	}
+	public void ocultarCostos(){
+		ocultarCostoCompra.setVisible(true);
+		tfCostoCompra.setText("");
+	}
 	
 	public void agregarFilaOrden(OrdenPedidoMatPrimaDTO ordenAagregar){
 		modeloOrdenesMatPrimas.addRow(new Object[] {ordenAagregar.getIdCompra(), 

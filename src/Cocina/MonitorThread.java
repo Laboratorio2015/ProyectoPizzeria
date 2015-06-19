@@ -337,7 +337,7 @@ public class MonitorThread extends Thread {
 			if (indiceFaltante == -1){ // NO ESTA EN EL MODELO DE FALTANTE 
 				Integer cantComentario =0;
 				String charComentario = "No";
-				if (item.getComentario().compareTo("")!= 0){
+				if (item.getComentario().trim().compareTo("")!= 0){
 					cantComentario++;
 					charComentario = "Si";
 				}
@@ -346,7 +346,7 @@ public class MonitorThread extends Thread {
 			else{
 				//Reemplazo la cantidad de faltante
 				modeloCorrespondiente.setValueAt((Integer) modeloCorrespondiente.getValueAt(indiceFaltante, 1) + item.getCantidad(), indiceFaltante, 1);
-				if (item.getComentario().compareTo("")!= 0){
+				if (item.getComentario().trim().compareTo("")!= 0){
 					//CHEQUEO Y CONTABILIZO COMENTARIOS
 					if ( (Integer) modeloCorrespondiente.getValueAt(indiceFaltante, 3) == 0){
 						modeloCorrespondiente.setValueAt("Si", indiceFaltante, 2);
@@ -386,7 +386,7 @@ public class MonitorThread extends Thread {
 				}
 				else{
 					modeloCorrespondiente.setValueAt(faltanteDescontado, indiceFaltante, 1);
-					if (item.getComentario()!=null&&item.getComentario().compareTo("")!= 0){ // si tiene comentarios
+					if (item.getComentario()!=null&&item.getComentario().trim().compareTo("")!= 0){ // si tiene comentarios
 						modeloCorrespondiente.setValueAt((Integer)modeloCorrespondiente.getValueAt(indiceFaltante, 3) - 1, indiceFaltante, 3);
 						if ( (Integer) modeloCorrespondiente.getValueAt(indiceFaltante, 3) == 0){
 							modeloCorrespondiente.setValueAt("No", indiceFaltante, 2);

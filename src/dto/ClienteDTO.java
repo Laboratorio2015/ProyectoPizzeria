@@ -1,10 +1,13 @@
 package dto;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-public class ClienteDTO 
+public class ClienteDTO implements Serializable
 {
+
+	private static final long serialVersionUID = 4650304815029858272L;
 	private Integer idcliente;
 	private Integer dni;
 	private String nombre;
@@ -34,8 +37,7 @@ public class ClienteDTO
 		this.codPostal=codPostal;
 		this.email=email;
 		this.fueeliminado=fueeliminado;
-		
-		this.fueeliminado=fueeliminado;
+
 	}
 	
 	public ClienteDTO()

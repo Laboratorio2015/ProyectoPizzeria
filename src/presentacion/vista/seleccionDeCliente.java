@@ -186,6 +186,7 @@ public class seleccionDeCliente extends JDialog {
 						pedido.setLlevaDelivery(true);
 					else
 						pedido.setLlevaDelivery(false);
+					control.getMonitor().nuevoPedido(pedido);
 					control.getPedido().agregarPedido(pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
 					//control.getMonitorCocina().nuevoPedido(pedido);
@@ -376,6 +377,7 @@ public class seleccionDeCliente extends JDialog {
 					control.getPedido().quitarPedido(pedido);
 					control.getPedido().agregarPedido(pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
+				
 					//control.getMonitorCocina().nuevoPedido(pedido);
 					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
 					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
@@ -385,6 +387,7 @@ public class seleccionDeCliente extends JDialog {
 					/////////////////////////////////////////////
 					//new Ticket(seleccionDeCliente.this.pedido).generarTicket();
 					//new Comanda(seleccionDeCliente.this.pedido).generarComanda();
+					
 					dispose();
 				}
 			});
