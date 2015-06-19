@@ -6,17 +6,13 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPTable;
+
+
 
 import dto.ItemDTO;
 import dto.PedidoDTO;
@@ -33,7 +29,7 @@ public class Ticket {
 		try {
 			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Factura " + this.pedido.getIdpedido().toString() + ".pdf";
 			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
-		    Image image = Image.getInstance("C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Diseño Factura_Ticket_2.png");
+		    Image image = Image.getInstance(Ticket.class.getResource("/prototipos/Diseño Factura_Ticket_2.png"));
             image.setAlignment(Element.ALIGN_BOTTOM);
             image.setAbsolutePosition(0, 0);
 		    documento.open();
