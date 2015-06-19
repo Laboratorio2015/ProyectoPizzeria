@@ -14,7 +14,7 @@ import dto.PromocionDTO;
 
 public class PromocionDAO {
 	private static final String insert = "INSERT INTO ofertas(idoferta, nombre,precio,item,fueeliminado) VALUES(?,?,?,?,?)";
-	private static final String delete = "DELETE FROM ofertas WHERE idoferta = ?";
+	private static final String delete = "update ofertas set fueeliminado=true WHERE idoferta = ?";
 	private static final String readall = "SELECT * FROM ofertas ";
 	private static final String actualizarDatos="Update ofertas Set nombre=?, precio=?, item=?,fueeliminado=? where idoferta=?";
 	
@@ -92,11 +92,21 @@ public class PromocionDAO {
 			
 			while(resultSet.next())
 			{
+				
 				if(resultSet.getBoolean("fueeliminado")==false)
 				{
+					String t= resultSet.getString("nombre");
+					String nombre="";
+					for (int i=0; i<t.length(); i++)
+					{
+						  if (t.charAt(i) != ' ' || (t.charAt(i)==' ' && t.charAt(i+1)!=' '))
+						    nombre += t.charAt(i);
+						  else if(t.charAt(i)==' ' && t.charAt(i+1)==' ')
+							  break;
+					}
 				Items a=new Items();
 				ArrayList<ItemDTO>listaItems= a.pasarDeStringAArray(resultSet.getString("item"));
-				ofertas.add(new PromocionDTO(resultSet.getInt("idoferta"),resultSet.getString("nombre"),
+				ofertas.add(new PromocionDTO(resultSet.getInt("idoferta"),nombre,
 						resultSet.getInt("precio"),listaItems,resultSet.getBoolean("fueeliminado")));
 				}
 

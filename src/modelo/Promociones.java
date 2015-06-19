@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import dao.PromocionDAO;
 import dto.ItemDTO;
+import dto.ProductoDTO;
 import dto.PromocionDTO;
 import dto.PedidoDTO;
 
@@ -143,5 +144,17 @@ public class Promociones {
 				ultimo=elemento.getIdOferta();
 		}
 		return ultimo;
+	}
+
+	public ArrayList<Object> buscaNombresOfertas()
+	{
+		ArrayList<Object> nombres= new ArrayList<>();
+		Iterator<PromocionDTO> Iterador = this.obtenerOfertas().iterator();
+		while(Iterador.hasNext())
+		{
+			PromocionDTO elemento = Iterador.next();
+			nombres.add(elemento.getNombre());
+		}
+		return nombres;
 	}
 }

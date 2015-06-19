@@ -66,7 +66,7 @@ public class promocionAlta extends JDialog{
 		
 		{
 			comboBox= new JComboBox();
-			comboBox.addItemListener(new ItemListener() {
+			/*comboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e)
 				{
 					  String seleccionado=(String)comboBox.getSelectedItem();
@@ -78,7 +78,7 @@ public class promocionAlta extends JDialog{
 						case "Otros":AutoCompletar.addItems(buscarProductos("otros"));break;
 			            }
 				}
-			});
+			});*/
 			comboBox.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione un tipo de Producto)", "Empanada", "Pizza", "Otros"}));
 			comboBox.setBounds(46, 261, 254, 25);
 			contentPanel.add(comboBox);
@@ -359,6 +359,7 @@ public class promocionAlta extends JDialog{
 		}
 		return result;
 	}
+	
 	public void validarTexto(KeyEvent evt, JTextField a)
 	{
 		char car = evt.getKeyChar();

@@ -1011,6 +1011,7 @@ public class Controlador implements ActionListener
 			nuevoPedido.setTotal(Integer.parseInt(this.ventanaPedido.getTfTotal().getText()));
 			nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 			nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
+			//aca
 			nuevoPedido.setProductos(generarListaItems());
 			nuevoPedido.setOfertas(generarListaOfertas());
 			nuevoPedido.setFecha(fecha);
@@ -1055,7 +1056,7 @@ public class Controlador implements ActionListener
 			ventanamenu=new pedidoMenu(this,ventanaPedido);
 			ventanamenu.setTitle("promocion");
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
-			llenarTablaMenu("promocion");
+			llenarTablaMenuPromociones();
 			ventanamenu.setVisible(true);
 
 		}
@@ -1275,7 +1276,21 @@ public class Controlador implements ActionListener
 			ventanaAgregarPromocion.getBtnAgregarProducto().addActionListener(this);
 			ventanaAgregarPromocion.getBtnCrearPromocion().addActionListener(this);
 			ventanaAgregarPromocion.getBtnQuitarProducto().addActionListener(this);
+			ventanaAgregarPromocion.getComboBox().addActionListener(this);
 			ventanaAgregarPromocion.setVisible(true);
+		}
+		//acciones asociadas al combo box
+		else if (this.ventanaAgregarPromocion!= null && e.getSource()==this.ventanaAgregarPromocion.getComboBox())
+		{
+			String tipoProducto=ventanaAgregarPromocion.getComboBox().getSelectedItem().toString();
+			TextAutoCompleter autoCompletar=new TextAutoCompleter(ventanaAgregarPromocion.getTfAgregarProducto());
+			autoCompletar.setCaseSensitive(false);
+			if(tipoProducto.compareTo("Empanada")==0)
+				autoCompletar.addItems(this.producto.buscaNombresProductos("empanada"));
+			if(tipoProducto.compareTo("Pizza")==0)
+				autoCompletar.addItems(this.producto.buscaNombresProductos("pizza"));
+			if(tipoProducto.compareTo("Otros")==0)
+				autoCompletar.addItems(this.producto.buscaNombresProductos("otros"));
 		}
 		//acciones asociadas a crear una promocion
 		else if (this.ventanaAgregarPromocion!= null && e.getSource()==this.ventanaAgregarPromocion.getBtnAgregarProducto())
@@ -1331,9 +1346,11 @@ public class Controlador implements ActionListener
 		//ventana de configuracion editar una promocion
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarPromocion())
 		{
-			ventanaEditarPromocion=new promocionBajaModificacion();
+			ventanaEditarPromocion=new promocionBajaModificacion(this);
 			cargarPromociones(ventanaEditarPromocion.getComboBox());
+			ventanaEditarPromocion.getCbTipoProducto().addActionListener(this);
 			ventanaEditarPromocion.getComboBox().addActionListener(this);
+			ventanaEditarPromocion.getBtnAceptarProducto().addActionListener(this);
 			ventanaEditarPromocion.getBtnReemplazarProducto().addActionListener(this);
 			ventanaEditarPromocion.getBtnBorrarProducto().addActionListener(this);
 			ventanaEditarPromocion.getBtnEliminarPromocion().addActionListener(this);
@@ -1344,7 +1361,7 @@ public class Controlador implements ActionListener
 			ventanaEditarPromocion.getTfSubTotal().setVisible(false);
 			ventanaEditarPromocion.getTfUnidades().setVisible(false);
 			ventanaEditarPromocion.getTfSubTotal().setEnabled(false);
-			
+			ventanaEditarPromocion.getLbotonAgregarProducto().setVisible(false);
 			ventanaEditarPromocion.getTfOcullto().setVisible(true);
 			ventanaEditarPromocion.setVisible(true);
 		}
@@ -1360,6 +1377,7 @@ public class Controlador implements ActionListener
 				ventanaEditarPromocion.getTfPrecioReal().setText(calcularPrecioReal(promocion).toString());
 			}
 		}
+		
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnReemplazarProducto())
 		{
 			ventanaEditarPromocion.getTfBuscarProducto().setEnabled(true);
@@ -1369,17 +1387,69 @@ public class Controlador implements ActionListener
 			ventanaEditarPromocion.getTfBuscarProducto().setVisible(true);
 			ventanaEditarPromocion.getTfSubTotal().setVisible(true);
 			ventanaEditarPromocion.getTfOcullto().setVisible(false);
+			ventanaEditarPromocion.getLbotonAgregarProducto().setVisible(true);
 			
+		}
+		
+		//elegir el tipo de producto
+		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getCbTipoProducto())
+		{
+			String tipoProducto=ventanaEditarPromocion.getCbTipoProducto().getSelectedItem().toString();
+			TextAutoCompleter autoCompletar2=new TextAutoCompleter(ventanaEditarPromocion.getTfBuscarProducto());
+			autoCompletar2.setCaseSensitive(false);
+			if(tipoProducto.compareTo("Empanada")==0)
+			autoCompletar2.addItems(this.producto.buscaNombresProductos("empanada"));
+			if(tipoProducto.compareTo("Pizza")==0)
+				autoCompletar2.addItems(this.producto.buscaNombresProductos("pizza"));
+			if(tipoProducto.compareTo("Otros")==0)
+				autoCompletar2.addItems(this.producto.buscaNombresProductos("otros"));
+		}
+		//agregar un producto
+		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnAceptarProducto())
+		{
+			if(ventanaEditarPromocion.getTfBuscarProducto().getText().compareTo("")!=0 && ventanaEditarPromocion.getTfUnidades().getText().compareTo("")!=0)
+			{
+				Object[] fila = {ventanaEditarPromocion.getTfBuscarProducto().getText(),ventanaEditarPromocion.getTfUnidades().getText()};
+				this.ventanaEditarPromocion.getModel().addRow(fila);
+				ventanaEditarPromocion.getTfOcullto().setVisible(true);
+				ventanaEditarPromocion.getLbotonAgregarProducto().setVisible(false);
+				ventanaEditarPromocion.getTfBuscarProducto().setVisible(false);
+				ventanaEditarPromocion.getTfSubTotal().setVisible(false);
+				ventanaEditarPromocion.getTfUnidades().setVisible(false);
+				ventanaEditarPromocion.getBtnAceptarProducto().setVisible(false);
+				ventanaEditarPromocion.getCbTipoProducto().setVisible(false);
+				Integer precioReal=Integer.parseInt(ventanaEditarPromocion.getTfPrecioReal().getText().toString());
+				ProductoDTO aux=this.producto.buscarProductoPorNombre(ventanaEditarPromocion.getTfBuscarProducto().getText());
+				Integer costoActual=(precioReal+aux.getPrecio());
+				ventanaEditarPromocion.getTfPrecioReal().setText(costoActual.toString());
+			}
 		}
 		//borra un producto
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnBorrarProducto())
 		{
-			
+			int filaSeleccionada=(ventanaEditarPromocion.getTable().getSelectedRow());
+			ventanaEditarPromocion.getModel().removeRow(ventanaEditarPromocion.getTable().getSelectedRow());
+			Integer precioReal=Integer.parseInt(ventanaEditarPromocion.getTfPrecioReal().getText().toString());
+			Object nombre=(ventanaEditarPromocion.getModel().getValueAt(filaSeleccionada, 0));
+			ProductoDTO aux=this.producto.buscarProductoPorNombre(nombre.toString());
+			Integer cantidad= Integer.parseInt(ventanaEditarPromocion.getModel().getValueAt(filaSeleccionada, 1).toString());
+			Integer costoActual=(precioReal-(aux.getPrecio()*cantidad));
+			ventanaEditarPromocion.getTfPrecioReal().setText(costoActual.toString());
 		}
 		//elimina un apromocion
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnEliminarPromocion())
 		{
-			
+			Component a= new Component(){};
+			int opcion = JOptionPane.showConfirmDialog(a, "¿Esta seguro que desea eliminar la promocion?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			if( opcion==0)
+			{
+				this.ventanaEditarPromocion.getModel().setRowCount(0);
+				this.ventanaEditarPromocion.getModel().setColumnCount(0);
+				PromocionDTO aux=this.promocion.buscarOfertaPorNombre(ventanaEditarPromocion.getTfNombre().getText());
+				this.promocion.quitarItem(aux);
+				ventanaEditarPromocion.getComboBox().setSelectedIndex(0);
+				
+			}
 		}
 		//guarda los cambios
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnGuardarCambios())
@@ -1916,10 +1986,11 @@ public class Controlador implements ActionListener
 	public ArrayList<ItemDTO> generarListaItems() 
 	{
 		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
-
+		String nombre="";
 		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
 		{
-			if(producto.buscaNombresProductos(this.ventanaPedido.getModel().getValueAt(i, 0).toString())!=null)
+			nombre=this.ventanaPedido.getModel().getValueAt(i, 0).toString();
+			if(producto.buscarProductoPorNombre(nombre)!=null)
 			{
 				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)(this.ventanaPedido.getModel().getValueAt(i, 3)),false);
 				item.agregarItem(aux);
@@ -2050,7 +2121,7 @@ public class Controlador implements ActionListener
 		{
 			if((oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()))!=null)
 			{
-				PromocionDTO aux=oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 1).toString());
+				PromocionDTO aux=oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString());
 				aux.setIdOferta(this.oferta.ultimaOferta()+1);
 				aux.setNombre(aux.getNombre());
 				aux.setPrecio(aux.getPrecio());
@@ -2223,6 +2294,22 @@ public class Controlador implements ActionListener
 			}
 		}
 	}
+	private void llenarTablaMenuPromociones()
+	{
+		this.ventanamenu.getModel().setRowCount(0); //Para vaciar la tabla
+		this.ventanamenu.getModel().setColumnCount(0);
+		this.ventanamenu.getModel().setColumnIdentifiers(this.ventanamenu.getNombreColumnas());
+		Iterator<PromocionDTO> Iterador = this.promocion.obtenerOfertas().iterator();
+		while(Iterador.hasNext())
+		{
+			PromocionDTO elemento = Iterador.next();
+			{
+				Object[] fila = {elemento.getNombre(), elemento.getPrecio()};
+				this.ventanamenu.getModel().addRow(fila);			
+			}
+		}
+	}
+	
 	private void llenarTablaCliente()
 	{
 		this.ventanaModificacionCliente.getModel().setRowCount(0);

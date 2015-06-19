@@ -14,11 +14,16 @@ import javax.swing.JTable;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.DefaultComboBoxModel;
+
+import presentacion.controlador.Controlador;
+import dto.ProductoDTO;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class promocionBajaModificacion extends JDialog {
 
@@ -33,19 +38,22 @@ public class promocionBajaModificacion extends JDialog {
 	private JTextField tfUnidades;
 	private JTextField tfSubTotal;
 	private JComboBox comboBox ;
+	private JComboBox cbTipoProducto;
 	private JButton btnEliminarPromocion;
-	private JButton btnGuardarEdicionPromocion;
 	private JButton btnBorrarProducto;
 	private JButton btnAgregarProducto;
 	private JButton btnGuardarCambios;
 	private JTextField tfOcullto;
 	private JTextField txtAgegar;
 	private JTextField textField;
-	
+	private JButton btnAceptarProducto;
+	private JLabel lbotonAgregarProducto;
+	private Controlador control;
 
 
-	public promocionBajaModificacion() {
+	public promocionBajaModificacion(final Controlador control) {
 		setBounds(100, 100, 745, 670);
+		this.control=control;
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -83,16 +91,42 @@ public class promocionBajaModificacion extends JDialog {
 		contentPanel.add(tfPrecioReal);
 		
 		tfBuscarProducto = new JTextField();
+		tfBuscarProducto.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyTyped(KeyEvent evt) 
+			{
+				validarTexto(evt,tfBuscarProducto);
+			}
+		});
 		tfBuscarProducto.setColumns(10);
 		tfBuscarProducto.setBounds(343, 392, 212, 25);
 		contentPanel.add(tfBuscarProducto);
 		
 		tfUnidades = new JTextField();
+		tfUnidades.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+				ProductoDTO producto=control.getProducto().buscarProductoPorNombre(tfBuscarProducto.getText());
+				if(tfBuscarProducto.getText().compareTo("")!=0 && tfUnidades.getText().compareTo("")!=0 && producto!=null)
+				{
+					Integer costo=producto.getPrecio();
+					Integer cantidad=Integer.parseInt(tfUnidades.getText().toString());
+					Integer precio=costo*cantidad;
+					tfSubTotal.setText(precio.toString());
+				}
+				if(tfUnidades.getText().compareTo("")==0)
+					tfSubTotal.setText("");
+					
+			}
+		});
 		tfUnidades.setColumns(10);
 		tfUnidades.setBounds(574, 392, 49, 25);
 		contentPanel.add(tfUnidades);
 		
 		tfSubTotal = new JTextField();
+		tfSubTotal.setEditable(false);
 		tfSubTotal.setColumns(10);
 		tfSubTotal.setBounds(653, 392, 49, 25);
 		contentPanel.add(tfSubTotal);
@@ -101,12 +135,18 @@ public class promocionBajaModificacion extends JDialog {
 		comboBox.setBounds(381, 112, 242, 25);
 		contentPanel.add(comboBox);
 		
+		cbTipoProducto= new JComboBox();
+		cbTipoProducto.setOpaque(false);
+		cbTipoProducto.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione un tipo de Producto)", "Empanada", "Pizza", "Otros"}));
+		cbTipoProducto.setBounds(343, 366, 212, 20);
+		contentPanel.add(cbTipoProducto);
+		
 		tfOcullto = new JTextField();
 		tfOcullto.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		tfOcullto.setBackground(new Color(102, 102, 102));
 		tfOcullto.setEnabled(false);
 		tfOcullto.setEditable(false);
-		tfOcullto.setBounds(322, 366, 389, 69);
+		tfOcullto.setBounds(322, 364, 389, 69);
 		contentPanel.add(tfOcullto);
 		tfOcullto.setColumns(10);
 		
@@ -120,6 +160,16 @@ public class promocionBajaModificacion extends JDialog {
 		txtAgegar.setBounds(391, 336, 71, 20);
 		contentPanel.add(txtAgegar);
 		txtAgegar.setColumns(10);
+		
+		lbotonAgregarProducto= new JLabel("");
+		lbotonAgregarProducto.setIcon(new ImageIcon(promocionBajaModificacion.class.getResource("/Botones/boton agregar Promocion.png")));
+		lbotonAgregarProducto.setBounds(437, 428, 140, 69);
+		contentPanel.add(lbotonAgregarProducto);
+		
+		btnAceptarProducto= new JButton("New button");
+		btnAceptarProducto.setOpaque(false);
+		btnAceptarProducto.setBounds(484, 439, 40, 30);
+		contentPanel.add(btnAceptarProducto);
 		
 		textField = new JTextField();
 		textField.setEnabled(false);
@@ -139,11 +189,6 @@ public class promocionBajaModificacion extends JDialog {
 		btnEliminarPromocion.setOpaque(false);
 		btnEliminarPromocion.setBounds(54, 484, 45, 43);
 		contentPanel.add(btnEliminarPromocion);
-		
-		btnGuardarEdicionPromocion= new JButton("New button");
-		btnGuardarEdicionPromocion.setOpaque(false);
-		btnGuardarEdicionPromocion.setBounds(347, 450, 50, 51);
-		contentPanel.add(btnGuardarEdicionPromocion);
 		
 		btnBorrarProducto= new JButton("New button");
 		btnBorrarProducto.setOpaque(false);
@@ -290,22 +335,50 @@ public class promocionBajaModificacion extends JDialog {
 	public void setBtnEliminarPromocion(JButton btnEliminarPromocion) {
 		this.btnEliminarPromocion = btnEliminarPromocion;
 	}
+	
 
-
-	public JButton getBtnGuardarEdicionPromocion() {
-		return btnGuardarEdicionPromocion;
+	public JButton getBtnAgregarProducto() {
+		return btnAgregarProducto;
 	}
 
 
-	public void setBtnGuardarEdicionPromocion(JButton btnGuardarEdicionPromocion) {
-		this.btnGuardarEdicionPromocion = btnGuardarEdicionPromocion;
+	public void setBtnAgregarProducto(JButton btnAgregarProducto) {
+		this.btnAgregarProducto = btnAgregarProducto;
 	}
 
+
+	public JButton getBtnAceptarProducto() {
+		return btnAceptarProducto;
+	}
+
+
+	public void setBtnAceptarProducto(JButton btnAceptarProducto) {
+		this.btnAceptarProducto = btnAceptarProducto;
+	}
+	
+	
+	public JComboBox getCbTipoProducto() {
+		return cbTipoProducto;
+	}
+
+
+	public void setCbTipoProducto(JComboBox cbTipoProducto) {
+		this.cbTipoProducto = cbTipoProducto;
+	}
+
+
+	public JLabel getLbotonAgregarProducto() {
+		return lbotonAgregarProducto;
+	}
+
+
+	public void setLbotonAgregarProducto(JLabel lbotonAgregarProducto) {
+		this.lbotonAgregarProducto = lbotonAgregarProducto;
+	}
 
 	public JButton getBtnBorrarProducto() {
 		return btnBorrarProducto;
 	}
-
 
 	public void setBtnBorrarProducto(JButton btnBorrarProducto) {
 		this.btnBorrarProducto = btnBorrarProducto;
@@ -329,5 +402,11 @@ public class promocionBajaModificacion extends JDialog {
 
 	public void setBtnGuardarCambios(JButton btnGuardarCambios) {
 		this.btnGuardarCambios = btnGuardarCambios;
+	}
+	public void validarTexto(KeyEvent evt, JTextField a)
+	{
+		char car = evt.getKeyChar();
+		if(a.getText().length()>=20) evt.consume();
+		if(!(car<'0' || car>'9')) evt.consume();
 	}
 }
