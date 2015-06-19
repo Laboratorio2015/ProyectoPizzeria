@@ -131,6 +131,7 @@ public class ProveedorDTO
 	public ArrayList<CategoriaDTO> getCategorias() {
 		return categorias;
 	}
+	
 	public boolean isCategoria(String nomCategoria) {
 		nomCategoria = nomCategoria.trim();
 		Iterator<CategoriaDTO> Iterador = categorias.iterator();
