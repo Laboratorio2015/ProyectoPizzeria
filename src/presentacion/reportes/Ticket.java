@@ -64,6 +64,13 @@ public class Ticket {
         canvas.setFontAndSize(bf_helv, 17);
 		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getIdpedido().toString(), 350, 745, 0);
 		
+		//Fecha-Día
+		canvas.showTextAligned(Element.ALIGN_LEFT, "19", 360, 715, 0);
+		//Fecha-Mes
+		canvas.showTextAligned(Element.ALIGN_LEFT, "06", 435, 715, 0);
+		//Fecha-Año
+		canvas.showTextAligned(Element.ALIGN_LEFT, "2015", 505, 715, 0);
+		
 		//Agrego DNI de Cliente
 		canvas.setFontAndSize(bf_helv, 12);
 		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getCliente().getDni().toString(), 450, 641, 0);
@@ -90,7 +97,7 @@ public class Ticket {
 				canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getProducto().getNombre(), 110, y, 0);
 				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getProducto().getPrecio().toString(), 460, y, 0);
 				Integer totalItem = elemento.getCantidad()*elemento.getProducto().getPrecio();
-				canvas.showTextAligned(Element.ALIGN_CENTER, totalItem.toString(), 535, y, 0);
+				canvas.showTextAligned(Element.ALIGN_CENTER, totalItem.toString(), 545, y, 0);
 				y=y-30;
 			}
 		canvas.setFontAndSize(bf_helv, 14);
@@ -101,6 +108,13 @@ public class Ticket {
 		//Agrego n° de Pedido
 	    canvas.setFontAndSize(bf_helv, 17);
 		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getIdpedido().toString(), 350, 305, 0);
+		
+		//Fecha-Día
+		canvas.showTextAligned(Element.ALIGN_LEFT, "19", 360, 275, 0);
+		//Fecha-Mes
+		canvas.showTextAligned(Element.ALIGN_LEFT, "06", 435, 275, 0);
+		//Fecha-Año
+		canvas.showTextAligned(Element.ALIGN_LEFT, "2015", 505, 275, 0);
 		
 		//Agrego Nombre y Apellido del Cliente
 		canvas.setFontAndSize(bf_helv, 12);

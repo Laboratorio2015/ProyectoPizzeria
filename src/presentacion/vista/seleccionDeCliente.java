@@ -196,7 +196,7 @@ public class seleccionDeCliente extends JDialog {
 					//////////ENVIA el NUEVO PEDIDO AL MONITOR//////
 					//control.getMonitorCocina().nuevoPedido(pedido);  // no funciona, da null pointer exception
 					/////////////////////////////////////////////
-					//new Ticket(seleccionDeCliente.this.pedido).generarTicket();
+					new Ticket(seleccionDeCliente.this.pedido).generarTicket();
 					//new Comanda(seleccionDeCliente.this.pedido).generarComanda();
 					dispose();
 				}
