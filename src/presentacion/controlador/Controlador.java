@@ -1348,9 +1348,7 @@ public class Controlador implements ActionListener
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarPromocion())
 		{
 			ventanaEditarPromocion=new promocionBajaModificacion(this);
-			//cargarPromociones();
-			com
-			ventanaEditarPromocion.getComboBox().add(auiliar);
+			llenarComboBoxEdicionPromo();
 			ventanaEditarPromocion.getCbTipoProducto().addActionListener(this);
 			ventanaEditarPromocion.getComboBox().addActionListener(this);
 			ventanaEditarPromocion.getBtnAceptarProducto().addActionListener(this);
@@ -1380,7 +1378,7 @@ public class Controlador implements ActionListener
 				ventanaEditarPromocion.getTfPrecioReal().setText(calcularPrecioReal(promocion).toString());
 			}
 		}
-		
+		//editar para agregar un producto a una promocion
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnReemplazarProducto())
 		{
 			ventanaEditarPromocion.getTfBuscarProducto().setEnabled(true);
@@ -1419,6 +1417,10 @@ public class Controlador implements ActionListener
 				ventanaEditarPromocion.getTfOcullto().setVisible(true);
 				ventanaEditarPromocion.getLbotonAgregarProducto().setVisible(false);
 				ventanaEditarPromocion.getTfBuscarProducto().setVisible(false);
+				ventanaEditarPromocion.getCbTipoProducto().setSelectedIndex(0);
+				ventanaEditarPromocion.getTfBuscarProducto().setText("");
+				ventanaEditarPromocion.getTfUnidades().setText("");
+				ventanaEditarPromocion.getTfSubTotal().setText("");
 				ventanaEditarPromocion.getTfSubTotal().setVisible(false);
 				ventanaEditarPromocion.getTfUnidades().setVisible(false);
 				ventanaEditarPromocion.getBtnAceptarProducto().setVisible(false);
@@ -1441,7 +1443,7 @@ public class Controlador implements ActionListener
 			Integer costoActual=(precioReal-(aux.getPrecio()*cantidad));
 			ventanaEditarPromocion.getTfPrecioReal().setText(costoActual.toString());
 		}
-		//elimina un apromocion
+		//elimina una promocion
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnEliminarPromocion())
 		{
 			Component a= new Component(){};
@@ -1458,7 +1460,22 @@ public class Controlador implements ActionListener
 		//guarda los cambios
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnGuardarCambios())
 		{
-			
+			Component a= new Component(){};
+			int opcion = JOptionPane.showConfirmDialog(a, "¿Esta seguro que desea modificar la promocion?", "Seleccione una opción", JOptionPane.YES_NO_OPTION);
+			if( opcion==0)
+			{
+				PromocionDTO aux=this.promocion.buscarOfertaPorNombre(ventanaEditarPromocion.getComboBox().getSelectedItem().toString());
+				aux.setNombre(ventanaEditarPromocion.getTfNombre().getText());
+				aux.setPrecio(Integer.parseInt(ventanaEditarPromocion.getTfPrecioFinal().getText().toString()));
+				aux.setProductosOfertados(obtenerListaProductosTabla());
+				this.promocion.actualizarPromocion(aux);
+			}
+			ventanaEditarPromocion.getTfNombre().setText("");
+			ventanaEditarPromocion.getTfPrecioFinal().setText("");
+			ventanaEditarPromocion.getTfPrecioReal().setText("");
+			this.ventanaEditarPromocion.getModel().setRowCount(0);
+			this.ventanaEditarPromocion.getModel().setColumnCount(0);
+			ventanaEditarPromocion.getComboBox().setSelectedIndex(0);
 		}
 
 		//ventana de configuracion para editar un cliente
@@ -2507,13 +2524,37 @@ public class Controlador implements ActionListener
         int año = fecha.get(Calendar.YEAR);
         int mes = fecha.get(Calendar.MONTH)+1;
         int dia = fecha.get(Calendar.DAY_OF_MONTH);
-//        int hora = fecha.get(Calendar.HOUR_OF_DAY);
-//        int minuto = fecha.get(Calendar.MINUTE);
-//        int segundo = fecha.get(Calendar.SECOND);
-
+//      int hora = fecha.get(Calendar.HOUR_OF_DAY);
+//      int minuto = fecha.get(Calendar.MINUTE);
+//      int segundo = fecha.get(Calendar.SECOND);
         //System.out.printf("Hora Actual: %02d:%02d:%02d %n",hora, minuto, segundo);
         return String.format("%02d", dia)+ "/" + String.format("%02d", mes)+ "/" + año;// + " "
-        	//+ String.format("%02d", hora) + ":" + String.format("%02d", minuto) + ":" + String.format("%02d", segundo);           
+        //+ String.format("%02d", hora) + ":" + String.format("%02d", minuto) + ":" + String.format("%02d", segundo);           
         
 	}
+	private void llenarComboBoxEdicionPromo()
+	{
+		Iterator<PromocionDTO> promociones=this.promocion.obtenerOfertas().iterator();
+		ventanaEditarPromocion.getComboBox().addItem("(Seleccione una Promocion)");
+		while(promociones.hasNext())
+		{
+			PromocionDTO elemPormo = promociones.next();
+			ventanaEditarPromocion.getComboBox().addItem(elemPormo.getNombre());
+		}
+	}
+	private ArrayList<ItemDTO> obtenerListaProductosTabla()
+	{
+		ArrayList<ItemDTO> ofertas=new ArrayList<ItemDTO>();
+		for(int i=0; i<ventanaEditarPromocion.getTable().getRowCount();i++)
+		{
+			String nombreProducto=ventanaEditarPromocion.getModel().getValueAt(i, 0).toString();
+			ProductoDTO producto=this.producto.buscarProductoPorNombre(nombreProducto);
+			ItemDTO item=new ItemDTO(this.item.ultimoItem()+1, producto, Integer.parseInt(ventanaEditarPromocion.getModel().getValueAt(i, 1).toString()),"", false);
+			this.item.agregarItem(item);
+			ofertas.add(item);
+		}
+		return ofertas;
+	}
 }
+	
+

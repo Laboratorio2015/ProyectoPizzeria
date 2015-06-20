@@ -153,7 +153,7 @@ public class PromocionDAO {
 	}
 	
 	//actualiza los datos de un producto
-		public boolean actualizarProducto(PromocionDTO PromocionActualizar)
+		public boolean actualizarPromocion(PromocionDTO PromocionActualizar)
 		{
 			PreparedStatement statement;
 			int chequeoUpdate=0;

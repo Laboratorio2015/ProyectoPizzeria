@@ -8,6 +8,7 @@ import dto.ItemDTO;
 import dto.ProductoDTO;
 import dto.PromocionDTO;
 import dto.PedidoDTO;
+import dto.RepartidorDTO;
 
 
 public class Promociones {
@@ -34,10 +35,12 @@ public class Promociones {
 		return this.oferta.readAll();
 	}
 	
-	/*public List<OfertaDTO> obtenerOfertaPedido(Integer idpedido)
+	//actualiza un repartidor/////////////////////////////
+	public void actualizarPromocion(PromocionDTO promo)
 	{
-		return this.oferta.obtenerListaItems(idpedido);
-	}*/
+		this.oferta.actualizarPromocion(promo);
+	}
+	//////////////////////////////////////////////////////////
 	
 	public String idofertas(PedidoDTO pedido)
 	{
