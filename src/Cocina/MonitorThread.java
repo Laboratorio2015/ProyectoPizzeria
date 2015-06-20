@@ -346,7 +346,7 @@ public class MonitorThread extends Thread {
 			else{
 				//Reemplazo la cantidad de faltante
 				modeloCorrespondiente.setValueAt((Integer) modeloCorrespondiente.getValueAt(indiceFaltante, 1) + item.getCantidad(), indiceFaltante, 1);
-				if (item.getComentario().trim().compareTo("")!= 0){
+				if (item.getComentario()!=null&&item.getComentario().trim().compareTo("")!= 0){
 					//CHEQUEO Y CONTABILIZO COMENTARIOS
 					if ( (Integer) modeloCorrespondiente.getValueAt(indiceFaltante, 3) == 0){
 						modeloCorrespondiente.setValueAt("Si", indiceFaltante, 2);

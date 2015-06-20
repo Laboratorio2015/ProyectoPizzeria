@@ -137,6 +137,7 @@ public class promocionBajaModificacion extends JDialog {
 		
 		cbTipoProducto= new JComboBox();
 		cbTipoProducto.setOpaque(false);
+		cbTipoProducto.setVisible(false);
 		cbTipoProducto.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione un tipo de Producto)", "Empanada", "Pizza", "Otros"}));
 		cbTipoProducto.setBounds(343, 366, 212, 20);
 		contentPanel.add(cbTipoProducto);
@@ -168,6 +169,7 @@ public class promocionBajaModificacion extends JDialog {
 		
 		btnAceptarProducto= new JButton("New button");
 		btnAceptarProducto.setOpaque(false);
+		btnAceptarProducto.setVisible(false);
 		btnAceptarProducto.setBounds(484, 439, 40, 30);
 		contentPanel.add(btnAceptarProducto);
 		

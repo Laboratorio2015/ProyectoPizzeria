@@ -1,6 +1,7 @@
 package presentacion.controlador;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.dnd.Autoscroll;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -1347,7 +1348,9 @@ public class Controlador implements ActionListener
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnEditarPromocion())
 		{
 			ventanaEditarPromocion=new promocionBajaModificacion(this);
-			cargarPromociones(ventanaEditarPromocion.getComboBox());
+			//cargarPromociones();
+			com
+			ventanaEditarPromocion.getComboBox().add(auiliar);
 			ventanaEditarPromocion.getCbTipoProducto().addActionListener(this);
 			ventanaEditarPromocion.getComboBox().addActionListener(this);
 			ventanaEditarPromocion.getBtnAceptarProducto().addActionListener(this);
@@ -1387,6 +1390,8 @@ public class Controlador implements ActionListener
 			ventanaEditarPromocion.getTfBuscarProducto().setVisible(true);
 			ventanaEditarPromocion.getTfSubTotal().setVisible(true);
 			ventanaEditarPromocion.getTfOcullto().setVisible(false);
+			ventanaEditarPromocion.getCbTipoProducto().setVisible(true);
+			ventanaEditarPromocion.getBtnAceptarProducto().setVisible(true);
 			ventanaEditarPromocion.getLbotonAgregarProducto().setVisible(true);
 			
 		}
@@ -1446,9 +1451,8 @@ public class Controlador implements ActionListener
 				this.ventanaEditarPromocion.getModel().setRowCount(0);
 				this.ventanaEditarPromocion.getModel().setColumnCount(0);
 				PromocionDTO aux=this.promocion.buscarOfertaPorNombre(ventanaEditarPromocion.getTfNombre().getText());
-				this.promocion.quitarItem(aux);
+				this.promocion.quitarPromocion(aux);
 				ventanaEditarPromocion.getComboBox().setSelectedIndex(0);
-				
 			}
 		}
 		//guarda los cambios
@@ -2035,7 +2039,8 @@ public class Controlador implements ActionListener
 		ArrayList<PromocionDTO> listaPromociones;// = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
 		listaPromociones = (ArrayList<PromocionDTO>) this.promocion.obtenerOfertas();
 		comboBox.addItem("(Seleccine una promocion)");
-		for (int i=0; i< listaPromociones.size();i++){
+		for (int i=0; i< listaPromociones.size();i++)
+		{
 			comboBox.addItem(listaPromociones.get(i).getNombre());
 		}
 	}

@@ -24,7 +24,7 @@ public class Promociones {
 		
 	}
 	
-	public void quitarItem(PromocionDTO quitarOferta)
+	public void quitarPromocion(PromocionDTO quitarOferta)
 	{
 		this.oferta.delete(quitarOferta);
 	}

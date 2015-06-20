@@ -126,6 +126,7 @@ public class ordenDePedido extends JDialog {
 				producto=control.getProducto().buscarProductoPorNombre(tfAgregarEmpanada.getText());
 				if(tfAgregarEmpanada.getText().length()>4)
 					tfPrecioUniEmpanada.setText(Integer.toString(producto.getPrecio()));
+				vaciarFormulario();
 			}
 			});	
 		
@@ -596,7 +597,10 @@ public class ordenDePedido extends JDialog {
 						model.addRow(new String[] {tfBusquedaPromocion.getText(),""+tfUnidadPromocion.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalPromocion,"suma"));
-						vaciarFormulario();	
+						tfBusquedaPromocion.setText("");
+						tfUnidadPromocion.setText("");
+						tfPrecioUniPromocion.setText("");
+						tfSubTotalPromocion.setText("");
 						}
 					else
 						JOptionPane.showMessageDialog(null, "Error, presione ENTER para que se genere el subtotal");
@@ -1442,6 +1446,10 @@ public class ordenDePedido extends JDialog {
 		tfPrecioUniOtro.setText("");
 		tfSubTotalOtro.setText("");
 		tfUnidadOtro.setText("");
+		tfBusquedaPromocion.setText("");
+		tfPrecioUniPromocion.setText("");
+		tfUnidadPromocion.setText("");
+		tfSubTotalPromocion.setText("");
 	}
 	
 	public ArrayList<ItemDTO> generarListaItem() 
