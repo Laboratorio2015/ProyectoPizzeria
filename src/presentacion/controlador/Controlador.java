@@ -298,6 +298,8 @@ public class Controlador implements ActionListener
 				else{
 					reporteContable = new ReporteContable();
 					ArrayList<PedidoDTO> pedidosResultantes = reporteContable.getListadoPedidos();
+					ArrayList<OrdenPedidoMatPrimaDTO> comprasResultantes = reporteContable.getListadoCompras();
+
 					for (int j=añoInicio; j<= añoFin ;j++){
 						if (j == añoInicio)
 							mesCero = mesInicio;
@@ -321,7 +323,8 @@ public class Controlador implements ActionListener
 							}
 							for (int x=diaCero; x<= diaIndiceFin ;x++){
 								try {
-									pedidosResultantes.addAll(	pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));
+									pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));
+									comprasResultantes.addAll(ordenesMatPrimas.reporteEnRango(String.valueOf(x), String.valueOf(i),String.valueOf(j)));
 								} catch (SQLException e1) {
 									JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
 									e1.printStackTrace();								

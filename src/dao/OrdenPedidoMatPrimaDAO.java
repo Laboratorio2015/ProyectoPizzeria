@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modelo.ItemMateriasPrimas;
+import modelo.Items;
+import modelo.Promociones;
 import modelo.Proveedores;
 import conexion.Conexion;
 import dto.ItemMateriaPrimaDTO;
 import dto.OrdenPedidoMatPrimaDTO;
+import dto.PedidoDTO;
 import dto.ProveedorDTO;
 
 public class OrdenPedidoMatPrimaDAO
@@ -21,6 +24,7 @@ public class OrdenPedidoMatPrimaDAO
 	private String updateEstado = "UPDATE ordenpedidomatprima SET estado='";
 	private String updateEnviado = "UPDATE ordenpedidomatprima SET enviado=";
 	private String updateFecha = "UPDATE ordenpedidomatprima SET fecha='";
+	private String select;
 
 
 	
@@ -154,4 +158,37 @@ public class OrdenPedidoMatPrimaDAO
 		return false;
 	}
 
+	public ArrayList<OrdenPedidoMatPrimaDTO> reporteEnRango(String dia,String mes, String año) {
+//		select = "SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '" + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
+//		System.out.println(select);
+//		PreparedStatement statement;
+//		ResultSet resultSet; //Guarda
+//		try 
+//		{
+//			statement = conexion.getSQLConexion().prepareStatement(select);
+//			resultSet = statement.executeQuery();			
+//			ArrayList<PedidoDTO> resultado = new ArrayList<PedidoDTO>();
+//			Items items=new Items();
+//			Promociones promociones = new Promociones();
+//
+//			while (resultSet.next())
+//			{			
+//				resultado.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray((String) resultSet.getObject(2))
+//											,(Integer)resultSet.getObject(3), promociones.pasarDeStringAArray((String) resultSet.getObject(4))));
+//			}
+//			return resultado;
+//		}
+//		catch (SQLException e) 
+//		{
+//			e.printStackTrace();
+//		}
+//		finally //Se ejecuta siempre
+//		{
+//			conexion.cerrarConexion();
+//		}
+		select = "SELECT idcompra,proveedor,fecha,costo " +
+		"FROM ordenpedidomatprima WHERE estado='pagado' AND fueeliminado=FALSE " +
+		"AND fecha LIKE '" + dia.toString() + "/" + mes.toString() + "/" + año + "%'";
+		return null;
+	}
 }

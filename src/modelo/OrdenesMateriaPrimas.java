@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -76,5 +78,9 @@ private OrdenPedidoMatPrimaDAO ordenMatPrima;
 	public void actualizarDatos(OrdenPedidoMatPrimaDTO ordenSeleccionada) {
 		this.ordenMatPrima.actualizarDatos(ordenSeleccionada);
 		
+	}
+
+	public ArrayList<OrdenPedidoMatPrimaDTO> reporteEnRango(String dia, String mes, String año) {
+		return this.ordenMatPrima.reporteEnRango(dia,mes,año);
 	}
 }

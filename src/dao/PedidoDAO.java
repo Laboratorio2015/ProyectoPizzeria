@@ -189,10 +189,6 @@ public class PedidoDAO
 	}
 		
 	public ArrayList<PedidoDTO> ventaDiaria (String dia,String mes,String año) throws SQLException{
-		//SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '%%-6-2015%';
-		//private static final String select = "SELECT idpedido,item,total,oferta FROM pedidos " +
-		//									"WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '";
-		//el diario tambien recibe el dia. correguir select 
 		select = "SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '" + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
 		System.out.println(select);
 		PreparedStatement statement;
