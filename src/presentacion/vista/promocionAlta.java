@@ -147,14 +147,30 @@ public class promocionAlta extends JDialog{
 		}
 		{
 			tfCantidad = new JTextField();
-			tfCantidad.addActionListener(new ActionListener() {
+			tfCantidad.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent arg0)
+				{
+					ProductoDTO producto=control.getProducto().buscarProductoPorNombre(tfAgregarProducto.getText());
+					if(tfAgregarProducto.getText().compareTo("")!=0 && tfCantidad.getText().compareTo("")!=0 && producto!=null)
+					{
+						Integer costo=producto.getPrecio();
+						Integer cantidad=Integer.parseInt(tfCantidad.getText().toString());
+						Integer precio=costo*cantidad;
+						tfSubtotal.setText(precio.toString());
+					}
+					if(tfCantidad.getText().compareTo("")==0)
+						tfSubtotal.setText("");
+				}
+			});
+		/*	tfCantidad.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0)
 				{
 					int cantidad=Integer.parseInt(tfCantidad.getText());
 					int precio=Integer.parseInt(tfPrecioUnidad.getText().toString());
 					tfSubtotal.setText(Integer.toString(precio*cantidad));
 				}
-			});
+			});*/
 			tfCantidad.setColumns(10);
 			tfCantidad.setBounds(329, 323, 53, 25);
 			contentPanel.add(tfCantidad);

@@ -1,5 +1,4 @@
 package presentacion.controlador;
-
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.dnd.Autoscroll;
@@ -21,9 +20,9 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;import com.itextpdf.text.log.SysoCounter;
+import javax.swing.table.DefaultTableModel;
+import com.itextpdf.text.log.SysoCounter;
 import com.mxrck.autocompleter.TextAutoCompleter;
-
 import Cocina.PadreMonitor;
 import modelo.Categorias;
 import modelo.Clientes;
