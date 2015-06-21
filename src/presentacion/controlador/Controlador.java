@@ -77,7 +77,7 @@ import presentacion.vista.seleccionarRepartidor;
 import presentacion.vista.selectorMatPrima;
 import presentacion.vista.selectorOpcionesOrdenMatPrima;
 import presentacion.vista.gestionarOrdenesMatPrima;
-
+import presentacion.vista.selectMenuReportes;
 
 public class Controlador implements ActionListener
 {
@@ -87,10 +87,10 @@ public class Controlador implements ActionListener
 	private pedidosPendientes ventanaPedPendiente;
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
-	//moficiaciones
-	private selectorOpcionesOrdenMatPrima ventanaSelectorOpcOrdenMatPrima;
 	private gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
-	//
+	//moficiaciones
+	private selectMenuReportes ventanaMenuReportes;
+	private selectorOpcionesOrdenMatPrima ventanaSelectorOpcOrdenMatPrima;
 	private buscadorProveedor ventanaSeleccionProveedor;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
 	private productoAlta ventanaAgregarProducto;
@@ -188,7 +188,12 @@ public class Controlador implements ActionListener
 			this.ventanaPedPendiente.setVisible(true);
 		}
 		/////////////////////////////////////////CodigoJuliet/////////////////////////////////////////////////
-
+		//CONFIGURACIONES: ABRIR VENTANA DE MENU DE REPORTES
+		else if(e.getSource()== this.ventana.getBtnReportes())
+		{
+			
+			
+		}
 
 		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
