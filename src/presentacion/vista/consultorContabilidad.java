@@ -12,6 +12,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Date;
+import java.awt.Color;
+import java.awt.Font;
 
 public class consultorContabilidad extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -33,74 +38,104 @@ public class consultorContabilidad extends JDialog {
 	private JButton btnFinalizarconsulta;
 	private JButton btnEnviarxmail;
 	private JButton btnImprimircons;
+	//Datos
+	private String fechaInicio;
+	private String fechaFin;
+	private Date dateFechaInicio;
+	private Date dateFechaFin;
+	private JLabel ocultarRangoFecha;
+	
 
 	public consultorContabilidad(VentanaPrincipal ventanaPrincipal, Controlador controlador) {
 		this.ventanaPrincipal = ventanaPrincipal;
 		this.controlador = controlador;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 706, 550);
+		setBounds(100, 100, 706, 526);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		cbTipoConsulta.setModel(new DefaultComboBoxModel<String>(new String[] {"Selecciona una opci\u00F3n", "Dia de hoy", "Elegir un rango de fechas"}));
-		cbTipoConsulta.setBounds(76, 144, 252, 20);
+		cbTipoConsulta.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione el tipo de consulta", "Dia de hoy", "Elegir un rango de fechas"}));
+		cbTipoConsulta.setBounds(76, 125, 252, 20);
 		contentPane.add(cbTipoConsulta);
 		
 		lblFechaInicio = new JLabel("");
-		lblFechaInicio.setBounds(60, 314, 119, 20);
+		lblFechaInicio.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFechaInicio.setFont(new Font("Calibri", Font.BOLD, 16));
+		lblFechaInicio.setForeground(Color.WHITE);
+		lblFechaInicio.setBounds(60, 295, 119, 20);
 		contentPane.add(lblFechaInicio);
 		
 		lblVentas = new JLabel("");
-		lblVentas.setBounds(497, 178, 138, 33);
+		lblVentas.setFont(new Font("Candara", Font.PLAIN, 16));
+		lblVentas.setBounds(496, 159, 138, 33);
 		contentPane.add(lblVentas);
 		
 		lblCompras = new JLabel("");
-		lblCompras.setBounds(497, 235, 138, 33);
+		lblCompras.setFont(new Font("Candara", Font.PLAIN, 16));
+		lblCompras.setBounds(496, 217, 138, 33);
 		contentPane.add(lblCompras);
 		
 		lblGanancias = new JLabel("");
-		lblGanancias.setBounds(496, 295, 138, 33);
+		lblGanancias.setFont(new Font("Candara", Font.PLAIN, 16));
+		lblGanancias.setBounds(496, 277, 138, 33);
 		contentPane.add(lblGanancias);
 		
 		lblFechaFin = new JLabel("");
-		lblFechaFin.setBounds(0, 0, 119, 20);
+		lblFechaFin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFechaFin.setFont(new Font("Calibri", Font.BOLD, 16));
+		lblFechaFin.setForeground(Color.WHITE);
+		lblFechaFin.setBounds(60, 350, 119, 20);
 		contentPane.add(lblFechaFin);
 		
+		ocultarRangoFecha = new JLabel("");
+		ocultarRangoFecha.setBackground(new Color(153, 153, 00));
+		ocultarRangoFecha.setOpaque(true);
+		ocultarRangoFecha.setBounds(10, 173, 305, 214);
+		contentPane.add(ocultarRangoFecha);
+		
 		fondo = new JLabel("");
+		fondo.setFont(new Font("Calibri Light", Font.PLAIN, 14));
 		fondo.setIcon(new ImageIcon(consultorContabilidad.class.getResource("/prototipos/reportesContabilidad.png")));
 		fondo.setHorizontalTextPosition(SwingConstants.CENTER);
-		fondo.setBounds(0, 11, 690, 500);
+		fondo.setBounds(0, 0, 690, 486);
 		contentPane.add(fondo);
 		
 		btnBtnbuscarrangofecha = new JButton("btnBuscarRangoFecha");
 		btnBtnbuscarrangofecha.setOpaque(false);
-		btnBtnbuscarrangofecha.setBounds(256, 328, 58, 45);
+		btnBtnbuscarrangofecha.setBounds(253, 312, 58, 45);
 		contentPane.add(btnBtnbuscarrangofecha);
 		
 		btnCalendfinicio = new JButton("calendFInicio");
 		btnCalendfinicio.setOpaque(false);
-		btnCalendfinicio.setBounds(194, 302, 29, 33);
+		btnCalendfinicio.setBounds(194, 295, 29, 20);
 		contentPane.add(btnCalendfinicio);
 		
 		btnCalendarffin = new JButton("calendarFFin");
-		btnCalendarffin.setBounds(194, 362, 29, 33);
+		btnCalendarffin.setOpaque(false);
+		btnCalendarffin.setBounds(194, 348, 29, 33);
 		contentPane.add(btnCalendarffin);
 		
 		btnFinalizarconsulta = new JButton("finalizarconsulta");
+		btnFinalizarconsulta.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				dispose();
+			}
+		});
 		btnFinalizarconsulta.setOpaque(false);
-		btnFinalizarconsulta.setBounds(267, 447, 149, 39);
+		btnFinalizarconsulta.setBounds(267, 426, 149, 39);
 		contentPane.add(btnFinalizarconsulta);
 		
 		btnEnviarxmail = new JButton("enviarXmail");
 		btnEnviarxmail.setOpaque(false);
-		btnEnviarxmail.setBounds(410, 367, 41, 39);
+		btnEnviarxmail.setBounds(410, 348, 41, 39);
 		contentPane.add(btnEnviarxmail);
 		
 		btnImprimircons = new JButton("imprimirCons");
 		btnImprimircons.setOpaque(false);
-		btnImprimircons.setBounds(549, 367, 58, 45);
+		btnImprimircons.setBounds(548, 348, 58, 45);
 		contentPane.add(btnImprimircons);
 	}
 	
@@ -112,6 +147,14 @@ public class consultorContabilidad extends JDialog {
 		lblVentas.setText("");
 	}
 
+	public void ocultarRango(boolean ocultar){
+		ocultarRangoFecha.setVisible(ocultar);
+	}
+	
+	public boolean controlFechas(){
+		return dateFechaInicio.before(dateFechaFin);
+	}
+	
 	public JLabel getLblFechaInicio() {
 		return lblFechaInicio;
 	}
@@ -202,6 +245,38 @@ public class consultorContabilidad extends JDialog {
 
 	public JComboBox<String> getCbTipoConsulta() {
 		return cbTipoConsulta;
+	}
+
+	public String getFechaFin() {
+		return fechaFin;
+	}
+
+	public void setFechaFin(String fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
+	public String getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(String fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+
+	public Date getDateFechaInicio() {
+		return dateFechaInicio;
+	}
+
+	public void setDateFechaInicio(Date dateFechaInicio) {
+		this.dateFechaInicio = dateFechaInicio;
+	}
+
+	public Date getDateFechaFin() {
+		return dateFechaFin;
+	}
+
+	public void setDateFechaFin(Date dateFechaFin) {
+		this.dateFechaFin = dateFechaFin;
 	}
 	
 	

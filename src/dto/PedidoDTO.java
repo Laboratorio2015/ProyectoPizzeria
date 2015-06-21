@@ -47,6 +47,13 @@ public class PedidoDTO
 	}
 
 	
+	public PedidoDTO(Integer idOrden, ArrayList<ItemDTO> items,Integer totalCosto,ArrayList<PromocionDTO> promos) {
+		this.idpedido = idOrden;
+		this.total = totalCosto;
+		this.items= items;
+		this.ofertas=promos;
+		
+	}
 	public ArrayList<ItemDTO> getProductos()
 	{
 		return items;

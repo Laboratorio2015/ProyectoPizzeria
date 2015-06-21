@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jasperreports.engine.export.draw.Offset;
+
 import modelo.Clientes;
 import modelo.Items;
 import modelo.Promociones;
@@ -23,7 +25,12 @@ public class PedidoDAO
 	private static final String delete = "DELETE FROM pedidos WHERE idpedido = ?";
 	private static final String readall = "SELECT * FROM pedidos";
 	private static final String pedidosPendientes="select * from pedidos where estado='solicitado'";
+	//SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '%%-6-2015%';
+	private static String select = "SELECT idpedido,item,total,oferta FROM pedidos " +
+										"WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '";
+	@SuppressWarnings("unused")
 	private static final String listaItems="select item from pedidos where idpedido=";
+	@SuppressWarnings("unused")
 	private static final String listaOfertas="select oferta from pedidos where idpedido=";
 	private static final Conexion conexion = Conexion.getConexion();
 	
@@ -31,8 +38,7 @@ public class PedidoDAO
 	{
 		PreparedStatement statement;
 		try 
-		{
-			
+		{			
 			Items ite=new Items();
 			String iditems= ite.iditemsPed(pedido);
 			Promociones ofe=new Promociones();
@@ -93,7 +99,6 @@ public class PedidoDAO
 		}
 		return false;
 	}
-
 		
 	public List<PedidoDTO> readAll()
 	{
@@ -138,9 +143,7 @@ public class PedidoDAO
 		}
 		return pedidos;
 	}
-	
-	
-	
+		
 	public List<PedidoDTO> pedidosPendientes()
 	{
 		PreparedStatement statement;
@@ -184,4 +187,40 @@ public class PedidoDAO
 		}
 		return pedidos;
 	}
+		
+	public ArrayList<PedidoDTO> ventaDiaria (String dia,String mes,String año) throws SQLException{
+		//SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '%%-6-2015%';
+		//private static final String select = "SELECT idpedido,item,total,oferta FROM pedidos " +
+		//									"WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '";
+		//el diario tambien recibe el dia. correguir select 
+		select = select + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
+		System.out.println(select);
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(select);
+			resultSet = statement.executeQuery();			
+			ArrayList<PedidoDTO> resultado = new ArrayList<PedidoDTO>();
+			Items items=new Items();
+			Promociones promociones = new Promociones();
+
+			while (resultSet.next())
+			{			
+				resultado.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray((String) resultSet.getObject(2))
+											,(Integer)resultSet.getObject(3), promociones.pasarDeStringAArray((String) resultSet.getObject(4))));
+			}
+			return resultado;
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return null;
+	}
+
 }

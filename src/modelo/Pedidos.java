@@ -1,6 +1,7 @@
 package modelo;
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -97,5 +98,10 @@ public class Pedidos
 				  break;
 		}
 		return result;
+	}
+
+	public ArrayList<PedidoDTO> reporteDiario(String dia, String mes, String año) throws SQLException {
+		return pedido.ventaDiaria(dia,mes, año);
+		
 	}
 }

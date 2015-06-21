@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -47,11 +48,14 @@ import dto.PedidoDTO;
 import dto.ProductoDTO;
 import dto.ProveedorDTO;
 import dto.RepartidorDTO;
+import dto.ReporteContable;
 import presentacion.reportes.solicitudDeMateriaPrima;
 import presentacion.vista.VentanaPrincipal;
 import presentacion.vista.buscadorProveedor;
 import presentacion.vista.calendario;
+import presentacion.vista.calendarioSelectFecha;
 import presentacion.vista.clienteBajaModificacion;
+import presentacion.vista.consultorContabilidad;
 import presentacion.vista.gestionCategoria;
 import presentacion.vista.matPrimaAlta;
 import presentacion.vista.matPrimaBajaModificacion;
@@ -89,7 +93,9 @@ public class Controlador implements ActionListener
 	private ordenarMatPrima ventanaOrdenMatPrima;
 	private gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
 	//moficiaciones
+	private calendarioSelectFecha selectorFecha;
 	private selectMenuReportes ventanaMenuReportes;
+	private consultorContabilidad ventanaReportesContables;
 	private selectorOpcionesOrdenMatPrima ventanaSelectorOpcOrdenMatPrima;
 	private buscadorProveedor ventanaSeleccionProveedor;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
@@ -113,7 +119,7 @@ public class Controlador implements ActionListener
 	private registroDeCliente ventanaRegistrarCliente;
 	private clienteBajaModificacion ventanaModificacionCliente;
 	private selectorMatPrima ventanaSeleccionMatPrima;
-	private boolean seleccionCte = false;
+	//private boolean seleccionCte = false;
 
 
 	//modelo
@@ -131,6 +137,7 @@ public class Controlador implements ActionListener
 	private ItemMateriasPrimas itemsMateriaPrima;
 	private Itinerarios itinerario;
 	private registrarPagoOrdenMatPrima ventanaRegistrarPagoOrdenMatPrima;
+	private ReporteContable reporteContable;
 
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
@@ -167,7 +174,7 @@ public class Controlador implements ActionListener
 		System.out.println(getFechaActual());
 	}
 
-	@SuppressWarnings("serial")
+	@SuppressWarnings({ "serial", "deprecation" })
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
@@ -191,10 +198,146 @@ public class Controlador implements ActionListener
 		//CONFIGURACIONES: ABRIR VENTANA DE MENU DE REPORTES
 		else if(e.getSource()== this.ventana.getBtnReportes())
 		{
-			
-			
+			ventanaMenuReportes = new selectMenuReportes(ventana,this);
+			ventanaMenuReportes.setVisible(true);
+			ventanaMenuReportes.getBtnConsultacontable().addActionListener(this);
+			ventanaMenuReportes.getBtnConsultaestadisticas().addActionListener(this);
 		}
+		//VENTANA DE MENU DE REPORTES:ABRIR VENTANA REPORTES CONTABLES 
+		else if(this.ventanaMenuReportes!= null && e.getSource()==this.ventanaMenuReportes.getBtnConsultacontable())
+		{
+			ventanaMenuReportes.dispose();
+			ventanaReportesContables = new consultorContabilidad(ventana, this);
+			ventanaReportesContables.setVisible(true);
+			ventanaReportesContables.getBtnBtnbuscarrangofecha().addActionListener(this);
+			ventanaReportesContables.getBtnCalendarffin().addActionListener(this);
+			ventanaReportesContables.getBtnCalendfinicio().addActionListener(this);
+			ventanaReportesContables.getBtnEnviarxmail().addActionListener(this);
+			ventanaReportesContables.getBtnFinalizarconsulta().addActionListener(this);
+			ventanaReportesContables.getBtnImprimircons().addActionListener(this);		
+			ventanaReportesContables.getCbTipoConsulta().addActionListener(this);
+		}
+		//VENTANA DE REPORTES CONTABLES: ABRIR Selector fecha calendario
+		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnCalendfinicio())
+		{
+			selectorFecha = new calendarioSelectFecha(ventana, this, "inicio");
+			selectorFecha.setVisible(true);
+			selectorFecha.getBtnSeleccionar().addActionListener(this);
+		}
+		//VENTANA DE REPORTES CONTABLES: COMBO BOX TIPO CONSULTA
+		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getCbTipoConsulta())
+		{
+			switch (ventanaReportesContables.getCbTipoConsulta().getSelectedItem().toString()) {
+			case "Seleccione el tipo de consulta":
+			{
+				break;
+			}
+			case "Dia de hoy":
+			{	
+				ventanaReportesContables.ocultarRango(true);
+				try {
+					consultaReporteDiario();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("No se pudo realizar consulta a la bd.");
+					e1.printStackTrace();
+				}
+				break;
+			}
+			case "Elegir un rango de fechas":
+			{	
+				ventanaReportesContables.ocultarRango(false);
+				
+				break;
+			}
+			default:
+				break;
+			}
+			System.out.println("algo");
+		}
+		//SELECTOR FECHA INICIO:Seleccionar la fecha elegida
+		else if(this.selectorFecha!= null && e.getSource()==this.selectorFecha.getBtnSeleccionar())
+		{
+			if (selectorFecha.getIndicadorFecha().compareTo("inicio")==0){
+				ventanaReportesContables.setFechaInicio(selectorFecha.getFechaSeleccionada());
+				ventanaReportesContables.setDateFechaInicio(selectorFecha.getFechaDate());
+				ventanaReportesContables.getLblFechaInicio().setText(selectorFecha.getFechaSeleccionada());
+			}
+			else{
+				ventanaReportesContables.setFechaFin(selectorFecha.getFechaSeleccionada());
+				ventanaReportesContables.setDateFechaFin(selectorFecha.getFechaDate());
+				ventanaReportesContables.getLblFechaFin().setText(selectorFecha.getFechaSeleccionada());
+				System.out.println("Fechas selecionadas: " + ventanaReportesContables.getFechaInicio() + " fecha fin: " + ventanaReportesContables.getFechaFin());
+				System.out.println(ventanaReportesContables.getDateFechaInicio());
+			}
+			selectorFecha.dispose();
+		}
+//		//VENTANA DE REPORTES CONTABLES: ABRIR Selector fecha calendario
+//		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnCalendarffin())
+//		{
+//			selectorFecha = new calendarioSelectFecha(ventana, this,"fin");
+//			selectorFecha.setVisible(true);
+//			selectorFecha.getBtnSeleccionar().addActionListener(this);
+//		}
+		//VENTANA DE REPORTES CONTABLES: BOTON DE REALIZAR CONSULTA
+		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnBtnbuscarrangofecha())
+		{
+			if (!ventanaReportesContables.getLblFechaInicio().getText().isEmpty() 
+					&& !ventanaReportesContables.getLblFechaFin().getText().isEmpty() && ventanaReportesContables.controlFechas()){	
+				Integer diaCero = 1;
+				Integer mesCero = 1;
+				Integer mes12 = 12;
+				Integer diaIndiceFin = 31;
+				Integer diaInicio = ventanaReportesContables.getDateFechaInicio().getDay();
+				Integer mesInicio = ventanaReportesContables.getDateFechaInicio().getMonth()+1;
+				Integer añoInicio = ventanaReportesContables.getDateFechaInicio().getYear()+1900;
+				Integer diaFin = ventanaReportesContables.getDateFechaFin().getDay();
+				Integer mesFin = ventanaReportesContables.getDateFechaFin().getMonth()+1;
+				Integer añoFin = ventanaReportesContables.getDateFechaFin().getYear()+1900;
+				//if (el rango de fecha es dentro del mismo mes NO hacer esto)
+				if (mesInicio==12){
+					//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
+				}
+				else{
+					reporteContable = new ReporteContable();
+					ArrayList<PedidoDTO> pedidosResultantes = reporteContable.getListadoPedidos();
+					for (int j=añoInicio; j<= añoFin ;j++){
+						if (j == añoInicio)
+							mesCero = mesInicio;
+						else
+							mesCero = 1;
+						
+						if (j == añoFin)
+							mes12 = mesFin;
+						else
+							mes12 = 12;
 
+						for (int i=mesCero; i<= mes12;i++){
+							if (i == mesInicio)
+								diaCero = diaInicio;
+								else
+									diaCero = 1;
+							if (i == mesFin)
+								diaIndiceFin = diaFin;
+							else{
+								diaIndiceFin=31;
+							}
+							for (int x=diaCero; i<= diaIndiceFin ;i++){
+								try {
+									pedidosResultantes.addAll(	pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));
+								} catch (SQLException e1) {
+									JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+									e1.printStackTrace();								
+								}
+							}
+						}
+					}
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "La fecha de inicio no puede ser igual ni mayor a la fecha de fin", "Confirmación",JOptionPane.WARNING_MESSAGE);
+			}
+		}
 		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
@@ -204,7 +347,6 @@ public class Controlador implements ActionListener
 			this.ventanaSelectorOpcOrdenMatPrima.getBtnAgregarOrdenMatPrima().addActionListener(this);
 			this.ventanaSelectorOpcOrdenMatPrima.btnGestionarOrdenes().addActionListener(this);
 		}
-
 		//SELECTOR OPC ORDENES MAT PRIMA> abre ventana agregar orden mat prima
 		else if(this.ventanaSelectorOpcOrdenMatPrima!= null && e.getSource()==this.ventanaSelectorOpcOrdenMatPrima.getBtnAgregarOrdenMatPrima())
 		{
@@ -1678,6 +1820,37 @@ public class Controlador implements ActionListener
 						JOptionPane.showMessageDialog(null, "Error el debe haber un dni registrado para poder editarlo");
 				}
 	}
+
+	private void consultaReporteDiario() throws SQLException {
+		//Que debo almacenar? 
+		//Listado de pedidos.
+		//Listado de Compras
+		//Integer Ganancia
+		reporteContable = new ReporteContable();
+		reporteContable.setListadoPedidos( pedido.reporteDiario( getDiaActual(),getMesActual(),getAñoActual() ));
+	}
+
+
+	private String getDiaActual() {
+		Calendar fecha = new GregorianCalendar();
+        int dia = fecha.get(Calendar.DAY_OF_MONTH);
+        return String.valueOf(dia);
+	}
+
+
+	private String getAñoActual() {
+		Calendar fecha = new GregorianCalendar();
+        int año = fecha.get(Calendar.YEAR);
+        return String.valueOf(año);
+	}
+
+
+	private String getMesActual() {
+		Calendar fecha = new GregorianCalendar();
+        int mes = fecha.get(Calendar.MONTH)+1;
+        return String.valueOf(mes);
+	}
+
 
 	private void prepararParaSobreescribirPDF(OrdenPedidoMatPrimaDTO ordenSeleccionada) {
 		//String rutaFile = "D:/OrdenDePedidoNro" + ordenSeleccionada.getIdCompra() + ".pdf";
