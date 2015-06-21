@@ -7,12 +7,12 @@ import presentacion.reportes.solicitudDeMateriaPrima;
 
 public class ReporteContable {
 	
-	ArrayList<PedidoDTO> listadoPedidos;
+	ArrayList<PedidoDTO> listadoPedidos;// = new Arraylist<PedidoDTO>;
 	ArrayList<OrdenPedidoMatPrimaDTO> listadoCompras;
 	Integer ganancia;
 	
 	public ReporteContable(){
-		
+		listadoPedidos = new ArrayList<PedidoDTO>();
 	}
 
 	public ArrayList<PedidoDTO> getListadoPedidos() {

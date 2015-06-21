@@ -193,7 +193,7 @@ public class PedidoDAO
 		//private static final String select = "SELECT idpedido,item,total,oferta FROM pedidos " +
 		//									"WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '";
 		//el diario tambien recibe el dia. correguir select 
-		select = select + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
+		select = "SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '" + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
 		System.out.println(select);
 		PreparedStatement statement;
 		ResultSet resultSet; //Guarda

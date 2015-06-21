@@ -216,12 +216,36 @@ public class Controlador implements ActionListener
 			ventanaReportesContables.getBtnImprimircons().addActionListener(this);		
 			ventanaReportesContables.getCbTipoConsulta().addActionListener(this);
 		}
-		//VENTANA DE REPORTES CONTABLES: ABRIR Selector fecha calendario
+		//VENTANA DE REPORTES CONTABLES: ABRIR Selector fecha calendario INICIO
 		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnCalendfinicio())
 		{
 			selectorFecha = new calendarioSelectFecha(ventana, this, "inicio");
 			selectorFecha.setVisible(true);
 			selectorFecha.getBtnSeleccionar().addActionListener(this);
+		}
+		//VENTANA DE REPORTES CONTABLES: ABRIR Selector fecha calendario FIN
+		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnCalendarffin())
+		{
+			selectorFecha = new calendarioSelectFecha(ventana, this,"fin");
+			selectorFecha.setVisible(true);
+			selectorFecha.getBtnSeleccionar().addActionListener(this);
+		}
+		//SELECTOR FECHA INICIO:Seleccionar la fecha elegida
+		else if(this.selectorFecha!= null && e.getSource()==this.selectorFecha.getBtnSeleccionar())
+		{
+			if (selectorFecha.getIndicadorFecha().compareTo("inicio")==0){
+				ventanaReportesContables.setFechaInicio(selectorFecha.getFechaSeleccionada());
+				ventanaReportesContables.setDateFechaInicio(selectorFecha.getFechaDate());
+				ventanaReportesContables.getLblFechaInicio().setText(selectorFecha.getFechaSeleccionada());
+			}
+			else{
+				ventanaReportesContables.setFechaFin(selectorFecha.getFechaSeleccionada());
+				ventanaReportesContables.setDateFechaFin(selectorFecha.getFechaDate());
+				ventanaReportesContables.getLblFechaFin().setText(selectorFecha.getFechaSeleccionada());
+				System.out.println("Fechas selecionadas: " + ventanaReportesContables.getFechaInicio() + " fecha fin: " + ventanaReportesContables.getFechaFin());
+				System.out.println(ventanaReportesContables.getDateFechaInicio());
+			}
+			selectorFecha.dispose();
 		}
 		//VENTANA DE REPORTES CONTABLES: COMBO BOX TIPO CONSULTA
 		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getCbTipoConsulta())
@@ -246,38 +270,12 @@ public class Controlador implements ActionListener
 			case "Elegir un rango de fechas":
 			{	
 				ventanaReportesContables.ocultarRango(false);
-				
 				break;
 			}
 			default:
 				break;
 			}
-			System.out.println("algo");
 		}
-		//SELECTOR FECHA INICIO:Seleccionar la fecha elegida
-		else if(this.selectorFecha!= null && e.getSource()==this.selectorFecha.getBtnSeleccionar())
-		{
-			if (selectorFecha.getIndicadorFecha().compareTo("inicio")==0){
-				ventanaReportesContables.setFechaInicio(selectorFecha.getFechaSeleccionada());
-				ventanaReportesContables.setDateFechaInicio(selectorFecha.getFechaDate());
-				ventanaReportesContables.getLblFechaInicio().setText(selectorFecha.getFechaSeleccionada());
-			}
-			else{
-				ventanaReportesContables.setFechaFin(selectorFecha.getFechaSeleccionada());
-				ventanaReportesContables.setDateFechaFin(selectorFecha.getFechaDate());
-				ventanaReportesContables.getLblFechaFin().setText(selectorFecha.getFechaSeleccionada());
-				System.out.println("Fechas selecionadas: " + ventanaReportesContables.getFechaInicio() + " fecha fin: " + ventanaReportesContables.getFechaFin());
-				System.out.println(ventanaReportesContables.getDateFechaInicio());
-			}
-			selectorFecha.dispose();
-		}
-//		//VENTANA DE REPORTES CONTABLES: ABRIR Selector fecha calendario
-//		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnCalendarffin())
-//		{
-//			selectorFecha = new calendarioSelectFecha(ventana, this,"fin");
-//			selectorFecha.setVisible(true);
-//			selectorFecha.getBtnSeleccionar().addActionListener(this);
-//		}
 		//VENTANA DE REPORTES CONTABLES: BOTON DE REALIZAR CONSULTA
 		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnBtnbuscarrangofecha())
 		{
@@ -321,7 +319,7 @@ public class Controlador implements ActionListener
 							else{
 								diaIndiceFin=31;
 							}
-							for (int x=diaCero; i<= diaIndiceFin ;i++){
+							for (int x=diaCero; x<= diaIndiceFin ;x++){
 								try {
 									pedidosResultantes.addAll(	pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));
 								} catch (SQLException e1) {
