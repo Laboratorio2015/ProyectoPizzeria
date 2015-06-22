@@ -28,6 +28,7 @@ import modelo.Categorias;
 import modelo.Clientes;
 import modelo.ItemMateriasPrimas;
 import modelo.Items;
+import modelo.ItemsPromociones;
 import modelo.Itinerarios;
 import modelo.MatPrimas;
 import modelo.Promociones;
@@ -40,6 +41,7 @@ import dto.CategoriaDTO;
 import dto.ClienteDTO;
 import dto.ItemDTO;
 import dto.ItemMateriaPrimaDTO;
+import dto.ItemPromocionDTO;
 import dto.MateriaPrimaDTO;
 import dto.PromocionDTO;
 import dto.OrdenPedidoMatPrimaDTO;
@@ -127,6 +129,7 @@ public class Controlador implements ActionListener
 	private Pedidos pedido;
 	private Clientes cliente;
 	private Items item;
+	private ItemsPromociones itemPromocion;
 	private Promociones promocion;
 	private Repartidores repartidor;
 	private Promociones oferta;
@@ -142,7 +145,7 @@ public class Controlador implements ActionListener
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
 			Repartidores repartidor,Promociones oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, 
-			MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario, Promociones promocion) 
+			MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario, Promociones promocion, ItemsPromociones itemPromocion) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -152,6 +155,7 @@ public class Controlador implements ActionListener
 		this.proveedor=proveedor;
 		this.repartidor=repartidor;
 		this.oferta=oferta;
+		this.itemPromocion=itemPromocion;
 		this.categoria=categoria;
 		this.promocion=promocion;
 		this.itinerario=itinerario;
@@ -169,8 +173,8 @@ public class Controlador implements ActionListener
 	public void inicializar()
 	{
 		this.ventana.show();
-		this.monitorCocina=new PadreMonitor(pedido);
-		System.out.println(getFechaActual());
+		//this.monitorCocina=new PadreMonitor(pedido);
+		//System.out.println(getFechaActual());
 	}
 
 	@SuppressWarnings({ "serial", "deprecation" })
@@ -1559,7 +1563,9 @@ public class Controlador implements ActionListener
 		{
 			if(ventanaEditarPromocion.getTfBuscarProducto().getText().compareTo("")!=0 && ventanaEditarPromocion.getTfUnidades().getText().compareTo("")!=0)
 			{
-				Object[] fila = {ventanaEditarPromocion.getTfBuscarProducto().getText(),ventanaEditarPromocion.getTfUnidades().getText()};
+				String nombre=ventanaEditarPromocion.getTfBuscarProducto().getText();
+				Integer cantidad=Integer.parseInt(ventanaEditarPromocion.getTfUnidades().getText().toString());
+				Object[] fila = {nombre,cantidad};
 				this.ventanaEditarPromocion.getModel().addRow(fila);
 				ventanaEditarPromocion.getTfOcullto().setVisible(true);
 				ventanaEditarPromocion.getLbotonAgregarProducto().setVisible(false);
@@ -1573,8 +1579,8 @@ public class Controlador implements ActionListener
 				ventanaEditarPromocion.getBtnAceptarProducto().setVisible(false);
 				ventanaEditarPromocion.getCbTipoProducto().setVisible(false);
 				Integer precioReal=Integer.parseInt(ventanaEditarPromocion.getTfPrecioReal().getText().toString());
-				ProductoDTO aux=this.producto.buscarProductoPorNombre(ventanaEditarPromocion.getTfBuscarProducto().getText());
-				Integer costoActual=(precioReal+aux.getPrecio());
+				ProductoDTO aux=this.producto.buscarProductoPorNombre(nombre);
+				Integer costoActual=(precioReal+(aux.getPrecio()*cantidad));
 				ventanaEditarPromocion.getTfPrecioReal().setText(costoActual.toString());
 			}
 		}
@@ -2314,20 +2320,22 @@ public class Controlador implements ActionListener
 	}
 	//FIN METODOS PARA VENTANA ORDEN DE MATERIA PRIMA
 
-	private ArrayList<PromocionDTO> generarListaOfertas() 
+	private ArrayList<ItemPromocionDTO> generarListaOfertas() 
 	{
-		ArrayList<PromocionDTO> listaAux= new ArrayList<PromocionDTO>();
+		ArrayList<ItemPromocionDTO> listaAux= new ArrayList<ItemPromocionDTO>();
 		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
 		{
 			if((oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()))!=null)
 			{
+				ItemPromocionDTO nuevo= new ItemPromocionDTO ();
 				PromocionDTO aux=oferta.buscarOfertaPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString());
-				aux.setIdOferta(this.oferta.ultimaOferta()+1);
-				aux.setNombre(aux.getNombre());
-				aux.setPrecio(aux.getPrecio());
-				aux.setProductosOfertados(aux.getProductosOfertados());
-				oferta.agregarOferta(aux);
-				listaAux.add(aux);
+				nuevo.setIditemPromo(this.itemPromocion.ultimaOferta()+1);
+				nuevo.setPromocion(aux);
+				nuevo.setCantidad(Integer.parseInt(this.ventanaPedido.getModel().getValueAt(i, 1).toString()));
+				nuevo.setComentario(this.ventanaPedido.getModel().getValueAt(i, 3).toString());
+				nuevo.setFueeliminado(false);
+				listaAux.add(nuevo);
+				itemPromocion.agregarItemPromo(nuevo);
 			}
 		}
 		return listaAux;
@@ -2349,6 +2357,27 @@ public class Controlador implements ActionListener
 	public void setProducto(Productos producto) {
 		this.producto = producto;
 	}
+	
+
+	public ItemsPromociones getItemPromocion() {
+		return itemPromocion;
+	}
+
+
+	public void setItemPromocion(ItemsPromociones itemPromocion) {
+		this.itemPromocion = itemPromocion;
+	}
+
+
+	public Promociones getPromocion() {
+		return promocion;
+	}
+
+
+	public void setPromocion(Promociones promocion) {
+		this.promocion = promocion;
+	}
+
 
 	public Pedidos getPedido() {
 		return pedido;

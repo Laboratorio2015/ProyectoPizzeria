@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import dto.ItemDTO;
+import dto.ItemPromocionDTO;
 import dto.PedidoDTO;
 import dto.ProductoDTO;
 import dto.PromocionDTO;
@@ -73,13 +74,9 @@ public class ordenDePedido extends JDialog {
 	
 	//text field
 	private JTextField tfUnidadPromocion;
-	private JTextField tfBusquedaPromocion;
+	private JTextField tfAgregarPromocion;
 	private JTextField tfSubTotalPromocion;
 	private JTextField tfPrecioUniPromocion;
-	private JTextField tfPrecioUniPromo;
-	private JTextField tfSubTotalPromo;
-	private JTextField tfAgregarPromo;
-	private JTextField tfUnidadPromo;
 	private JTextField tfAgregarEmpanada;
 	private JTextField tfAgregarPizza;
 	private JTextField tfAgregarOtroProducto;
@@ -94,11 +91,8 @@ public class ordenDePedido extends JDialog {
 	private JTextField tfSubTotalOtro;
 	private JTextField tfTotal;
 	private JTextField textField;
-	
 
-	/**
-	 * @wbp.parser.constructor
-	 */
+	
 	public ordenDePedido(VentanaPrincipal padre,final Controlador control) 
 	{
 		setModal(true);
@@ -348,24 +342,24 @@ public class ordenDePedido extends JDialog {
 		tfUnidadPromocion.setBounds(731, 319, 47, 25);
 		contentPanel.add(tfUnidadPromocion);
 		
-		tfBusquedaPromocion = new JTextField();
-		tfBusquedaPromocion.addKeyListener(new KeyAdapter() {
+		tfAgregarPromocion = new JTextField();
+		tfAgregarPromocion.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent evt) 
 			{
-				validarTexto(evt,tfBusquedaPromocion);
+				validarTexto(evt,tfAgregarPromocion);
 			}
 			@Override
 			public void keyReleased(KeyEvent e) 
 			{
-				PromocionDTO promo=control.getOferta().buscarOfertaPorNombre(tfBusquedaPromocion.getText());
-				if(tfBusquedaPromocion.getText().length()>4)
+				PromocionDTO promo=control.getOferta().buscarOfertaPorNombre(tfAgregarPromocion.getText());
+				if(tfAgregarPromocion.getText().length()>4)
 					tfPrecioUniPromocion.setText(Integer.toString(promo.getPrecio()));
 			}
 		});
-		tfBusquedaPromocion.setColumns(10);
-		tfBusquedaPromocion.setBounds(492, 319, 229, 25);
-		contentPanel.add(tfBusquedaPromocion);
+		tfAgregarPromocion.setColumns(10);
+		tfAgregarPromocion.setBounds(492, 319, 229, 25);
+		contentPanel.add(tfAgregarPromocion);
 		
 		tfSubTotalPromocion = new JTextField();
 		tfSubTotalPromocion.setEditable(false);
@@ -594,10 +588,10 @@ public class ordenDePedido extends JDialog {
 						if(tfSubTotalPromocion.getText().compareTo("")!=0)
 						{
 						Integer subtotal=Integer.parseInt(tfPrecioUniPromocion.getText())* Integer.parseInt(tfUnidadPromocion.getText());
-						model.addRow(new String[] {tfBusquedaPromocion.getText(),""+tfUnidadPromocion.getText(),""+subtotal});
+						model.addRow(new String[] {tfAgregarPromocion.getText(),""+tfUnidadPromocion.getText(),""+subtotal});
 						tablaItems.setModel(model);
 						tfTotal.setText(actualizarTotal(tfSubTotalPromocion,"suma"));
-						tfBusquedaPromocion.setText("");
+						tfAgregarPromocion.setText("");
 						tfUnidadPromocion.setText("");
 						tfPrecioUniPromocion.setText("");
 						tfSubTotalPromocion.setText("");
@@ -630,7 +624,7 @@ public class ordenDePedido extends JDialog {
 				btnVerOtros.setBounds(17, 333, 40, 23);
 				contentPanel.add(btnVerOtros);
 				
-				TextAutoCompleter AutoCompletar4 = new TextAutoCompleter(tfBusquedaPromocion);
+				TextAutoCompleter AutoCompletar4 = new TextAutoCompleter(tfAgregarPromocion);
 				AutoCompletar4.setCaseSensitive(false); //No sensible a mayúsculas
 				AutoCompletar4.addItems(control.getOferta().buscaNombresOfertas());
 		}
@@ -643,6 +637,9 @@ public class ordenDePedido extends JDialog {
 	/////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ordenDePedido(VentanaPrincipal padre,final PedidoDTO pedidoCambiar,final Controlador control) 
 	{
 		setModal(false);
@@ -857,31 +854,66 @@ public class ordenDePedido extends JDialog {
 		
 		model=crearModelo();
 		
-		tfPrecioUniPromo = new JTextField();
-		tfPrecioUniPromo.setEditable(false);
-		tfPrecioUniPromo.setColumns(10);
-		tfPrecioUniPromo.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
-		tfPrecioUniPromo.setBackground(new Color(204, 204, 0));
-		tfPrecioUniPromo.setBounds(505, 370, 48, 22);
-		contentPanel.add(tfPrecioUniPromo);
+		tfPrecioUniPromocion = new JTextField();
+		tfPrecioUniPromocion.setEditable(false);
+		tfPrecioUniPromocion.setColumns(10);
+		tfPrecioUniPromocion.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
+		tfPrecioUniPromocion.setBackground(new Color(204, 204, 0));
+		tfPrecioUniPromocion.setBounds(505, 370, 48, 22);
+		contentPanel.add(tfPrecioUniPromocion);
 		
-		tfSubTotalPromo = new JTextField();
-		tfSubTotalPromo.setEditable(false);
-		tfSubTotalPromo.setColumns(10);
-		tfSubTotalPromo.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
-		tfSubTotalPromo.setBackground(new Color(204, 204, 0));
-		tfSubTotalPromo.setBounds(572, 370, 57, 22);
-		contentPanel.add(tfSubTotalPromo);
+		tfSubTotalPromocion = new JTextField();
+		tfSubTotalPromocion.setEditable(false);
+		tfSubTotalPromocion.setColumns(10);
+		tfSubTotalPromocion.setBorder(new MatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
+		tfSubTotalPromocion.setBackground(new Color(204, 204, 0));
+		tfSubTotalPromocion.setBounds(572, 370, 57, 22);
+		contentPanel.add(tfSubTotalPromocion);
 		
-		tfAgregarPromo = new JTextField();
-		tfAgregarPromo.setColumns(10);
-		tfAgregarPromo.setBounds(498, 319, 224, 25);
-		contentPanel.add(tfAgregarPromo);
+		tfAgregarPromocion = new JTextField();
+		tfAgregarPromocion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent evt) 
+			{
+				validarTexto(evt,tfAgregarPromocion);
+			}
+			@Override
+			public void keyReleased(KeyEvent e) 
+			{
+				PromocionDTO promo=control.getOferta().buscarOfertaPorNombre(tfAgregarPromocion.getText());
+				if(tfAgregarPromocion.getText().length()>4)
+					tfPrecioUniPromocion.setText(Integer.toString(promo.getPrecio()));
+			}
+		});
+		tfAgregarPromocion.setColumns(10);
+		tfAgregarPromocion.setBounds(498, 319, 224, 25);
+		contentPanel.add(tfAgregarPromocion);
 		
-		tfUnidadPromo = new JTextField();
-		tfUnidadPromo.setColumns(10);
-		tfUnidadPromo.setBounds(730, 319, 48, 25);
-		contentPanel.add(tfUnidadPromo);
+		tfUnidadPromocion = new JTextField();
+		tfUnidadPromocion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent evt)
+			{
+				validarNumeros(evt,tfUnidadPromocion);
+			}	
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+				if(tfUnidadPromocion.getText().compareTo("")!=0)
+				{
+					cantidad=Integer.parseInt(tfUnidadPromocion.getText());
+					precio=Integer.parseInt(tfPrecioUniPromocion.getText());
+					tfSubTotalPromocion.setText(Integer.toString(precio*cantidad));
+				}
+				if(tfUnidadPromocion.getText().compareTo("")==0)
+				{
+					tfSubTotalPromocion.setText("");
+				}
+			}
+		});
+		tfUnidadPromocion.setColumns(10);
+		tfUnidadPromocion.setBounds(730, 319, 48, 25);
+		contentPanel.add(tfUnidadPromocion);
 		{
 			scrollPane_1 = new JScrollPane();
 			scrollPane_1.setBounds(112, 472, 561, 109);
@@ -957,6 +989,7 @@ public class ordenDePedido extends JDialog {
 					nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 					nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 					nuevoPedido.setProductos(generarListaItem());
+					nuevoPedido.setOfertas(generarListaOfertas());
 					nuevoPedido.setHora(hora);
 					nuevoPedido.setFecha(fecha);
 					nuevoPedido.setFueeliminado(false);
@@ -1084,7 +1117,7 @@ public class ordenDePedido extends JDialog {
 						ventanamenu=new pedidoMenu(control,_this);
 						ventanamenu.setTitle("promocion");
 						ventanamenu.getBtnSeleccionar().addActionListener(control);
-						llenarTablaMenu("promocion");
+						llenarTablaMenuPromociones();
 						ventanamenu.setVisible(true);
 					}
 				});
@@ -1169,7 +1202,30 @@ public class ordenDePedido extends JDialog {
 				btnAgregarComentarioPre.setBounds(36, 553, 36, 30);
 				contentPanel.add(btnAgregarComentarioPre);
 				
-				TextAutoCompleter AutoCompletar4 = new TextAutoCompleter(tfAgregarPromo);
+				TextAutoCompleter AutoCompletar4 = new TextAutoCompleter(tfAgregarPromocion);
+				
+				JButton btnAgregarPromo = new JButton("New button");
+				btnAgregarPromo.setOpaque(false);
+				btnAgregarPromo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0)
+					{
+						if(tfSubTotalPromocion.getText().compareTo("")!=0)
+						{
+						Integer subtotal=Integer.parseInt(tfPrecioUniPromocion.getText())* Integer.parseInt(tfUnidadPromocion.getText());
+						model.addRow(new String[] {tfAgregarPromocion.getText(),""+tfUnidadPromocion.getText(),""+subtotal});
+						tablaItems.setModel(model);
+						tfTotal.setText(actualizarTotal(tfSubTotalPromocion,"suma"));
+						tfAgregarPromocion.setText("");
+						tfUnidadPromocion.setText("");
+						tfPrecioUniPromocion.setText("");
+						tfSubTotalPromocion.setText("");
+						}
+					else
+						JOptionPane.showMessageDialog(null, "Error, presione ENTER para que se genere el subtotal");
+					}
+				});
+				btnAgregarPromo.setBounds(803, 298, 30, 35);
+				contentPanel.add(btnAgregarPromo);
 				AutoCompletar4.setCaseSensitive(false); //No sensible a mayúsculas
 				AutoCompletar4.addItems(control.getOferta().buscaNombresOfertas());
 		}
@@ -1214,6 +1270,12 @@ public class ordenDePedido extends JDialog {
 		{
 			ItemDTO elemento = Iterador.next();
 			model.addRow(new String[] {elemento.getProducto().getNombre(),""+elemento.getCantidad(),""+(elemento.getProducto().getPrecio()* elemento.getCantidad()),elemento.getComentario()});
+		}
+		Iterator<ItemPromocionDTO> Iterador2=pedido.getOfertas().iterator();
+		while(Iterador2.hasNext())
+		{
+			ItemPromocionDTO elemento = Iterador2.next();
+			model.addRow(new String[] {elemento.getPromocion().getNombre(),""+elemento.getCantidad(),""+(elemento.getPromocion().getPrecio()* elemento.getCantidad()),elemento.getComentario()});
 		}
 		tablaItems.setModel(model);
 	}
@@ -1446,7 +1508,7 @@ public class ordenDePedido extends JDialog {
 		tfPrecioUniOtro.setText("");
 		tfSubTotalOtro.setText("");
 		tfUnidadOtro.setText("");
-		tfBusquedaPromocion.setText("");
+		tfAgregarPromocion.setText("");
 		tfPrecioUniPromocion.setText("");
 		tfUnidadPromocion.setText("");
 		tfSubTotalPromocion.setText("");
@@ -1455,13 +1517,16 @@ public class ordenDePedido extends JDialog {
 	public ArrayList<ItemDTO> generarListaItem() 
 	{
 		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
-		Integer empieza=control.getItem().obtenerItems().size()+1;
+		Integer empieza=control.getItem().ultimoItem()+1;
 		System.out.println(this.control);
 		for(int i=0; i<this.tablaItems.getRowCount(); i++)
 		{
+			if(control.getProducto().buscarProductoPorNombre(model.getValueAt(i, 0).toString())!=null)
+			{
 			ItemDTO aux=new ItemDTO(empieza+i,control.getProducto().buscarProductoPorNombre(model.getValueAt(i, 0).toString()), Integer.parseInt((String)model.getValueAt(i, 1)), (String)model.getValueAt(i, 3),false);
 			listaAux.add(aux);
 			control.getItem().agregarItem(aux);
+			}
 		}
 		return listaAux;
 	}
@@ -1477,12 +1542,12 @@ public class ordenDePedido extends JDialog {
 
 
 	public JTextField getTfAgregarPromocion() {
-		return tfBusquedaPromocion;
+		return tfAgregarPromocion;
 	}
 
 
 	public void setTfAgregarPromocion(JTextField tfAgregarPromocion) {
-		this.tfBusquedaPromocion = tfAgregarPromocion;
+		this.tfAgregarPromocion = tfAgregarPromocion;
 	}
 
 
@@ -1551,5 +1616,43 @@ public class ordenDePedido extends JDialog {
 				ventanamenu.getModel().addRow(fila);			
 			}
 		}
+	}
+	private void llenarTablaMenuPromociones()
+	{
+		this.ventanamenu.getModel().setRowCount(0); //Para vaciar la tabla
+		this.ventanamenu.getModel().setColumnCount(0);
+		this.ventanamenu.getModel().setColumnIdentifiers(this.ventanamenu.getNombreColumnas());
+		Iterator<PromocionDTO> Iterador = control.getOferta().obtenerOfertas().iterator();
+		while(Iterador.hasNext())
+		{
+			PromocionDTO elemento = Iterador.next();
+			{
+				Object[] fila = {elemento.getNombre(), elemento.getPrecio()};
+				this.ventanamenu.getModel().addRow(fila);			
+			}
+		}
+	}
+	private ArrayList<ItemPromocionDTO> generarListaOfertas() 
+	{
+		ArrayList<ItemPromocionDTO> listaAux= new ArrayList<ItemPromocionDTO>();
+		for(int i=0; i<this.tablaItems.getRowCount(); i++)
+		{
+			PromocionDTO aux=control.getOferta().buscarOfertaPorNombre(model.getValueAt(i, 0).toString());
+			if(aux!=null)
+			{
+				ItemPromocionDTO nuevo= new ItemPromocionDTO ();
+				nuevo.setIditemPromo(control.getItemPromocion().ultimaOferta()+1);
+				nuevo.setPromocion(aux);
+				nuevo.setCantidad(Integer.parseInt(model.getValueAt(i, 1).toString()));
+				if(model.getValueAt(i, 3)!=null)
+					nuevo.setComentario(model.getValueAt(i, 3).toString());
+				else
+					nuevo.setComentario("");
+				nuevo.setFueeliminado(false);
+				listaAux.add(nuevo);
+				control.getItemPromocion().agregarItemPromo(nuevo);
+			}
+		}
+		return listaAux;
 	}
 }

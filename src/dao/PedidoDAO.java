@@ -6,14 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.sf.jasperreports.engine.export.draw.Offset;
-
 import modelo.Clientes;
 import modelo.Items;
+import modelo.ItemsPromociones;
 import modelo.Promociones;
 import dto.ClienteDTO;
 import dto.ItemDTO;
+import dto.ItemPromocionDTO;
 import dto.PromocionDTO;
 import dto.PedidoDTO;
 import conexion.Conexion;
@@ -41,7 +41,7 @@ public class PedidoDAO
 		{			
 			Items ite=new Items();
 			String iditems= ite.iditemsPed(pedido);
-			Promociones ofe=new Promociones();
+			ItemsPromociones ofe=new ItemsPromociones();
 			String idofertas= ofe.iditemsOferta(pedido);
 			statement = conexion.getSQLConexion().prepareStatement(insert);		
 				statement.setInt(1, pedido.getIdpedido());
@@ -123,8 +123,8 @@ public class PedidoDAO
 				ClienteDTO lab=cli.buscarClientePorID(resultSet.getInt("cliente"));
 				Items ite=new Items();
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
-				Promociones ofe=new Promociones();
-				ArrayList<PromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				ItemsPromociones ofe=new ItemsPromociones();
+				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
 				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
@@ -166,8 +166,8 @@ public class PedidoDAO
 				Clientes cli=new Clientes();
 				Items ite=new Items();
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
-				Promociones ofe=new Promociones();
-				ArrayList<PromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				ItemsPromociones ofe=new ItemsPromociones();
+				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
 				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
@@ -199,7 +199,7 @@ public class PedidoDAO
 			resultSet = statement.executeQuery();			
 			ArrayList<PedidoDTO> resultado = new ArrayList<PedidoDTO>();
 			Items items=new Items();
-			Promociones promociones = new Promociones();
+			ItemsPromociones promociones = new ItemsPromociones();
 
 			while (resultSet.next())
 			{			

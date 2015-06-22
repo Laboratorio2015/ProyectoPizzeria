@@ -11,7 +11,7 @@ public class PedidoDTO
 	//public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
 	private Integer idpedido;
 	private ArrayList<ItemDTO> items;
-	private ArrayList<PromocionDTO> ofertas;
+	private ArrayList<ItemPromocionDTO> ofertas;
 	private String fecha;
 	private String hora;
 	private Integer total;
@@ -25,7 +25,7 @@ public class PedidoDTO
 	
 	public PedidoDTO(Integer pedido,ArrayList<ItemDTO> items ,String fecha, String hora, String estado,
 			Integer total, Integer ticket, Integer comanda, ClienteDTO cliente,
-			Boolean llevaDelivery,ArrayList<PromocionDTO> ofertas,	Boolean fueeliminado) 
+			Boolean llevaDelivery,ArrayList<ItemPromocionDTO> ofertas,	Boolean fueeliminado) 
 	{
 		this.idpedido=pedido;
 		this.items=items;
@@ -47,7 +47,7 @@ public class PedidoDTO
 	}
 
 	
-	public PedidoDTO(Integer idOrden, ArrayList<ItemDTO> items,Integer totalCosto,ArrayList<PromocionDTO> promos) {
+	public PedidoDTO(Integer idOrden, ArrayList<ItemDTO> items,Integer totalCosto,ArrayList<ItemPromocionDTO> promos) {
 		this.idpedido = idOrden;
 		this.total = totalCosto;
 		this.items= items;
@@ -147,10 +147,10 @@ public class PedidoDTO
 	public void setItems(ArrayList<ItemDTO> items) {
 		this.items = items;
 	}
-	public ArrayList<PromocionDTO> getOfertas() {
+	public ArrayList<ItemPromocionDTO> getOfertas() {
 		return ofertas;
 	}
-	public void setOfertas(ArrayList<PromocionDTO> ofertas) {
+	public void setOfertas(ArrayList<ItemPromocionDTO> ofertas) {
 		this.ofertas = ofertas;
 	}
 	public String getEstado() {

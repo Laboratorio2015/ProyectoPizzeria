@@ -61,7 +61,9 @@ public class ItemDTO implements Serializable{
 	public void setFueeliminado(Boolean fueeliminado) {
 		this.fueeliminado = fueeliminado;
 	}
-
+	
+	//////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////
 	public ItemDTO buscarItem(ArrayList<ItemDTO> listaItem)
 	{
 		Iterator<ItemDTO> Iterador = listaItem.iterator();

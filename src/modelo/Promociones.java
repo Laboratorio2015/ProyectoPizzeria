@@ -42,7 +42,7 @@ public class Promociones {
 	}
 	//////////////////////////////////////////////////////////
 	
-	public String idofertas(PedidoDTO pedido)
+/*	public String idofertas(PedidoDTO pedido)
 	{
 		String listaId="";
 		Iterator<PromocionDTO> Iterador = pedido.getOfertas().iterator();
@@ -53,7 +53,7 @@ public class Promociones {
 		}
 		return listaId;
 	}
-	
+	*/
 	public PromocionDTO buscarOferta(Integer idoferta)
 	{
 		List<PromocionDTO> productos=this.obtenerOfertas();
@@ -93,7 +93,7 @@ public class Promociones {
 		}
 		return ultimo;
 	}
-
+/*
 	public String iditemsOferta(PedidoDTO pedido)
 	{
 		String listaId="";
@@ -108,7 +108,7 @@ public class Promociones {
 		}
 		return listaId;
 	}
-
+*/
 	public ArrayList<PromocionDTO> pasarDeStringAArray(String listado) 
 	{
 		ArrayList<PromocionDTO> result=new ArrayList<PromocionDTO>();

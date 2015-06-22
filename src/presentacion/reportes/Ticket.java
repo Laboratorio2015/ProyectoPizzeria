@@ -126,7 +126,10 @@ public class Ticket {
 				ItemDTO elemento = Iterador2.next();
 				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getCantidad().toString(), 50, y2, 0);
 				canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getProducto().getNombre(), 110, y2, 0);
+				if (elemento.getComentario()!= null)
 				canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getComentario(), 370, y2, 0);
+				else
+					canvas.showTextAligned(Element.ALIGN_LEFT, "", 370, y2, 0);
 				y2=y2-30;
 			}	
 		canvas.endText();

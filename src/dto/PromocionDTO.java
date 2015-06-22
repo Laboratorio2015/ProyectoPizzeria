@@ -1,6 +1,8 @@
 package dto;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class PromocionDTO {
 
@@ -59,6 +61,17 @@ public class PromocionDTO {
 	}
 	public void setFueeliminado(Boolean fueeliminado) {
 		this.fueeliminado = fueeliminado;
+	}
+	public static PromocionDTO buscarProducto(List<PromocionDTO> obtenerOfertas, int idpromo)
+	{
+		Iterator<PromocionDTO> Iterador = obtenerOfertas.iterator();
+		while(Iterador.hasNext())
+		{
+			PromocionDTO elemento = Iterador.next();
+			if(elemento.getIdOferta().equals(idpromo))
+				return elemento;
+		}
+		return null;
 	}
 	
 }
