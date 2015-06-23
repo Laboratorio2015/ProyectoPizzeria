@@ -28,6 +28,7 @@ import presentacion.reportes.Ticket;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -187,7 +188,12 @@ public class seleccionDeCliente extends JDialog {
 					else
 						pedido.setLlevaDelivery(false);
 					//control.getMonitor().nuevoPedido(pedido);
-					control.getPedido().agregarPedido(pedido);
+				try {
+						control.enviarPedidoMonitor(pedido, false);
+					} catch (IOException e) {
+						System.out.println("Fallo conexion con monitor (servidor)");
+						e.printStackTrace();
+					}							control.getPedido().agregarPedido(pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
 					//control.getMonitorCocina().nuevoPedido(pedido);
 					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
@@ -364,11 +370,23 @@ public class seleccionDeCliente extends JDialog {
 					{
 						cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText()));
 						pedido.setCliente(cliente);
+						try {
+							control.enviarPedidoMonitor(pedido, true);
+						} catch (IOException e) {
+							System.out.println("Fallo conexion con monitor (servidor)");
+							e.printStackTrace();
+						}
 					}
 					catch(Exception e)
 					{
 						cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
 						pedido.setCliente(cliente);
+						try {
+							control.enviarPedidoMonitor(pedido,false);
+						} catch (IOException e1) {
+							System.out.println("Fallo la conexion con el monitor (servidor)");
+							e1.printStackTrace();
+						}
 					}
 					if(CheckBoxDelivery.isSelected())
 						pedido.setLlevaDelivery(true);

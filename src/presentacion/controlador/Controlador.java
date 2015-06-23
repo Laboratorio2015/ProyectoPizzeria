@@ -1,4 +1,10 @@
 package presentacion.controlador;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.dnd.Autoscroll;
@@ -49,7 +55,7 @@ import dto.PedidoDTO;
 import dto.ProductoDTO;
 import dto.ProveedorDTO;
 import dto.RepartidorDTO;
-import dto.ReporteContable;
+import dto.ReporteContableDTO;
 import presentacion.reportes.solicitudDeMateriaPrima;
 import presentacion.vista.VentanaPrincipal;
 import presentacion.vista.buscadorProveedor;
@@ -87,6 +93,9 @@ import presentacion.vista.selectMenuReportes;
 
 public class Controlador implements ActionListener
 {
+	private Socket socket;
+	private ObjectOutputStream objectOutputStream;
+	private ObjectInputStream objectInputStream;
 	//ventanas
 	private VentanaPrincipal ventana;
 	private ordenDePedido ventanaPedido;
@@ -117,7 +126,7 @@ public class Controlador implements ActionListener
 	private registrarCobroDePedido ventanaRegCobroPedido;
 	private registrarCobroManualmente ventanaRegCobroManual;
 	private seleccionarRepartidor ventanaSeleccionRepartidor;
-	private PadreMonitor monitorCocina;
+//	private PadreMonitor monitorCocina;
 	private pedidoMenu ventanamenu;
 	private registroDeCliente ventanaRegistrarCliente;
 	private clienteBajaModificacion ventanaModificacionCliente;
@@ -141,7 +150,7 @@ public class Controlador implements ActionListener
 	private ItemMateriasPrimas itemsMateriaPrima;
 	private Itinerarios itinerario;
 	private registrarPagoOrdenMatPrima ventanaRegistrarPagoOrdenMatPrima;
-	private ReporteContable reporteContable;
+	private ReporteContableDTO reporteContable;
 
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
@@ -175,9 +184,7 @@ public class Controlador implements ActionListener
 	public void inicializar()
 	{
 		this.ventana.show();
-		//this.monitorCocina=new PadreMonitor(pedido);
-		//System.out.println(getFechaActual());
-	}
+		System.out.println(getFechaActual());	}
 
 	@SuppressWarnings({ "serial", "deprecation" })
 	@Override
@@ -259,6 +266,7 @@ public class Controlador implements ActionListener
 			switch (ventanaReportesContables.getCbTipoConsulta().getSelectedItem().toString()) {
 			case "Seleccione el tipo de consulta":
 			{
+				ventanaReportesContables.ocultarRango(true);
 				break;
 			}
 			case "Dia de hoy":
@@ -266,8 +274,9 @@ public class Controlador implements ActionListener
 				ventanaReportesContables.ocultarRango(true);
 				try {
 					consultaReporteDiario();
+					reporteContable.calcularGanancias();
+					ventanaReportesContables.mostrarResultados(reporteContable.getTotalCompras(),reporteContable.getTotalPedidos(),reporteContable.getGanancia());
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					System.out.println("No se pudo realizar consulta a la bd.");
 					e1.printStackTrace();
 				}
@@ -302,7 +311,7 @@ public class Controlador implements ActionListener
 					//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
 				}
 				else{
-					reporteContable = new ReporteContable();
+					reporteContable = new ReporteContableDTO();
 					ArrayList<PedidoDTO> pedidosResultantes = reporteContable.getListadoPedidos();
 					ArrayList<OrdenPedidoMatPrimaDTO> comprasResultantes = reporteContable.getListadoCompras();
 
@@ -330,7 +339,7 @@ public class Controlador implements ActionListener
 							for (int x=diaCero; x<= diaIndiceFin ;x++){
 								try {
 									pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));
-									comprasResultantes.addAll(ordenesMatPrimas.reporteEnRango(String.valueOf(x), String.valueOf(i),String.valueOf(j)));
+									comprasResultantes.addAll(ordenesMatPrimas.reporteEnRango(String.valueOf(x), String.valueOf(i),String.valueOf(j)));							
 								} catch (SQLException e1) {
 									JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
 									e1.printStackTrace();								
@@ -338,6 +347,8 @@ public class Controlador implements ActionListener
 							}
 						}
 					}
+					reporteContable.calcularGanancias();
+					ventanaReportesContables.mostrarResultados(reporteContable.getTotalCompras(),reporteContable.getTotalPedidos(),reporteContable.getGanancia());
 				}
 			}
 			else{
@@ -462,7 +473,7 @@ public class Controlador implements ActionListener
 			(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
 			this.gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
 		}
-		//GESTOR MAT PRIMA> IMPRIMIR ORDEN 
+		//GESTOR ORDENES MAT PRIMA> IMPRIMIR ORDEN 
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnImprimirOrden())
 		{
 			Integer intRowSelected = this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
@@ -497,26 +508,40 @@ public class Controlador implements ActionListener
 				filtrarBusquedaOrdenes();
 			}
 		}
-		//GESTOR MAT PRIMA> ABRIR VENTANA DE Registrar pago y recepci[on de orden
+		//GESTOR ORDEN MAT PRIMA> ABRIR VENTANA DE Registrar pago y recepci[on de orden
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnPagarorden())
 		{
 			//Se debe obtener el objeto seleccionado,en base al nro de id correspondiente. Realizar metodo
 			Integer intFilaSeleccionada = gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getSelectedRow();
-			if (intFilaSeleccionada >-1){
-				Integer idOrdenSeleccionada = Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt
-						(intFilaSeleccionada, 0).toString());			
-				gestorOrdenesMateriasPrimas.setOrdenSeleccionada(ordenesMatPrimas.buscarOrdenPedidoMatPrima( Integer.parseInt
-						(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt(intFilaSeleccionada, 0).toString())));
+			if (intFilaSeleccionada >-1){		
+				gestorOrdenesMateriasPrimas.setOrdenSeleccionada(ordenesMatPrimas.buscarOrdenPedidoMatPrima( Integer.parseInt(gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().getValueAt
+						(intFilaSeleccionada, 0).toString()) ) );
 
 				ventanaRegistrarPagoOrdenMatPrima = new registrarPagoOrdenMatPrima(ventana, this);
 				ventanaRegistrarPagoOrdenMatPrima.setVisible(true);
-
 				ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro().addActionListener(this);
+				
 				ventanaRegistrarPagoOrdenMatPrima.cargarDatosOrden(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
 			}
 			else
 				JOptionPane.showMessageDialog(null, "Primero debe seleccionar una orden de la tabla.", "Confirmación",JOptionPane.WARNING_MESSAGE);
 		}
+		//GESTOR ORDEN MAT PRIMA: BOTON CONFIRMAR PAGO ORDEN
+		else if(this.ventanaRegistrarPagoOrdenMatPrima!= null && e.getSource()==this.ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro())
+			{
+				if (!ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().isEmpty())
+				{
+					ordenesMatPrimas.quitarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
+					gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setCosto(Integer.parseInt(ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().toString()));
+					gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setEstado("pagado");
+					gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setFecha(getFechaActual());
+					ordenesMatPrimas.agregarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
+					filtrarBusquedaOrdenes();//para q actualice los estados de las ordenes y no haya problema con la busq x 
+					JOptionPane.showMessageDialog(null, "Se ha registrado correctamente la recepción y pago de la orden de materia prima", "Confirmación",JOptionPane.WARNING_MESSAGE); 
+					filtrarBusquedaOrdenes();
+					ventanaRegistrarPagoOrdenMatPrima.dispose();	
+				}
+			}
 		//GESTOR MAT PRIMA> BORRAR ORDEN DE MATERIA PRIMA.
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnBorrarorden())
 		{		
@@ -535,22 +560,6 @@ public class Controlador implements ActionListener
 					this.gestorOrdenesMateriasPrimas.resetearModeloOrdenesPedido();
 
 				}
-			}
-		}
-		//REGISTRO PAGO ORDEN MAT PRIMA> Registrar pago y recepci[on de orden
-		else if(this.ventanaRegistrarPagoOrdenMatPrima!= null && e.getSource()==this.ventanaRegistrarPagoOrdenMatPrima.getBtnRegistrarcobro())
-		{
-			if (!ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().isEmpty())
-			{
-				ordenesMatPrimas.quitarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
-				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setCosto(Integer.parseInt(ventanaRegistrarPagoOrdenMatPrima.getTextFieldCosto().getText().toString()));
-				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setEstado("pagado");
-				gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setFecha(getFechaActual());
-				ordenesMatPrimas.agregarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
-				filtrarBusquedaOrdenes();//para q actualice los estados de las ordenes y no haya problema con la busq x 
-				JOptionPane.showMessageDialog(null, "Se ha registrado correctamente la recepción y pago de la orden de materia prima", "Confirmación",JOptionPane.WARNING_MESSAGE); 
-				filtrarBusquedaOrdenes();
-				ventanaRegistrarPagoOrdenMatPrima.dispose();	
 			}
 		}
 		//ORDEN MATERIA PRIMA> COMBO LISTA PROVEEDORES
@@ -703,7 +712,7 @@ public class Controlador implements ActionListener
 			ventanaSeleccionProveedor.borrarDetalles();
 			accionParaCambioFiltroCategoria();
 		}
-		/////////////////////ABM CATEORIAS///////////////////////////////
+		/////////////////////ABM CATEGORIAS///////////////////////////////
 		//VENTANA CONFIGURACION > Abrir ventana abm categoria
 		else if (this.ventanaConfiguraciones!= null && e.getSource()==this.ventanaConfiguraciones.getBtnGestionarCategorias())
 		{
@@ -1846,14 +1855,10 @@ public class Controlador implements ActionListener
 	}
 
 	private void consultaReporteDiario() throws SQLException {
-		//Que debo almacenar? 
-		//Listado de pedidos.
-		//Listado de Compras
-		//Integer Ganancia
-		reporteContable = new ReporteContable();
+		reporteContable = new ReporteContableDTO();
 		reporteContable.setListadoPedidos( pedido.reporteDiario( getDiaActual(),getMesActual(),getAñoActual() ));
+		reporteContable.setListadoCompras( ordenesMatPrimas.reporteEnRango(getDiaActual(),getMesActual(),getAñoActual() ));							
 	}
-
 
 	private String getDiaActual() {
 		Calendar fecha = new GregorianCalendar();
@@ -1861,13 +1866,11 @@ public class Controlador implements ActionListener
         return String.valueOf(dia);
 	}
 
-
 	private String getAñoActual() {
 		Calendar fecha = new GregorianCalendar();
         int año = fecha.get(Calendar.YEAR);
         return String.valueOf(año);
 	}
-
 
 	private String getMesActual() {
 		Calendar fecha = new GregorianCalendar();
@@ -2375,7 +2378,7 @@ public class Controlador implements ActionListener
 	public void setProducto(Productos producto) {
 		this.producto = producto;
 	}
-	
+
 
 	public ItemsPromociones getItemPromocion() {
 		return itemPromocion;
@@ -2480,16 +2483,6 @@ public class Controlador implements ActionListener
 		this.itinerario = itinerario;
 	}
 
-
-	public PadreMonitor getMonitorCocina()
-	{
-		return monitorCocina;
-	}
-
-	public void setMonitorCocina(PadreMonitor monitorCocina)
-	{
-		this.monitorCocina = monitorCocina;
-	}
 
 	public Proveedores getProveedor() {
 		return proveedor;
@@ -2661,9 +2654,6 @@ public class Controlador implements ActionListener
 			}
 		}
 	}
-	public PadreMonitor getMonitor(){
-		return this.monitorCocina;
-	}
 
 	private void accionParaCambioFiltroCategoria() {
 		ventanaSeleccionProveedor.resetearModeloTablaResultados();
@@ -2675,13 +2665,9 @@ public class Controlador implements ActionListener
 			while(IteradorProv.hasNext())
 			{
 				ProveedorDTO elementoProveed = IteradorProv.next();
-
-				System.out.println("El provedor " + elementoProveed.getNombre() + " es de la categoria " + nomCatSeleccionada 
-						+ "?= "+ elementoProveed.isCategoria(nomCatSeleccionada) );
-
 				if (elementoProveed.isCategoria(nomCatSeleccionada)){
-					ventanaSeleccionProveedor.getModeloResultados().addRow( new String[] {elementoProveed.getNombre(),
-							elementoProveed.getDireccion(),elementoProveed.getTelefono(),elementoProveed.getEmail()});
+					ventanaSeleccionProveedor.getModeloResultados().addRow( new String[] {elementoProveed.getNombre().trim(),
+							elementoProveed.getDireccion().trim(),elementoProveed.getTelefono().trim(),elementoProveed.getEmail().trim()});
 				}
 			}
 			ventanaSeleccionProveedor.getResultadoBusquedaProv().setModel(ventanaSeleccionProveedor.getModeloResultados());
@@ -2753,7 +2739,7 @@ public class Controlador implements ActionListener
 //      int minuto = fecha.get(Calendar.MINUTE);
 //      int segundo = fecha.get(Calendar.SECOND);
         //System.out.printf("Hora Actual: %02d:%02d:%02d %n",hora, minuto, segundo);
-        return String.format("%02d", dia)+ "/" + String.format("%02d", mes)+ "/" + año;// + " "
+        return new String (dia + "/" + mes + "/" + año);// + " "
         //+ String.format("%02d", hora) + ":" + String.format("%02d", minuto) + ":" + String.format("%02d", segundo);           
         
 	}
@@ -2779,6 +2765,20 @@ public class Controlador implements ActionListener
 			ofertas.add(item);
 		}
 		return ofertas;
+	}
+	
+	public void enviarPedidoMonitor(PedidoDTO nuevoPedido,boolean borrar) throws IOException{
+
+		this.socket = new Socket("localhost",5000);;
+
+		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
+		objectInputStream = new ObjectInputStream(socket.getInputStream());
+		
+		//ENVIO DE PEDIDO
+		this.objectOutputStream.writeObject(nuevoPedido);
+		//RETORNO POSIBLE. persona returnHumano = (persona)cliente.objectInputStream.readObject();
+		System.out.println("Pedido enviado");
+		socket.close();			
 	}
 }
 	

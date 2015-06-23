@@ -61,7 +61,7 @@ public class buscadorProveedor extends JDialog {
 		this.controlador = controlador;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 594, 725);
+		setBounds(100, 100, 615, 748);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -69,7 +69,7 @@ public class buscadorProveedor extends JDialog {
 
 		comboFiltroBusqueda = new JComboBox<String>();
 		comboFiltroBusqueda.setModel(new DefaultComboBoxModel<String>(new String[] {"Todos", "Categor\u00EDa", "Nombre"}));
-		comboFiltroBusqueda.setBounds(60, 156, 204, 20);
+		comboFiltroBusqueda.setBounds(60, 156, 217, 20);
 		contentPane.add(comboFiltroBusqueda);
 		
 		comboBoxCategorias = new JComboBox<String>();
@@ -108,7 +108,9 @@ public class buscadorProveedor extends JDialog {
 			};
 		resultadoBusquedaProv.setModel(modeloResultados);
 		resultadoBusquedaProv.getColumnModel().getColumn(0).setMaxWidth(200);
-		resultadoBusquedaProv.getColumnModel().getColumn(1).setMaxWidth(200);
+		resultadoBusquedaProv.getColumnModel().getColumn(1).setMinWidth(160);
+		resultadoBusquedaProv.getColumnModel().getColumn(1).setWidth(160);
+		resultadoBusquedaProv.getColumnModel().getColumn(1).setMaxWidth(160);
 		resultadoBusquedaProv.getColumnModel().getColumn(2).setMaxWidth(55);
 		resultadoBusquedaProv.getColumnModel().getColumn(3).setMaxWidth(300);
 
@@ -127,7 +129,7 @@ public class buscadorProveedor extends JDialog {
 		textPaneComentario.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textPaneComentario.setForeground(new Color(250, 235, 215));
 		textPaneComentario.setBackground(new Color(0, 51, 102));
-		textPaneComentario.setBounds(31, 565, 500, 48);
+		textPaneComentario.setBounds(31, 565, 512, 48);
 		contentPane.add(textPaneComentario);
 		textFieldBuscadorProv.setBounds(66, 225, 211, 20);
 		contentPane.add(textFieldBuscadorProv);
@@ -136,10 +138,11 @@ public class buscadorProveedor extends JDialog {
 		textAutoAcompleter = new TextAutoCompleter( textFieldBuscadorProv );
 		
 		textPanecategorias = new JTextPane();
+		textPanecategorias.setEditable(false);
 		textPanecategorias.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textPanecategorias.setForeground(new Color(250, 235, 215));
 		textPanecategorias.setBackground(new Color(0, 51, 102));
-		textPanecategorias.setBounds(31, 493, 500, 48);
+		textPanecategorias.setBounds(31, 493, 512, 48);
 		contentPane.add(textPanecategorias);
 		
 		labelMuestraNomContacto = new JLabel("");
@@ -153,7 +156,7 @@ public class buscadorProveedor extends JDialog {
 		JLabel fondo = new JLabel("");
 		fondo.setHorizontalAlignment(SwingConstants.CENTER);
 		fondo.setIcon(new ImageIcon(buscadorProveedor.class.getResource("/prototipos/Buscador de proveedor.png")));
-		fondo.setBounds(-14, 0, 620, 686);
+		fondo.setBounds(0, 0, 600, 686);
 		contentPane.add(fondo);
 		textAutoAcompleter.setMode(0);
 		textAutoAcompleter.setCaseSensitive(false);
@@ -201,6 +204,12 @@ public class buscadorProveedor extends JDialog {
 				}
 			};
 		resultadoBusquedaProv.setModel(modeloResultados);
+		resultadoBusquedaProv.getColumnModel().getColumn(0).setMaxWidth(200);
+		resultadoBusquedaProv.getColumnModel().getColumn(1).setMinWidth(160);
+		resultadoBusquedaProv.getColumnModel().getColumn(1).setWidth(160);
+		resultadoBusquedaProv.getColumnModel().getColumn(1).setMaxWidth(160);
+		resultadoBusquedaProv.getColumnModel().getColumn(2).setMaxWidth(55);
+		resultadoBusquedaProv.getColumnModel().getColumn(3).setMaxWidth(300);
 	}
 	
 	public void borrarDetalles(){

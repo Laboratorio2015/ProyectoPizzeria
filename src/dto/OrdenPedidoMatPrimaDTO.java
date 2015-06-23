@@ -40,6 +40,13 @@ public class OrdenPedidoMatPrimaDTO
 //	}
 	
 	
+	public OrdenPedidoMatPrimaDTO(Integer idOrden,ProveedorDTO proveedor, String fecha, Integer costo){
+		this.idCompra = idOrden;
+		this.proveedor = proveedor;
+		this.fecha=fecha;
+		this.costo=costo;
+	}
+
 	public Integer getIdCompra() {
 		return idCompra;
 	}

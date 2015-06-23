@@ -20,6 +20,7 @@ import javax.swing.JTable;
 import dto.PedidoDTO;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 
 public class pedidosPendientes extends JDialog {
@@ -262,7 +263,12 @@ public class pedidosPendientes extends JDialog {
 						numFilaSeleccionada=table.getSelectedRow();
 						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
 						//Quita el pedido del MONITOR ////////////////////////////////////////////
-						control.getMonitorCocina().quitarPedido(pedidoCambia);/////////////////////////////
+						try {
+							control.enviarPedidoMonitor(pedidoCambia, true);
+						} catch (IOException e) {
+							System.out.println("Fallo conexion con monitor (servidor)");
+							e.printStackTrace();
+						}/////////////////////////////
 						//////////////////////////////////////////////////////////////////////////
 						model.setValueAt("rechazado", numFilaSeleccionada, 2);
 						pedidoCambia.set_estado("rechazado");
@@ -344,7 +350,12 @@ public class pedidosPendientes extends JDialog {
 						pedido.set_estado("preparado");
 						control.getPedido().agregarPedido(pedido);				
 						//////////QUITA EL PEDIDO DEL MONITOR//////////
-						control.getMonitorCocina().quitarPedido(pedido);
+						try {
+							control.enviarPedidoMonitor(pedido, true);
+						} catch (IOException e) {
+							System.out.println("Fallo conexion con monitor (servidor)");
+							e.printStackTrace();
+						}
 						///////////////////////////////////////////////
 					}
 					else if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("rechazado")==0)

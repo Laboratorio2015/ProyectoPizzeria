@@ -159,36 +159,36 @@ public class OrdenPedidoMatPrimaDAO
 	}
 
 	public ArrayList<OrdenPedidoMatPrimaDTO> reporteEnRango(String dia,String mes, String año) {
-//		select = "SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '" + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
-//		System.out.println(select);
-//		PreparedStatement statement;
-//		ResultSet resultSet; //Guarda
-//		try 
-//		{
-//			statement = conexion.getSQLConexion().prepareStatement(select);
-//			resultSet = statement.executeQuery();			
-//			ArrayList<PedidoDTO> resultado = new ArrayList<PedidoDTO>();
-//			Items items=new Items();
-//			Promociones promociones = new Promociones();
-//
-//			while (resultSet.next())
-//			{			
-//				resultado.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray((String) resultSet.getObject(2))
-//											,(Integer)resultSet.getObject(3), promociones.pasarDeStringAArray((String) resultSet.getObject(4))));
-//			}
-//			return resultado;
-//		}
-//		catch (SQLException e) 
-//		{
-//			e.printStackTrace();
-//		}
-//		finally //Se ejecuta siempre
-//		{
-//			conexion.cerrarConexion();
-//		}
 		select = "SELECT idcompra,proveedor,fecha,costo " +
 		"FROM ordenpedidomatprima WHERE estado='pagado' AND fueeliminado=FALSE " +
-		"AND fecha LIKE '" + dia.toString() + "/" + mes.toString() + "/" + año + "%'";
+		"AND fecha LIKE '" + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
+		System.out.println(select);
+		PreparedStatement statement;
+		ResultSet resultSet; 
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(select);
+			resultSet = statement.executeQuery();			
+			ArrayList<OrdenPedidoMatPrimaDTO> resultado = new ArrayList<OrdenPedidoMatPrimaDTO>();
+			Proveedores proveedores = new Proveedores();
+			while (resultSet.next())
+			{
+				resultado.add(new OrdenPedidoMatPrimaDTO( (Integer)resultSet.getObject(1), 
+						proveedores.buscarProveedorPorId((Integer)resultSet.getObject(2)),
+						(String)resultSet.getObject(3), (Integer)resultSet.getObject(4)));
+			}
+			return resultado;
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
 		return null;
+		
+		
 	}
 }

@@ -20,7 +20,7 @@ public class ItemDTO implements Serializable{
 		this.comentario=comentario;
 		this.fueeliminado=fueeliminado;
 	}
-
+	
 	public ProductoDTO getProducto() {
 		return producto;
 	}

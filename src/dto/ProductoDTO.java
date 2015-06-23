@@ -1,11 +1,13 @@
 package dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ProductoDTO 
+public class ProductoDTO implements Serializable
 {
+	private static final long serialVersionUID = 1606181834602238613L;
 	private Integer idproducto;
 	private String nombre;
 	private Integer precio;
@@ -25,6 +27,10 @@ public class ProductoDTO
 		
 	}
 	
+	@Override
+	public int hashCode(){
+		return nombre.hashCode();
+	}
 	public String getTipo() {
 		return tipo;
 	}

@@ -1,7 +1,10 @@
 package dto;
 
-public class RepartidorDTO 
+import java.io.Serializable;
+
+public class RepartidorDTO implements Serializable 
 {
+	private static final long serialVersionUID = 3433051101713319167L;
 	private Integer idRepartidor;
 	private Integer dni;
 	private String nombre;

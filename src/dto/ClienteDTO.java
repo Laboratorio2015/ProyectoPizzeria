@@ -6,7 +6,6 @@ import java.util.List;
 
 public class ClienteDTO implements Serializable
 {
-
 	private static final long serialVersionUID = 4650304815029858272L;
 	private Integer idcliente;
 	private Integer dni;

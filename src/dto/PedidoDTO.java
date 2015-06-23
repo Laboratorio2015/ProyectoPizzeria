@@ -1,13 +1,15 @@
 package dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dto.ItemDTO;
 
 
-public class PedidoDTO 
+public class PedidoDTO implements Serializable
 {
+	private static final long serialVersionUID = -796849469951998455L;
 	//public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
 	private Integer idpedido;
 	private ArrayList<ItemDTO> items;

@@ -57,7 +57,7 @@ public class consultorContabilidad extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		cbTipoConsulta.setModel(new DefaultComboBoxModel<String>(new String[] {"Seleccione el tipo de consulta", "Dia de hoy", "Elegir un rango de fechas"}));
-		cbTipoConsulta.setBounds(76, 125, 252, 20);
+		cbTipoConsulta.setBounds(76, 125, 252, 22);
 		contentPane.add(cbTipoConsulta);
 		
 		lblFechaInicio = new JLabel("");
@@ -68,17 +68,23 @@ public class consultorContabilidad extends JDialog {
 		contentPane.add(lblFechaInicio);
 		
 		lblVentas = new JLabel("");
-		lblVentas.setFont(new Font("Candara", Font.PLAIN, 16));
+		lblVentas.setHorizontalAlignment(SwingConstants.CENTER);
+		lblVentas.setForeground(new Color(0, 102, 51));
+		lblVentas.setFont(new Font("Browallia New", Font.BOLD, 31));
 		lblVentas.setBounds(496, 159, 138, 33);
 		contentPane.add(lblVentas);
 		
 		lblCompras = new JLabel("");
-		lblCompras.setFont(new Font("Candara", Font.PLAIN, 16));
+		lblCompras.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCompras.setForeground(new Color(0, 102, 51));
+		lblCompras.setFont(new Font("Browallia New", Font.BOLD, 31));
 		lblCompras.setBounds(496, 217, 138, 33);
 		contentPane.add(lblCompras);
 		
 		lblGanancias = new JLabel("");
-		lblGanancias.setFont(new Font("Candara", Font.PLAIN, 16));
+		lblGanancias.setHorizontalAlignment(SwingConstants.CENTER);
+		lblGanancias.setForeground(new Color(0, 102, 51));
+		lblGanancias.setFont(new Font("Browallia New", Font.BOLD, 31));
 		lblGanancias.setBounds(496, 277, 138, 33);
 		contentPane.add(lblGanancias);
 		
@@ -149,6 +155,7 @@ public class consultorContabilidad extends JDialog {
 
 	public void ocultarRango(boolean ocultar){
 		ocultarRangoFecha.setVisible(ocultar);
+		resetearCampos();
 	}
 	
 	public boolean controlFechas(){
@@ -277,6 +284,12 @@ public class consultorContabilidad extends JDialog {
 
 	public void setDateFechaFin(Date dateFechaFin) {
 		this.dateFechaFin = dateFechaFin;
+	}
+
+	public void mostrarResultados(Integer totalCompras, Integer totalPedidos,Integer ganancia) {
+		this.lblCompras.setText(totalCompras.toString());
+		this.lblVentas.setText(totalPedidos.toString());
+		this.lblGanancias.setText(ganancia.toString());
 	}
 	
 	
