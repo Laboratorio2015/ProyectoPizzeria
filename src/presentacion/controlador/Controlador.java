@@ -56,6 +56,7 @@ import presentacion.vista.buscadorProveedor;
 import presentacion.vista.calendario;
 import presentacion.vista.calendarioSelectFecha;
 import presentacion.vista.clienteBajaModificacion;
+import presentacion.vista.consultoEstadistica;
 import presentacion.vista.consultorContabilidad;
 import presentacion.vista.gestionCategoria;
 import presentacion.vista.matPrimaAlta;
@@ -97,6 +98,7 @@ public class Controlador implements ActionListener
 	private calendarioSelectFecha selectorFecha;
 	private selectMenuReportes ventanaMenuReportes;
 	private consultorContabilidad ventanaReportesContables;
+	private consultoEstadistica ventanaReportesEstadistica;
 	private selectorOpcionesOrdenMatPrima ventanaSelectorOpcOrdenMatPrima;
 	private buscadorProveedor ventanaSeleccionProveedor;
 	private opcionesDeConfiguracion ventanaConfiguraciones;
@@ -342,6 +344,22 @@ public class Controlador implements ActionListener
 				JOptionPane.showMessageDialog(null, "La fecha de inicio no puede ser igual ni mayor a la fecha de fin", "Confirmación",JOptionPane.WARNING_MESSAGE);
 			}
 		}
+		
+		//Ventana de reportes ESTADISTICOS
+		else if(this.ventanaMenuReportes!= null && e.getSource()==this.ventanaMenuReportes.getBtnConsultaestadisticas())
+		{
+			ventanaMenuReportes.dispose();
+			ventanaReportesEstadistica=new consultoEstadistica(ventana, this);
+			ventanaReportesEstadistica.getBtnBuscar().addActionListener(this);
+			ventanaReportesEstadistica.getBtnCalendarioFin().addActionListener(this);
+			ventanaReportesEstadistica.getBtnCalendarioInicio().addActionListener(this);
+			ventanaReportesEstadistica.getBtnEnviarPorEmail().addActionListener(this);
+			ventanaReportesEstadistica.getBtnImprimir().addActionListener(this);
+			ventanaReportesEstadistica.setVisible(true);
+		}
+		
+		
+		
 		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
