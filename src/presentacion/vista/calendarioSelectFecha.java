@@ -64,14 +64,28 @@ public class calendarioSelectFecha extends JDialog {
 	
 	public String getFechaSeleccionada(){
 		Date date = calendar.getDate();
-        
-		SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
-        System.out.println("Fecha seleccinada en formato dato: " + date.toString());
-        System.out.println("La fecha actual en un formato dado: " + dateformatter.format(date.getTime()));
-		String fechaSeleccionada = dateformatter.format(date.getTime());
+		String dia = "";
+		String año = "";
+		String mes = "";
+		SimpleDateFormat dateformatter = new SimpleDateFormat("d-M-yyyy");
+		String dateFormateado = dateformatter.format(date.getTime());
 		
-		//String fechaSeleccionada = calendar.getDate().getDay() + "-" + (calendar.getDate().getMonth()+1) + "-" + (calendar.getDate().getYear()+1900);
-		return fechaSeleccionada;
+		for (int i=dateFormateado.length()-1; i >= 0; i--){
+			if (i > dateFormateado.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+				año = dateFormateado.charAt(i) + año;
+			}
+			else if (i == dateFormateado.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+			}
+			else if ( (i != 0 && i !=1) && dateFormateado.charAt(i)!='-'){
+				mes = dateFormateado.charAt(i) + mes;
+			}
+			else{
+				if (dateFormateado.charAt(i)!='-'){
+					dia = dateFormateado.charAt(i) + dia;
+				}
+			}
+		} 
+		return dia + "-" + mes + "-" + año;
 	}
 
 	public JButton getBtnSeleccionar() {
@@ -91,7 +105,6 @@ public class calendarioSelectFecha extends JDialog {
 	}
 
 	public Date getFechaDate() {
-		// TODO Auto-generated method stub
 		return calendar.getDate();
 	}
 }

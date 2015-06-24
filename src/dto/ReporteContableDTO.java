@@ -65,7 +65,6 @@ public class ReporteContableDTO {
 				ItemDTO elementoItem = iteradorItems.next();
 				sumarProducto(elementoItem);
 			}
-			
 			///SUMA LOS ITEMS DE CADA OFERTA
 			//El atributo <ofertas> de la clase PedidoDTO contiene un array de ItemPromocionDTO. Este item hace referencia a un id de PromocionDTO;
 			//tambien indica la cantidad de esa promoción (0,1,*). 
@@ -73,10 +72,11 @@ public class ReporteContableDTO {
 			//la oferta obtenida. Por cada item, me interesa saber:
 			//	el producto y cantidad del mismo: para poder sumar al hashmap. Esta cantidad la multiplico por el atributo <cantidad> del item 
 			//q obtuve 
-			Promociones promociones = new Promociones();
+			//Promociones promociones = new Promociones();
 			java.util.Iterator<ItemPromocionDTO> iteradorOfertas = elementoPedido.getOfertas().iterator();
 			while (iteradorOfertas.hasNext()){
 				ItemPromocionDTO elementoPromo = iteradorOfertas.next();
+				
 				//Tomo cada item de la promocion seleccionada que es representado por un Id. Con ese Id tengo q obtener la promo del modelo correspon
 				//y recien ahi recorrer todos los items de la promo obtenida de la consulta.
 				//PromocionDTO promo =  promociones.buscarOferta(elementoPromo.getIditemPromo());
@@ -85,7 +85,7 @@ public class ReporteContableDTO {
 				java.util.Iterator<ItemDTO> iterItemOferta = elementoPromo.getProductosOfertados().iterator();
 				while (iterItemOferta.hasNext()){
 					ItemDTO elementoItem = iterItemOferta.next();
-					sumarProducto(elementoItem);
+					sumarProducto(elementoItem,elementoPromo.getCantidad());
 				}
 			}
 
@@ -97,14 +97,26 @@ public class ReporteContableDTO {
 		while (iteradorOrdenesMP.hasNext()){
 			OrdenPedidoMatPrimaDTO elementoOrden = iteradorOrdenesMP.next();
 			this.totalCompras = this.totalCompras + elementoOrden.getCosto();
-		}
-		
+		}	
 		ganancia = totalPedidos - totalCompras;
-		System.out.println("total pedidos: " + this.totalPedidos);
-		System.out.println("total compras: " + this.totalCompras);
-		System.out.println("ganancia: " + this.ganancia);
 	}
 	
+	private void sumarProducto(ItemDTO item, Integer cantPromoRepetida) {
+		if (item.getProducto().getTipo().trim().compareTo("otros") != 0){
+			HashMap<ProductoDTO, Integer> tablaCorresp = this.cantEmpVendidas;
+			if (item.getProducto().getTipo().trim().compareTo("pizza") == 0){
+				tablaCorresp = this.cantPizzaVendidas;
+			}
+			if (tablaCorresp.containsKey(item.getProducto())){
+				Integer total = cantEmpVendidas.get(item.getProducto()) + item.getCantidad()*cantPromoRepetida;
+				tablaCorresp.replace(item.getProducto(), total);
+			}
+			else{
+				tablaCorresp.put(item.getProducto(),item.getCantidad());
+			}	
+		}
+	}
+
 	public void sumarProducto(ItemDTO item){
 		if (item.getProducto().getTipo().trim().compareTo("otros") != 0){
 			HashMap<ProductoDTO, Integer> tablaCorresp = this.cantEmpVendidas;
@@ -137,14 +149,25 @@ public class ReporteContableDTO {
 		this.totalCompras = totalCompras;
 	}
 	
-	public void mostrarCantProdVendidos(){
+	public void mostrarDetalle(){
+		System.out.println("total pedidos: " + this.totalPedidos);
+		System.out.println("total compras: " + this.totalCompras);
+		System.out.println("ganancia: " + this.ganancia);
+		System.out.println(" ");
 		System.out.println("Empanadas vendidas");
 		for (ProductoDTO key : cantEmpVendidas.keySet()) {
-			System.out.println("Producto = " + key.getNombre() + " -Cantidad vendida: " + cantEmpVendidas.get(key));
+			System.out.println("Producto: " + key.getNombre() + " -Cantidad vendida: " + cantEmpVendidas.get(key));
 		}
 		System.out.println("Pizzas vendidas");
 		for (ProductoDTO key : cantPizzaVendidas.keySet()) {
-			System.out.println("Producto = " + key.getNombre() + " -Cantidad vendida: " + cantPizzaVendidas.get(key));
+			System.out.println("Producto: " + key.getNombre() + " -Cantidad vendida: " + cantPizzaVendidas.get(key));
 		}
+		System.out.println("Compras realizadas");
+		java.util.Iterator<OrdenPedidoMatPrimaDTO> iteradorCompras = this.listadoCompras.iterator();
+		while (iteradorCompras.hasNext()){
+			OrdenPedidoMatPrimaDTO elemento = iteradorCompras.next();
+			System.out.println(elemento.getFecha().trim() + " | " + elemento.getProveedor().getNombre().trim() + "  | Costo: $" + elemento.getCosto());
+		}
+		
 	}
 }

@@ -276,6 +276,7 @@ public class Controlador implements ActionListener
 					consultaReporteDiario();
 					reporteContable.calcularGanancias();
 					ventanaReportesContables.mostrarResultados(reporteContable.getTotalCompras(),reporteContable.getTotalPedidos(),reporteContable.getGanancia());
+					reporteContable.mostrarDetalle();
 				} catch (SQLException e1) {
 					System.out.println("No se pudo realizar consulta a la bd.");
 					e1.printStackTrace();
@@ -300,17 +301,15 @@ public class Controlador implements ActionListener
 				Integer mesCero = 1;
 				Integer mes12 = 12;
 				Integer diaIndiceFin = 31;
+			
+				Integer diaInicio = ventanaReportesContables.getFechaInicio("dia");
+				Integer mesInicio = ventanaReportesContables.getFechaInicio("mes");
+				Integer añoInicio = ventanaReportesContables.getFechaInicio("año");
 				
-				//Integer diaInicio = ventanaReportesContables.getcal
+				Integer diaFin = ventanaReportesContables.getFechaFin("dia");
+				Integer mesFin = ventanaReportesContables.getFechaFin("mes");
+				Integer añoFin = ventanaReportesContables.getFechaFin("año");
 
-				
-				Integer diaInicio = ventanaReportesContables.getDateFechaInicio().getDay();
-				Integer mesInicio = ventanaReportesContables.getDateFechaInicio().getMonth()+1;
-				Integer añoInicio = ventanaReportesContables.getDateFechaInicio().getYear()+1900;
-				Integer diaFin = ventanaReportesContables.getDateFechaFin().getDay();
-				Integer mesFin = ventanaReportesContables.getDateFechaFin().getMonth()+1;
-				Integer añoFin = ventanaReportesContables.getDateFechaFin().getYear()+1900;
-				//if (el rango de fecha es dentro del mismo mes NO hacer esto)
 				if (mesInicio==12){
 					//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
 				}
@@ -353,26 +352,17 @@ public class Controlador implements ActionListener
 					}
 					reporteContable.calcularGanancias();
 					ventanaReportesContables.mostrarResultados(reporteContable.getTotalCompras(),reporteContable.getTotalPedidos(),reporteContable.getGanancia());
-					reporteContable.mostrarCantProdVendidos();
+					reporteContable.mostrarDetalle();
 				}
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "La fecha de inicio no puede ser igual ni mayor a la fecha de fin", "Confirmación",JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		
-		//Ventana de reportes ESTADISTICOS
-		else if(this.ventanaMenuReportes!= null && e.getSource()==this.ventanaMenuReportes.getBtnConsultaestadisticas())
+		//VENTANA DE REPORTES CONTABLES: Enviar reporte por Email
+		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnEnviarxmail() )
 		{
-			ventanaMenuReportes.dispose();
-			ventanaReportesEstadistica=new consultoEstadistica(ventana, this);
-			ventanaReportesEstadistica.getBtnBuscar().addActionListener(this);
-			ventanaReportesEstadistica.getBtnCalendarioFin().addActionListener(this);
-			ventanaReportesEstadistica.getBtnCalendarioInicio().addActionListener(this);
-			ventanaReportesEstadistica.getBtnEnviarPorEmail().addActionListener(this);
-			ventanaReportesEstadistica.getBtnImprimir().addActionListener(this);
-			ventanaReportesEstadistica.getCbEstadisticas().addActionListener(this);
-			ventanaReportesEstadistica.setVisible(true);
+			JOptionPane.showMessageDialog(null, "Se ha enviado por email", "Confirmación",JOptionPane.WARNING_MESSAGE);
 		}
 		//Seleccionar tipos de Estadisticas
 		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getCbEstadisticas())
@@ -475,8 +465,7 @@ public class Controlador implements ActionListener
 			}
 			else
 				JOptionPane.showMessageDialog(null, "Error, para hacer la consulta debe seleccionar la fecha de inicio y fin");
-		}
-		//ABRIR SELECTOR MAT PRIMA
+		}		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
 			ventanaSelectorOpcOrdenMatPrima = new selectorOpcionesOrdenMatPrima(ventana, this);
@@ -573,10 +562,9 @@ public class Controlador implements ActionListener
 			this.gestorOrdenesMateriasPrimas.getTextAutoAcompleter().removeAllItems();
 			this.gestorOrdenesMateriasPrimas.resetearModeloOrdenesPedido();
 			filtrarBusquedaOrdenes();
-			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel
-
-			(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
+			this.gestorOrdenesMateriasPrimas.gettableOrdenesMatPrimas().setModel(this.gestorOrdenesMateriasPrimas.getModeloOrdenesMatPrimas());
 			this.gestorOrdenesMateriasPrimas.resetearItemsOrdenesMatPrima();
+			this.gestorOrdenesMateriasPrimas.ocultarCostos();
 		}
 		//GESTOR ORDENES MAT PRIMA> IMPRIMIR ORDEN 
 		else if(this.gestorOrdenesMateriasPrimas!= null && e.getSource()==this.gestorOrdenesMateriasPrimas.getBtnImprimirOrden())
@@ -663,7 +651,7 @@ public class Controlador implements ActionListener
 					gestorOrdenesMateriasPrimas.getOrdenSeleccionada().setEstado("rechazado");
 					ordenesMatPrimas.agregarOrdenPedidoMatPrima(gestorOrdenesMateriasPrimas.getOrdenSeleccionada());
 					this.gestorOrdenesMateriasPrimas.resetearModeloOrdenesPedido();
-
+					filtrarBusquedaOrdenes();
 				}
 			}
 		}
@@ -1261,11 +1249,114 @@ public class Controlador implements ActionListener
 					ventanaEditarMatPrima.getModeloMatPrima().removeRow(intFilaCatSelecc);
 					ventanaEditarMatPrima.getTableMatPrimas().setModel(ventanaEditarMatPrima.getModeloMatPrima());
 				}
-//				ventanaEditarMatPrima.cargarMateriasPrimasFiltradas(ventanaEditarMatPrima.getComboBoxCategoriasFiltro().getSelectedItem().toString());
 			}
 		}
 
 		///////////////////////////////////FIN//////CodigoJuliet/////////////////////////////////////////////////
+		//Ventana de reportes ESTADISTICOS
+		else if(this.ventanaMenuReportes!= null && e.getSource()==this.ventanaMenuReportes.getBtnConsultaestadisticas())
+		{
+			ventanaMenuReportes.dispose();
+			ventanaReportesEstadistica=new consultoEstadistica(ventana, this);
+			ventanaReportesEstadistica.getBtnBuscar().addActionListener(this);
+			ventanaReportesEstadistica.getBtnCalendarioFin().addActionListener(this);
+			ventanaReportesEstadistica.getBtnCalendarioInicio().addActionListener(this);
+		 	ventanaReportesEstadistica.getBtnEnviarPorEmail().addActionListener(this);
+			ventanaReportesEstadistica.getBtnImprimir().addActionListener(this);
+			ventanaReportesEstadistica.getCbEstadisticas().addActionListener(this);
+			ventanaReportesEstadistica.setVisible(true);
+		}
+		//Seleccionar tipos de Estadisticas
+		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getCbEstadisticas())
+		{
+			String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
+			if (tipoProducto.compareTo("(Seleccione una estadistica)")==0)
+			{
+				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(true);
+				ventanaReportesEstadistica.getTfOcultarTop().setVisible(true);
+				ventanaReportesEstadistica.getTfFechaInicio().setText("");
+				ventanaReportesEstadistica.getTfFechaFin().setText("");
+			}
+			else if(tipoProducto.compareTo("Productos mas comprados")==0 || tipoProducto.compareTo("Productos menos comprados")==0 )
+			{
+				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(false);
+				ventanaReportesEstadistica.getTfOcultarTop().setVisible(false);
+				ventanaReportesEstadistica.getTfFechaInicio().setText("");
+				ventanaReportesEstadistica.getTfFechaFin().setText("");
+			}
+			else if(tipoProducto.compareTo("Ofertas mas compradas")==0 || tipoProducto.compareTo("Ofertas menos compradas")==0|| tipoProducto.compareTo("Cliente mas comprador")==0 )
+			{
+				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(false);
+				ventanaReportesEstadistica.getTfOcultarTop().setVisible(true);
+				ventanaReportesEstadistica.getTfFechaInicio().setText("");
+				ventanaReportesEstadistica.getTfFechaFin().setText("");
+			}
+		}
+		//establecer fecha de inicio y fin para ESTADISTICAS
+		else if(this.ventanaReportesEstadistica!= null && (e.getSource()==this.ventanaReportesEstadistica.getBtnCalendarioInicio() ||e.getSource()==this.ventanaReportesEstadistica.getBtnCalendarioFin() ))
+		{
+			if(e.getSource()==this.ventanaReportesEstadistica.getBtnCalendarioInicio())
+			{
+				ventanaCalendario=new calendario(ventanaReportesEstadistica);
+				ventanaCalendario.setTitle("Fecha de Inicio");
+				ventanaCalendario.setVisible(true);
+			}
+			else
+			{
+				ventanaCalendario=new calendario(ventanaReportesEstadistica);
+				ventanaCalendario.setTitle("Fecha de Fin");
+				ventanaCalendario.setVisible(true);
+			}	
+		}
+		//BUSCAR ESTADISTICAS EN UN RANGO DE FECHAS
+		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnBuscar())
+		{
+			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
+			{
+				Iterator<PedidoDTO> pedidos=this.pedido.obtenerPedidos().iterator();
+				ArrayList<ProductoEstadistico> productos=new ArrayList<ProductoEstadistico>();
+				while (pedidos.hasNext())
+				{
+					Iterator<ItemDTO> elemento = pedidos.next().getProductos().iterator();
+					while(elemento.hasNext())
+					{
+						//if()
+					}
+		
+			String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
+				switch (tipoProducto) {
+				case "Productos mas comprados":
+				{
+					
+				}				
+				break;
+
+				case "Productos menos comprados":
+				{
+					
+				}				
+				break;
+				case "Ofertas mas compradas":
+				{
+
+				}				
+				break;
+				case "Ofertas menos compradas":
+				{
+
+				}				
+				break;
+				case "Cliente mas comprador":
+				{
+
+				}				
+				break;
+				}
+				}
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Error, para hacer la consulta debe seleccionar la fecha de inicio y fin");
+		}
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
 		{
 			ventanaConfiguraciones=new opcionesDeConfiguracion();
@@ -2348,12 +2439,7 @@ public class Controlador implements ActionListener
 	}
 	
 	private void cargarProveedores(JComboBox<String> comboBox){
-		//		ArrayList<ProveedorDTO> listaProveedores;// = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
-		//		listaProveedores = quitarEspacioArray((ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor());
-		//		for (int i=0; i< listaProveedores.size();i++){
-		//			ventanaOrdenMatPrima.getComboListaProveedores().addItem(listaProveedores.get(i).getNombre());
-		//		}
-
+	
 		ArrayList<ProveedorDTO> listaProveedores;// = (ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor();
 		listaProveedores = quitarEspacioArray((ArrayList<ProveedorDTO>) this.proveedor.obtenerProveedor());
 		for (int i=0; i< listaProveedores.size();i++){
@@ -2845,7 +2931,7 @@ public class Controlador implements ActionListener
 //      int minuto = fecha.get(Calendar.MINUTE);
 //      int segundo = fecha.get(Calendar.SECOND);
         //System.out.printf("Hora Actual: %02d:%02d:%02d %n",hora, minuto, segundo);
-        return new String (dia + "/" + mes + "/" + año);// + " "
+        return new String (dia + "-" + mes + "-" + año);// + " "
         //+ String.format("%02d", hora) + ":" + String.format("%02d", minuto) + ":" + String.format("%02d", segundo);           
         
 	}
@@ -2902,7 +2988,7 @@ public class Controlador implements ActionListener
 			if(pEstadistico!=null)
 			{
 				pEstadistico.setCantidad(pEstadistico.getCantidad()+p.getCantidad());
-			}
+}
 			else
 			{
 				producto.add(p);
@@ -2922,7 +3008,7 @@ public class Controlador implements ActionListener
 			PromocionEstadistica p=new PromocionEstadistica();
 			p.setPromo(elemento.getPromocion());
 			p.setCantidad(elemento.getCantidad());
-			
+
 			pEstadistico=PromocionEstadistica.buscarPromoEst(producto, p);
 			if(pEstadistico!=null)
 			{

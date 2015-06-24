@@ -23,7 +23,7 @@ public class consultorContabilidad extends JDialog {
 	private JPanel contentPane;
 	private final Controlador controlador;
 	private VentanaPrincipal ventanaPrincipal;
-	private final JComboBox<String> cbTipoConsulta = new JComboBox();
+	private final JComboBox<String> cbTipoConsulta = new JComboBox<String>();
 	
 	//BOTONES Y LABELS:
 	private JLabel lblFechaInicio;
@@ -39,12 +39,19 @@ public class consultorContabilidad extends JDialog {
 	private JButton btnEnviarxmail;
 	private JButton btnImprimircons;
 	//Datos
-	private String fechaInicio;
+	private String fechaInicio="";
 	private String fechaFin;
 	private Date dateFechaInicio;
 	private Date dateFechaFin;
 	private JLabel ocultarRangoFecha;
 	
+	private Integer diaInicio;
+	private Integer diaFin;
+	private Integer mesInicio;
+	private Integer mesFin;
+	private Integer añoFin;
+	private Integer añoInicio;
+
 
 	public consultorContabilidad(VentanaPrincipal ventanaPrincipal, Controlador controlador) {
 		this.ventanaPrincipal = ventanaPrincipal;
@@ -258,17 +265,64 @@ public class consultorContabilidad extends JDialog {
 		return fechaFin;
 	}
 
-	public void setFechaFin(String fechaFin) {
-		this.fechaFin = fechaFin;
-	}
-
 	public String getFechaInicio() {
 		return fechaInicio;
 	}
 
 	public void setFechaInicio(String fechaInicio) {
 		this.fechaInicio = fechaInicio;
+		//guardo dia, mes año por separado.
+		
+		String dia = "";
+		String año = "";
+		String mes = "";
+		
+		for (int i=fechaInicio.length()-1; i >= 0; i--){
+			if (i > fechaInicio.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+				año = fechaInicio.charAt(i) + año;
+			}
+			else if (i == fechaInicio.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+			}
+			else if ( (i != 0 && i !=1) && fechaInicio.charAt(i)!='-'){
+				mes = fechaInicio.charAt(i) + mes;
+			}
+			else{
+				if (fechaInicio.charAt(i)!='-'){
+					dia = fechaInicio.charAt(i) + dia;
+				}
+			}
+		}
+		añoInicio = Integer.parseInt(año);
+		mesInicio = Integer.parseInt(mes);
+		diaInicio = Integer.parseInt(dia);
 	}
+	public void setFechaFin(String fechaFin) {
+		this.fechaFin = fechaFin;
+		//guardo dia, mes año por separado.
+		String dia = "";
+		String año = "";
+		String mes = "";
+		
+		for (int i=fechaFin.length()-1; i >= 0; i--){
+			if (i > fechaFin.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+				año = fechaFin.charAt(i) + año;
+			}
+			else if (i == fechaFin.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+			}
+			else if ( (i != 0 && i !=1) && fechaFin.charAt(i)!='-'){
+				mes = fechaFin.charAt(i) + mes;
+			}
+			else{
+				if (fechaFin.charAt(i)!='-'){
+					dia = fechaFin.charAt(i) + dia;
+				}
+			}
+		}
+		añoFin = Integer.parseInt(año);
+		mesFin = Integer.parseInt(mes);
+		diaFin = Integer.parseInt(dia);
+	}
+
 
 	public Date getDateFechaInicio() {
 		return dateFechaInicio;
@@ -290,6 +344,30 @@ public class consultorContabilidad extends JDialog {
 		this.lblCompras.setText(totalCompras.toString());
 		this.lblVentas.setText(totalPedidos.toString());
 		this.lblGanancias.setText(ganancia.toString());
+	}
+
+	public Integer getFechaInicio(String dma) {
+		switch (dma) {
+		case "dia":
+			return this.diaInicio;
+		case "mes":
+			return this.mesInicio;
+		case "año":
+			return this.añoInicio;
+		}
+		return null;
+	}
+
+	public Integer getFechaFin(String dma) {
+		switch (dma) {
+		case "dia":
+			return this.diaFin;
+		case "mes":
+			return this.mesFin;
+		case "año":
+			return this.añoFin;
+		}
+		return null;
 	}
 	
 	

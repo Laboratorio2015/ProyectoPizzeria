@@ -405,7 +405,7 @@ public class gestionarOrdenesMatPrima extends JDialog {
 
 	public void agregarFilaItem(ItemMateriaPrimaDTO elementoItem) {
 
-		modeloItemsSolicitdos.addRow(new Object [] {elementoItem.getItemMatPrima().getNombre().trim(),elementoItem.getCantidad()});
+		modeloItemsSolicitdos.addRow(new Object [] {elementoItem.getItemMatPrima().getNombre().trim().replace("_", " "),elementoItem.getCantidad()});
 	}
 
 	public OrdenPedidoMatPrimaDTO getOrdenSeleccionada() {
