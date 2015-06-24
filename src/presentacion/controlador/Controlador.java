@@ -2408,22 +2408,22 @@ public class Controlador implements ActionListener
 		}
 		return null;
 	}
-	public ArrayList<ItemDTO> generarListaItems() 
-	{
-		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
-		String nombre="";
-		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
-		{
-			nombre=this.ventanaPedido.getModel().getValueAt(i, 0).toString();
-			if(producto.buscarProductoPorNombre(nombre)!=null)
-			{
-				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)(this.ventanaPedido.getModel().getValueAt(i, 3)),false);
-				item.agregarItem(aux);
-				listaAux.add(aux);
-			}
-		}
-		return listaAux;
-	}
+//	public ArrayList<ItemDTO> generarListaItems() 
+//	{
+//		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
+//		String nombre="";
+//		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
+//		{
+//			nombre=this.ventanaPedido.getModel().getValueAt(i, 0).toString();
+//			if(producto.buscarProductoPorNombre(nombre)!=null)
+//			{
+//				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)(this.ventanaPedido.getModel().getValueAt(i, 3)),false);
+//				item.agregarItem(aux);
+//				listaAux.add(aux);
+//			}
+//		}
+//		return listaAux;
+//	}
 	public ArrayList<ItemDTO> generarListaItemsOfertados() 
 	{
 		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
