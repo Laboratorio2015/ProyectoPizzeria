@@ -1,11 +1,12 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import dto.PromocionDTO;
 
-public class PromocionEstadistica implements Comparable<PromocionEstadistica>
+public class PromocionEstadistica implements Comparable<PromocionEstadistica>, Comparator<PromocionEstadistica>
 {
 	private PromocionDTO promo;
 	private Integer cantidad;
@@ -47,8 +48,15 @@ public class PromocionEstadistica implements Comparable<PromocionEstadistica>
 	@Override
     public int compareTo(PromocionEstadistica o)
 	{
-       Integer a=new Integer(String.valueOf(this.getCantidad()));
-       Integer b=new Integer(String.valueOf(o.getCantidad()));
-       return a.compareTo(b);
+       if(this.cantidad<o.cantidad)
+    	   return -1;
+       if(this.cantidad>o.cantidad)
+    	   return 1;
+       return 0;
    }
+	@Override
+	public int compare(PromocionEstadistica p1, PromocionEstadistica p2) {
+		Integer numero=new Integer(p1.getCantidad()).compareTo(new Integer(p2.getCantidad()));
+		return numero;
+	}
 }

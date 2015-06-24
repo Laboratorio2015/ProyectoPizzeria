@@ -18,7 +18,10 @@ import java.io.File;
 import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -410,17 +413,7 @@ public class Controlador implements ActionListener
 		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnBuscar())
 		{
 			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
-			{		
-				Iterator<PedidoDTO> pedidos=this.pedido.obtenerPedidos().iterator();
-				ArrayList<ProductoEstadistico> productos=new ArrayList<ProductoEstadistico>();
-				while (pedidos.hasNext())
-				{
-					Iterator<ItemDTO> elemento = pedidos.next().getProductos().iterator();
-					while(elemento.hasNext())
-					{
-						if()
-					}
-		
+			{				
 				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
 				switch (tipoProducto) {
 				case "Productos mas comprados":
@@ -445,7 +438,14 @@ public class Controlador implements ActionListener
 				{
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
-					OrdenarPromocion(promocion);
+					Collections.sort(promocion,new Comparator<PromocionEstadistica>() {
+						@Override
+						public int compare(PromocionEstadistica o1,
+								PromocionEstadistica o2) {
+							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
+						}
+					});
+					llenarTablaEstadisticas("promocion",promocion,null);
 					System.out.println("termino");
 				}				
 				break;
@@ -453,6 +453,8 @@ public class Controlador implements ActionListener
 				{
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
+					Collections.sort(promocion);
+					llenarTablaEstadisticas("promocion",promocion,null);
 					System.out.println("termino");
 				}				
 				break;
@@ -2545,7 +2547,10 @@ public class Controlador implements ActionListener
 				nuevo.setIditemPromo(this.itemPromocion.ultimaOferta()+1);
 				nuevo.setPromocion(aux);
 				nuevo.setCantidad(Integer.parseInt(this.ventanaPedido.getModel().getValueAt(i, 1).toString()));
-				nuevo.setComentario(this.ventanaPedido.getModel().getValueAt(i, 3).toString());
+				if(this.ventanaPedido.getModel().getValueAt(i, 3)!=null)
+					nuevo.setComentario(this.ventanaPedido.getModel().getValueAt(i, 3).toString());
+				else
+					nuevo.setComentario("");
 				nuevo.setFueeliminado(false);
 				listaAux.add(nuevo);
 				itemPromocion.agregarItemPromo(nuevo);
@@ -3024,7 +3029,31 @@ public class Controlador implements ActionListener
 	
 	private void OrdenarPromocion(ArrayList<PromocionEstadistica> promocion)
 	{
+		//ArrayList<Object> aux=new ArrayList<Object>;
+		//Collections.sort(promocion);
 		
+	}
+	
+	private void llenarTablaEstadisticas(String tipo,ArrayList<PromocionEstadistica> promocion,ArrayList<ProductoEstadistico> productos)
+	{
+		this.ventanaReportesEstadistica.getModel().setRowCount(0);
+		this.ventanaReportesEstadistica.getModel().setColumnCount(0);
+		String[] nombreColum=new String[2];
+		nombreColum[0]="Oferta";
+		nombreColum[1]="Cantidad";
+		this.ventanaReportesEstadistica.setNombreColumnas(nombreColum);
+		this.ventanaReportesEstadistica.getModel().setColumnIdentifiers(this.ventanaReportesEstadistica.getNombreColumnas());
+		if(tipo.compareTo("promocion")==0)
+		{
+			Iterator<PromocionEstadistica> Iterador = promocion.iterator();
+			while(Iterador.hasNext())
+			{
+				PromocionEstadistica elemento = Iterador.next();
+					Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
+					this.ventanaReportesEstadistica.getModel().addRow(fila);
+	
+			}
+		}
 	}
 }
 	
