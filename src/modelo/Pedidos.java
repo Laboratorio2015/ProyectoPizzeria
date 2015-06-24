@@ -8,7 +8,10 @@ import java.util.List;
 
 import dao.PedidoDAO;
 import dto.HojaItinerarioDTO;
+import dto.ItemDTO;
+import dto.ItemPromocionDTO;
 import dto.PedidoDTO;
+import dto.PromocionDTO;
 
 public class Pedidos 
 {
@@ -32,6 +35,16 @@ public class Pedidos
 	public List<PedidoDTO> obtenerPedidos()
 	{
 		return this.pedido.readAll();
+	}
+	
+	public List<ItemDTO> obtenerTodosItems() 
+	{
+		return this.pedido.readItem();
+	}
+	
+	public List<ItemPromocionDTO> obtenerTodosPromos() 
+	{
+		return this.pedido.readPromo();
 	}
 	
 	public Integer ultimoPedido()
@@ -104,4 +117,8 @@ public class Pedidos
 		return pedido.getPedidosVendidosPorFecha(dia,mes, año);
 		
 	}
+
+	
+
+	
 }

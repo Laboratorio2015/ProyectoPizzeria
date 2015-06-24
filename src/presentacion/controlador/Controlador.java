@@ -38,6 +38,7 @@ import modelo.ItemsPromociones;
 import modelo.Itinerarios;
 import modelo.MatPrimas;
 import modelo.ProductoEstadistico;
+import modelo.PromocionEstadistica;
 import modelo.Promociones;
 import modelo.OrdenesMateriaPrimas;
 import modelo.Pedidos;
@@ -124,9 +125,6 @@ public class Controlador implements ActionListener
 	private promocionBajaModificacion ventanaEditarPromocion;
 	private gestionCategoria ventanaGestionCategoria;
 	private calendario ventanaCalendario;
-	private registrarCobroDePedido ventanaRegCobroPedido;
-	private registrarCobroManualmente ventanaRegCobroManual;
-	private seleccionarRepartidor ventanaSeleccionRepartidor;
 //	private PadreMonitor monitorCocina;
 	private pedidoMenu ventanamenu;
 	private registroDeCliente ventanaRegistrarCliente;
@@ -152,12 +150,14 @@ public class Controlador implements ActionListener
 	private Itinerarios itinerario;
 	private registrarPagoOrdenMatPrima ventanaRegistrarPagoOrdenMatPrima;
 	private ReporteContableDTO reporteContable;
+	private ProductoEstadistico prodEstadistico;
 
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
 	public Controlador(VentanaPrincipal ventana, Pedidos pedido, Clientes cliente,Productos producto, Items item, Proveedores proveedor,
 			Repartidores repartidor,Promociones oferta, Categorias categoria,OrdenesMateriaPrimas ordenesMatPrimas, 
-			MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario, Promociones promocion, ItemsPromociones itemPromocion) 
+			MatPrimas matPrimas, ItemMateriasPrimas itemsMatPrima, Itinerarios itinerario, Promociones promocion,
+			ItemsPromociones itemPromocion, ProductoEstadistico prodEstadistico) 
 	{
 		this.ventana=ventana;
 		this.pedido=pedido;
@@ -174,6 +174,7 @@ public class Controlador implements ActionListener
 		this.ordenesMatPrimas = ordenesMatPrimas;
 		this.materiasPrimas = matPrimas;
 		this.itemsMateriaPrima = itemsMatPrima;
+		this.prodEstadistico=prodEstadistico;
 		this.ventana.getBtnIngresarPedido().addActionListener(this);
 		this.ventana.getBtnPedidosPendientes().addActionListener(this);
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
@@ -419,7 +420,7 @@ public class Controlador implements ActionListener
 		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnBuscar())
 		{
 			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
-			{
+			{		
 				Iterator<PedidoDTO> pedidos=this.pedido.obtenerPedidos().iterator();
 				ArrayList<ProductoEstadistico> productos=new ArrayList<ProductoEstadistico>();
 				while (pedidos.hasNext())
@@ -430,27 +431,39 @@ public class Controlador implements ActionListener
 						if()
 					}
 		
-			String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
+				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
 				switch (tipoProducto) {
 				case "Productos mas comprados":
 				{
-					
-				}				
+					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
+					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
+					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido);
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
+					System.out.println("termino");
+				}
 				break;
-
 				case "Productos menos comprados":
 				{
-					
+					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
+					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
+					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido);
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
+					System.out.println("termino");
 				}				
 				break;
 				case "Ofertas mas compradas":
 				{
-					
+					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
+					OrdenarPromocion(promocion);
+					System.out.println("termino");
 				}				
 				break;
 				case "Ofertas menos compradas":
 				{
-					
+					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
+					System.out.println("termino");
 				}				
 				break;
 				case "Cliente mas comprador":
@@ -1946,6 +1959,7 @@ public class Controlador implements ActionListener
 				}
 	}
 
+
 	private void consultaReporteDiario() throws SQLException {
 		reporteContable = new ReporteContableDTO();
 		reporteContable.setListadoPedidos( pedido.reporteDiario( getDiaActual(),getMesActual(),getAñoActual() ));
@@ -2871,6 +2885,60 @@ public class Controlador implements ActionListener
 		//RETORNO POSIBLE. persona returnHumano = (persona)cliente.objectInputStream.readObject();
 		System.out.println("Pedido enviado");
 		socket.close();			
+	}
+	private ArrayList<ProductoEstadistico> obtenerTodosProdusctosTodosPedidos(List<ItemDTO> listaPed)
+	{
+		ArrayList<ProductoEstadistico> producto=new ArrayList<ProductoEstadistico>();
+		Iterator<ItemDTO> items=listaPed.iterator();
+		ProductoEstadistico pEstadistico=new ProductoEstadistico();
+		while (items.hasNext())
+		{
+			ItemDTO elemento = items.next();
+			ProductoEstadistico p=new ProductoEstadistico();
+			p.setProducto(elemento.getProducto());
+			p.setCantidad(elemento.getCantidad());
+			
+			pEstadistico=ProductoEstadistico.buscarProductoEst(producto, p);
+			if(pEstadistico!=null)
+			{
+				pEstadistico.setCantidad(pEstadistico.getCantidad()+p.getCantidad());
+			}
+			else
+			{
+				producto.add(p);
+			}
+		}
+		return producto;
+	}
+	
+	public ArrayList<PromocionEstadistica> obtenerTodasPromocionesTodosPedidos(List<ItemPromocionDTO> listaPed)
+	{
+		ArrayList<PromocionEstadistica> producto=new ArrayList<PromocionEstadistica>();
+		Iterator<ItemPromocionDTO> items=listaPed.iterator();
+		PromocionEstadistica pEstadistico=new PromocionEstadistica();
+		while (items.hasNext())
+		{
+			ItemPromocionDTO elemento = items.next();
+			PromocionEstadistica p=new PromocionEstadistica();
+			p.setPromo(elemento.getPromocion());
+			p.setCantidad(elemento.getCantidad());
+			
+			pEstadistico=PromocionEstadistica.buscarPromoEst(producto, p);
+			if(pEstadistico!=null)
+			{
+				pEstadistico.setCantidad(pEstadistico.getCantidad()+p.getCantidad());
+			}
+			else
+			{
+				producto.add(p);
+			}
+		}
+		return producto;
+	}
+	
+	private void OrdenarPromocion(ArrayList<PromocionEstadistica> promocion)
+	{
+		
 	}
 }
 	

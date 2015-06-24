@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import net.sf.jasperreports.engine.export.draw.Offset;
 import modelo.Clientes;
@@ -24,6 +25,8 @@ public class PedidoDAO
 	private static final String insert = "INSERT INTO pedidos(idpedido, item,fecha, hora, estado, total, ticket,comanda, cliente,llevadelivery,oferta,fueeliminado) VALUES(?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String delete = "DELETE FROM pedidos WHERE idpedido = ?";
 	private static final String readall = "SELECT * FROM pedidos";
+	private static final String readItem = "SELECT item FROM pedidos";
+	private static final String readPromo = "SELECT oferta FROM pedidos";
 	private static final String pedidosPendientes="select * from pedidos where estado='solicitado'";
 	//SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '%%-6-2015%';
 	private static String select = "SELECT idpedido,item,total,oferta FROM pedidos " +
@@ -143,7 +146,70 @@ public class PedidoDAO
 		}
 		return pedidos;
 	}
-		
+	
+	public List<ItemDTO> readItem()
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<ItemDTO> itemPedid = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(readItem);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				
+				Items ite=new Items();
+				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
+				Iterator<ItemDTO> iterador=listaItems.iterator();
+				while(iterador.hasNext())
+				{
+					itemPedid.add(iterador.next());
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return itemPedid;
+	}
+	public List<ItemPromocionDTO> readPromo()
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<ItemPromocionDTO> promoPed = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(readPromo);
+			resultSet = statement.executeQuery();
+			while(resultSet.next())
+			{
+				ItemsPromociones ofe=new ItemsPromociones();
+				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				Iterator<ItemPromocionDTO> iterador=listOfertas.iterator();
+				while(iterador.hasNext())
+				{
+					promoPed.add(iterador.next());
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return promoPed;
+	}
+	
 	public List<PedidoDTO> pedidosPendientes()
 	{
 		PreparedStatement statement;

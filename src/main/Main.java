@@ -7,6 +7,7 @@ import modelo.Items;
 import modelo.ItemsPromociones;
 import modelo.Itinerarios;
 import modelo.MatPrimas;
+import modelo.ProductoEstadistico;
 import modelo.Promociones;
 import modelo.OrdenesMateriaPrimas;
 import modelo.Pedidos;
@@ -34,11 +35,12 @@ public class Main
 		Itinerarios itinerario=new Itinerarios();
 		Promociones promocion=new Promociones();
 		ItemsPromociones itempromocion= new ItemsPromociones();
+		ProductoEstadistico prodEstadistico=new ProductoEstadistico();
 		VentanaPrincipal ventanaPrincial=new VentanaPrincipal();
 
 		
 		///agrego entidades de ORDENES DE MAT PRIMA Y MATERIAS PRIMAS, por lo cual uso este constructor
-		Controlador controlador=new Controlador(ventanaPrincial,pedido,cliente,producto,item, proveedor, repartidor,oferta,categoria,ordenesMatPrima,materiasPrimas,itemsMateriaPrima,itinerario,promocion, itempromocion);
+		Controlador controlador=new Controlador(ventanaPrincial,pedido,cliente,producto,item, proveedor, repartidor,oferta,categoria,ordenesMatPrima,materiasPrimas,itemsMateriaPrima,itinerario,promocion, itempromocion, prodEstadistico);
 		controlador.inicializar();
 	}
 		
