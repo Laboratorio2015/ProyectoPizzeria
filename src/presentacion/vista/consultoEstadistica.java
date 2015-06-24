@@ -20,6 +20,11 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 import presentacion.controlador.Controlador;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
+import java.awt.Font;
+import javax.swing.ButtonGroup;
+import javax.swing.SwingConstants;
 
 public class consultoEstadistica extends JDialog {
 
@@ -37,6 +42,8 @@ public class consultoEstadistica extends JDialog {
 	private JButton btnCalendarioFin;
 	private JButton btnBuscar;
 	private Controlador control;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JTextField tfOcultarTop;
 
 
 	public consultoEstadistica(VentanaPrincipal ventana, Controlador control) {
@@ -48,11 +55,12 @@ public class consultoEstadistica extends JDialog {
 		contentPanel.setLayout(null);
 		
 		cbEstadisticas= new JComboBox();
+		cbEstadisticas.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione una estadistica)", "Productos mas comprados", "Productos menos comprados", "Ofertas mas compradas", "Ofertas menos compradas", "Cliente mas comprador"}));
 		cbEstadisticas.setBounds(76, 131, 250, 22);
 		contentPanel.add(cbEstadisticas);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(398, 134, 244, 280);
+		scrollPane.setBounds(398, 134, 244, 246);
 		contentPanel.add(scrollPane);
 		
 		model = new DefaultTableModel(null,nombreColumnas);
@@ -65,6 +73,9 @@ public class consultoEstadistica extends JDialog {
 		scrollPane.setViewportView(table);
 		
 		tfFechaInicio = new JTextField();
+		tfFechaInicio.setHorizontalAlignment(SwingConstants.CENTER);
+		tfFechaInicio.setFont(new Font("Calibri", Font.BOLD, 14));
+		tfFechaInicio.setForeground(Color.LIGHT_GRAY);
 		tfFechaInicio.setEditable(false);
 		tfFechaInicio.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		tfFechaInicio.setBackground(new Color(153, 153, 0));
@@ -73,6 +84,9 @@ public class consultoEstadistica extends JDialog {
 		tfFechaInicio.setColumns(10);
 		
 		tfFechaFin = new JTextField();
+		tfFechaFin.setHorizontalAlignment(SwingConstants.CENTER);
+		tfFechaFin.setFont(new Font("Calibri", Font.BOLD, 14));
+		tfFechaFin.setForeground(Color.LIGHT_GRAY);
 		tfFechaFin.setEditable(false);
 		tfFechaFin.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		tfFechaFin.setBackground(new Color(153, 153, 0));
@@ -85,9 +99,34 @@ public class consultoEstadistica extends JDialog {
 		tfOcultaRangoFechas.setEditable(false);
 		tfOcultaRangoFechas.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		tfOcultaRangoFechas.setBackground(new Color(153, 153, 0));
-		tfOcultaRangoFechas.setBounds(62, 160, 294, 107);
+		tfOcultaRangoFechas.setBounds(34, 164, 325, 273);
 		contentPanel.add(tfOcultaRangoFechas);
 		tfOcultaRangoFechas.setColumns(10);
+		
+		tfOcultarTop = new JTextField();
+		tfOcultarTop.setEnabled(false);
+		tfOcultarTop.setEditable(false);
+		tfOcultarTop.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		tfOcultarTop.setBackground(new Color(153, 153, 0));
+		tfOcultarTop.setBounds(408, 391, 234, 35);
+		contentPanel.add(tfOcultarTop);
+		tfOcultarTop.setColumns(10);
+		
+		JCheckBox Top5 = new JCheckBox("Top 5");
+		buttonGroup.add(Top5);
+		Top5.setFont(new Font("Calibri", Font.BOLD, 14));
+		Top5.setForeground(Color.LIGHT_GRAY);
+		Top5.setBackground(new Color(153, 153, 0));
+		Top5.setBounds(437, 393, 73, 23);
+		contentPanel.add(Top5);
+		
+		JCheckBox verTodo = new JCheckBox("Ver Todos");
+		buttonGroup.add(verTodo);
+		verTodo.setFont(new Font("Calibri", Font.BOLD, 14));
+		verTodo.setForeground(Color.LIGHT_GRAY);
+		verTodo.setBackground(new Color(153, 153, 0));
+		verTodo.setBounds(521, 393, 85, 23);
+		contentPanel.add(verTodo);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(consultoEstadistica.class.getResource("/prototipos/reportesEstadistica.png")));
@@ -247,14 +286,24 @@ public class consultoEstadistica extends JDialog {
 		this.btnCalendarioFin = btnCalendarioFin;
 	}
 
+	public JTextField getTfOcultarTop() {
+		return tfOcultarTop;
+	}
+
+	public void setTfOcultarTop(JTextField tfOcultarTop) {
+		this.tfOcultarTop = tfOcultarTop;
+	}
+
 
 	public JButton getBtnBuscar() {
 		return btnBuscar;
 	}
-
+		
+	public ButtonGroup getButtonGroup() {
+		return buttonGroup;
+	}
 
 	public void setBtnBuscar(JButton btnBuscar) {
 		this.btnBuscar = btnBuscar;
 	}
-	
 }

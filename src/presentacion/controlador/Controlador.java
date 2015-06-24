@@ -37,6 +37,7 @@ import modelo.Items;
 import modelo.ItemsPromociones;
 import modelo.Itinerarios;
 import modelo.MatPrimas;
+import modelo.ProductoEstadistico;
 import modelo.Promociones;
 import modelo.OrdenesMateriaPrimas;
 import modelo.Pedidos;
@@ -366,11 +367,101 @@ public class Controlador implements ActionListener
 			ventanaReportesEstadistica.getBtnCalendarioInicio().addActionListener(this);
 			ventanaReportesEstadistica.getBtnEnviarPorEmail().addActionListener(this);
 			ventanaReportesEstadistica.getBtnImprimir().addActionListener(this);
+			ventanaReportesEstadistica.getCbEstadisticas().addActionListener(this);
 			ventanaReportesEstadistica.setVisible(true);
 		}
-		
-		
-		
+		//Seleccionar tipos de Estadisticas
+		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getCbEstadisticas())
+		{
+			String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
+			if (tipoProducto.compareTo("(Seleccione una estadistica)")==0)
+			{
+				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(true);
+				ventanaReportesEstadistica.getTfOcultarTop().setVisible(true);
+				ventanaReportesEstadistica.getTfFechaInicio().setText("");
+				ventanaReportesEstadistica.getTfFechaFin().setText("");
+			}
+			else if(tipoProducto.compareTo("Productos mas comprados")==0 || tipoProducto.compareTo("Productos menos comprados")==0 )
+			{
+				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(false);
+				ventanaReportesEstadistica.getTfOcultarTop().setVisible(false);
+				ventanaReportesEstadistica.getTfFechaInicio().setText("");
+				ventanaReportesEstadistica.getTfFechaFin().setText("");
+			}
+			else if(tipoProducto.compareTo("Ofertas mas compradas")==0 || tipoProducto.compareTo("Ofertas menos compradas")==0|| tipoProducto.compareTo("Cliente mas comprador")==0 )
+			{
+				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(false);
+				ventanaReportesEstadistica.getTfOcultarTop().setVisible(true);
+				ventanaReportesEstadistica.getTfFechaInicio().setText("");
+				ventanaReportesEstadistica.getTfFechaFin().setText("");
+			}
+		}
+		//establecer fecha de inicio y fin para ESTADISTICAS
+		else if(this.ventanaReportesEstadistica!= null && (e.getSource()==this.ventanaReportesEstadistica.getBtnCalendarioInicio() ||e.getSource()==this.ventanaReportesEstadistica.getBtnCalendarioFin() ))
+		{
+			if(e.getSource()==this.ventanaReportesEstadistica.getBtnCalendarioInicio())
+			{
+				ventanaCalendario=new calendario(ventanaReportesEstadistica);
+				ventanaCalendario.setTitle("Fecha de Inicio");
+				ventanaCalendario.setVisible(true);
+			}
+			else
+			{
+				ventanaCalendario=new calendario(ventanaReportesEstadistica);
+				ventanaCalendario.setTitle("Fecha de Fin");
+				ventanaCalendario.setVisible(true);
+			}	
+		}
+		//BUSCAR ESTADISTICAS EN UN RANGO DE FECHAS
+		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnBuscar())
+		{
+			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
+			{
+				Iterator<PedidoDTO> pedidos=this.pedido.obtenerPedidos().iterator();
+				ArrayList<ProductoEstadistico> productos=new ArrayList<ProductoEstadistico>();
+				while (pedidos.hasNext())
+				{
+					Iterator<ItemDTO> elemento = pedidos.next().getProductos().iterator();
+					while(elemento.hasNext())
+					{
+						if()
+					}
+					
+				}
+				
+				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
+				switch (tipoProducto) {
+				case "Productos mas comprados":
+				{
+					
+				}				
+				break;
+
+				case "Productos menos comprados":
+				{
+					
+				}				
+				break;
+				case "Ofertas mas compradas":
+				{
+					
+				}				
+				break;
+				case "Ofertas menos compradas":
+				{
+					
+				}				
+				break;
+				case "Cliente mas comprador":
+				{
+					
+				}				
+				break;
+				}
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Error, para hacer la consulta debe seleccionar la fecha de inicio y fin");
+		}
 		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
