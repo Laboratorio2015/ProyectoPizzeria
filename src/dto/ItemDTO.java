@@ -101,6 +101,44 @@ public class ItemDTO implements Serializable{
 				salir=true;	
 		}
 		listaItem.remove(cont);
-		
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((producto == null) ? 0 : producto.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ItemDTO other = (ItemDTO) obj;
+		if (producto == null) {
+			if (other.producto != null)
+				return false;
+		} else if (!producto.equals(other.producto))
+			return false;
+		return true;
+	}
+	
+//	@Override
+//	public int hashCode()
+//	{
+//	    return this.producto.getNombre().trim().hashCode();
+//	}
+//
+//	@Override
+//	public boolean equals(Object o)
+//	{
+//	    ItemDTO itemAcomparar = (ItemDTO) o;
+//		return this.producto.getNombre().trim().hashCode() == itemAcomparar.getProducto().getNombre().trim().hashCode();
+//	}
 }

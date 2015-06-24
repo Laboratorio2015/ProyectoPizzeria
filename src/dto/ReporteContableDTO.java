@@ -3,6 +3,8 @@ package dto;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import modelo.Promociones;
+
 import com.itextpdf.text.pdf.hyphenation.TernaryTree.Iterator;
 
 import presentacion.reportes.solicitudDeMateriaPrima;
@@ -12,7 +14,8 @@ public class ReporteContableDTO {
 	
 	private ArrayList<PedidoDTO> listadoPedidos;
 	private ArrayList<OrdenPedidoMatPrimaDTO> listadoCompras;
-	private HashMap<ProductoDTO, Integer> contadorProductosVendidos;
+	private HashMap<ProductoDTO, Integer> cantEmpVendidas;
+	private HashMap<ProductoDTO, Integer> cantPizzaVendidas;
 	private Integer ganancia;
 	private Integer totalPedidos;
 	private Integer totalCompras;
@@ -20,7 +23,8 @@ public class ReporteContableDTO {
 	public ReporteContableDTO(){
 		listadoPedidos = new ArrayList<PedidoDTO>();
 		listadoCompras = new ArrayList<OrdenPedidoMatPrimaDTO>();
-		contadorProductosVendidos= new HashMap<ProductoDTO, Integer>();
+		cantEmpVendidas= new HashMap<ProductoDTO, Integer>();
+		cantPizzaVendidas = new HashMap<ProductoDTO, Integer>();
 		totalPedidos = 0;
 		totalCompras = 0;
 	}
@@ -61,8 +65,31 @@ public class ReporteContableDTO {
 				ItemDTO elementoItem = iteradorItems.next();
 				sumarProducto(elementoItem);
 			}
+			
 			///SUMA LOS ITEMS DE CADA OFERTA
-			//*falta//
+			//El atributo <ofertas> de la clase PedidoDTO contiene un array de ItemPromocionDTO. Este item hace referencia a un id de PromocionDTO;
+			//tambien indica la cantidad de esa promoción (0,1,*). 
+			//Idea: Se itera el array de <ofertas>, por cada una guardo la cantidad de veces que lo contiene y luego recorro los items que componen
+			//la oferta obtenida. Por cada item, me interesa saber:
+			//	el producto y cantidad del mismo: para poder sumar al hashmap. Esta cantidad la multiplico por el atributo <cantidad> del item 
+			//q obtuve 
+			Promociones promociones = new Promociones();
+			java.util.Iterator<ItemPromocionDTO> iteradorOfertas = elementoPedido.getOfertas().iterator();
+			while (iteradorOfertas.hasNext()){
+				ItemPromocionDTO elementoPromo = iteradorOfertas.next();
+				//Tomo cada item de la promocion seleccionada que es representado por un Id. Con ese Id tengo q obtener la promo del modelo correspon
+				//y recien ahi recorrer todos los items de la promo obtenida de la consulta.
+				//PromocionDTO promo =  promociones.buscarOferta(elementoPromo.getIditemPromo());
+				//System.out.println("Promo nro " + promo.getIdOferta());
+				//Ahora recoorro los items dentro de la promo
+				java.util.Iterator<ItemDTO> iterItemOferta = elementoPromo.getProductosOfertados().iterator();
+				while (iterItemOferta.hasNext()){
+					ItemDTO elementoItem = iterItemOferta.next();
+					sumarProducto(elementoItem);
+				}
+			}
+
+			
 		}
 		
 		//CALCULOS SOBRE ORDENES DE MATERIA PRIMA
@@ -80,13 +107,16 @@ public class ReporteContableDTO {
 	
 	public void sumarProducto(ItemDTO item){
 		if (item.getProducto().getTipo().trim().compareTo("otros") != 0){
-			System.out.println( "Item obtenido" + item.getProducto().getNombre() + " item devuelto de hash: " + contadorProductosVendidos.get(item));
-			if (contadorProductosVendidos.get(item)!= null){
-				Integer total = contadorProductosVendidos.get(item.getProducto()) + item.getCantidad();
-				contadorProductosVendidos.replace(item.getProducto(), total);
+			HashMap<ProductoDTO, Integer> tablaCorresp = this.cantEmpVendidas;
+			if (item.getProducto().getTipo().trim().compareTo("pizza") == 0){
+				tablaCorresp = this.cantPizzaVendidas;
+			}
+			if (tablaCorresp.containsKey(item.getProducto())){
+				Integer total = cantEmpVendidas.get(item.getProducto()) + item.getCantidad();
+				tablaCorresp.replace(item.getProducto(), total);
 			}
 			else{
-				contadorProductosVendidos.put(item.getProducto(),item.getCantidad());
+				tablaCorresp.put(item.getProducto(),item.getCantidad());
 			}	
 		}
 	}
@@ -107,5 +137,14 @@ public class ReporteContableDTO {
 		this.totalCompras = totalCompras;
 	}
 	
-	
+	public void mostrarCantProdVendidos(){
+		System.out.println("Empanadas vendidas");
+		for (ProductoDTO key : cantEmpVendidas.keySet()) {
+			System.out.println("Producto = " + key.getNombre() + " -Cantidad vendida: " + cantEmpVendidas.get(key));
+		}
+		System.out.println("Pizzas vendidas");
+		for (ProductoDTO key : cantPizzaVendidas.keySet()) {
+			System.out.println("Producto = " + key.getNombre() + " -Cantidad vendida: " + cantPizzaVendidas.get(key));
+		}
+	}
 }

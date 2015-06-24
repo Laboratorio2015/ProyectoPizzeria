@@ -256,8 +256,6 @@ public class Controlador implements ActionListener
 				ventanaReportesContables.setFechaFin(selectorFecha.getFechaSeleccionada());
 				ventanaReportesContables.setDateFechaFin(selectorFecha.getFechaDate());
 				ventanaReportesContables.getLblFechaFin().setText(selectorFecha.getFechaSeleccionada());
-				System.out.println("Fechas selecionadas: " + ventanaReportesContables.getFechaInicio() + " fecha fin: " + ventanaReportesContables.getFechaFin());
-				System.out.println(ventanaReportesContables.getDateFechaInicio());
 			}
 			selectorFecha.dispose();
 		}
@@ -301,6 +299,10 @@ public class Controlador implements ActionListener
 				Integer mesCero = 1;
 				Integer mes12 = 12;
 				Integer diaIndiceFin = 31;
+				
+				//Integer diaInicio = ventanaReportesContables.getcal
+
+				
 				Integer diaInicio = ventanaReportesContables.getDateFechaInicio().getDay();
 				Integer mesInicio = ventanaReportesContables.getDateFechaInicio().getMonth()+1;
 				Integer añoInicio = ventanaReportesContables.getDateFechaInicio().getYear()+1900;
@@ -350,6 +352,7 @@ public class Controlador implements ActionListener
 					}
 					reporteContable.calcularGanancias();
 					ventanaReportesContables.mostrarResultados(reporteContable.getTotalCompras(),reporteContable.getTotalPedidos(),reporteContable.getGanancia());
+					reporteContable.mostrarCantProdVendidos();
 				}
 			}
 			else{
@@ -426,10 +429,8 @@ public class Controlador implements ActionListener
 					{
 						if()
 					}
-					
-				}
-				
-				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
+		
+			String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
 				switch (tipoProducto) {
 				case "Productos mas comprados":
 				{

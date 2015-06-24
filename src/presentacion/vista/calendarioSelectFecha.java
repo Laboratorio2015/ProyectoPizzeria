@@ -63,7 +63,14 @@ public class calendarioSelectFecha extends JDialog {
 	}
 	
 	public String getFechaSeleccionada(){
-		String fechaSeleccionada = calendar.getDate().getDay() + "-" + (calendar.getDate().getMonth()+1) + "-" + (calendar.getDate().getYear()+1900);
+		Date date = calendar.getDate();
+        
+		SimpleDateFormat dateformatter = new SimpleDateFormat("dd/MM/yyyy");
+        System.out.println("Fecha seleccinada en formato dato: " + date.toString());
+        System.out.println("La fecha actual en un formato dado: " + dateformatter.format(date.getTime()));
+		String fechaSeleccionada = dateformatter.format(date.getTime());
+		
+		//String fechaSeleccionada = calendar.getDate().getDay() + "-" + (calendar.getDate().getMonth()+1) + "-" + (calendar.getDate().getYear()+1900);
 		return fechaSeleccionada;
 	}
 

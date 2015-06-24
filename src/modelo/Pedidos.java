@@ -101,7 +101,7 @@ public class Pedidos
 	}
 
 	public ArrayList<PedidoDTO> reporteDiario(String dia, String mes, String año) throws SQLException {
-		return pedido.ventaDiaria(dia,mes, año);
+		return pedido.getPedidosVendidosPorFecha(dia,mes, año);
 		
 	}
 }
