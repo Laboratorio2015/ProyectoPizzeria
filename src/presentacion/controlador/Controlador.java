@@ -3008,27 +3008,28 @@ public class Controlador implements ActionListener
 	
 	
 	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException{
-		//ENVIO DE PEDIDO
+		this.socket = new Socket("localhost",5000);
+		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
+				
 		this.objectOutputStream.writeObject(nuevoPedido);
-		//RETORNO POSIBLE. persona returnHumano = (persona)cliente.objectInputStream.readObject();
-		System.out.println("Pedido enviado");
-		
+		this.objectOutputStream.writeObject(null);
+
 	}
+	
 	private void enviarPedidosMonitor() throws IOException{
 		this.socket = new Socket("localhost",5000);
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
 		objectInputStream = new ObjectInputStream(socket.getInputStream());
-		
 		//Levanta de la base todos los pedidos en estado solicitado, no eliminados y del dia de la fecha de hoy.
 		Iterator<PedidoDTO> pedidos = pedido.obtenerPedidos().iterator();
 		while (pedidos.hasNext()){
 			PedidoDTO pedido = pedidos.next();
-			if (pedido.getEstado().trim().compareTo("solicitado")==0)// && !pedido.getFueeliminado() && pedido.getFecha().trim().compareTo(getFechaActual())==0)
-			{
-				enviarPedidoMonitor(pedido);
+			if (pedido.getEstado().trim().compareTo("solicitado")==0){
+			// && !pedido.getFueeliminado() && pedido.getFecha().trim().compareTo(getFechaActual())==0)
+				this.objectOutputStream.writeObject(pedido);
 			}
 		}
-		
+		this.objectOutputStream.writeObject(null);
 		socket.close();		
 	}
 

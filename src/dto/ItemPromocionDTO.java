@@ -1,9 +1,11 @@
 package dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ItemPromocionDTO
+public class ItemPromocionDTO implements Serializable
 {
+	private static final long serialVersionUID = -302596640510821032L;
 	private Integer iditempromo;
 	private PromocionDTO promocion;
 	private Integer cantidad;

@@ -45,6 +45,9 @@ public class Main
 		Controlador controlador=new Controlador(ventanaPrincial,pedido,cliente,producto,item, proveedor, repartidor,oferta,categoria,ordenesMatPrima,materiasPrimas,itemsMateriaPrima,itinerario,promocion, itempromocion, prodEstadistico);
 		try {
 			controlador.inicializar();
+			
+			esperarXsegundos(5);
+			controlador.enviarPedidoMonitor(controlador.getPedido().buscarPedidoId(3));
 		} catch (IOException e) {
 			System.out.println("Problema de conexion con monitor (servidor)");
 			e.printStackTrace();
