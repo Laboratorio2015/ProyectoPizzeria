@@ -127,7 +127,7 @@ public class PedidoDAO
 				Items ite=new Items();
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
 				ItemsPromociones ofe=new ItemsPromociones();
-				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArrayItPromo(resultSet.getString("oferta"));
 				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
@@ -191,7 +191,7 @@ public class PedidoDAO
 			while(resultSet.next())
 			{
 				ItemsPromociones ofe=new ItemsPromociones();
-				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArrayItPromo(resultSet.getString("oferta"));
 				Iterator<ItemPromocionDTO> iterador=listOfertas.iterator();
 				while(iterador.hasNext())
 				{
@@ -233,7 +233,7 @@ public class PedidoDAO
 				Items ite=new Items();
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
 				ItemsPromociones ofe=new ItemsPromociones();
-				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArray(resultSet.getString("oferta"));
+				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArrayItPromo(resultSet.getString("oferta"));
 				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
@@ -265,12 +265,21 @@ public class PedidoDAO
 			resultSet = statement.executeQuery();			
 			ArrayList<PedidoDTO> resultado = new ArrayList<PedidoDTO>();
 			Items items=new Items();
-			ItemsPromociones promociones = new ItemsPromociones();
-
+			ItemsPromociones itemPromos = new ItemsPromociones();
+			
 			while (resultSet.next())
-			{			
-				resultado.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray((String) resultSet.getObject(2))
-											,(Integer)resultSet.getObject(3), promociones.pasarDeStringAArray((String) resultSet.getObject(4))));
+			{					
+				// pruebas
+				String arrayItems = String.valueOf(resultSet.getObject(2));
+				if (resultSet.getObject(2) == null)
+					arrayItems = "";				
+				String arrayIdPromo = String.valueOf(resultSet.getObject(4));
+				if (resultSet.getObject(4) == null)
+					arrayIdPromo = "";
+				//
+				
+				resultado.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray(arrayItems)
+											,(Integer)resultSet.getObject(3), itemPromos.pasarDeStringAArrayItPromo(arrayIdPromo) ));
 			}
 			return resultado;
 		}

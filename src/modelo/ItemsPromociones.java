@@ -50,30 +50,32 @@ public class ItemsPromociones
 		return listaId;
 	}
 
-	public ArrayList<ItemPromocionDTO> pasarDeStringAArray(String listado) 
+	public ArrayList<ItemPromocionDTO> pasarDeStringAArrayItPromo(String listado) 
 	{
 		ArrayList<ItemPromocionDTO> result=new ArrayList<ItemPromocionDTO>();
 		String a="";
-		for (int i=0; i<listado.length(); i++)
-		{
-			
-			  if (listado.charAt(i) != ' '&& listado.charAt(i+1)!=' ')
-			  {
-				  a=a+listado.charAt(i)+"";
-				  
-			  }
-			  if(listado.charAt(i) != ' '&& listado.charAt(i+1)==' ')
-			  {
-				  a=a+listado.charAt(i);
-				  int elemento=Integer.parseInt(a);
-				  ItemPromocionDTO item=this.buscarItemPromo(elemento);
-				  result.add(item);
-				  a="";
-			  }
-			  else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
-				  break;
+		if (!listado.isEmpty()){
+			for (int i=0; i<listado.length(); i++)
+			{		
+				if (listado.charAt(i) != ' '&& listado.charAt(i+1)!=' ')
+				{
+					a=a+listado.charAt(i)+"";
+
+				}
+				if(listado.charAt(i) != ' '&& listado.charAt(i+1)==' ')
+				{
+					a=a+listado.charAt(i);
+					int elemento=Integer.parseInt(a);
+					ItemPromocionDTO item=this.buscarItemPromo(elemento);
+					result.add(item);
+					a="";
+				}
+				else if(listado.charAt(i)==' ' && listado.charAt(i+1)==' ')
+					break;
+			}
 		}
 		return result;
+
 	}
 
 	public ItemPromocionDTO buscarItemPromo(int iditem) 

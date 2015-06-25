@@ -186,10 +186,17 @@ public class Controlador implements ActionListener
 	}
 
 
-	public void inicializar()
+	public void inicializar() throws IOException
 	{
 		this.ventana.show();
-		System.out.println(getFechaActual());	}
+		System.out.println(getFechaActual());	
+		try {
+			enviarPedidosMonitor();
+		} catch (Exception e) {
+			System.out.println("Problema surgido al conectarse con monitor.");
+			e.printStackTrace();
+		}
+	}
 
 	@SuppressWarnings({ "serial", "deprecation" })
 	@Override
@@ -1389,7 +1396,7 @@ public class Controlador implements ActionListener
 			nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 			nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 			//aca
-			nuevoPedido.setProductos(generarListaItems());
+			//nuevoPedido.setProductos(generarListaItems());
 			nuevoPedido.setOfertas(generarListaOfertas());
 			nuevoPedido.setFecha(fecha);
 			nuevoPedido.setHora(hora);
@@ -2408,22 +2415,22 @@ public class Controlador implements ActionListener
 		}
 		return null;
 	}
-//	public ArrayList<ItemDTO> generarListaItems() 
-//	{
-//		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
-//		String nombre="";
-//		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
-//		{
-//			nombre=this.ventanaPedido.getModel().getValueAt(i, 0).toString();
-//			if(producto.buscarProductoPorNombre(nombre)!=null)
-//			{
-//				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)(this.ventanaPedido.getModel().getValueAt(i, 3)),false);
-//				item.agregarItem(aux);
-//				listaAux.add(aux);
-//			}
-//		}
-//		return listaAux;
-//	}
+	public ArrayList<ItemDTO> generarListaItems() 
+	{
+		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
+		String nombre="";
+		for(int i=0; i<this.ventanaPedido.getTablaItems().getRowCount(); i++)
+		{
+			nombre=this.ventanaPedido.getModel().getValueAt(i, 0).toString();
+			if(producto.buscarProductoPorNombre(nombre)!=null)
+			{
+				ItemDTO aux=new ItemDTO(this.item.ultimoItem()+1,this.getProducto().buscarProductoPorNombre(this.ventanaPedido.getModel().getValueAt(i, 0).toString()), Integer.parseInt((String)this.ventanaPedido.getModel().getValueAt(i, 1)), (String)(this.ventanaPedido.getModel().getValueAt(i, 3)),false);
+				item.agregarItem(aux);
+				listaAux.add(aux);
+			}
+		}
+		return listaAux;
+	}
 	public ArrayList<ItemDTO> generarListaItemsOfertados() 
 	{
 		ArrayList<ItemDTO> listaAux= new ArrayList<ItemDTO>();
@@ -2977,6 +2984,35 @@ public class Controlador implements ActionListener
 		System.out.println("Pedido enviado");
 		socket.close();			
 	}
+	
+	
+	
+	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException{
+		//ENVIO DE PEDIDO
+		this.objectOutputStream.writeObject(nuevoPedido);
+		//RETORNO POSIBLE. persona returnHumano = (persona)cliente.objectInputStream.readObject();
+		System.out.println("Pedido enviado");
+		
+	}
+	private void enviarPedidosMonitor() throws IOException{
+		this.socket = new Socket("localhost",5000);
+		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
+		objectInputStream = new ObjectInputStream(socket.getInputStream());
+		
+		//Levanta de la base todos los pedidos en estado solicitado, no eliminados y del dia de la fecha de hoy.
+		Iterator<PedidoDTO> pedidos = pedido.obtenerPedidos().iterator();
+		while (pedidos.hasNext()){
+			PedidoDTO pedido = pedidos.next();
+			if (pedido.getEstado().trim().compareTo("solicitado")==0)// && !pedido.getFueeliminado() && pedido.getFecha().trim().compareTo(getFechaActual())==0)
+			{
+				enviarPedidoMonitor(pedido);
+			}
+		}
+		
+		socket.close();		
+	}
+
+
 	private ArrayList<ProductoEstadistico> obtenerTodosProdusctosTodosPedidos(List<ItemDTO> listaPed)
 	{
 		ArrayList<ProductoEstadistico> producto=new ArrayList<ProductoEstadistico>();

@@ -2,13 +2,7 @@ package dto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import modelo.Promociones;
-
-import com.itextpdf.text.pdf.hyphenation.TernaryTree.Iterator;
-
-import presentacion.reportes.solicitudDeMateriaPrima;
-
 
 public class ReporteContableDTO {
 	
@@ -72,17 +66,17 @@ public class ReporteContableDTO {
 			//la oferta obtenida. Por cada item, me interesa saber:
 			//	el producto y cantidad del mismo: para poder sumar al hashmap. Esta cantidad la multiplico por el atributo <cantidad> del item 
 			//q obtuve 
-			//Promociones promociones = new Promociones();
+			
 			java.util.Iterator<ItemPromocionDTO> iteradorOfertas = elementoPedido.getOfertas().iterator();
 			while (iteradorOfertas.hasNext()){
 				ItemPromocionDTO elementoPromo = iteradorOfertas.next();
-				
+//				PromocionDTO promo = promociones.buscarOferta(elementoPromo.getIditemPromo());
 				//Tomo cada item de la promocion seleccionada que es representado por un Id. Con ese Id tengo q obtener la promo del modelo correspon
 				//y recien ahi recorrer todos los items de la promo obtenida de la consulta.
 				//PromocionDTO promo =  promociones.buscarOferta(elementoPromo.getIditemPromo());
 				//System.out.println("Promo nro " + promo.getIdOferta());
 				//Ahora recoorro los items dentro de la promo
-				java.util.Iterator<ItemDTO> iterItemOferta = elementoPromo.getProductosOfertados().iterator();
+				java.util.Iterator<ItemDTO> iterItemOferta = elementoPromo.getPromocion().getProductosOfertados().iterator();
 				while (iterItemOferta.hasNext()){
 					ItemDTO elementoItem = iterItemOferta.next();
 					sumarProducto(elementoItem,elementoPromo.getCantidad());
@@ -108,11 +102,11 @@ public class ReporteContableDTO {
 				tablaCorresp = this.cantPizzaVendidas;
 			}
 			if (tablaCorresp.containsKey(item.getProducto())){
-				Integer total = cantEmpVendidas.get(item.getProducto()) + item.getCantidad()*cantPromoRepetida;
+				Integer total = cantEmpVendidas.get(item.getProducto()) + (item.getCantidad()*cantPromoRepetida);
 				tablaCorresp.replace(item.getProducto(), total);
 			}
 			else{
-				tablaCorresp.put(item.getProducto(),item.getCantidad());
+				tablaCorresp.put(item.getProducto(),item.getCantidad()*cantPromoRepetida);
 			}	
 		}
 	}
