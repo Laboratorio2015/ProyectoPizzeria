@@ -3,6 +3,7 @@ package presentacion.controlador;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.awt.Component;
@@ -158,6 +159,7 @@ public class Controlador implements ActionListener
 	private registrarPagoOrdenMatPrima ventanaRegistrarPagoOrdenMatPrima;
 	private ReporteContableDTO reporteContable;
 	private ProductoEstadistico prodEstadistico;
+	private OutputStream sos;
 
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
@@ -3014,30 +3016,39 @@ public class Controlador implements ActionListener
 	
 	
 	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException{
-		this.socket = new Socket("localhost",5000);
-		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
 				
 		this.objectOutputStream.writeObject(nuevoPedido);
-		this.objectOutputStream.writeObject(null);
+		//this.objectOutputStream.writeObject(null);
 
 	}
 	
 	private void enviarPedidosMonitor() throws IOException
 	{
 		this.socket = new Socket("localhost",5000);
+		//
+		sos = socket.getOutputStream(); 
+		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
-		objectInputStream = new ObjectInputStream(socket.getInputStream());
 		//Levanta de la base todos los pedidos en estado solicitado, no eliminados y del dia de la fecha de hoy.
 		Iterator<PedidoDTO> pedidos = pedido.obtenerPedidos().iterator();
 		while (pedidos.hasNext()){
 			PedidoDTO pedido = pedidos.next();
 			if (pedido.getEstado().trim().compareTo("solicitado")==0){
 			// && !pedido.getFueeliminado() && pedido.getFecha().trim().compareTo(getFechaActual())==0)
-				this.objectOutputStream.writeObject(pedido);
+				try {//
+					this.objectOutputStream.writeObject(pedido);
+				} catch (IOException e) {//
+		            e.printStackTrace(System.err);//
+				}//
+				try {//
+		            Thread.sleep(50);//
+		        } catch (Exception e) {//
+		            e.printStackTrace();//
+		        }//
 			}
 		}
-		this.objectOutputStream.writeObject(null);
-		socket.close();		
+//		this.objectOutputStream.writeObject(null);
+//		socket.close();		
 	}
 
 
