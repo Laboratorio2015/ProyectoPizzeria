@@ -448,6 +448,16 @@ public class Controlador implements ActionListener
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
+					ArrayList<ProductoEstadistico>produc=obtenerTodasProductostodasPromocionesTodosPedidos(promocion);
+					producto=sumarProductos(produc, producto);
+					Collections.sort(producto,new Comparator<ProductoEstadistico>() {
+						@Override
+						public int compare(ProductoEstadistico o1,
+								ProductoEstadistico o2) {
+							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
+						}
+					});
+					llenarTablaEstadisticas("producto", null, producto);
 					System.out.println("termino");
 				}				
 				break;
