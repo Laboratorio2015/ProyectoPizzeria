@@ -427,8 +427,18 @@ public class Controlador implements ActionListener
 				{
 					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
-					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido);
+					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
+					ArrayList<ProductoEstadistico>produc=obtenerTodasProductostodasPromocionesTodosPedidos(promocion);
+					producto=sumarProductos(produc, producto);
+					Collections.sort(producto,new Comparator<ProductoEstadistico>() {
+						@Override
+						public int compare(ProductoEstadistico o1,
+								ProductoEstadistico o2) {
+							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
+						}
+					});
+					llenarTablaEstadisticas("producto", null, producto);
 					System.out.println("termino");
 				}
 				break;
@@ -436,7 +446,7 @@ public class Controlador implements ActionListener
 				{
 					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
-					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido);
+					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
 					System.out.println("termino");
 				}				
@@ -3013,7 +3023,7 @@ public class Controlador implements ActionListener
 	}
 
 
-	private ArrayList<ProductoEstadistico> obtenerTodosProdusctosTodosPedidos(List<ItemDTO> listaPed)
+	private ArrayList<ProductoEstadistico> obtenerTodosProdusctosTodosPedidos(List<ItemDTO> listaPed,Integer cant)
 	{
 		ArrayList<ProductoEstadistico> producto=new ArrayList<ProductoEstadistico>();
 		Iterator<ItemDTO> items=listaPed.iterator();
@@ -3028,10 +3038,11 @@ public class Controlador implements ActionListener
 			pEstadistico=ProductoEstadistico.buscarProductoEst(producto, p);
 			if(pEstadistico!=null)
 			{
-				pEstadistico.setCantidad(pEstadistico.getCantidad()+p.getCantidad());
+				pEstadistico.setCantidad((pEstadistico.getCantidad()*cant)+p.getCantidad());
 }
 			else
 			{
+				p.setCantidad(elemento.getCantidad()*cant);
 				producto.add(p);
 			}
 		}
@@ -3063,33 +3074,81 @@ public class Controlador implements ActionListener
 		return producto;
 	}
 	
-	private void OrdenarPromocion(ArrayList<PromocionEstadistica> promocion)
+	public ArrayList<ProductoEstadistico> obtenerTodasProductostodasPromocionesTodosPedidos(ArrayList<PromocionEstadistica> listaPed)
 	{
-		//ArrayList<Object> aux=new ArrayList<Object>;
-		//Collections.sort(promocion);
-		
+		ArrayList<ProductoEstadistico> producto=new ArrayList<ProductoEstadistico>();
+		ArrayList<ProductoEstadistico> result= new ArrayList<ProductoEstadistico>();
+		Iterator<PromocionEstadistica> items=listaPed.iterator();
+		while (items.hasNext())
+		{
+			PromocionEstadistica elemento = items.next();
+			producto=obtenerTodosProdusctosTodosPedidos(elemento.getPromo().getProductosOfertados(),elemento.getCantidad());
+			result=sumarProductos(producto,result);
+		}
+		return producto;
 	}
 	
+	
+
+
 	private void llenarTablaEstadisticas(String tipo,ArrayList<PromocionEstadistica> promocion,ArrayList<ProductoEstadistico> productos)
 	{
 		this.ventanaReportesEstadistica.getModel().setRowCount(0);
 		this.ventanaReportesEstadistica.getModel().setColumnCount(0);
-		String[] nombreColum=new String[2];
-		nombreColum[0]="Oferta";
-		nombreColum[1]="Cantidad";
-		this.ventanaReportesEstadistica.setNombreColumnas(nombreColum);
-		this.ventanaReportesEstadistica.getModel().setColumnIdentifiers(this.ventanaReportesEstadistica.getNombreColumnas());
 		if(tipo.compareTo("promocion")==0)
 		{
+			String[] nombreColum=new String[2];
+			nombreColum[0]="Oferta";
+			nombreColum[1]="Cantidad";
+			this.ventanaReportesEstadistica.setNombreColumnas(nombreColum);
+			this.ventanaReportesEstadistica.getModel().setColumnIdentifiers(this.ventanaReportesEstadistica.getNombreColumnas());
 			Iterator<PromocionEstadistica> Iterador = promocion.iterator();
 			while(Iterador.hasNext())
 			{
 				PromocionEstadistica elemento = Iterador.next();
 					Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
+					this.ventanaReportesEstadistica.getModel().addRow(fila);	
+			}
+		}
+		else
+		{
+			String[] nombreColum=new String[3];
+			nombreColum[0]="Producto";
+			nombreColum[1]="Tipo";			
+			nombreColum[2]="Cantidad";
+			this.ventanaReportesEstadistica.setNombreColumnas(nombreColum);
+			this.ventanaReportesEstadistica.getModel().setColumnIdentifiers(this.ventanaReportesEstadistica.getNombreColumnas());
+			Iterator<ProductoEstadistico> Iterador = productos.iterator();
+			while(Iterador.hasNext())
+			{
+				ProductoEstadistico elemento = Iterador.next();
+					Object[] fila = {elemento.getProducto().getNombre(),elemento.getProducto().getTipo() ,elemento.getCantidad()};
 					this.ventanaReportesEstadistica.getModel().addRow(fila);
 	
 			}
 		}
+	}
+	private ArrayList<ProductoEstadistico> sumarProductos(ArrayList<ProductoEstadistico> acumulador,ArrayList<ProductoEstadistico> productos)
+	{
+		Iterator<ProductoEstadistico> iterador=productos.iterator();
+		while(iterador.hasNext())
+		{
+			ProductoEstadistico elemento=iterador.next();
+			ProductoEstadistico nuevo= ProductoEstadistico.buscarProductoEst(acumulador, elemento);
+			if(nuevo!=null)
+			{
+				acumulador.remove(nuevo);
+				nuevo.setCantidad(nuevo.getCantidad()+elemento.getCantidad());
+				acumulador.add(nuevo);
+			}
+			else
+				acumulador.add(elemento);
+		}
+		return acumulador;
+	}
+	public void actualizar(ProductoEstadistico prod)
+	{
+		
 	}
 }
 	
