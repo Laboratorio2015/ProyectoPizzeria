@@ -82,7 +82,8 @@ public class Ticket {
 
 		
 		//Agregar Items del Pedido a Ticket
-		
+		if(pedido.getProductos()!=null)
+		{
 		Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
 		Integer y = 543;
 		canvas.setFontAndSize(bf_helv, 12);
@@ -96,6 +97,7 @@ public class Ticket {
 				canvas.showTextAligned(Element.ALIGN_CENTER, totalItem.toString(), 545, y, 0);
 				y=y-30;
 			}
+		}
 		canvas.setFontAndSize(bf_helv, 14);
 		canvas.showTextAligned(Element.ALIGN_LEFT, "$" + pedido.getTotal().toString(), 530, 400, 0);
 		
@@ -117,7 +119,8 @@ public class Ticket {
 		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), 100, 223, 0);
 		
 		//Agregar Items del Pedido a Comanda
-		
+		if(pedido.getProductos()!=null)
+		{
 		Iterator<ItemDTO> Iterador2 = pedido.getProductos().iterator();
 		Integer y2 = 143;
 		canvas.setFontAndSize(bf_helv, 12);
@@ -133,6 +136,6 @@ public class Ticket {
 				y2=y2-30;
 			}	
 		canvas.endText();
-	
+		}
 	}
 }

@@ -16,7 +16,6 @@ import java.awt.Cursor;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
-import java.time.chrono.JapaneseDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.awt.Color;

@@ -42,11 +42,16 @@ public class Items
 	public String iditemsPed(PedidoDTO pedido)
 	{
 		String listaId="";
-		Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
+		Iterator<ItemDTO> Iterador;
+		if(pedido.getProductos()!=null)
+		{
+			Iterador= pedido.getProductos().iterator();
+		
 		while(Iterador.hasNext())
 		{
 			ItemDTO elemento = Iterador.next();
 			listaId=listaId +elemento.getIditem()+" ";
+		}
 		}
 		return listaId;
 	}

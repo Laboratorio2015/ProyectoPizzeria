@@ -25,6 +25,8 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -40,6 +42,7 @@ import modelo.Items;
 import modelo.ItemsPromociones;
 import modelo.Itinerarios;
 import modelo.MatPrimas;
+import modelo.PantallaCargando;
 import modelo.ProductoEstadistico;
 import modelo.PromocionEstadistica;
 import modelo.Promociones;
@@ -137,6 +140,7 @@ public class Controlador implements ActionListener
 
 
 	//modelo
+	private PantallaCargando screen;
 	private Productos producto;
 	private Proveedores proveedor;
 	private Pedidos pedido;
@@ -425,6 +429,8 @@ public class Controlador implements ActionListener
 				switch (tipoProducto) {
 				case "Productos mas comprados":
 				{
+					inicioPantalla();
+					screen.velocidadDeCarga();
 					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
@@ -3016,7 +3022,8 @@ public class Controlador implements ActionListener
 
 	}
 	
-	private void enviarPedidosMonitor() throws IOException{
+	private void enviarPedidosMonitor() throws IOException
+	{
 		this.socket = new Socket("localhost",5000);
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
 		objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -3042,6 +3049,8 @@ public class Controlador implements ActionListener
 		while (items.hasNext())
 		{
 			ItemDTO elemento = items.next();
+			if(elemento!=null)
+			{
 			ProductoEstadistico p=new ProductoEstadistico();
 			p.setProducto(elemento.getProducto());
 			p.setCantidad(elemento.getCantidad());
@@ -3056,6 +3065,7 @@ public class Controlador implements ActionListener
 				p.setCantidad(elemento.getCantidad()*cant);
 				producto.add(p);
 			}
+			}
 		}
 		return producto;
 	}
@@ -3067,7 +3077,11 @@ public class Controlador implements ActionListener
 		PromocionEstadistica pEstadistico=new PromocionEstadistica();
 		while (items.hasNext())
 		{
+			//if(items.next()!=null)
+			{
 			ItemPromocionDTO elemento = items.next();
+			if(elemento!=null)
+			{
 			PromocionEstadistica p=new PromocionEstadistica();
 			p.setPromo(elemento.getPromocion());
 			p.setCantidad(elemento.getCantidad());
@@ -3080,6 +3094,8 @@ public class Controlador implements ActionListener
 			else
 			{
 				producto.add(p);
+			}
+			}
 			}
 		}
 		return producto;
@@ -3157,10 +3173,13 @@ public class Controlador implements ActionListener
 		}
 		return acumulador;
 	}
-	public void actualizar(ProductoEstadistico prod)
-	{
-		
-	}
+	  private void inicioPantalla() {
+		    ImageIcon myImage = new ImageIcon("/prototipos/Gestor de categorias.png");
+		    screen = new PantallaCargando(myImage);
+		    screen.setLocationRelativeTo(null);
+		    screen.setProgresoMax(100);
+		    screen.setVisible(true);
+		  }
 }
 	
 
