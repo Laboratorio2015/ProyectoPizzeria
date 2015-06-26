@@ -35,7 +35,7 @@ public class ReporteContable
 	public void generarReporteContable()
 	{
 		try {
-			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte_Contable.pdf";			
+			final String FILE = "D:/Reporte Contable.pdf";			
 			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(Ticket.class.getResource("/prototipos/Reporte_Contable_Header.png"));
             image.setAlignment(Element.ALIGN_TOP);
@@ -146,7 +146,7 @@ public class ReporteContable
 
 	public ReporteContable(ReporteContableDTO reporte, String fechaInicio, String fechaFin)
 	{	
-		this.reporte = reporte;
+		ReporteContable.reporte = reporte;
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
 		impresora = new Impresora();

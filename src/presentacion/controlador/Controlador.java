@@ -66,6 +66,7 @@ import dto.ProductoDTO;
 import dto.ProveedorDTO;
 import dto.RepartidorDTO;
 import dto.ReporteContableDTO;
+import presentacion.reportes.ReporteContable;
 import presentacion.reportes.solicitudDeMateriaPrima;
 import presentacion.vista.VentanaPrincipal;
 import presentacion.vista.buscadorProveedor;
@@ -246,6 +247,14 @@ public class Controlador implements ActionListener
 			ventanaReportesContables.getBtnFinalizarconsulta().addActionListener(this);
 			ventanaReportesContables.getBtnImprimircons().addActionListener(this);		
 			ventanaReportesContables.getCbTipoConsulta().addActionListener(this);
+		}
+		//VENTANA DE REPORTES CONTABLES: IMPRIMIR RESULTADO DE CONSULTA. GENERA PDF
+		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnImprimircons())
+		{
+			ReporteContable resultados = new ReporteContable(reporteContable, ventanaReportesContables.getFechaInicio(), ventanaReportesContables.getFechaFin());
+			
+			JOptionPane.showMessageDialog(null, "Se generó y envió a imprimir  la consulta en formato .pdf", "Confirmación",JOptionPane.WARNING_MESSAGE);
+
 		}
 		//VENTANA DE REPORTES CONTABLES: ABRIR Selector fecha calendario INICIO
 		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnCalendfinicio())
@@ -3034,7 +3043,7 @@ public class Controlador implements ActionListener
 		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
 		//Levanta de la base todos los pedidos en estado solicitado, no eliminados y del dia de la fecha de hoy.
-		Iterator<PedidoDTO> pedidos = pedido.obtenerPedidos().iterator();
+		Iterator<PedidoDTO> pedidos = pedido.obtenerPedidosPendientes().iterator();
 		while (pedidos.hasNext()){
 			PedidoDTO pedido = pedidos.next();
 			if (pedido.getEstado().trim().compareTo("solicitado")==0){

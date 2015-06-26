@@ -123,7 +123,9 @@ public class Pedidos
 		
 	}
 
-	
+	public List<PedidoDTO> obtenerPedidosPendientes(){
+		return this.pedido.pedidosPendientes();
+	}
 
 	
 }
