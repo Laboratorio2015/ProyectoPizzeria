@@ -3092,11 +3092,7 @@ public class Controlador implements ActionListener
 		PromocionEstadistica pEstadistico=new PromocionEstadistica();
 		while (items.hasNext())
 		{
-			//if(items.next()!=null)
-			{
 			ItemPromocionDTO elemento = items.next();
-			if(elemento!=null)
-			{
 			PromocionEstadistica p=new PromocionEstadistica();
 			p.setPromo(elemento.getPromocion());
 			p.setCantidad(elemento.getCantidad());
@@ -3109,9 +3105,7 @@ public class Controlador implements ActionListener
 			else
 			{
 				producto.add(p);
-			}
-			}
-			}
+			}			
 		}
 		return producto;
 	}

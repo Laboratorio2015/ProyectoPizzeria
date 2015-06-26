@@ -26,6 +26,7 @@ public class PedidoDAO
 	private static final String delete = "DELETE FROM pedidos WHERE idpedido = ?";
 	private static final String readall = "SELECT * FROM pedidos";
 	private static final String readItem = "SELECT item FROM pedidos";
+	private static final String obtenerPedidosFecha = "SELECT * FROM pedidos where fecha=?";
 	private static final String readPromo = "SELECT oferta FROM pedidos";
 	private static final String pedidosPendientes="select * from pedidos where estado='solicitado'";
 	//SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '%%-6-2015%';
@@ -294,4 +295,51 @@ public class PedidoDAO
 		return null;
 	}
 
+	public List<PedidoDTO> pedidosDadoUnaFecha(String fecha)
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<PedidoDTO> pedidos = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(obtenerPedidosFecha);
+			statement.setString(1,fecha);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				String y= resultSet.getString("estado");
+				String estadoPedido="";
+				for (int i=0; i<y.length(); i++)
+				{
+					  if (y.charAt(i) != ' ')
+					    estadoPedido += y.charAt(i);
+				}
+				if(resultSet.getBoolean("fueeliminado")==false && estadoPedido=="cobrado")
+				{	
+					Clientes cli=new Clientes();
+					ClienteDTO lab=cli.buscarClientePorID(resultSet.getInt("cliente"));
+					Items ite=new Items();
+					ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
+					ItemsPromociones ofe=new ItemsPromociones();
+					ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArrayItPromo(resultSet.getString("oferta"));
+					PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
+					resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
+					resultSet.getInt("total"),resultSet.getInt("ticket"),
+					resultSet.getInt("comanda"),
+					lab,resultSet.getBoolean("llevadelivery"),listOfertas,resultSet.getBoolean("fueeliminado"));
+					pedidos.add(aux);
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return pedidos;
+	}
 }

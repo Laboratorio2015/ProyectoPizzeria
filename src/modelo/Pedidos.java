@@ -36,7 +36,10 @@ public class Pedidos
 	{
 		return this.pedido.readAll();
 	}
-	
+	public List<PedidoDTO> obtenerPedidosDeFecha(String fecha)
+	{
+		return this.pedido.pedidosDadoUnaFecha(fecha);
+	}
 	public List<ItemDTO> obtenerTodosItems() 
 	{
 		return this.pedido.readItem();
