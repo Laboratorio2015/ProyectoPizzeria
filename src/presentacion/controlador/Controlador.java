@@ -431,8 +431,9 @@ public class Controlador implements ActionListener
 				switch (tipoProducto) {
 				case "Productos mas comprados":
 				{
-					inicioPantalla();
+					new Thread(inicioPantalla()).start();
 					screen.velocidadDeCarga();
+					screen.setModalExclusionType(null);
 					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
@@ -1440,6 +1441,7 @@ public class Controlador implements ActionListener
 		{
 			ventanamenu=new pedidoMenu(this,ventanaPedido);
 			ventanamenu.setTitle("empanada");
+			ventanamenu.setBounds(400, 100, 347, 540);
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("empanada");
 			ventanamenu.setVisible(true);
@@ -1449,6 +1451,7 @@ public class Controlador implements ActionListener
 		{
 			ventanamenu=new pedidoMenu(this,ventanaPedido);
 			ventanamenu.setTitle("pizza");
+			ventanamenu.setBounds(400, 100, 347, 540);
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("pizza");
 			ventanamenu.setVisible(true);
@@ -1458,6 +1461,7 @@ public class Controlador implements ActionListener
 		{
 			ventanamenu=new pedidoMenu(this,ventanaPedido);
 			ventanamenu.setTitle("otros");
+			ventanamenu.setBounds(400, 100, 347, 540);
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenu("otros");
 			ventanamenu.setVisible(true);
@@ -1467,6 +1471,7 @@ public class Controlador implements ActionListener
 		{
 			ventanamenu=new pedidoMenu(this,ventanaPedido);
 			ventanamenu.setTitle("promocion");
+			ventanamenu.setBounds(400, 100, 670, 540);
 			ventanamenu.getBtnSeleccionar().addActionListener(this);
 			llenarTablaMenuPromociones();
 			ventanamenu.setVisible(true);
@@ -3184,12 +3189,13 @@ public class Controlador implements ActionListener
 		}
 		return acumulador;
 	}
-	  private void inicioPantalla() {
+	  private Runnable inicioPantalla() {
 		    ImageIcon myImage = new ImageIcon("/prototipos/Gestor de categorias.png");
 		    screen = new PantallaCargando(myImage);
 		    screen.setLocationRelativeTo(null);
 		    screen.setProgresoMax(100);
 		    screen.setVisible(true);
+		    return inicioPantalla();
 		  }
 }
 	

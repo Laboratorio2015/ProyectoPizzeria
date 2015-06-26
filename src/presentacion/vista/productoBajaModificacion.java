@@ -40,7 +40,7 @@ public class productoBajaModificacion extends JDialog {
 	private Controlador control;
 
 	public productoBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 746, 586);
+		setBounds(100, 100, 347, 586);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

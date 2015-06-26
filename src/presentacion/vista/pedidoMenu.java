@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Dimension;
 import javax.swing.JLabel;
@@ -13,6 +14,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import presentacion.controlador.Controlador;
+import java.awt.Color;
+import javax.swing.JTextField;
+import javax.swing.border.MatteBorder;
+
+import dto.ItemDTO;
+import dto.PromocionDTO;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Iterator;
 
 @SuppressWarnings("serial")
 public class pedidoMenu extends JDialog {
@@ -21,15 +32,21 @@ public class pedidoMenu extends JDialog {
 	private JTable table;
 	private DefaultTableModel model;
 	private  String[] nombreColumnas = {"Nombre","Precio"};
+	private  String[] nombreColumnasOfertas = {"Producto","Cantidad"};
 	private JButton btnSeleccionar;
 	private Controlador control;
 	private ordenDePedido padre;
+	private JTextField textField;
+	private JTable table_1;
+	private DefaultTableModel model1;
+	private pedidoMenu _this;
 
-	public pedidoMenu(Controlador control, ordenDePedido padre)
+	public pedidoMenu(final Controlador control, ordenDePedido padre)
 	{
 		setModal(true);
 		setMinimumSize(new Dimension(200, 200));
-		setBounds(100, 100, 347, 540);
+		setBounds(100, 100, 670, 540);
+		_this=this;
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setMinimumSize(new Dimension(500, 500));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -49,7 +66,31 @@ public class pedidoMenu extends JDialog {
 		        return false; //desabilita la edicion de las celdas
 		    }
 		};
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0)
+			{
+				if(_this.getTitle().compareTo("promocion")==0)
+					{
+					PromocionDTO aux=control.getPromocion().buscarOfertaPorNombre(model.getValueAt(table.getSelectedRow(), 0).toString());
+					llenarTablaProdPromocion(aux);
+					}
+				
+			}
+		});
 		scrollPane.setViewportView(table);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(353, 102, 266, 302);
+		contentPanel.add(scrollPane_1);
+		
+		table_1 = new JTable(model1){
+		    @Override
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+		        return false; //desabilita la edicion de las celdas
+		    }
+		};
+		scrollPane_1.setViewportView(table_1);
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		lblNewLabel.setIcon(new ImageIcon(pedidoMenu.class.getResource("/prototipos/verMenu.png")));
@@ -62,6 +103,17 @@ public class pedidoMenu extends JDialog {
 			contentPanel.add(btnSeleccionar);
 			btnSeleccionar.setActionCommand("Cancel");
 		}
+		
+		model1 = new DefaultTableModel(null,nombreColumnasOfertas);
+		
+		textField = new JTextField();
+		textField.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		textField.setBackground(new Color(204, 204, 0));
+		textField.setEnabled(false);
+		textField.setEditable(false);
+		textField.setBounds(332, 0, 324, 501);
+		contentPanel.add(textField);
+		textField.setColumns(10);
 	}
 	
 	public String[] getNombreColumnas() {
@@ -83,5 +135,17 @@ public class pedidoMenu extends JDialog {
 	public void setBtnSeleccionar(JButton btnSeleccionar) {
 		this.btnSeleccionar = btnSeleccionar;
 	}
-	
+	private void llenarTablaProdPromocion(PromocionDTO promo) 
+	{
+		model1.setRowCount(0);
+		model1.setColumnCount(0);
+		model1.setColumnIdentifiers(nombreColumnasOfertas);
+		Iterator<ItemDTO> Iterador = promo.getProductosOfertados().iterator();
+		while(Iterador.hasNext())
+		{
+			ItemDTO elemento = Iterador.next();
+			Object[] fila = {elemento.getProducto().getNombre(), elemento.getCantidad()};
+			model1.addRow(fila);
+		}
+	}
 }
