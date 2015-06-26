@@ -3221,6 +3221,11 @@ public class Controlador implements ActionListener
 		}
 		return fechaFinal;
 	}
+	  
+	  public ReporteContableDTO getReporteContable ()
+	  {
+		  return this.reporteContable;
+	  }
 }
 	
 

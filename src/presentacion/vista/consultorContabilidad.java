@@ -6,12 +6,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import presentacion.controlador.Controlador;
+import presentacion.reportes.ReporteContable;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+
+import dto.ReporteContableDTO;
+import presentacion.reportes.Impresora;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -53,7 +59,7 @@ public class consultorContabilidad extends JDialog {
 	private Integer añoInicio;
 
 
-	public consultorContabilidad(VentanaPrincipal ventanaPrincipal, Controlador controlador) {
+	public consultorContabilidad(VentanaPrincipal ventanaPrincipal, final Controlador controlador) {
 		this.ventanaPrincipal = ventanaPrincipal;
 		this.controlador = controlador;
 
@@ -147,6 +153,16 @@ public class consultorContabilidad extends JDialog {
 		contentPane.add(btnEnviarxmail);
 		
 		btnImprimircons = new JButton("imprimirCons");
+		btnImprimircons.addMouseListener(new MouseAdapter() {
+			ReporteContableDTO reporteDTO = controlador.getReporteContable();
+			Impresora impresora = new Impresora();
+			
+			public void mouseClicked(MouseEvent arg0) {
+				ReporteContable reporte = new ReporteContable(reporteDTO, getFechaInicio(), getFechaFin());
+				reporte.generarReporteContable();
+				impresora.imprimir(reporte.getReporte());
+			}
+		});
 		btnImprimircons.setOpaque(false);
 		btnImprimircons.setBounds(548, 348, 58, 45);
 		contentPane.add(btnImprimircons);
