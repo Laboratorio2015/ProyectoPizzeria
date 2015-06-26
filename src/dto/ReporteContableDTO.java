@@ -144,6 +144,15 @@ public class ReporteContableDTO {
 		this.totalCompras = totalCompras;
 	}
 	
+	public HashMap<ProductoDTO, Integer> getCantPizzaVendidas() {
+		return cantPizzaVendidas;
+	}
+	
+	public HashMap<ProductoDTO, Integer> getCantEmpVendidas() {
+		return cantEmpVendidas;
+	}
+	
+	
 	public void mostrarDetalle(){
 		System.out.println("total pedidos: " + this.totalPedidos);
 		System.out.println("total compras: " + this.totalCompras);
