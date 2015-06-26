@@ -426,7 +426,8 @@ public class Controlador implements ActionListener
 		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnBuscar())
 		{
 			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
-			{				
+			{
+				calcularRango(ventanaReportesEstadistica.getTfFechaInicio().getText(),ventanaReportesEstadistica.getTfFechaFin().getText());
 				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
 				switch (tipoProducto) {
 				case "Productos mas comprados":
@@ -2092,6 +2093,9 @@ public class Controlador implements ActionListener
 	}
 
 
+	
+
+
 	private void consultaReporteDiario() throws SQLException {
 		reporteContable = new ReporteContableDTO();
 		reporteContable.setListadoPedidos( pedido.reporteDiario( getDiaActual(),getMesActual(),getAñoActual() ));
@@ -3181,6 +3185,41 @@ public class Controlador implements ActionListener
 				acumulador.add(elemento);
 		}
 		return acumulador;
+	}
+	private ArrayList<String> calcularRango(String fInicio, String fFin)
+	{
+		ArrayList<String> rangoFechas=new ArrayList<String>();
+		Integer[] fechaInicio=descomponerFecha(fInicio);
+		Integer[] fechaFin=descomponerFecha(fFin);
+		if(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
+		{
+			while(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
+			{
+				fhg
+			}
+		}
+		else
+			JOptionPane.showMessageDialog(null, "Error, rango de fechas Incorrecto");
+	}
+
+
+	private Integer[] descomponerFecha(String fInicio)
+	{
+		Integer[] fechaFinal=new Integer[3];
+		String t= fInicio;
+		String fecha="";
+		int num=0;
+		for (int i=0; i<t.length(); i++)
+		{
+			  if (t.charAt(i) != '-' || (t.charAt(i)=='-' && t.charAt(i+1)!='-'))
+				  fecha += t.charAt(i);
+			  else if(t.charAt(i)=='-' )//&& t.charAt(i+1)==' ')
+				  {
+				  fechaFinal[num]=Integer.parseInt(fecha.toString());
+				  num++;
+				  }
+		}
+		return fechaFinal;
 	}
 }
 	
