@@ -105,11 +105,13 @@ public class calendario extends JDialog {
 					Date fech=_calendar.getDate();
 					if(_this.getTitle().compareTo("Fecha de Inicio")==0)
 					{
+						_ventanaEstadistica.setFechaInicio(fech.getDate()+"-"+(fech.getMonth()+1)+"-"+(fech.getYear()+1900));
 						_ventanaEstadistica.getTfFechaInicio().setText(fech.getDate()+"-"+(fech.getMonth()+1)+"-"+(fech.getYear()+1900));
 						dispose();
 					}
 					else if(_this.getTitle().compareTo("Fecha de Fin")==0)
 					{
+						_ventanaEstadistica.setFechaFin(fech.getDate()+"-"+(fech.getMonth()+1)+"-"+(fech.getYear()+1900));
 						_ventanaEstadistica.getTfFechaFin().setText(fech.getDate()+"-"+(fech.getMonth()+1)+"-"+(fech.getYear()+1900));
 						dispose();
 					}

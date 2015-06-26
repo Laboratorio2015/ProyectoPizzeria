@@ -46,6 +46,14 @@ public class consultoEstadistica extends JDialog {
 	private JTextField tfOcultarTop;
 	private JCheckBox Top5;
 	private JCheckBox verTodo;
+	private String fechaInicio;
+	private Integer añoInicio;
+	private Integer mesInicio;
+	private String fechaFin;
+	private Integer añoFin;
+	private Integer mesFin;
+	private Integer diaFin;
+	private Integer diaInicio;
 
 
 	public consultoEstadistica(VentanaPrincipal ventana, Controlador control) {
@@ -57,7 +65,7 @@ public class consultoEstadistica extends JDialog {
 		contentPanel.setLayout(null);
 		
 		cbEstadisticas= new JComboBox();
-		cbEstadisticas.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione una estadistica)", "Productos mas comprados", "Productos menos comprados", "Ofertas mas compradas", "Ofertas menos compradas", "Cliente mas comprador"}));
+		cbEstadisticas.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione una estadistica)", "Productos mas comprados", "Productos menos comprados", "Ofertas mas compradas", "Ofertas menos compradas"}));
 		cbEstadisticas.setBounds(76, 131, 250, 22);
 		contentPanel.add(cbEstadisticas);
 		
@@ -327,4 +335,130 @@ public class consultoEstadistica extends JDialog {
 	public void setBtnBuscar(JButton btnBuscar) {
 		this.btnBuscar = btnBuscar;
 	}
+	public void setFechaInicio(String fechaInicio) {
+		this.fechaInicio = fechaInicio;
+		//guardo dia, mes año por separado.
+		
+		String dia = "";
+		String año = "";
+		String mes = "";
+		
+		for (int i=fechaInicio.length()-1; i >= 0; i--){
+			if (i > fechaInicio.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+				año = fechaInicio.charAt(i) + año;
+			}
+			else if (i == fechaInicio.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+			}
+			else if ( (i != 0 && i !=1) && fechaInicio.charAt(i)!='-'){
+				mes = fechaInicio.charAt(i) + mes;
+			}
+			else{
+				if (fechaInicio.charAt(i)!='-'){
+					dia = fechaInicio.charAt(i) + dia;
+				}
+			}
+		}
+		añoInicio = Integer.parseInt(año);
+		mesInicio = Integer.parseInt(mes);
+		diaInicio = Integer.parseInt(dia);
+	}
+	public void setFechaFin(String fechaFin) {
+		this.fechaFin = fechaFin;
+		//guardo dia, mes año por separado.
+		String dia = "";
+		String año = "";
+		String mes = "";
+		
+		for (int i=fechaFin.length()-1; i >= 0; i--){
+			if (i > fechaFin.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+				año = fechaFin.charAt(i) + año;
+			}
+			else if (i == fechaFin.length()-5){ // 4 espaciosdelaño, un espacio del guion, menos uno del largo q comienza en 1 y array en 0
+			}
+			else if ( (i != 0 && i !=1) && fechaFin.charAt(i)!='-'){
+				mes = fechaFin.charAt(i) + mes;
+			}
+			else{
+				if (fechaFin.charAt(i)!='-'){
+					dia = fechaFin.charAt(i) + dia;
+				}
+			}
+		}
+		añoFin = Integer.parseInt(año);
+		mesFin = Integer.parseInt(mes);
+		diaFin = Integer.parseInt(dia);
+	}
+
+
+	public Integer getAñoInicio() {
+		return añoInicio;
+	}
+
+
+	public void setAñoInicio(Integer añoInicio) {
+		this.añoInicio = añoInicio;
+	}
+
+
+	public Integer getMesInicio() {
+		return mesInicio;
+	}
+
+
+	public void setMesInicio(Integer mesInicio) {
+		this.mesInicio = mesInicio;
+	}
+
+
+	public Integer getAñoFin() {
+		return añoFin;
+	}
+
+
+	public void setAñoFin(Integer añoFin) {
+		this.añoFin = añoFin;
+	}
+
+
+	public Integer getMesFin() {
+		return mesFin;
+	}
+
+
+	public void setMesFin(Integer mesFin) {
+		this.mesFin = mesFin;
+	}
+
+
+	public Integer getDiaFin() {
+		return diaFin;
+	}
+
+
+	public void setDiaFin(Integer diaFin) {
+		this.diaFin = diaFin;
+	}
+
+
+	public Integer getDiaInicio() {
+		return diaInicio;
+	}
+
+
+	public void setDiaInicio(Integer diaInicio) {
+		this.diaInicio = diaInicio;
+	}
+
+
+	public String getFechaInicio() {
+		return fechaInicio;
+	}
+
+
+	public String getFechaFin() {
+		return fechaFin;
+	}
+
+
+		
 }
