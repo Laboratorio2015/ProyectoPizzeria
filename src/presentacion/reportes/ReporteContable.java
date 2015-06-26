@@ -30,23 +30,20 @@ public class ReporteContable
 	private static PdfWriter writer;
 	private final String fechaInicio;
 	private final String fechaFin;
-	private Impresora impresora;
+	//private Impresora impresora;
 	
 	public void generarReporteContable()
 	{
 		try {
 			final String FILE = "D:/Reporte Contable.pdf";			
 			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
-		    Image image = Image.getInstance(Ticket.class.getResource("/prototipos/Reporte_Contable_Header.png"));
-            image.setAlignment(Element.ALIGN_TOP);
+		    Image image = Image.getInstance(ReporteContable.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
 		    documento.add(image);
 		    addContentPage (documento,reporte, this.fechaInicio, this.fechaFin);
 		    PdfPTable table = createTable1();
 	        documento.add(table);
 	        table = createTable2();
-	        table.setSpacingBefore(5);
-	        table.setSpacingAfter(5);
 	        documento.add(table);
 	        table = createTable3();
 	        documento.add(table);
@@ -84,6 +81,7 @@ public class ReporteContable
 	        	addCell(table, p.getNombre());
 	        	addCell(table, reporte.getCantPizzaVendidas().get(p).toString());
 			}
+	        System.out.println("Agregadas a la tabla las PIZZAS vendidas");
 	        return table;
 	    }
 	 
@@ -109,6 +107,7 @@ public class ReporteContable
 	        	addCell(table, p.getNombre());
 	        	addCell(table, reporte.getCantEmpVendidas().get(p).toString());
 			}
+	        System.out.println("Agregadas a la tabla las EMPANADAS vendidas");
 	        return table;
 	    }
 	 
@@ -141,6 +140,7 @@ public class ReporteContable
 					addCell(table, elemento.getProveedor().getNombre());
 					addCell(table, elemento.getCosto().toString());
 				}
+			System.out.println("Agregadas a la tabla las COMPRAS realizadas");
 	        return table;
 	    }
 
@@ -149,36 +149,28 @@ public class ReporteContable
 		ReporteContable.reporte = reporte;
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
-		impresora = new Impresora();
+		//impresora = new Impresora();
 	}
 		
 	
 	private static void addContentPage(Document document, ReporteContableDTO reporte, String fechaInicio, String fechaFin) 
 	throws DocumentException 
-	{
-		Font helvetica = new Font(FontFamily.HELVETICA, 12);
-	    BaseFont bf_helv = helvetica.getCalculatedBaseFont(false);
-		PdfContentByte canvas = writer.getDirectContent();
-		canvas.beginText(); 
-		
+	{	
 		//Agrego INFO de Reporte
 		
-		canvas.setFontAndSize(bf_helv, 14);
-		canvas.showTextAligned(Element.ALIGN_LEFT, "Reporte Contable de la Pizzería Wild " + reporte.getTotalPedidos().toString(), 10, 765, 0);
-		canvas.showTextAligned(Element.ALIGN_LEFT, "Fecha de Inicio: " + fechaInicio, 10, 745, 0);
-		canvas.showTextAligned(Element.ALIGN_LEFT, "Fecha de Finalización: " + fechaFin, 10, 725, 0);
-		
+		documento.add(new Paragraph ("Reporte Contable de la Pizzería Wild " + reporte.getTotalPedidos().toString()));
+		documento.add(new Paragraph ("Fecha de Inicio: " + fechaInicio));
+		documento.add(new Paragraph ("Fecha de Finalización: " + fechaFin));
 		
 		/////RESUMEN
 		//Agrego Total de Pedidos
-        canvas.setFontAndSize(bf_helv, 12);
-		canvas.showTextAligned(Element.ALIGN_LEFT, "Total Pedidos: " + reporte.getTotalPedidos().toString(), 10, 700, 0);
+		documento.add(new Paragraph ("Total Pedidos: " + reporte.getTotalPedidos().toString()));
 		
 		//Agrego Total de Compras
-		canvas.showTextAligned(Element.ALIGN_LEFT, "Total Compras: " + reporte.getTotalCompras().toString(), 10, 680, 0);
+		documento.add(new Paragraph ("Total Compras: " + reporte.getTotalCompras().toString()));
 		
 		//Agrego la Ganancia
-		canvas.showTextAligned(Element.ALIGN_LEFT, "Ganancia: " + reporte.getGanancia().toString(), 10, 660, 0);
+		documento.add(new Paragraph ("Ganancia: " + reporte.getGanancia().toString()));
 	}
 	
 	public Document getReporte ()
