@@ -44,6 +44,8 @@ public class consultoEstadistica extends JDialog {
 	private Controlador control;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTextField tfOcultarTop;
+	private JCheckBox Top5;
+	private JCheckBox verTodo;
 
 
 	public consultoEstadistica(VentanaPrincipal ventana, Controlador control) {
@@ -60,7 +62,7 @@ public class consultoEstadistica extends JDialog {
 		contentPanel.add(cbEstadisticas);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(398, 134, 244, 246);
+		scrollPane.setBounds(398, 134, 244, 240);
 		contentPanel.add(scrollPane);
 		
 		model = new DefaultTableModel(null,nombreColumnas);
@@ -79,7 +81,7 @@ public class consultoEstadistica extends JDialog {
 		tfFechaInicio.setEditable(false);
 		tfFechaInicio.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		tfFechaInicio.setBackground(new Color(153, 153, 0));
-		tfFechaInicio.setBounds(83, 184, 117, 19);
+		tfFechaInicio.setBounds(80, 182, 115, 19);
 		contentPanel.add(tfFechaInicio);
 		tfFechaInicio.setColumns(10);
 		
@@ -91,7 +93,7 @@ public class consultoEstadistica extends JDialog {
 		tfFechaFin.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		tfFechaFin.setBackground(new Color(153, 153, 0));
 		tfFechaFin.setColumns(10);
-		tfFechaFin.setBounds(84, 239, 117, 19);
+		tfFechaFin.setBounds(80, 237, 117, 19);
 		contentPanel.add(tfFechaFin);
 		
 		tfOcultaRangoFechas = new JTextField();
@@ -99,7 +101,7 @@ public class consultoEstadistica extends JDialog {
 		tfOcultaRangoFechas.setEditable(false);
 		tfOcultaRangoFechas.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		tfOcultaRangoFechas.setBackground(new Color(153, 153, 0));
-		tfOcultaRangoFechas.setBounds(34, 164, 325, 273);
+		tfOcultaRangoFechas.setBounds(34, 160, 325, 273);
 		contentPanel.add(tfOcultaRangoFechas);
 		tfOcultaRangoFechas.setColumns(10);
 		
@@ -112,7 +114,7 @@ public class consultoEstadistica extends JDialog {
 		contentPanel.add(tfOcultarTop);
 		tfOcultarTop.setColumns(10);
 		
-		JCheckBox Top5 = new JCheckBox("Top 5");
+		Top5= new JCheckBox("Top 5");
 		buttonGroup.add(Top5);
 		Top5.setFont(new Font("Calibri", Font.BOLD, 14));
 		Top5.setForeground(Color.LIGHT_GRAY);
@@ -120,7 +122,7 @@ public class consultoEstadistica extends JDialog {
 		Top5.setBounds(437, 393, 73, 23);
 		contentPanel.add(Top5);
 		
-		JCheckBox verTodo = new JCheckBox("Ver Todos");
+		verTodo= new JCheckBox("Ver Todos");
 		buttonGroup.add(verTodo);
 		verTodo.setFont(new Font("Calibri", Font.BOLD, 14));
 		verTodo.setForeground(Color.LIGHT_GRAY);
@@ -199,6 +201,25 @@ public class consultoEstadistica extends JDialog {
 
 	public String[] getNombreColumnas() {
 		return nombreColumnas;
+	}
+	
+	public JCheckBox getTop5() {
+		return Top5;
+	}
+
+
+	public void setTop5(JCheckBox top5) {
+		Top5 = top5;
+	}
+
+
+	public JCheckBox getVerTodo() {
+		return verTodo;
+	}
+
+
+	public void setVerTodo(JCheckBox verTodo) {
+		this.verTodo = verTodo;
 	}
 
 

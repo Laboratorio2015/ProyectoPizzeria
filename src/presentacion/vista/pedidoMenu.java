@@ -36,10 +36,10 @@ public class pedidoMenu extends JDialog {
 	private JButton btnSeleccionar;
 	private Controlador control;
 	private ordenDePedido padre;
-	private JTextField textField;
 	private JTable table_1;
 	private DefaultTableModel model1;
 	private pedidoMenu _this;
+	private JLabel label;
 
 	public pedidoMenu(final Controlador control, ordenDePedido padre)
 	{
@@ -58,6 +58,10 @@ public class pedidoMenu extends JDialog {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(47, 102, 244, 302);
 		contentPanel.add(scrollPane);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(368, 102, 251, 302);
+		contentPanel.add(scrollPane_1);
 		
 		model = new DefaultTableModel(null,nombreColumnas);
 		table = new JTable(model){
@@ -80,10 +84,9 @@ public class pedidoMenu extends JDialog {
 		});
 		scrollPane.setViewportView(table);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(353, 102, 266, 302);
-		contentPanel.add(scrollPane_1);
 		
+		
+		model1 = new DefaultTableModel(null,nombreColumnasOfertas);
 		table_1 = new JTable(model1){
 		    @Override
 			public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -92,9 +95,15 @@ public class pedidoMenu extends JDialog {
 		};
 		scrollPane_1.setViewportView(table_1);
 		
+		label = new JLabel("");
+		label.setIcon(new ImageIcon(pedidoMenu.class.getResource("/prototipos/verMenu1.png")));
+		label.setBackground(new Color(204, 204, 0));
+		label.setBounds(334, 0, 320, 501);
+		contentPanel.add(label);
+		
 		JLabel lblNewLabel = new JLabel("New label");
 		lblNewLabel.setIcon(new ImageIcon(pedidoMenu.class.getResource("/prototipos/verMenu.png")));
-		lblNewLabel.setBounds(0, 0, 333, 501);
+		lblNewLabel.setBounds(0, 0, 343, 501);
 		contentPanel.add(lblNewLabel);
 		{
 			btnSeleccionar= new JButton("Cancel");
@@ -103,17 +112,6 @@ public class pedidoMenu extends JDialog {
 			contentPanel.add(btnSeleccionar);
 			btnSeleccionar.setActionCommand("Cancel");
 		}
-		
-		model1 = new DefaultTableModel(null,nombreColumnasOfertas);
-		
-		textField = new JTextField();
-		textField.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
-		textField.setBackground(new Color(204, 204, 0));
-		textField.setEnabled(false);
-		textField.setEditable(false);
-		textField.setBounds(332, 0, 324, 501);
-		contentPanel.add(textField);
-		textField.setColumns(10);
 	}
 	
 	public String[] getNombreColumnas() {

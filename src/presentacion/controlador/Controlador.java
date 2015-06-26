@@ -27,6 +27,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -141,7 +142,6 @@ public class Controlador implements ActionListener
 
 
 	//modelo
-	private PantallaCargando screen;
 	private Productos producto;
 	private Proveedores proveedor;
 	private Pedidos pedido;
@@ -431,9 +431,6 @@ public class Controlador implements ActionListener
 				switch (tipoProducto) {
 				case "Productos mas comprados":
 				{
-					new Thread(inicioPantalla()).start();
-					screen.velocidadDeCarga();
-					screen.setModalExclusionType(null);
 					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
@@ -1302,6 +1299,7 @@ public class Controlador implements ActionListener
 		 	ventanaReportesEstadistica.getBtnEnviarPorEmail().addActionListener(this);
 			ventanaReportesEstadistica.getBtnImprimir().addActionListener(this);
 			ventanaReportesEstadistica.getCbEstadisticas().addActionListener(this);
+			ventanaReportesEstadistica.getButtonGroup().setSelected(ventanaReportesEstadistica.getTop5().getModel(), true);
 			ventanaReportesEstadistica.setVisible(true);
 		}
 		//Seleccionar tipos de Estadisticas
@@ -1319,6 +1317,7 @@ public class Controlador implements ActionListener
 			{
 				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(false);
 				ventanaReportesEstadistica.getTfOcultarTop().setVisible(false);
+				ventanaReportesEstadistica.getButtonGroup().setSelected(ventanaReportesEstadistica.getTop5().getModel(), true);
 				ventanaReportesEstadistica.getTfFechaInicio().setText("");
 				ventanaReportesEstadistica.getTfFechaFin().setText("");
 			}
@@ -3189,14 +3188,6 @@ public class Controlador implements ActionListener
 		}
 		return acumulador;
 	}
-	  private Runnable inicioPantalla() {
-		    ImageIcon myImage = new ImageIcon("/prototipos/Gestor de categorias.png");
-		    screen = new PantallaCargando(myImage);
-		    screen.setLocationRelativeTo(null);
-		    screen.setProgresoMax(100);
-		    screen.setVisible(true);
-		    return inicioPantalla();
-		  }
 }
 	
 
