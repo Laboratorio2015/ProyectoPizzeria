@@ -34,6 +34,7 @@ public class registrarPagoOrdenMatPrima extends JDialog {
 	private final JTextField textFieldCosto = new JTextField();
 	private final JLabel lableNroOrden = new JLabel("");
 	private final JLabel labelNomProveedor = new JLabel("");
+	private JButton btnNorecibido;
 
 	
 	@SuppressWarnings("serial")
@@ -42,7 +43,7 @@ public class registrarPagoOrdenMatPrima extends JDialog {
 		this.controlador = controlador;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 406, 345);
+		setBounds(100, 100, 521, 345);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -58,20 +59,20 @@ public class registrarPagoOrdenMatPrima extends JDialog {
 				 }
 			}
 		});
-		textFieldCosto.setBounds(300, 168, 56, 23);
+		textFieldCosto.setBounds(311, 168, 67, 23);
 		contentPane.add(textFieldCosto);
 		textFieldCosto.setColumns(10);
 		lableNroOrden.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lableNroOrden.setForeground(new Color(51, 102, 102));
-		lableNroOrden.setBounds(139, 114, 217, 23);
+		lableNroOrden.setBounds(147, 114, 217, 23);
 		contentPane.add(lableNroOrden);
 		labelNomProveedor.setFont(new Font("Tahoma", Font.BOLD, 14));
 		labelNomProveedor.setForeground(new Color(51, 102, 102));
-		labelNomProveedor.setBounds(118, 143, 217, 21);
+		labelNomProveedor.setBounds(128, 143, 217, 21);
 		contentPane.add(labelNomProveedor);
 
 		fondo.setIcon(new ImageIcon(registrarPagoOrdenMatPrima.class.getResource("/prototipos/registrarRecepci\u00F2nyPagoOrdenMatPrima.png")));
-		fondo.setBounds(0, 0, 390, 306);
+		fondo.setBounds(0, 0, 505, 306);
 		contentPane.add(fondo);
 		
 		JButton btnCancelar = new JButton("Cancelar");
@@ -82,13 +83,18 @@ public class registrarPagoOrdenMatPrima extends JDialog {
 			}
 		});
 		btnCancelar.setOpaque(false);
-		btnCancelar.setBounds(217, 223, 111, 35);
+		btnCancelar.setBounds(323, 223, 111, 35);
 		contentPane.add(btnCancelar);
 		
 		btnRegistrarcobro = new JButton("Registrarcobro");
 		btnRegistrarcobro.setOpaque(false);
-		btnRegistrarcobro.setBounds(60, 223, 111, 35);
+		btnRegistrarcobro.setBounds(79, 223, 111, 35);
 		contentPane.add(btnRegistrarcobro);
+		
+		btnNorecibido = new JButton("noRecibido");
+		btnNorecibido.setOpaque(false);
+		btnNorecibido.setBounds(200, 223, 105, 35);
+		contentPane.add(btnNorecibido);
 	}
 
 
