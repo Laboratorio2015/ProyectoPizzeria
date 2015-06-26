@@ -427,7 +427,7 @@ public class Controlador implements ActionListener
 		{
 			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
 			{
-				calcularRango(ventanaReportesEstadistica.getTfFechaInicio().getText(),ventanaReportesEstadistica.getTfFechaFin().getText());
+				//calcularRango(ventanaReportesEstadistica.getTfFechaInicio().getText(),ventanaReportesEstadistica.getTfFechaFin().getText());
 				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
 				switch (tipoProducto) {
 				case "Productos mas comprados":
@@ -3007,31 +3007,27 @@ public class Controlador implements ActionListener
 		return ofertas;
 	}
 	
-	public void enviarPedidoMonitor(PedidoDTO nuevoPedido,boolean borrar) throws IOException{
-
-		this.socket = new Socket("localhost",5000);;
-
-		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
-		objectInputStream = new ObjectInputStream(socket.getInputStream());
-		
-		//ENVIO DE PEDIDO
-		this.objectOutputStream.writeObject(nuevoPedido);
-		//RETORNO POSIBLE. persona returnHumano = (persona)cliente.objectInputStream.readObject();
-		System.out.println("Pedido enviado");
-		socket.close();			
-	}
-	
+//	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException{
+//
+//		this.socket = new Socket("localhost",5000);;
+//
+//		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
+//		objectInputStream = new ObjectInputStream(socket.getInputStream());
+//		
+//		//ENVIO DE PEDIDO
+//		this.objectOutputStream.writeObject(nuevoPedido);
+//		//RETORNO POSIBLE. persona returnHumano = (persona)cliente.objectInputStream.readObject();
+//		System.out.println("Pedido enviado");
+//		socket.close();			
+//	}
 	
 	
 	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException{
-				
 		this.objectOutputStream.writeObject(nuevoPedido);
 		//this.objectOutputStream.writeObject(null);
-
 	}
 	
-	private void enviarPedidosMonitor() throws IOException
-	{
+	private void enviarPedidosMonitor() throws IOException{
 		this.socket = new Socket("localhost",5000);
 		//
 		sos = socket.getOutputStream(); 
@@ -3045,6 +3041,7 @@ public class Controlador implements ActionListener
 			// && !pedido.getFueeliminado() && pedido.getFecha().trim().compareTo(getFechaActual())==0)
 				try {//
 					this.objectOutputStream.writeObject(pedido);
+					System.out.println("Pedido enviado a monitor.");
 				} catch (IOException e) {//
 		            e.printStackTrace(System.err);//
 				}//
@@ -3186,21 +3183,21 @@ public class Controlador implements ActionListener
 		}
 		return acumulador;
 	}
-	private ArrayList<String> calcularRango(String fInicio, String fFin)
-	{
-		ArrayList<String> rangoFechas=new ArrayList<String>();
-		Integer[] fechaInicio=descomponerFecha(fInicio);
-		Integer[] fechaFin=descomponerFecha(fFin);
-		if(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
-		{
-			while(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
-			{
-				fhg
-			}
-		}
-		else
-			JOptionPane.showMessageDialog(null, "Error, rango de fechas Incorrecto");
-	}
+//	private ArrayList<String> calcularRango(String fInicio, String fFin)
+//	{
+//		ArrayList<String> rangoFechas=new ArrayList<String>();
+//		Integer[] fechaInicio=descomponerFecha(fInicio);
+//		Integer[] fechaFin=descomponerFecha(fFin);
+//		if(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
+//		{
+//			while(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
+//			{
+//				
+//			}
+//		}
+//		else
+//			JOptionPane.showMessageDialog(null, "Error, rango de fechas Incorrecto");
+//	}
 
 
 	private Integer[] descomponerFecha(String fInicio)

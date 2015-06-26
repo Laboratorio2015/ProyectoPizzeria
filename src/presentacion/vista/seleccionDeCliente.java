@@ -14,7 +14,6 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
-import main.Main;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import dto.ClienteDTO;
 import dto.PedidoDTO;
@@ -22,17 +21,14 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 import presentacion.controlador.Controlador;
-import presentacion.reportes.Comanda;
 import presentacion.reportes.Ticket;
 
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+
 import java.util.Iterator;
-import java.util.List;
 import javax.swing.JCheckBox;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -40,6 +36,8 @@ import javax.swing.JTable;
 
 public class seleccionDeCliente extends JDialog {
 
+
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private ordenDePedido _padre;
 	private PedidoDTO pedido;
@@ -187,13 +185,14 @@ public class seleccionDeCliente extends JDialog {
 						pedido.setLlevaDelivery(true);
 					else
 						pedido.setLlevaDelivery(false);
-					//control.getMonitor().nuevoPedido(pedido);
+					control.getPedido().agregarPedido(pedido);
 				try {
-						control.enviarPedidoMonitor(pedido, false);
+						control.enviarPedidoMonitor(pedido);
 					} catch (IOException e) {
 						System.out.println("Fallo conexion con monitor (servidor)");
 						e.printStackTrace();
-					}							control.getPedido().agregarPedido(pedido);
+					}
+				
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
 					//control.getMonitorCocina().nuevoPedido(pedido);
 					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
@@ -371,7 +370,7 @@ public class seleccionDeCliente extends JDialog {
 						cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(tfAgregarDNI.getText()));
 						pedido.setCliente(cliente);
 						try {
-							control.enviarPedidoMonitor(pedido, true);
+							control.enviarPedidoMonitor(pedido);
 						} catch (IOException e) {
 							System.out.println("Fallo conexion con monitor (servidor)");
 							e.printStackTrace();
@@ -382,7 +381,7 @@ public class seleccionDeCliente extends JDialog {
 						cliente=control.getCliente().buscarClientePorDNI(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString()));
 						pedido.setCliente(cliente);
 						try {
-							control.enviarPedidoMonitor(pedido,false);
+							control.enviarPedidoMonitor(pedido);
 						} catch (IOException e1) {
 							System.out.println("Fallo la conexion con el monitor (servidor)");
 							e1.printStackTrace();

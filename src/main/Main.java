@@ -46,10 +46,7 @@ public class Main
 		try {
 			controlador.inicializar();
 			
-			esperarXsegundos(5);
-			controlador.enviarPedidoMonitor(controlador.getPedido().buscarPedidoId(3));
-			esperarXsegundos(3);
-			controlador.enviarPedidoMonitor(controlador.getPedido().buscarPedidoId(2));
+
 		} catch (IOException e) {
 			System.out.println("Problema de conexion con monitor (servidor)");
 			e.printStackTrace();

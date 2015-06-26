@@ -212,9 +212,17 @@ public class pedidosPendientes extends JDialog {
 					{
 						numFilaSeleccionada=table.getSelectedRow();
 						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
+						
 						//Quita el pedido del MONITOR antes de modificarlo en la siguiente ventana.
-						//control.getMonitorCocina().quitarPedido(pedidoCambia);/////////////////////
+						pedidoCambia.setEstado("modificado");
+						try {
+							control.enviarPedidoMonitor(pedidoCambia);
+						} catch (IOException e) {
+							System.out.println("Error para enviar pedido a monitor (servidor)");
+							e.printStackTrace();
+						}
 						//////////////////////////////////////////////////////////////////////////
+						
 						ordenDePedido pedidoCambiar=new ordenDePedido(_padre,pedidoCambia,control);
 						pedidoCambiar.llenarTabla(pedidoCambia);
 						pedidoCambiar.getTfTotal().setText(pedidoCambia.getTotal().toString());	
@@ -262,17 +270,18 @@ public class pedidosPendientes extends JDialog {
 				{
 						numFilaSeleccionada=table.getSelectedRow();
 						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
+
+						model.setValueAt("rechazado", numFilaSeleccionada, 2);
+						pedidoCambia.set_estado("rechazado");
+						control.getPedido().quitarPedido(pedidoCambia);
 						//Quita el pedido del MONITOR ////////////////////////////////////////////
-						try {
-							control.enviarPedidoMonitor(pedidoCambia, true);
+						try {					
+							control.enviarPedidoMonitor(pedidoCambia);
 						} catch (IOException e) {
 							System.out.println("Fallo conexion con monitor (servidor)");
 							e.printStackTrace();
 						}/////////////////////////////
 						//////////////////////////////////////////////////////////////////////////
-						model.setValueAt("rechazado", numFilaSeleccionada, 2);
-						pedidoCambia.set_estado("rechazado");
-						control.getPedido().quitarPedido(pedidoCambia);
 						control.getPedido().agregarPedido(pedidoCambia);
 						llenarTabla();
 						borrarBotones();
@@ -351,7 +360,7 @@ public class pedidosPendientes extends JDialog {
 						control.getPedido().agregarPedido(pedido);				
 						//////////QUITA EL PEDIDO DEL MONITOR//////////
 						try {
-							control.enviarPedidoMonitor(pedido, true);
+							control.enviarPedidoMonitor(pedido);
 						} catch (IOException e) {
 							System.out.println("Fallo conexion con monitor (servidor)");
 							e.printStackTrace();

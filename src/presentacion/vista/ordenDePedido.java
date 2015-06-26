@@ -35,6 +35,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
 import javax.swing.ListSelectionModel;
 import java.awt.Font;
+import java.io.IOException;
+
 import javax.swing.SwingConstants;
 import presentacion.controlador.Controlador;
 
@@ -1000,7 +1002,13 @@ public class ordenDePedido extends JDialog {
 						nuevoPedido.setLlevaDelivery(false);
 					control.getPedido().quitarPedido(pedidoCambiar);
 					control.getPedido().agregarPedido(nuevoPedido);
-					//control.getMonitorCocina().nuevoPedido(nuevoPedido);
+					
+					try {
+						control.enviarPedidoMonitor(nuevoPedido);
+					} catch (IOException e) {
+						System.out.println("Error para enviar pedido monitor (servidor)");
+						e.printStackTrace();
+					}
 					vaciarFormulario();
 					dispose();
 				}
@@ -1033,6 +1041,31 @@ public class ordenDePedido extends JDialog {
 			btnCancelar.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					Calendar c1 = Calendar.getInstance();
+					String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
+					String hora=c1.getTime().getHours()+":"+c1.getTime().getMinutes();
+					PedidoDTO nuevoPedido=new PedidoDTO();
+					nuevoPedido.setIdpedido(pedidoCambiar.getIdpedido());
+					nuevoPedido.set_estado("solicitado");
+					nuevoPedido.setTotal(Integer.parseInt(tfTotal.getText()));
+					nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
+					nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
+					nuevoPedido.setProductos(generarListaItem());
+					nuevoPedido.setOfertas(generarListaOfertas());
+					nuevoPedido.setHora(hora);
+					nuevoPedido.setFecha(fecha);
+					nuevoPedido.setFueeliminado(false);
+					nuevoPedido.setCliente(pedidoCambiar.getCliente());
+					if(checkBoxRepartidor.isSelected())
+						nuevoPedido.setLlevaDelivery(true);
+					else
+						nuevoPedido.setLlevaDelivery(false);
+					try {
+						control.enviarPedidoMonitor(nuevoPedido);
+					} catch (IOException e) {
+						System.out.println("Error para enviar pedido monitor (servidor)");
+						e.printStackTrace();
+					}					
 				}
 			});
 			btnCancelar.setOpaque(false);
