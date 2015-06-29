@@ -440,7 +440,8 @@ public class Controlador implements ActionListener
 			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
 			{
 				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
-				switch (tipoProducto) {
+				switch (tipoProducto)
+				{
 				case "Productos mas comprados":
 				{
 					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
@@ -493,28 +494,21 @@ public class Controlador implements ActionListener
 							}
 						}
 					}
-					///////fin adaptacion///
+					///////fin adaptacion///				
+					String tipoEstadistica = "Productos mas comprados";
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(pedidosResultantes,1);
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
-				//calcularRango(ventanaReportesEstadistica.getTfFechaInicio().getText(),ventanaReportesEstadistica.getTfFechaFin().getText());
-				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
-				switch (tipoProducto) {
-				case "Productos mas comprados":
-				{
-					String tipoEstadistica = "Productos mas comprados";
-					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
-					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
-					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
-					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
 					ArrayList<ProductoEstadistico>produc=obtenerTodasProductostodasPromocionesTodosPedidos(promocion);
 					producto=sumarProductos(produc, producto);
-					Collections.sort(producto,new Comparator<ProductoEstadistico>() {
-						@Override
-						public int compare(ProductoEstadistico o1,
-								ProductoEstadistico o2) {
-							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
-						}
-					});
+					Collections.sort(producto,new Comparator<ProductoEstadistico>()
+							{
+								@Override
+								public int compare(ProductoEstadistico o1,
+										ProductoEstadistico o2) 
+								{
+									return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
+								}
+							});
 					
 					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto);
 					reporte.generarReporteEstadistico();
@@ -522,6 +516,7 @@ public class Controlador implements ActionListener
 					System.out.println("termino");
 				}
 				break;
+				
 				case "Productos menos comprados":
 				{
 					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
@@ -579,10 +574,6 @@ public class Controlador implements ActionListener
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(pedidosResultantes,1);
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					String tipoEstadistica = "Productos menos comprados";
-					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
-					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
-					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
-					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
 					ArrayList<ProductoEstadistico>produc=obtenerTodasProductostodasPromocionesTodosPedidos(promocion);
 					producto=sumarProductos(produc, producto);
 					Collections.sort(producto,new Comparator<ProductoEstadistico>() {
@@ -596,7 +587,7 @@ public class Controlador implements ActionListener
 					reporte.generarReporteEstadistico();
 					llenarTablaEstadisticas("producto", null, producto);
 					System.out.println("termino");
-				}				
+				}
 				break;
 				case "Ofertas mas compradas":
 				{
@@ -654,8 +645,6 @@ public class Controlador implements ActionListener
 					///////fin adaptacion///
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					String tipoEstadistica = "Ofertas mas compradas";
-					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
-					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
 					Collections.sort(promocion,new Comparator<PromocionEstadistica>() {
 						@Override
 						public int compare(PromocionEstadistica o1,
@@ -737,7 +726,9 @@ public class Controlador implements ActionListener
 			}
 			else
 				JOptionPane.showMessageDialog(null, "Error, para hacer la consulta debe seleccionar la fecha de inicio y fin");
-		}		//ABRIR SELECTOR MAT PRIMA
+		}
+		
+		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
 			ventanaSelectorOpcOrdenMatPrima = new selectorOpcionesOrdenMatPrima(ventana, this);

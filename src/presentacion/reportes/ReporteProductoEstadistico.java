@@ -29,7 +29,7 @@ public class ReporteProductoEstadistico {
 	public void generarReporteEstadistico()
 	{
 		try {
-			final String FILE = "D:/Reporte Contable.pdf";			
+			final String FILE = "C:/Reporte Contable.pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteContable.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
