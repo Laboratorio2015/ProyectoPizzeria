@@ -439,6 +439,63 @@ public class Controlador implements ActionListener
 		{
 			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
 			{
+				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
+				switch (tipoProducto) {
+				case "Productos mas comprados":
+				{
+					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
+					///Adaptacion///////////////
+					Integer diaCero = 1;
+					Integer mesCero = 1;
+					Integer mes12 = 12;
+					Integer diaIndiceFin = 31;
+				
+					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
+					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
+					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					
+					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
+					Integer mesFin = ventanaReportesEstadistica.getMesFin();
+					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+					if (mesInicio==12){
+						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
+					}
+					else{
+						for (int j=añoInicio; j<= añoFin ;j++){
+							if (j == añoInicio)
+								mesCero = mesInicio;
+							else
+								mesCero = 1;
+							
+							if (j == añoFin)
+								mes12 = mesFin;
+							else
+								mes12 = 12;
+
+							for (int i=mesCero; i<= mes12;i++){
+								if (i == mesInicio)
+									diaCero = diaInicio;
+									else
+										diaCero = 1;
+								if (i == mesFin)
+									diaIndiceFin = diaFin;
+								else{
+									diaIndiceFin=31;
+								}
+								for (int x=diaCero; x<= diaIndiceFin ;x++){
+									try {
+										pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));							
+									} catch (SQLException e1) {
+										JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+										e1.printStackTrace();								
+									}
+								}
+							}
+						}
+					}
+					///////fin adaptacion///
+					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(pedidosResultantes,1);
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 				//calcularRango(ventanaReportesEstadistica.getTfFechaInicio().getText(),ventanaReportesEstadistica.getTfFechaFin().getText());
 				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
 				switch (tipoProducto) {
@@ -467,6 +524,60 @@ public class Controlador implements ActionListener
 				break;
 				case "Productos menos comprados":
 				{
+					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
+					///Adaptacion///////////////
+					Integer diaCero = 1;
+					Integer mesCero = 1;
+					Integer mes12 = 12;
+					Integer diaIndiceFin = 31;
+				
+					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
+					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
+					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					
+					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
+					Integer mesFin = ventanaReportesEstadistica.getMesFin();
+					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+
+					if (mesInicio==12){
+						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
+					}
+					else{
+						for (int j=añoInicio; j<= añoFin ;j++){
+							if (j == añoInicio)
+								mesCero = mesInicio;
+							else
+								mesCero = 1;
+							
+							if (j == añoFin)
+								mes12 = mesFin;
+							else
+								mes12 = 12;
+
+							for (int i=mesCero; i<= mes12;i++){
+								if (i == mesInicio)
+									diaCero = diaInicio;
+									else
+										diaCero = 1;
+								if (i == mesFin)
+									diaIndiceFin = diaFin;
+								else{
+									diaIndiceFin=31;
+								}
+								for (int x=diaCero; x<= diaIndiceFin ;x++){
+									try {
+										pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));							
+									} catch (SQLException e1) {
+										JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+										e1.printStackTrace();								
+									}
+								}
+							}
+						}
+					}
+					///////fin adaptacion///
+					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(pedidosResultantes,1);
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					String tipoEstadistica = "Productos menos comprados";
 					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
@@ -489,6 +600,59 @@ public class Controlador implements ActionListener
 				break;
 				case "Ofertas mas compradas":
 				{
+					///Adaptacion///////////////
+					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
+					Integer diaCero = 1;
+					Integer mesCero = 1;
+					Integer mes12 = 12;
+					Integer diaIndiceFin = 31;
+				
+					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
+					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
+					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					
+					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
+					Integer mesFin = ventanaReportesEstadistica.getMesFin();
+					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+
+					if (mesInicio==12){
+						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
+					}
+					else{
+						for (int j=añoInicio; j<= añoFin ;j++){
+							if (j == añoInicio)
+								mesCero = mesInicio;
+							else
+								mesCero = 1;
+							
+							if (j == añoFin)
+								mes12 = mesFin;
+							else
+								mes12 = 12;
+
+							for (int i=mesCero; i<= mes12;i++){
+								if (i == mesInicio)
+									diaCero = diaInicio;
+									else
+										diaCero = 1;
+								if (i == mesFin)
+									diaIndiceFin = diaFin;
+								else{
+									diaIndiceFin=31;
+								}
+								for (int x=diaCero; x<= diaIndiceFin ;x++){
+									try {
+										pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));							
+									} catch (SQLException e1) {
+										JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+										e1.printStackTrace();								
+									}
+								}
+							}
+						}
+					}
+					///////fin adaptacion///
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					String tipoEstadistica = "Ofertas mas compradas";
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
@@ -507,19 +671,66 @@ public class Controlador implements ActionListener
 				break;
 				case "Ofertas menos compradas":
 				{
+					///Adaptacion///////////////
+					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
+					Integer diaCero = 1;
+					Integer mesCero = 1;
+					Integer mes12 = 12;
+					Integer diaIndiceFin = 31;
+				
+					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
+					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
+					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					
+					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
+					Integer mesFin = ventanaReportesEstadistica.getMesFin();
+					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+
+					if (mesInicio==12){
+						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
+					}
+					else{
+						for (int j=añoInicio; j<= añoFin ;j++){
+							if (j == añoInicio)
+								mesCero = mesInicio;
+							else
+								mesCero = 1;
+							
+							if (j == añoFin)
+								mes12 = mesFin;
+							else
+								mes12 = 12;
+
+							for (int i=mesCero; i<= mes12;i++){
+								if (i == mesInicio)
+									diaCero = diaInicio;
+									else
+										diaCero = 1;
+								if (i == mesFin)
+									diaIndiceFin = diaFin;
+								else{
+									diaIndiceFin=31;
+								}
+								for (int x=diaCero; x<= diaIndiceFin ;x++){
+									try {
+										pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));							
+									} catch (SQLException e1) {
+										JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+										e1.printStackTrace();								
+									}
+								}
+							}
+						}
+					}
+					///////fin adaptacion///
 					String tipoEstadistica = "Ofertas menos compradas";
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
-					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					Collections.sort(promocion);
 					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion);
 					reporte.generarReporteEstadistico();
 					llenarTablaEstadisticas("promocion",promocion,null);
 					System.out.println("termino");
-				}				
-				break;
-				case "Cliente mas comprador":
-				{
-					
 				}				
 				break;
 				}
@@ -3082,20 +3293,24 @@ public class Controlador implements ActionListener
 	}
 
 
-	private ArrayList<ProductoEstadistico> obtenerTodosProdusctosTodosPedidos(List<ItemDTO> listaPed,Integer cant)
+	private ArrayList<ProductoEstadistico> obtenerTodosProdusctosTodosPedidos(List<PedidoDTO> listaPed,Integer cant)
 	{
+		ArrayList<ItemDTO>listaItems =new ArrayList<ItemDTO>();
+		Iterator<PedidoDTO> pedidos=listaPed.iterator();
+		while(pedidos.hasNext())
+		{
+			PedidoDTO element=pedidos.next();
+			listaItems.addAll(element.getProductos());
+		}
 		ArrayList<ProductoEstadistico> producto=new ArrayList<ProductoEstadistico>();
-		Iterator<ItemDTO> items=listaPed.iterator();
+		Iterator<ItemDTO> items=listaItems.iterator();
 		ProductoEstadistico pEstadistico=new ProductoEstadistico();
 		while (items.hasNext())
 		{
 			ItemDTO elemento = items.next();
-			if(elemento!=null)
-			{
 			ProductoEstadistico p=new ProductoEstadistico();
 			p.setProducto(elemento.getProducto());
 			p.setCantidad(elemento.getCantidad());
-			
 			pEstadistico=ProductoEstadistico.buscarProductoEst(producto, p);
 			if(pEstadistico!=null)
 			{
@@ -3106,15 +3321,21 @@ public class Controlador implements ActionListener
 				p.setCantidad(elemento.getCantidad()*cant);
 				producto.add(p);
 			}
-			}
 		}
 		return producto;
 	}
 	
-	public ArrayList<PromocionEstadistica> obtenerTodasPromocionesTodosPedidos(List<ItemPromocionDTO> listaPed)
+	public ArrayList<PromocionEstadistica> obtenerTodasPromocionesTodosPedidos(List<PedidoDTO> listaPed)
 	{
+		ArrayList<ItemPromocionDTO>listaPromos =new ArrayList<ItemPromocionDTO>();
+		Iterator<PedidoDTO> pedidos=listaPed.iterator();
+		while(pedidos.hasNext())
+		{
+			PedidoDTO element=pedidos.next();
+			listaPromos.addAll(element.getOfertas());
+		}
 		ArrayList<PromocionEstadistica> producto=new ArrayList<PromocionEstadistica>();
-		Iterator<ItemPromocionDTO> items=listaPed.iterator();
+		Iterator<ItemPromocionDTO> items=listaPromos.iterator();
 		PromocionEstadistica pEstadistico=new PromocionEstadistica();
 		while (items.hasNext())
 		{
@@ -3144,13 +3365,39 @@ public class Controlador implements ActionListener
 		while (items.hasNext())
 		{
 			PromocionEstadistica elemento = items.next();
-			producto=obtenerTodosProdusctosTodosPedidos(elemento.getPromo().getProductosOfertados(),elemento.getCantidad());
+			producto=obtenerTodosProdusctosTodosPedidosOf(elemento.getPromo().getProductosOfertados(),elemento.getCantidad());
 			result=sumarProductos(producto,result);
 		}
 		return producto;
 	}
 	
 	
+
+
+	private ArrayList<ProductoEstadistico> obtenerTodosProdusctosTodosPedidosOf(ArrayList<ItemDTO> productosOfertados, Integer cant)
+	{
+		ArrayList<ProductoEstadistico> producto=new ArrayList<ProductoEstadistico>();
+		Iterator<ItemDTO> items=productosOfertados.iterator();
+		ProductoEstadistico pEstadistico=new ProductoEstadistico();
+		while (items.hasNext())
+		{
+			ItemDTO elemento = items.next();
+			ProductoEstadistico p=new ProductoEstadistico();
+			p.setProducto(elemento.getProducto());
+			p.setCantidad(elemento.getCantidad());
+			pEstadistico=ProductoEstadistico.buscarProductoEst(producto, p);
+			if(pEstadistico!=null)
+			{
+				pEstadistico.setCantidad((pEstadistico.getCantidad()*cant)+p.getCantidad());
+}
+			else
+			{
+				p.setCantidad(elemento.getCantidad()*cant);
+				producto.add(p);
+			}
+		}
+		return producto;
+	}
 
 
 	private void llenarTablaEstadisticas(String tipo,ArrayList<PromocionEstadistica> promocion,ArrayList<ProductoEstadistico> productos)
