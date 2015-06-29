@@ -49,11 +49,12 @@ public class PedidoDTO implements Serializable
 	}
 
 	
-	public PedidoDTO(Integer idOrden, ArrayList<ItemDTO> items,Integer totalCosto,ArrayList<ItemPromocionDTO> promos) {
+	public PedidoDTO(Integer idOrden, ArrayList<ItemDTO> items,Integer totalCosto,ArrayList<ItemPromocionDTO> promos, String fecha) {
 		this.idpedido = idOrden;
 		this.total = totalCosto;
 		this.items= items;
 		this.ofertas=promos;
+		this.fecha = fecha;
 		
 	}
 	public ArrayList<ItemDTO> getProductos()

@@ -26,6 +26,26 @@ public class PromocionDTO implements Serializable{
 		
 	}
 	
+	
+	@Override
+	public int hashCode() {
+		return this.idOferta;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PromocionDTO promo = (PromocionDTO) obj;
+		if (idOferta == promo.getIdOferta())
+			return true;
+		else{
+			return false;
+		}
+	}
+	
+	
 	public Integer getIdOferta() {
 		return idOferta;
 	}

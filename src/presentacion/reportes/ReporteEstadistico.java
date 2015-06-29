@@ -141,7 +141,7 @@ public class ReporteEstadistico {
 	        return table;
 	    }
 
-	public ReporteContable(ReporteContableDTO reporte, String fechaInicio, String fechaFin)
+	public ReporteEstadistico(ReporteContableDTO reporte, String fechaInicio, String fechaFin)
 	{	
 		ReporteContable.reporte = reporte;
 		this.fechaInicio = fechaInicio;

@@ -256,7 +256,7 @@ public class PedidoDAO
 	}
 		
 	public ArrayList<PedidoDTO> getPedidosVendidosPorFecha (String dia,String mes,String año) throws SQLException{ 
-		select = "SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='cobrado' AND fueeliminado=FALSE AND fecha LIKE '" + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
+		select = "SELECT idpedido,item,total,oferta,fecha FROM pedidos WHERE estado='cobrado' AND fueeliminado=FALSE AND fecha LIKE '" + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
 		//System.out.println(select);
 		PreparedStatement statement;
 		ResultSet resultSet; //Guarda
@@ -280,7 +280,7 @@ public class PedidoDAO
 				//
 				
 				resultado.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray(arrayItems)
-											,(Integer)resultSet.getObject(3), itemPromos.pasarDeStringAArrayItPromo(arrayIdPromo) ));
+											,(Integer)resultSet.getObject(3), itemPromos.pasarDeStringAArrayItPromo(arrayIdPromo), (String)resultSet.getObject(5)) );
 			}
 			return resultado;
 		}
