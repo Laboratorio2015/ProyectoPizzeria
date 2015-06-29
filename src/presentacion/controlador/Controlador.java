@@ -67,6 +67,8 @@ import dto.ProveedorDTO;
 import dto.RepartidorDTO;
 import dto.ReporteContableDTO;
 import presentacion.reportes.ReporteContable;
+import presentacion.reportes.ReporteProductoEstadistico;
+import presentacion.reportes.ReportePromocionEstadistica;
 import presentacion.reportes.solicitudDeMateriaPrima;
 import presentacion.vista.VentanaPrincipal;
 import presentacion.vista.buscadorProveedor;
@@ -437,64 +439,12 @@ public class Controlador implements ActionListener
 		{
 			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
 			{
-				 	
-					Integer diaCero = 1;
-					Integer mesCero = 1;
-					Integer mes12 = 12;
-					Integer diaIndiceFin = 31;
-				
-					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
-					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
-					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
-					
-					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
-					Integer mesFin = ventanaReportesEstadistica.getMesFin();
-					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
-
-					if (mesInicio==12){
-						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
-					}
-					else{
-						ArrayList<PedidoDTO> pedidosResultantes = new ArrayList<PedidoDTO>();
-
-						for (int j=añoInicio; j<= añoFin ;j++){
-							if (j == añoInicio)
-								mesCero = mesInicio;
-							else
-								mesCero = 1;
-							
-							if (j == añoFin)
-								mes12 = mesFin;
-							else
-								mes12 = 12;
-
-							for (int i=mesCero; i<= mes12;i++){
-								if (i == mesInicio)
-									diaCero = diaInicio;
-									else
-										diaCero = 1;
-								if (i == mesFin)
-									diaIndiceFin = diaFin;
-								else{
-									diaIndiceFin=31;
-								}
-								for (int x=diaCero; x<= diaIndiceFin ;x++){
-									try {
-										pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));							
-									} catch (SQLException e1) {
-										JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
-										e1.printStackTrace();								
-									}
-								}
-							}
-						}
-					}
-
 				//calcularRango(ventanaReportesEstadistica.getTfFechaInicio().getText(),ventanaReportesEstadistica.getTfFechaFin().getText());
 				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
 				switch (tipoProducto) {
 				case "Productos mas comprados":
 				{
+					String tipoEstadistica = "Productos mas comprados";
 					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
@@ -508,12 +458,16 @@ public class Controlador implements ActionListener
 							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
 						}
 					});
+					
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto);
+					reporte.generarReporteEstadistico();
 					llenarTablaEstadisticas("producto", null, producto);
 					System.out.println("termino");
 				}
 				break;
 				case "Productos menos comprados":
 				{
+					String tipoEstadistica = "Productos menos comprados";
 					List<ItemDTO>listaPedido=this.pedido.obtenerTodosItems();
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(listaPedido,1);
@@ -527,12 +481,15 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto);
+					reporte.generarReporteEstadistico();
 					llenarTablaEstadisticas("producto", null, producto);
 					System.out.println("termino");
 				}				
 				break;
 				case "Ofertas mas compradas":
 				{
+					String tipoEstadistica = "Ofertas mas compradas";
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
 					Collections.sort(promocion,new Comparator<PromocionEstadistica>() {
@@ -542,15 +499,20 @@ public class Controlador implements ActionListener
 							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
 						}
 					});
+					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion);
+					reporte.generarReporteEstadistico();
 					llenarTablaEstadisticas("promocion",promocion,null);
 					System.out.println("termino");
 				}				
 				break;
 				case "Ofertas menos compradas":
 				{
+					String tipoEstadistica = "Ofertas menos compradas";
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(listaPormoPed);
 					Collections.sort(promocion);
+					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion);
+					reporte.generarReporteEstadistico();
 					llenarTablaEstadisticas("promocion",promocion,null);
 					System.out.println("termino");
 				}				
@@ -3083,8 +3045,8 @@ public class Controlador implements ActionListener
 //		System.out.println("Pedido enviado");
 //		socket.close();			
 //	}
-
-
+	
+	
 	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException{
 		this.objectOutputStream.writeObject(nuevoPedido);
 		//this.objectOutputStream.writeObject(null);
@@ -3246,29 +3208,13 @@ public class Controlador implements ActionListener
 		}
 		return acumulador;
 	}
-	private ArrayList<String> calcularRango(String fInicio, String fFin)
 //	private ArrayList<String> calcularRango(String fInicio, String fFin)
-	{
 //	{
-		ArrayList<String> rangoFechas=new ArrayList<String>();
-		Integer[] fechaInicio=descomponerFecha(fInicio);
-		Integer[] fechaFin=descomponerFecha(fFin);
-		if(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
 //		ArrayList<String> rangoFechas=new ArrayList<String>();
 //		Integer[] fechaInicio=descomponerFecha(fInicio);
 //		Integer[] fechaFin=descomponerFecha(fFin);
 //		if(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
-		{
 //		{
-			while(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
-			{
-			
-			}
-		}
-		else
-			JOptionPane.showMessageDialog(null, "Error, rango de fechas Incorrecto");
-		return rangoFechas;
-	}
 //			while(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
 //			{
 //				
@@ -3301,7 +3247,7 @@ public class Controlador implements ActionListener
 	  public ReporteContableDTO getReporteContable ()
 	  {
 		  return this.reporteContable;
-}
+	  }
 }
 	
 
