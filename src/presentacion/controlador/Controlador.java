@@ -3403,12 +3403,27 @@ public class Controlador implements ActionListener
 			this.ventanaReportesEstadistica.setNombreColumnas(nombreColum);
 			this.ventanaReportesEstadistica.getModel().setColumnIdentifiers(this.ventanaReportesEstadistica.getNombreColumnas());
 			Iterator<PromocionEstadistica> Iterador = promocion.iterator();
-			while(Iterador.hasNext())
+			int cont=0;
+			if(ventanaReportesEstadistica.getTop5().isSelected())
 			{
-				PromocionEstadistica elemento = Iterador.next();
-					Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
-					this.ventanaReportesEstadistica.getModel().addRow(fila);	
+				while(Iterador.hasNext() && cont<5)
+					{
+						PromocionEstadistica elemento = Iterador.next();
+						Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
+						this.ventanaReportesEstadistica.getModel().addRow(fila);
+						cont++;
+					}
 			}
+			else if(ventanaReportesEstadistica.getTop5().isSelected())
+			{
+				while(Iterador.hasNext())
+				{
+					PromocionEstadistica elemento = Iterador.next();
+					Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
+					this.ventanaReportesEstadistica.getModel().addRow(fila);
+				}
+			}
+			
 		}
 		else
 		{
@@ -3446,22 +3461,6 @@ public class Controlador implements ActionListener
 		}
 		return acumulador;
 	}
-//	private ArrayList<String> calcularRango(String fInicio, String fFin)
-//	{
-//		ArrayList<String> rangoFechas=new ArrayList<String>();
-//		Integer[] fechaInicio=descomponerFecha(fInicio);
-//		Integer[] fechaFin=descomponerFecha(fFin);
-//		if(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
-//		{
-//			while(fechaFin[2]<=fechaInicio[2]|| fechaFin[1]<=fechaInicio[1]|| fechaFin[0]<=fechaInicio[0])
-//			{
-//				
-//			}
-//		}
-//		else
-//			JOptionPane.showMessageDialog(null, "Error, rango de fechas Incorrecto");
-//	}
-
 
 	private Integer[] descomponerFecha(String fInicio)
 	{
