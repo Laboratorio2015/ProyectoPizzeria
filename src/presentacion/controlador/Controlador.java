@@ -1488,7 +1488,7 @@ public class Controlador implements ActionListener
 			nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 			nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 			//aca
-			//nuevoPedido.setProductos(generarListaItems());
+			nuevoPedido.setProductos(generarListaItems());
 			nuevoPedido.setOfertas(generarListaOfertas());
 			nuevoPedido.setFecha(fecha);
 			nuevoPedido.setHora(hora);

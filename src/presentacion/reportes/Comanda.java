@@ -26,7 +26,7 @@ public class Comanda {
 	public void generarComanda()
 	{
 		try {
-			String FILE = "C:Users/leandro gabriel/Documents/reportes/Comanda De Pedido " + this.pedido.getIdpedido().toString() + ".pdf";
+			String FILE = "D:/reportes/Comanda De Pedido " + this.pedido.getIdpedido().toString() + ".pdf";
 		    PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
 		    addContentPage (documento,pedido);

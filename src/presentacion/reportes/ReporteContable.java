@@ -25,7 +25,7 @@ import dto.ReporteContableDTO;
 
 public class ReporteContable 
 {
-	private static ReporteContableDTO reporte;
+	static ReporteContableDTO reporte;
 	private static Document documento = new Document();
 	private static PdfWriter writer;
 	private final String fechaInicio;
@@ -114,7 +114,7 @@ public class ReporteContable
 	 public static PdfPTable createTable3() throws DocumentException {
 	        PdfPTable table = new PdfPTable(3);
 	        table.setWidthPercentage(288 / 5.23f);
-	        table.setWidths(new int[]{2, 2});
+	        //table.setWidths(new int[]{2, 2});
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Compras Realizadas"));
 	        cell.setColspan(3);

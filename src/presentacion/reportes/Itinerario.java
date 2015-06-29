@@ -33,7 +33,7 @@ public class Itinerario
 	public void generarItinerario()
 	{
 		try {
-			String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Itinerario " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
+			String FILE = "D:/Itinerario " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
 		    addContentPage (documento,itinerario);

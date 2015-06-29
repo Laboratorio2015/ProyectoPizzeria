@@ -255,7 +255,7 @@ public class PedidoDAO
 		return pedidos;
 	}
 		
-	public ArrayList<PedidoDTO> getPedidosVendidosPorFecha (String dia,String mes,String año) throws SQLException{
+	public ArrayList<PedidoDTO> getPedidosVendidosPorFecha (String dia,String mes,String año) throws SQLException{ 
 		select = "SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='cobrado' AND fueeliminado=FALSE AND fecha LIKE '" + dia.toString() + "-" + mes.toString() + "-" + año + "%'";
 		//System.out.println(select);
 		PreparedStatement statement;
