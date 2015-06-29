@@ -23,13 +23,14 @@ public class Ticket {
 	private PedidoDTO pedido;
 	private static Document documento = new Document();
 	private static PdfWriter writer;
+	private static Image image;
 	
 	public void generarTicket()
 	{
 		try {
 			final String FILE = "D:/Factura " + this.pedido.getIdpedido().toString() + ".pdf";
 			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
-		    Image image = Image.getInstance(Ticket.class.getResource("/prototipos/Diseño Factura_Ticket_2.png"));
+		    image = Image.getInstance(Ticket.class.getResource("/prototipos/Diseño Factura_Ticket_2.png"));
             image.setAlignment(Element.ALIGN_BOTTOM);
             image.setAbsolutePosition(0, 0);
 		    documento.open();
@@ -96,6 +97,10 @@ public class Ticket {
 				Integer totalItem = elemento.getCantidad()*elemento.getProducto().getPrecio();
 				canvas.showTextAligned(Element.ALIGN_CENTER, totalItem.toString(), 545, y, 0);
 				y=y-30;
+				
+//				if 
+//				Ticket.documento.newPage();
+//				documento.add(image);
 			}
 		}
 		canvas.setFontAndSize(bf_helv, 14);

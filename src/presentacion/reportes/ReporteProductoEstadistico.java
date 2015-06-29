@@ -24,7 +24,7 @@ public class ReporteProductoEstadistico {
 
 	private static Document documento = new Document();
 	private static ArrayList<ProductoEstadistico> producto;
-	private final String tipoDeEstadistica;
+	private static String tipoDeEstadistica;
 	
 	public void generarReporteEstadistico()
 	{
@@ -34,7 +34,7 @@ public class ReporteProductoEstadistico {
 		    Image image = Image.getInstance(ReporteContable.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
 		    documento.add(image);
-		    addContentPage (documento,tipoDeEstadistica);
+		    addContentPage (documento);
 		    documento.close();
 		 } catch (Exception e) {
 	     e.printStackTrace();
@@ -49,20 +49,20 @@ public class ReporteProductoEstadistico {
 	
 	public ReporteProductoEstadistico(String tipo, ArrayList<ProductoEstadistico> producto)
 	{	
-		ReporteProductoEstadistico.producto=producto;
+		this.producto=producto;
 		tipoDeEstadistica = tipo;
 //		this.fechaInicio = fechaInicio;
 //		this.fechaFin = fechaFin;
 	}
 		
 
-	private static void addContentPage(Document document, String tipo) 
+	private static void addContentPage(Document document) 
 	throws DocumentException 
 	{	
 		//Agrego INFO de Reporte
 		
 		documento.add(new Paragraph ("Reporte Estadístico de la Pizzería Wild"));
-		documento.add(new Paragraph ("Tipo de Reporte: " + tipo));
+		documento.add(new Paragraph ("Tipo de Reporte: " + tipoDeEstadistica));
 //		documento.add(new Paragraph ("Fecha de Finalización: " + fechaFin));
 		
 		PdfPTable table = new PdfPTable(2);
