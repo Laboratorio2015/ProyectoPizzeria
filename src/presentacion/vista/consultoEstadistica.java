@@ -25,6 +25,8 @@ import javax.swing.JCheckBox;
 import java.awt.Font;
 import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class consultoEstadistica extends JDialog {
 

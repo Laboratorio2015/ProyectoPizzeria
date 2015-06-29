@@ -413,7 +413,7 @@ public class Controlador implements ActionListener
 			else if(tipoProducto.compareTo("Ofertas mas compradas")==0 || tipoProducto.compareTo("Ofertas menos compradas")==0|| tipoProducto.compareTo("Cliente mas comprador")==0 )
 			{
 				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(false);
-				ventanaReportesEstadistica.getTfOcultarTop().setVisible(true);
+				ventanaReportesEstadistica.getTfOcultarTop().setVisible(false);
 				ventanaReportesEstadistica.getTfFechaInicio().setText("");
 				ventanaReportesEstadistica.getTfFechaFin().setText("");
 			}
@@ -1527,6 +1527,8 @@ public class Controlador implements ActionListener
 		 	ventanaReportesEstadistica.getBtnEnviarPorEmail().addActionListener(this);
 			ventanaReportesEstadistica.getBtnImprimir().addActionListener(this);
 			ventanaReportesEstadistica.getCbEstadisticas().addActionListener(this);
+			ventanaReportesEstadistica.getTop5().addActionListener(this);
+			ventanaReportesEstadistica.getVerTodo().addActionListener(this);
 			ventanaReportesEstadistica.getButtonGroup().setSelected(ventanaReportesEstadistica.getTop5().getModel(), true);
 			ventanaReportesEstadistica.setVisible(true);
 		}
@@ -1557,6 +1559,7 @@ public class Controlador implements ActionListener
 				ventanaReportesEstadistica.getTfFechaFin().setText("");
 			}
 		}
+			
 		//establecer fecha de inicio y fin para ESTADISTICAS
 		else if(this.ventanaReportesEstadistica!= null && (e.getSource()==this.ventanaReportesEstadistica.getBtnCalendarioInicio() ||e.getSource()==this.ventanaReportesEstadistica.getBtnCalendarioFin() ))
 		{
@@ -1573,55 +1576,12 @@ public class Controlador implements ActionListener
 				ventanaCalendario.setVisible(true);
 			}	
 		}
-		//BUSCAR ESTADISTICAS EN UN RANGO DE FECHAS
-		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnBuscar())
+				//Generar el pdf  al presionar el boton imprimir
+		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnImprimir())
 		{
-			if(ventanaReportesEstadistica.getTfFechaInicio().getText().compareTo("")!=0 &&ventanaReportesEstadistica.getTfFechaFin().getText().compareTo("")!=0)
-			{
-				Iterator<PedidoDTO> pedidos=this.pedido.obtenerPedidos().iterator();
-				ArrayList<ProductoEstadistico> productos=new ArrayList<ProductoEstadistico>();
-				while (pedidos.hasNext())
-				{
-					Iterator<ItemDTO> elemento = pedidos.next().getProductos().iterator();
-					while(elemento.hasNext())
-					{
-						//if()
-					}
-		
-			String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
-				switch (tipoProducto) {
-				case "Productos mas comprados":
-				{
-					
-				}				
-				break;
-
-				case "Productos menos comprados":
-				{
-					
-				}				
-				break;
-				case "Ofertas mas compradas":
-				{
-
-				}				
-				break;
-				case "Ofertas menos compradas":
-				{
-
-				}				
-				break;
-				case "Cliente mas comprador":
-				{
-
-				}				
-				break;
-				}
-				}
-			}
-			else
-				JOptionPane.showMessageDialog(null, "Error, para hacer la consulta debe seleccionar la fecha de inicio y fin");
+			System.out.println("entro");
 		}
+		
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())
 		{
 			ventanaConfiguraciones=new opcionesDeConfiguracion();
@@ -3403,27 +3363,12 @@ public class Controlador implements ActionListener
 			this.ventanaReportesEstadistica.setNombreColumnas(nombreColum);
 			this.ventanaReportesEstadistica.getModel().setColumnIdentifiers(this.ventanaReportesEstadistica.getNombreColumnas());
 			Iterator<PromocionEstadistica> Iterador = promocion.iterator();
-			int cont=0;
-			if(ventanaReportesEstadistica.getTop5().isSelected())
+			while(Iterador.hasNext())
 			{
-				while(Iterador.hasNext() && cont<5)
-					{
-						PromocionEstadistica elemento = Iterador.next();
-						Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
-						this.ventanaReportesEstadistica.getModel().addRow(fila);
-						cont++;
-					}
+				PromocionEstadistica elemento = Iterador.next();
+				Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
+				this.ventanaReportesEstadistica.getModel().addRow(fila);
 			}
-			else if(ventanaReportesEstadistica.getTop5().isSelected())
-			{
-				while(Iterador.hasNext())
-				{
-					PromocionEstadistica elemento = Iterador.next();
-					Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
-					this.ventanaReportesEstadistica.getModel().addRow(fila);
-				}
-			}
-			
 		}
 		else
 		{
@@ -3443,6 +3388,47 @@ public class Controlador implements ActionListener
 			}
 		}
 	}
+	
+	private void llenarTablaEstadisticasTop5(String tipo,ArrayList<PromocionEstadistica> promocion,ArrayList<ProductoEstadistico> productos)
+	{
+		this.ventanaReportesEstadistica.getModel().setRowCount(0);
+		this.ventanaReportesEstadistica.getModel().setColumnCount(0);
+		int cont=0;
+		if(tipo.compareTo("promocion")==0)
+		{
+			String[] nombreColum=new String[2];
+			nombreColum[0]="Oferta";
+			nombreColum[1]="Cantidad";
+			this.ventanaReportesEstadistica.setNombreColumnas(nombreColum);
+			this.ventanaReportesEstadistica.getModel().setColumnIdentifiers(this.ventanaReportesEstadistica.getNombreColumnas());
+			Iterator<PromocionEstadistica> Iterador = promocion.iterator();
+			while(Iterador.hasNext() && cont<5)
+			{
+				PromocionEstadistica elemento = Iterador.next();
+				Object[] fila = {elemento.getPromo().getNombre(), elemento.getCantidad()};
+				this.ventanaReportesEstadistica.getModel().addRow(fila);
+				cont++;
+			}
+		}
+		else
+		{
+			String[] nombreColum=new String[3];
+			nombreColum[0]="Producto";
+			nombreColum[1]="Tipo";			
+			nombreColum[2]="Cantidad";
+			this.ventanaReportesEstadistica.setNombreColumnas(nombreColum);
+			this.ventanaReportesEstadistica.getModel().setColumnIdentifiers(this.ventanaReportesEstadistica.getNombreColumnas());
+			Iterator<ProductoEstadistico> Iterador = productos.iterator();
+			while(Iterador.hasNext() && cont<5)
+			{
+				ProductoEstadistico elemento = Iterador.next();
+				Object[] fila = {elemento.getProducto().getNombre(),elemento.getProducto().getTipo() ,elemento.getCantidad()};
+				this.ventanaReportesEstadistica.getModel().addRow(fila);
+				cont++;
+			}
+		}
+	}
+	
 	private ArrayList<ProductoEstadistico> sumarProductos(ArrayList<ProductoEstadistico> acumulador,ArrayList<ProductoEstadistico> productos)
 	{
 		Iterator<ProductoEstadistico> iterador=productos.iterator();
