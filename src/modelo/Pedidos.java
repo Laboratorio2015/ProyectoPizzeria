@@ -64,6 +64,20 @@ public class Pedidos
 		return ultimo;
 	}
 	
+	public Integer ultimoPedidoFecha(String fecha) 
+	{
+		Integer ultimo=0;
+		List<PedidoDTO> pedidos=this.pedido.pedidosDadoFecha(fecha);
+		Iterator<PedidoDTO> Iterador = pedidos.iterator();
+		while(Iterador.hasNext())
+		{
+			PedidoDTO elemento = Iterador.next();
+			if(elemento.getNumPedido()>ultimo)
+				ultimo=elemento.getNumPedido();
+		}
+		return ultimo;
+	}
+	
 	public PedidoDTO buscarPedidoId(Integer idpedido)
 	{
 		List<PedidoDTO> pedidos=this.obtenerPedidos();
@@ -126,6 +140,8 @@ public class Pedidos
 	public List<PedidoDTO> obtenerPedidosPendientes(){
 		return this.pedido.pedidosPendientes();
 	}
+
+
 
 	
 }

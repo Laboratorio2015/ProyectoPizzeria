@@ -22,11 +22,12 @@ import conexion.Conexion;
 
 public class PedidoDAO 
 {
-	private static final String insert = "INSERT INTO pedidos(idpedido, item,fecha, hora, estado, total, ticket,comanda, cliente,llevadelivery,oferta,fueeliminado) VALUES(?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String insert = "INSERT INTO pedidos(idpedido,numpedido ,item,fecha, hora, estado, total, ticket,comanda, cliente,llevadelivery,oferta,fueeliminado) VALUES(?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String delete = "DELETE FROM pedidos WHERE idpedido = ?";
 	private static final String readall = "SELECT * FROM pedidos";
 	private static final String readItem = "SELECT item FROM pedidos";
-	private static final String obtenerPedidosFecha = "SELECT * FROM pedidos where fecha=?";
+	private static final String obtenerPedidosFecha = "SELECT * FROM pedidos where fecha =?";
+	private static final String obtenerPedidosUnaFecha = "SELECT idpedido,numpedido,fueeliminado FROM pedidos where fecha =?";
 	private static final String readPromo = "SELECT oferta FROM pedidos";
 	private static final String pedidosPendientes="select * from pedidos where estado='solicitado'";
 	//SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '%%-6-2015%';
@@ -49,17 +50,18 @@ public class PedidoDAO
 			String idofertas= ofe.iditemsOferta(pedido);
 			statement = conexion.getSQLConexion().prepareStatement(insert);		
 				statement.setInt(1, pedido.getIdpedido());
-				statement.setString(2, iditems);
-				statement.setString(3, pedido.getFecha());
-				statement.setString(4, pedido.getHora());
-				statement.setString(5,pedido.get_estado());
-				statement.setInt(6, pedido.getTotal());
-				statement.setInt(7, pedido.get_ticket());
-				statement.setInt(8, pedido.get_comanda());
-				statement.setInt(9, pedido.getCliente().getIdcliente());
-				statement.setBoolean(10, pedido.getLlevaDelivery());
-				statement.setString(11, idofertas);
-				statement.setBoolean(12, pedido.getFueeliminado());
+				statement.setInt(2, pedido.getNumPedido());
+				statement.setString(3, iditems);
+				statement.setString(4, pedido.getFecha());
+				statement.setString(5, pedido.getHora());
+				statement.setString(6,pedido.get_estado());
+				statement.setInt(7, pedido.getTotal());
+				statement.setInt(8, pedido.get_ticket());
+				statement.setInt(9, pedido.get_comanda());
+				statement.setInt(10, pedido.getCliente().getIdcliente());
+				statement.setBoolean(11, pedido.getLlevaDelivery());
+				statement.setString(12, idofertas);
+				statement.setBoolean(13, pedido.getFueeliminado());
 				statement.executeUpdate();
 				System.out.println("inserccion exitosa de pedido");
 				return true;
@@ -129,7 +131,7 @@ public class PedidoDAO
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
 				ItemsPromociones ofe=new ItemsPromociones();
 				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArrayItPromo(resultSet.getString("oferta"));
-				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
+				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),resultSet.getInt("numpedido"),listaItems,
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
 				resultSet.getInt("comanda"),
@@ -235,7 +237,7 @@ public class PedidoDAO
 				ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
 				ItemsPromociones ofe=new ItemsPromociones();
 				ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArrayItPromo(resultSet.getString("oferta"));
-				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
+				PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),resultSet.getInt("numpedido"),listaItems,
 				resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 				resultSet.getInt("total"),resultSet.getInt("ticket"),
 				resultSet.getInt("comanda"),
@@ -280,7 +282,8 @@ public class PedidoDAO
 				//
 				
 				resultado.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray(arrayItems)
-											,(Integer)resultSet.getObject(3), itemPromos.pasarDeStringAArrayItPromo(arrayIdPromo), (String)resultSet.getObject(5)) );
+											,(Integer)resultSet.getObject(3),
+											itemPromos.pasarDeStringAArrayItPromo(arrayIdPromo), (String)resultSet.getObject(5)) );
 			}
 			return resultado;
 		}
@@ -315,7 +318,7 @@ public class PedidoDAO
 					  if (y.charAt(i) != ' ')
 					    estadoPedido += y.charAt(i);
 				}
-				if(resultSet.getBoolean("fueeliminado")==false && estadoPedido=="cobrado")
+				if(resultSet.getBoolean("fueeliminado")==false)
 				{	
 					Clientes cli=new Clientes();
 					ClienteDTO lab=cli.buscarClientePorID(resultSet.getInt("cliente"));
@@ -323,11 +326,45 @@ public class PedidoDAO
 					ArrayList<ItemDTO>listaItems= ite.pasarDeStringAArray(resultSet.getString("item"));
 					ItemsPromociones ofe=new ItemsPromociones();
 					ArrayList<ItemPromocionDTO> listOfertas=ofe.pasarDeStringAArrayItPromo(resultSet.getString("oferta"));
-					PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),listaItems,
+					PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),resultSet.getInt("numpedido"),listaItems,
 					resultSet.getString("fecha"),resultSet.getString("hora"),estadoPedido,
 					resultSet.getInt("total"),resultSet.getInt("ticket"),
 					resultSet.getInt("comanda"),
 					lab,resultSet.getBoolean("llevadelivery"),listOfertas,resultSet.getBoolean("fueeliminado"));
+					pedidos.add(aux);
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return pedidos;
+	}
+	
+	public List<PedidoDTO> pedidosDadoFecha(String fecha)
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<PedidoDTO> pedidos = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(obtenerPedidosUnaFecha);
+			statement.setString(1,fecha);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				
+				if(resultSet.getBoolean("fueeliminado")==false)
+				{	
+					PedidoDTO aux=new PedidoDTO(resultSet.getInt("idpedido"),resultSet.getInt("numpedido"),null,
+					"","","",0,0,0,null,false,null,false);
+					
 					pedidos.add(aux);
 				}
 			}

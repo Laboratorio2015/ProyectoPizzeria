@@ -12,6 +12,8 @@ public class PedidoDTO implements Serializable
 	private static final long serialVersionUID = -796849469951998455L;
 	//public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
 	private Integer idpedido;
+	//este numero depedido depende de la fecha
+	private Integer numPedido;
 	private ArrayList<ItemDTO> items;
 	private ArrayList<ItemPromocionDTO> ofertas;
 	private String fecha;
@@ -25,12 +27,13 @@ public class PedidoDTO implements Serializable
 	private Boolean fueeliminado;
 	
 	
-	public PedidoDTO(Integer pedido,ArrayList<ItemDTO> items ,String fecha, String hora, String estado,
+	public PedidoDTO(Integer pedido,Integer numPedido,ArrayList<ItemDTO> items ,String fecha, String hora, String estado,
 			Integer total, Integer ticket, Integer comanda, ClienteDTO cliente,
 			Boolean llevaDelivery,ArrayList<ItemPromocionDTO> ofertas,	Boolean fueeliminado) 
 	{
 		this.idpedido=pedido;
 		this.items=items;
+		this.numPedido=numPedido;
 		this.ofertas=ofertas;
 		this.fecha=fecha;
 		this.hora=hora;
@@ -50,7 +53,7 @@ public class PedidoDTO implements Serializable
 
 	
 	public PedidoDTO(Integer idOrden, ArrayList<ItemDTO> items,Integer totalCosto,ArrayList<ItemPromocionDTO> promos, String fecha) {
-		this.idpedido = idOrden;
+		this.numPedido = idOrden;
 		this.total = totalCosto;
 		this.items= items;
 		this.ofertas=promos;
@@ -180,6 +183,14 @@ public class PedidoDTO implements Serializable
 	public void setFueeliminado(Boolean fueeliminado) {
 		this.fueeliminado = fueeliminado;
 	}
+	
+	public Integer getNumPedido() {
+		return numPedido;
+	}
+	public void setNumPedido(Integer numPedido) {
+		this.numPedido = numPedido;
+	}
+	
 	//esta funcion verifica al pedido para no cargarlo dos veces
 	public static boolean estaPedido(List<PedidoDTO> pedidos, Integer num)
 	{

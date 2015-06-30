@@ -14,6 +14,8 @@ import presentacion.controlador.Controlador;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -381,10 +383,12 @@ public class pedidosPendientes extends JDialog {
 	
 	public void llenarTabla() 
 	{
+		Calendar c1 = GregorianCalendar.getInstance();
+		String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
 		model.setRowCount(0); //Para vaciar la tabla
 		model.setColumnCount(0);
 		model.setColumnIdentifiers(nombreColumnas);
-		Iterator<PedidoDTO> Iterador = control.getPedido().obtenerPedidos().iterator();
+		Iterator<PedidoDTO> Iterador = control.getPedido().obtenerPedidosDeFecha(fecha).iterator();
 		while(Iterador.hasNext())
 		{
 			PedidoDTO elemento = Iterador.next();
@@ -393,10 +397,10 @@ public class pedidosPendientes extends JDialog {
 				if(elemento.getEstado().compareTo("endelivery")==0)
 				{
 					int itinerario=control.getItinerario().buscarItinerarioPorPedido(elemento.getIdpedido());
-					model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),itinerario+""});
+					model.addRow(new String[] {elemento.getNumPedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),itinerario+""});
 				}
 				else
-					model.addRow(new String[] {elemento.getIdpedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),""});
+					model.addRow(new String[] {elemento.getNumPedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),""});
 			}
 		}
 		table.setModel(model);		

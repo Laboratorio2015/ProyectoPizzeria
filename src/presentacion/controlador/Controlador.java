@@ -1619,6 +1619,7 @@ public class Controlador implements ActionListener
 			String hora=c1.getTime().getHours()+":"+c1.getTime().getMinutes();
 			PedidoDTO nuevoPedido=new PedidoDTO();
 			nuevoPedido.setIdpedido(this.pedido.ultimoPedido()+1);
+			nuevoPedido.setNumPedido(this.pedido.ultimoPedidoFecha(fecha)+1);
 			nuevoPedido.set_estado("solicitado");
 			nuevoPedido.setTotal(Integer.parseInt(this.ventanaPedido.getTfTotal().getText()));
 			nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
