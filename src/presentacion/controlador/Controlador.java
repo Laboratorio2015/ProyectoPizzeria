@@ -512,7 +512,10 @@ public class Controlador implements ActionListener
 					
 					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto);
 					reporte.generarReporteEstadistico();
-					llenarTablaEstadisticas("producto", null, producto);
+					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
+						llenarTablaEstadisticas("producto", null, producto);
+					else
+						llenarTablaEstadisticasTop5("producto", null, producto);
 					System.out.println("termino");
 				}
 				break;
@@ -585,7 +588,10 @@ public class Controlador implements ActionListener
 					});
 					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto);
 					reporte.generarReporteEstadistico();
-					llenarTablaEstadisticas("producto", null, producto);
+					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
+						llenarTablaEstadisticas("producto", null, producto);
+					else
+						llenarTablaEstadisticasTop5("producto", null, producto);
 					System.out.println("termino");
 				}
 				break;
@@ -654,7 +660,10 @@ public class Controlador implements ActionListener
 					});
 					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion);
 					reporte.generarReporteEstadistico();
-					llenarTablaEstadisticas("promocion",promocion,null);
+					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
+						llenarTablaEstadisticas("promocion",promocion,null);
+					else
+						llenarTablaEstadisticasTop5("promocion",promocion,null);
 					System.out.println("termino");
 				}				
 				break;
@@ -718,7 +727,10 @@ public class Controlador implements ActionListener
 					Collections.sort(promocion);
 					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion);
 					reporte.generarReporteEstadistico();
-					llenarTablaEstadisticas("promocion",promocion,null);
+					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
+						llenarTablaEstadisticas("promocion",promocion,null);
+					else
+						llenarTablaEstadisticasTop5("promocion",promocion,null);
 					System.out.println("termino");
 				}				
 				break;
@@ -726,6 +738,12 @@ public class Controlador implements ActionListener
 			}
 			else
 				JOptionPane.showMessageDialog(null, "Error, para hacer la consulta debe seleccionar la fecha de inicio y fin");
+		}
+		
+		// Completar la tabla al presionar los boton Group
+		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getVerTodo())
+		{
+
 		}
 		
 		//ABRIR SELECTOR MAT PRIMA

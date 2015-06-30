@@ -122,7 +122,6 @@ public class ordenDePedido extends JDialog {
 				producto=control.getProducto().buscarProductoPorNombre(tfAgregarEmpanada.getText());
 				if(tfAgregarEmpanada.getText().length()>4)
 					tfPrecioUniEmpanada.setText(Integer.toString(producto.getPrecio()));
-				vaciarFormulario();
 			}
 			});	
 		
