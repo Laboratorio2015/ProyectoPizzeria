@@ -740,12 +740,6 @@ public class Controlador implements ActionListener
 				JOptionPane.showMessageDialog(null, "Error, para hacer la consulta debe seleccionar la fecha de inicio y fin");
 		}
 		
-		// Completar la tabla al presionar los boton Group
-		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getVerTodo())
-		{
-
-		}
-		
 		//ABRIR SELECTOR MAT PRIMA
 		else if(e.getSource()== this.ventana.getBtnPedMatPrima())
 		{
@@ -3227,7 +3221,8 @@ public class Controlador implements ActionListener
 //	}
 	
 	
-	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException{
+	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException
+	{
 		this.objectOutputStream.writeObject(nuevoPedido);
 		//this.objectOutputStream.writeObject(null);
 	}
