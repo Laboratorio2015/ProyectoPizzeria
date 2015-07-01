@@ -8,6 +8,7 @@ import modelo.ProductoEstadistico;
 import modelo.PromocionEstadistica;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -26,16 +27,18 @@ public class ReportePromocionEstadistica {
 	private static Document documento = new Document();
 	private static ArrayList<PromocionEstadistica> promocion;
 	private static String tipoDeEstadistica;
+	private final String fechaInicio;
+	private final String fechaFin;
 	
 	public void generarReporteEstadistico()
 	{
 		try {
-			final String FILE = "D:/Reporte Estadístico.pdf";			
+			final String FILE = "C:/Reporte Estadístico " + '(' + fechaInicio + '-' + fechaFin + ')' + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReportePromocionEstadistica.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
 		    documento.add(image);
-		    addContentPage (documento);
+		    addContentPage (documento, this.fechaInicio, this.fechaFin);
 		    documento.close();
 		 } catch (Exception e) {
 	     e.printStackTrace();
@@ -48,23 +51,25 @@ public class ReportePromocionEstadistica {
 	    c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	    table.addCell(c1);}
 	
-	public ReportePromocionEstadistica(String tipo, ArrayList<PromocionEstadistica> promocion)
+	public ReportePromocionEstadistica(String tipo, ArrayList<PromocionEstadistica> promocion, String fechaInicio, String fechaFin)
 	{	
 		ReportePromocionEstadistica.promocion=promocion;
 		tipoDeEstadistica = tipo;
-//		this.fechaInicio = fechaInicio;
-//		this.fechaFin = fechaFin;
+		this.fechaInicio = fechaInicio;
+		this.fechaFin = fechaFin;
 	}
 		
 
-	private static void addContentPage(Document document) 
+	private static void addContentPage(Document document, String fechaInicio, String fechaFin) 
 	throws DocumentException 
 	{	
 		//Agrego INFO de Reporte
 		
 		documento.add(new Paragraph ("Reporte Estadístico de la Pizzería Wild"));
 		documento.add(new Paragraph ("Tipo de Reporte: " + tipoDeEstadistica));
-//		documento.add(new Paragraph ("Fecha de Finalización: " + fechaFin));
+		documento.add(new Paragraph ("Fecha de Inicio: " + fechaInicio));
+		documento.add(new Paragraph ("Fecha de Finalización: " + fechaFin));
+		documento.add(new Paragraph (Chunk.NEWLINE));
 		
 		PdfPTable table = new PdfPTable(2);
 		addCell(table, "Promoción");

@@ -454,10 +454,13 @@ public class Controlador implements ActionListener
 					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
 					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
 					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					String fInicio= añoInicio.toString() + mesInicio.toString() + diaInicio.toString(); 
 					
 					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
 					Integer mesFin = ventanaReportesEstadistica.getMesFin();
 					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+					String fFin= añoFin.toString() + mesFin.toString() + diaFin.toString(); 
+					
 					if (mesInicio==12){
 						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
 					}
@@ -510,7 +513,7 @@ public class Controlador implements ActionListener
 								}
 							});
 					
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto);
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, fInicio, fFin);
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
@@ -532,10 +535,13 @@ public class Controlador implements ActionListener
 					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
 					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
 					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					String fInicio= añoInicio.toString() + mesInicio.toString() + diaInicio.toString();
 					
 					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
 					Integer mesFin = ventanaReportesEstadistica.getMesFin();
 					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+					String fFin= añoFin.toString() + mesFin.toString() + diaFin.toString(); 
+					
 
 					if (mesInicio==12){
 						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
@@ -586,7 +592,7 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto);
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, fInicio, fFin);
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
@@ -607,10 +613,12 @@ public class Controlador implements ActionListener
 					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
 					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
 					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					String fInicio= añoInicio.toString() + mesInicio.toString() + diaInicio.toString();
 					
 					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
 					Integer mesFin = ventanaReportesEstadistica.getMesFin();
 					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+					String fFin= añoFin.toString() + mesFin.toString() + diaFin.toString(); 
 
 					if (mesInicio==12){
 						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
@@ -658,7 +666,7 @@ public class Controlador implements ActionListener
 							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
 						}
 					});
-					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion);
+					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion, fInicio, fFin);
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("promocion",promocion,null);
@@ -679,10 +687,12 @@ public class Controlador implements ActionListener
 					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
 					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
 					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					String fInicio= añoInicio.toString() + mesInicio.toString() + diaInicio.toString();
 					
 					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
 					Integer mesFin = ventanaReportesEstadistica.getMesFin();
 					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+					String fFin= añoFin.toString() + mesFin.toString() + diaFin.toString(); 
 
 					if (mesInicio==12){
 						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
@@ -725,7 +735,7 @@ public class Controlador implements ActionListener
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					Collections.sort(promocion);
-					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion);
+					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion, fInicio, fFin);
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("promocion",promocion,null);
