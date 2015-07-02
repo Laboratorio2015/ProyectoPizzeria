@@ -84,7 +84,6 @@ public class pedidosPendientes extends JDialog {
 					lAsignarRepartidor.setVisible(false);
 					lCobroACliente.setVisible(false);
 					lCobroADelivery.setVisible(false);
-					
 				}
 				else if (pedido.get_estado().compareTo("preparado")==0)
 				{
