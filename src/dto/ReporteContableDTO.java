@@ -193,6 +193,12 @@ public class ReporteContableDTO {
 	public HashMap<ProductoDTO, Integer> getCantEmpVendidas() {
 		return cantEmpVendidas;
 	}
+	public HashMap<ProductoDTO, Integer> getCantOtrosProdVendidos() {
+		return cantOtrosProdVendidos;
+	}
+	public HashMap<PromocionDTO, Integer> getCantPromosVendidos() {
+		return cantPromosVendidos;
+	}
 	
 	
 	public void mostrarDetalle(){
