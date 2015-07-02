@@ -75,7 +75,7 @@ public class pedidosPendientes extends JDialog {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				numFilaSeleccionada=table.getSelectedRow();
-				PedidoDTO pedido=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
+				PedidoDTO pedido=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)),fechaActual());
 				if (pedido.get_estado().compareTo("solicitado")==0)
 				{
 					lMarcarComoPreparado.setVisible(true);
@@ -270,20 +270,17 @@ public class pedidosPendientes extends JDialog {
 				public void mouseClicked(MouseEvent arg0)
 				{
 						numFilaSeleccionada=table.getSelectedRow();
-						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
-
+						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)), fechaActual());
 						model.setValueAt("rechazado", numFilaSeleccionada, 2);
-						pedidoCambia.set_estado("rechazado");
-						control.getPedido().quitarPedido(pedidoCambia);
+						control.getPedido().actualizarPedido(pedidoCambia, "rechazado");
 						//Quita el pedido del MONITOR ////////////////////////////////////////////
 						try {					
 							control.enviarPedidoMonitor(pedidoCambia);
-						} catch (IOException e) {
+						} catch (IOException e)
+						{
 							System.out.println("Fallo conexion con monitor (servidor)");
 							e.printStackTrace();
-						}/////////////////////////////
-						//////////////////////////////////////////////////////////////////////////
-						control.getPedido().agregarPedido(pedidoCambia);
+						}
 						llenarTabla();
 						borrarBotones();
 				}
@@ -333,7 +330,7 @@ public class pedidosPendientes extends JDialog {
 					ArrayList<PedidoDTO> nuevo=new ArrayList<PedidoDTO>();
 					for(int i=0;i<numeros.length;i++)
 					{
-						nuevo.add(control.getPedido().buscarPedidoId(Integer.parseInt(model.getValueAt(numeros[i], 0).toString())));
+						nuevo.add(control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt(model.getValueAt(numeros[i], 0).toString()), fechaActual()));
 					}
 					seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente,control,numeros,nuevo);
 					selecRepartidor.setVisible(true);
@@ -355,10 +352,9 @@ public class pedidosPendientes extends JDialog {
 					if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("solicitado")==0)
 					{
 						model.setValueAt("preparado", numFilaSeleccionada, 2);
-						pedido=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
-						control.getPedido().quitarPedido(pedido);
-						pedido.set_estado("preparado");
-						control.getPedido().agregarPedido(pedido);				
+						table.setModel(model);
+						pedido=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)), fechaActual());
+						control.getPedido().actualizarPedido(pedido, "preparado");
 						//////////QUITA EL PEDIDO DEL MONITOR//////////
 						try {
 							control.enviarPedidoMonitor(pedido);
@@ -367,10 +363,10 @@ public class pedidosPendientes extends JDialog {
 							e.printStackTrace();
 						}
 						///////////////////////////////////////////////
+						
 					}
 					else if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("rechazado")==0)
 						JOptionPane.showMessageDialog(null, "Error, el pedido se encuentra Rechazado");
-					llenarTabla();
 					borrarBotones();
 				}
 			});
@@ -443,6 +439,12 @@ public class pedidosPendientes extends JDialog {
 		this.table = table;
 	}
 
+	public String fechaActual()
+	{
+		Calendar c1 = GregorianCalendar.getInstance();
+		String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
+		return fecha;
+	}
 
 	
 }

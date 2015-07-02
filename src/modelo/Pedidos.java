@@ -11,6 +11,7 @@ import dto.HojaItinerarioDTO;
 import dto.ItemDTO;
 import dto.ItemPromocionDTO;
 import dto.PedidoDTO;
+import dto.ProductoDTO;
 import dto.PromocionDTO;
 
 public class Pedidos 
@@ -43,6 +44,11 @@ public class Pedidos
 	public List<ItemDTO> obtenerTodosItems() 
 	{
 		return this.pedido.readItem();
+	}
+	
+	public void actualizarPedido(PedidoDTO pedido, String estado)
+	{
+		this.pedido.actualizarEstadoPedido(pedido, estado);
 	}
 	
 	public List<ItemPromocionDTO> obtenerTodosPromos() 
@@ -89,6 +95,19 @@ public class Pedidos
 				return elemento;
 		}
 		return null;	
+	}
+	
+	public PedidoDTO buscarPedidoNumeroFecha(Integer numPedido, String fecha)
+	{
+		List<PedidoDTO> pedidos=this.obtenerPedidosDeFecha(fecha);
+		Iterator<PedidoDTO> Iterador = pedidos.iterator();
+		while(Iterador.hasNext())
+		{
+			PedidoDTO elemento = Iterador.next();
+			if(elemento.getNumPedido().equals(numPedido))
+				return elemento;
+		}
+		return null;
 	}
 
 	public String iditemsPedido(HojaItinerarioDTO itinerario)
@@ -139,9 +158,5 @@ public class Pedidos
 
 	public List<PedidoDTO> obtenerPedidosPendientes(){
 		return this.pedido.pedidosPendientes();
-	}
-
-
-
-	
+	}	
 }

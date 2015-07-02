@@ -1601,7 +1601,7 @@ public class Controlador implements ActionListener
 				//Generar el pdf  al presionar el boton imprimir
 		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnImprimir())
 		{
-			System.out.println("entro");
+			JOptionPane.showMessageDialog(null, "Se generó y envió a imprimir la consulta en formato .pdf");
 		}
 		
 		else if(e.getSource()==this.ventana.getBtnConfiguraciones())

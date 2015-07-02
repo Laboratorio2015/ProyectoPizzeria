@@ -15,6 +15,7 @@ import modelo.Promociones;
 import dto.ClienteDTO;
 import dto.ItemDTO;
 import dto.ItemPromocionDTO;
+import dto.ProductoDTO;
 import dto.PromocionDTO;
 import dto.PedidoDTO;
 import conexion.Conexion;
@@ -29,6 +30,7 @@ public class PedidoDAO
 	private static final String obtenerPedidosFecha = "SELECT * FROM pedidos where fecha =?";
 	private static final String obtenerPedidosUnaFecha = "SELECT idpedido,numpedido,fueeliminado FROM pedidos where fecha =?";
 	private static final String readPromo = "SELECT oferta FROM pedidos";
+	private static final String actualizarEstado="Update pedidos Set estado=? where idpedido=?";
 	private static final String pedidosPendientes="select * from pedidos where estado='solicitado'";
 	//SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '%%-6-2015%';
 	private static String select = "SELECT idpedido,item,total,oferta FROM pedidos " +
@@ -378,5 +380,33 @@ public class PedidoDAO
 			conexion.cerrarConexion();
 		}
 		return pedidos;
+	}
+	
+	public boolean actualizarEstadoPedido(PedidoDTO PedidodActualizar, String estado)
+	{
+		PreparedStatement statement;
+		int chequeoUpdate=0;
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(actualizarEstado);
+			statement.setString(1, estado);
+			statement.setInt(2, PedidodActualizar.getIdpedido());
+			chequeoUpdate = statement.executeUpdate();
+			if(chequeoUpdate > 0)
+			{
+				System.out.println("Actualizacion exitosa de pedido");
+				return true;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			System.out.println("Actualizacion fallida de pedido");
+			e.printStackTrace();
+		}
+		finally
+		{
+			conexion.cerrarConexion();
+		}
+		return false;
 	}
 }

@@ -32,7 +32,7 @@ public class ReporteProductoEstadistico {
 	public void generarReporteEstadistico()
 	{
 		try {
-			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte Estadístico " + '(' + fechaInicio + '-' + fechaFin + ')' + ".pdf";
+			final String FILE = "C:/Reporte Estadístico " + '(' + fechaInicio + '-' + fechaFin + ')' + ".pdf";
 			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteProductoEstadistico.class.getResource("/prototipos/Reporte_Contable_Header.png"));
