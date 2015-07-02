@@ -32,7 +32,7 @@ public class solicitudDeMateriaPrima {
 
 		try {
 			//String FILE = "D:/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
-			String FILE = "D:/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
+			String FILE = "C:/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 			documento.open();
 			addContentPage ();

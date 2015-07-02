@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -73,8 +75,11 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 					if(seleccionado.compareTo("Itinerario")==0)
 						{
 							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario));
-							tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
-							tfMontoPedido.setText(costoItinerario(hoja).toString());
+							if(hoja!= null)
+							{
+								tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
+								tfMontoPedido.setText(costoItinerario(hoja).toString());
+							}
 						}
 					else if(seleccionado.compareTo("Pedido")==0)
 					{
@@ -82,9 +87,12 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 						Integer aux=control.getItinerario().buscarItinerarioPorPedido(pedido.getIdpedido());
 						if(aux!=0)
 						{
-						HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(aux);
-						tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
-						tfMontoPedido.setText(pedido.getTotal().toString());
+							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(aux);
+							if(hoja!= null)
+							{
+								tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
+								tfMontoPedido.setText(pedido.getTotal().toString());
+							}
 						}
 					}
 				}
@@ -143,17 +151,13 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 						while(Iterador.hasNext())
 						{
 							PedidoDTO elemento = Iterador.next();
-							elemento.setEstado("cobrado");
-							control.getPedido().quitarPedido(elemento);
-							control.getPedido().agregarPedido(elemento);
+							control.getPedido().actualizarPedido(elemento, "cobrado");
 						}				
 					}
 					else if(seleccionado.compareTo("Pedido")==0)
 					{
-						PedidoDTO pedido=control.getPedido().buscarPedidoId(Integer.parseInt(itinerario));
-						pedido.setEstado("cobrado");
-						control.getPedido().quitarPedido(pedido);
-						control.getPedido().agregarPedido(pedido);
+						PedidoDTO pedido=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt(itinerario), fechaActual());
+						control.getPedido().actualizarPedido(pedido, "cobrado");
 					}
 					dispose();
 				}
@@ -230,5 +234,11 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
             else if(seleccionado.compareTo("Pedido")==0)
             	AutoCompletar.addItems(buscarPedidos());
         }
+	}
+	public String fechaActual()
+	{
+		Calendar c1 = GregorianCalendar.getInstance();
+		String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
+		return fecha;
 	}
 }

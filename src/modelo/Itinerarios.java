@@ -55,9 +55,6 @@ public class Itinerarios
 			{
 				Iterator<PedidoDTO> Iterado = elemento.getPedidos().iterator();
 				while(Iterado.hasNext())
-					
-					
-					
 				{
 					PedidoDTO element = Iterado.next();
 					if(element.getIdpedido().equals(idpedido))

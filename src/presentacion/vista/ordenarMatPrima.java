@@ -109,7 +109,7 @@ public class ordenarMatPrima extends JDialog  {
 		
 		JLabel label_1 = new JLabel("");
 		label_1.setOpaque(true);
-		label_1.setBackground(Color.ORANGE);
+		label_1.setBackground(new Color(204, 204, 0));
 		label_1.setBounds(60, 176, 159, 59);
 		contentPane.add(label_1);
 		
