@@ -1,6 +1,8 @@
 package presentacion.reportes;
 
 import java.io.FileOutputStream;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import com.itextpdf.text.BaseColor;
@@ -64,8 +66,16 @@ public class ReporteContable
 	public ReporteContable(ReporteContableDTO reporte, String fechaInicio, String fechaFin)
 	{	
 		ReporteContable.reporte = reporte;
-		this.fechaInicio = fechaInicio;
-		this.fechaFin = fechaFin;
+		if(fechaInicio!=null && fechaFin!=null)
+		{
+			this.fechaInicio = fechaInicio;
+			this.fechaFin = fechaFin;
+		}
+		else
+		{
+			this.fechaInicio = this.getFechaActual();
+			this.fechaFin = this.getFechaActual();
+		}
 	}
 	
 	private static void addCell (PdfPTable table, String texto ){
@@ -297,5 +307,13 @@ public class ReporteContable
 	public Document getReporte ()
 	{
 		return ReporteContable.documento;
+	}
+	
+	private String getFechaActual(){
+		Calendar fecha = new GregorianCalendar();
+        int año = fecha.get(Calendar.YEAR);
+        int mes = fecha.get(Calendar.MONTH)+1;
+        int dia = fecha.get(Calendar.DAY_OF_MONTH);
+        return new String (dia + "-" + mes + "-" + año);        
 	}
 }

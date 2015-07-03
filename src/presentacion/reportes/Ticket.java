@@ -2,6 +2,7 @@ package presentacion.reportes;
 import java.io.FileOutputStream;
 import java.util.Iterator;
 
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
@@ -20,7 +21,7 @@ import dto.PedidoDTO;
 
 public class Ticket {
 	
-	private PedidoDTO pedido;
+	private static PedidoDTO pedido;
 	private static Document documento = new Document();
 	private static PdfWriter writer;
 	private static Image image;
@@ -85,22 +86,15 @@ public class Ticket {
 		//Agregar Items del Pedido a Ticket
 		if(pedido.getProductos()!=null)
 		{
-		Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
-		Integer y = 543;
-		canvas.setFontAndSize(bf_helv, 12);
-		while(Iterador.hasNext())
+			Integer tamaño = pedido.getProductos().size();
+			
+			writeTicket(canvas, bf_helv, tamaño);
+			while (tamaño>0)
 			{
-				ItemDTO elemento = Iterador.next();
-				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getCantidad().toString(), 50, y, 0);
-				canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getProducto().getNombre(), 110, y, 0);
-				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getProducto().getPrecio().toString(), 460, y, 0);
-				Integer totalItem = elemento.getCantidad()*elemento.getProducto().getPrecio();
-				canvas.showTextAligned(Element.ALIGN_CENTER, totalItem.toString(), 545, y, 0);
-				y=y-30;
-				
-//				if 
-//				Ticket.documento.newPage();
-//				documento.add(image);
+				Ticket.documento.newPage();
+				Ticket.documento.add(Chunk.NEXTPAGE);
+				documento.add(image);
+				writeTicket(canvas, bf_helv, tamaño);
 			}
 		}
 		canvas.setFontAndSize(bf_helv, 14);
@@ -143,4 +137,23 @@ public class Ticket {
 		canvas.endText();
 		}
 	}
+	
+	private static void writeTicket(PdfContentByte canvas, BaseFont bf_helv, Integer size) throws DocumentException
+	{
+		Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
+		Integer y = 543;
+		canvas.setFontAndSize(bf_helv, 12);
+		while(Iterador.hasNext())
+			{
+				ItemDTO elemento = Iterador.next();
+				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getCantidad().toString(), 50, y, 0);
+				canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getProducto().getNombre(), 110, y, 0);
+				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getProducto().getPrecio().toString(), 460, y, 0);
+				Integer totalItem = elemento.getCantidad()*elemento.getProducto().getPrecio();
+				canvas.showTextAligned(Element.ALIGN_CENTER, totalItem.toString(), 545, y, 0);
+				y=y-30;
+				size= size-1;
+			}
+	}
 }
+
