@@ -45,6 +45,14 @@ public class Itinerarios
 		return null;
 	}
 
+	public HojaItinerarioDTO buscarItinerario1(Integer iditinerario)
+	{
+		
+		HojaItinerarioDTO aux= this.itinerario.buscarItinerario(iditinerario);
+		return aux;
+	}
+
+
 	public int buscarItinerarioPorPedido(Integer idpedido) 
 	{
 		List<HojaItinerarioDTO> items=this.obtenerItinerarios();

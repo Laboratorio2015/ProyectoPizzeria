@@ -101,11 +101,11 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 						}
 					else if(seleccionado.compareTo("Pedido")==0)
 					{
-						PedidoDTO pedido=control.getPedido().buscarPedidoId(Integer.parseInt(itinerario));
+						PedidoDTO pedido=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt(itinerario), fechaActual());
 						Integer aux=control.getItinerario().buscarItinerarioPorPedido(pedido.getIdpedido());
 						if(aux!=0)
 						{
-							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(aux);
+							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario1(aux);
 							if(hoja!= null)
 							{
 								tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
@@ -196,12 +196,12 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 	private ArrayList<Object> buscarPedidos()
 	{
 		ArrayList<Object> result=new ArrayList<Object>();
-		Iterator<PedidoDTO> Iterador=control.getPedido().obtenerPedidos().iterator();
+		Iterator<PedidoDTO> Iterador=control.getPedido().obtenerPedidosDeFecha(fechaActual()).iterator();
 		while(Iterador.hasNext())
 		{
 			PedidoDTO elemento = Iterador.next();
 			if(elemento.getEstado().compareTo("endelivery")==0)
-				result.add(elemento.getIdpedido());
+				result.add(elemento.getNumPedido());
 		}
 		return result;
 	}

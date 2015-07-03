@@ -20,6 +20,7 @@ public class HojaItinerarioDAO
 	private static final String insert = "INSERT INTO hojaitinerarios(idhojaitinerario,repartidor, pedido,fueeliminado) VALUES(?,?,?,?)";
 	private static final String delete = "DELETE FROM hojaitinerarios WHERE idhojaitinerario = ?";
 	private static final String readall = "SELECT * FROM hojaitinerarios";
+	private static final String buscarItinerario = "SELECT * FROM hojaitinerarios where idhojaitinerario=?";
 	private static final String numItinerarios = "SELECT idhojaitinerario FROM hojaitinerarios";	
 	private static final Conexion conexion = Conexion.getConexion();
 	
@@ -136,5 +137,39 @@ public class HojaItinerarioDAO
 			conexion.cerrarConexion();
 		}
 		return itinerarios;
+	}
+
+	public HojaItinerarioDTO buscarItinerario(Integer iditinerario)
+	{
+		PreparedStatement statement;
+		
+		ResultSet resultSet; //Guarda el resultado de la query
+		HojaItinerarioDTO itinerario = new HojaItinerarioDTO();
+		try 
+		{
+			
+			statement = conexion.getSQLConexion().prepareStatement(buscarItinerario);
+			statement.setInt(1, iditinerario);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				Pedidos ite=new Pedidos();
+				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedido"));
+				Repartidores rep=new Repartidores();
+				RepartidorDTO repartidor=rep.buscarRepartidor(resultSet.getInt("repartidor"));
+				itinerario=new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"),
+								repartidor,listaPedidos,resultSet.getBoolean("fueeliminado"));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return itinerario;
 	}
 }
