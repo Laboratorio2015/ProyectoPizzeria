@@ -64,4 +64,18 @@ public class Itinerarios
 		}
 		return 0;
 	}
+
+	public Integer obtenerUltimoItinerario() 
+	{
+		Integer ultimo=0;
+		List<Integer> items=this.itinerario.obtenerIdItinerarios();
+		Iterator<Integer> Iterador = items.iterator();
+		while(Iterador.hasNext())
+		{
+			Integer elemento = Iterador.next();
+			if(elemento>ultimo)
+				ultimo=elemento;
+		}
+		return ultimo;
+	}
 }

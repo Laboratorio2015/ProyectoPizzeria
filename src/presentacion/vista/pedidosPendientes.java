@@ -212,7 +212,7 @@ public class pedidosPendientes extends JDialog {
 					if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("solicitado")==0 && model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("rechazado")!=0)
 					{
 						numFilaSeleccionada=table.getSelectedRow();
-						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
+						PedidoDTO pedidoCambia=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)), fechaActual());
 						
 						//Quita el pedido del MONITOR antes de modificarlo en la siguiente ventana.
 						pedidoCambia.setEstado("modificado");

@@ -36,7 +36,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class registrarCobroManualmente extends JDialog implements ItemListener{
+public class registrarCobroManualmente extends JDialog{ //implements ItemListener{
 
 	private final JPanel contentPanel = new JPanel();
 	private pedidosPendientes _padre;
@@ -63,49 +63,11 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		tfSeleccionItinerario = new JTextField();
-		tfSeleccionItinerario.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) 
-			{
-				String itinerario=tfSeleccionItinerario.getText();
-				String seleccionado=(String)comboBox.getSelectedItem();
-				if(itinerario.compareTo("")!=0)
-				{
-					if(seleccionado.compareTo("Itinerario")==0)
-						{
-							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario));
-							if(hoja!= null)
-							{
-								tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
-								tfMontoPedido.setText(costoItinerario(hoja).toString());
-							}
-						}
-					else if(seleccionado.compareTo("Pedido")==0)
-					{
-						PedidoDTO pedido=control.getPedido().buscarPedidoId(Integer.parseInt(itinerario));
-						Integer aux=control.getItinerario().buscarItinerarioPorPedido(pedido.getIdpedido());
-						if(aux!=0)
-						{
-							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(aux);
-							if(hoja!= null)
-							{
-								tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
-								tfMontoPedido.setText(pedido.getTotal().toString());
-							}
-						}
-					}
-				}
-			}
-			@Override
-			public void keyReleased(KeyEvent e) 
-			{
-				
-			}
-		});
-		tfSeleccionItinerario.setBounds(294, 61, 148, 20);
-		contentPanel.add(tfSeleccionItinerario);
-		tfSeleccionItinerario.setColumns(10);
+		comboBox= new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"(Filtrar busqueda por Itinerario o Pedido)", "Itinerario", "Pedido"}));
+		comboBox.setBounds(27, 61, 261, 20);
+		//comboBox.addItemListener(this);
+		contentPanel.add(comboBox);
 		
 		tfMuestraRepartidor = new JTextField();
 		tfMuestraRepartidor.setEditable(false);
@@ -119,15 +81,51 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 		tfMontoPedido.setBounds(175, 154, 235, 20);
 		contentPanel.add(tfMontoPedido);
 		
+		tfSeleccionItinerario = new JTextField();
+		tfSeleccionItinerario.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) 
+			{
+				String itinerario=tfSeleccionItinerario.getText();
+				String seleccionado=(String)comboBox.getSelectedItem();
+				if(itinerario.compareTo("")!=0 && itinerario.compareTo("(Filtrar busqueda por Itinerario o Pedido)")!=0)
+				{
+					if(seleccionado.compareTo("Itinerario")==0)
+						{
+							AutoCompletar.addItems(buscarItinerarios());
+							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario));
+							if(hoja!= null)
+							{
+								tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
+								tfMontoPedido.setText(costoItinerario(hoja).toString());
+							}
+						}
+					else if(seleccionado.compareTo("Pedido")==0)
+					{
+						PedidoDTO pedido=control.getPedido().buscarPedidoId(Integer.parseInt(itinerario));
+						Integer aux=control.getItinerario().buscarItinerarioPorPedido(pedido.getIdpedido());
+						if(aux!=0)
+						{
+							AutoCompletar.addItems(buscarPedidos());
+							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(aux);
+							if(hoja!= null)
+							{
+								tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
+								tfMontoPedido.setText(pedido.getTotal().toString());
+							}
+						}
+					}
+				}
+			}
+		});
+		tfSeleccionItinerario.setBounds(294, 61, 148, 20);
+		contentPanel.add(tfSeleccionItinerario);
+		tfSeleccionItinerario.setColumns(10);
 		//autocompletar
 		AutoCompletar= new TextAutoCompleter(tfSeleccionItinerario);
 		AutoCompletar.setCaseSensitive(false); //No sensible a mayúsculas
 		
-		comboBox= new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"(Filtrar busqueda por Itinerario o Pedido)", "Itinerario", "Pedido"}));
-		comboBox.setBounds(27, 61, 261, 20);
-		comboBox.addItemListener(this);
-		contentPanel.add(comboBox);
+		
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(registrarCobroManualmente.class.getResource("/prototipos/registrarCobroManualmete.png")));
@@ -222,7 +220,7 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 	}
 	
 	// evento asociado a seleccionar un combo box
-	@Override
+/*	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
         if (e.getSource()==comboBox)
@@ -234,7 +232,8 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
             else if(seleccionado.compareTo("Pedido")==0)
             	AutoCompletar.addItems(buscarPedidos());
         }
-	}
+	}*/
+	
 	public String fechaActual()
 	{
 		Calendar c1 = GregorianCalendar.getInstance();

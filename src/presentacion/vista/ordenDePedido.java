@@ -378,10 +378,6 @@ public class ordenDePedido extends JDialog {
 		tfPrecioUniPromocion.setBounds(502, 370, 48, 25);
 		contentPanel.add(tfPrecioUniPromocion);
 		
-		//checkBoxDelivery= new JCheckBox("");
-		//checkBoxDelivery.setBackground(new Color(204, 204, 0));
-		//checkBoxDelivery.setBounds(789, 477, 27, 33);
-		//contentPanel.add(checkBoxDelivery);
 		{
 			scrollPane_1 = new JScrollPane();
 			scrollPane_1.setBounds(112, 472, 561, 109);
@@ -987,6 +983,7 @@ public class ordenDePedido extends JDialog {
 					nuevoPedido.setIdpedido(pedidoCambiar.getIdpedido());
 					nuevoPedido.set_estado("solicitado");
 					nuevoPedido.setTotal(Integer.parseInt(tfTotal.getText()));
+					nuevoPedido.setNumPedido(pedidoCambiar.getNumPedido());
 					nuevoPedido.set_comanda(nuevoPedido.getIdpedido());
 					nuevoPedido.set_ticket(nuevoPedido.getIdpedido());
 					nuevoPedido.setProductos(generarListaItem());
@@ -1475,10 +1472,6 @@ public class ordenDePedido extends JDialog {
 	public void setBtnVerPizzas(JButton btnVerPizzas) {
 		this.btnVerPizzas = btnVerPizzas;
 	}
-
-//  public JCheckBox getCheckBoxDelivery() {
-//		return checkBoxDelivery;
-//	}
 
 
 	public JButton getBtnVerPromociones() {

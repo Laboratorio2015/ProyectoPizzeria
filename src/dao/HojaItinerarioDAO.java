@@ -20,6 +20,7 @@ public class HojaItinerarioDAO
 	private static final String insert = "INSERT INTO hojaitinerarios(idhojaitinerario,repartidor, pedido,fueeliminado) VALUES(?,?,?,?)";
 	private static final String delete = "DELETE FROM hojaitinerarios WHERE idhojaitinerario = ?";
 	private static final String readall = "SELECT * FROM hojaitinerarios";
+	private static final String numItinerarios = "SELECT idhojaitinerario FROM hojaitinerarios";	
 	private static final Conexion conexion = Conexion.getConexion();
 	
 	public boolean insert(HojaItinerarioDTO itinerario)
@@ -111,4 +112,29 @@ public class HojaItinerarioDAO
 		return categorias;
 	}
 
+	public List<Integer> obtenerIdItinerarios()
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<Integer> itinerarios = new ArrayList<>();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(numItinerarios);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				itinerarios.add(resultSet.getInt("idhojaitinerario"));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return itinerarios;
+	}
 }

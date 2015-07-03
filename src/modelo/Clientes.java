@@ -1,5 +1,6 @@
 package modelo;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +35,10 @@ public class Clientes
 	public List<ClienteDTO> obtenerTodoClientes()
 	{
 		return this.cliente.readAlli();
+	}
+	public List<ClienteDTO> obtenerClientesTabla() 
+	{
+		return this.cliente.obtenerDatos();
 	}
 	
 	public void actualizarCliente(ClienteDTO clienteActualizar)
@@ -138,4 +143,6 @@ public class Clientes
 		}
 		return aux;
 	}
+
+
 }

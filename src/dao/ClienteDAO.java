@@ -14,6 +14,7 @@ public class ClienteDAO
 	private static final String insert = "INSERT INTO clientes(idcliente,dni, nombre,apellido, calle, numeracion,telefono,entrecalle1,entrecalle2,codpostal,email,comentario,fueeliminado) VALUES(?,?,?,?,?,?,?, ?, ?, ?, ?,?,?)";
 	private static final String delete = "update clientes set fueeliminado=true WHERE idcliente = ?";
 	private static final String readall = "SELECT * FROM clientes";
+	private static final String obtenerDatos = "SELECT idcliente,dni, nombre,apellido FROM clientes where fueeliminado=false";
 	private static final String actualizarDatos="Update clientes Set dni=?, nombre=?, apellido=?,calle=?,numeracion=?,telefono=?,entrecalle1=?,entrecalle2=?,codpostal=?,email=?,comentario=?,fueeliminado=? where idcliente=?";
 	private static final Conexion conexion = Conexion.getConexion();
 	
@@ -233,5 +234,51 @@ public class ClienteDAO
 				conexion.cerrarConexion();
 			}
 			return false;
+		}
+
+		public List<ClienteDTO> obtenerDatos()
+		{
+			PreparedStatement statement;
+			ResultSet resultSet; //Guarda el resultado de la query
+			ArrayList<ClienteDTO> clientes = new ArrayList<>();
+			try 
+			{
+				statement = conexion.getSQLConexion().prepareStatement(obtenerDatos);
+				resultSet = statement.executeQuery();
+				
+				while(resultSet.next())
+				{
+					String t= resultSet.getString("nombre");
+					String nombre="";
+					for (int i=0; i<t.length(); i++)
+					{
+						  if (t.charAt(i) != ' ' || (t.charAt(i)==' ' && t.charAt(i+1)!=' '))
+						    nombre += t.charAt(i);
+						  else if(t.charAt(i)==' ' && t.charAt(i+1)==' ')
+							  break;
+					}
+					String ti= resultSet.getString("apellido");
+					String apellido="";
+					for (int i=0; i<ti.length(); i++)
+					{
+						  if (ti.charAt(i) != ' ' || (ti.charAt(i)==' ' && ti.charAt(i+1)!=' '))
+						    apellido += ti.charAt(i);
+						  else if(ti.charAt(i)==' ' && ti.charAt(i+1)==' ')
+							  break;
+					}
+					clientes.add(new ClienteDTO(resultSet.getInt("idcliente"),resultSet.getInt("dni"),
+							nombre,apellido,"","",
+							"","","","","","",false));
+				}
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+			finally //Se ejecuta siempre
+			{
+				conexion.cerrarConexion();
+			}
+			return clientes;
 		}
 }

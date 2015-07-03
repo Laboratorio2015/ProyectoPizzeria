@@ -404,7 +404,6 @@ public class seleccionDeCliente extends JDialog {
 					/////////////////////////////////////////////
 					//new Ticket(seleccionDeCliente.this.pedido).generarTicket();
 					//new Comanda(seleccionDeCliente.this.pedido).generarComanda();
-					
 					dispose();
 				}
 			});

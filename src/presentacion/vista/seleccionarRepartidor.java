@@ -80,7 +80,7 @@ public class seleccionarRepartidor extends JDialog {
 				{
 					//crea la hoja de itinerario con los pedidos seleccionados
 					hojaItinerario=new HojaItinerarioDTO();
-					hojaItinerario.setIdHojaItinerario(control.getItinerario().obtenerItinerarios().size()+1);
+					hojaItinerario.setIdHojaItinerario(control.getItinerario().obtenerUltimoItinerario()+1);
 					hojaItinerario.setFueeliminado(false);
 					hojaItinerario.setRepartidor(control.getRepartidor().buscarRepartidorPorDni(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString())));
 					hojaItinerario.setPedidos(pedidos);
