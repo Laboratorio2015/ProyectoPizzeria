@@ -32,7 +32,7 @@ public class ReporteProductoEstadistico {
 	public void generarReporteEstadistico()
 	{
 		try {
-			final String FILE = "C:/Reporte Estadístico " + '(' + fechaInicio + '-' + fechaFin + ')' + ".pdf";
+			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte Estadístico " + '(' + fechaInicio + '-' + fechaFin + ')' + producto.hashCode() + ".pdf";
 			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteProductoEstadistico.class.getResource("/prototipos/Reporte_Contable_Header.png"));
@@ -76,14 +76,20 @@ public class ReporteProductoEstadistico {
 		addCell(table, "Cantidad");
 		
 		Iterator<ProductoEstadistico> Iterador = producto.iterator();
-		while(Iterador.hasNext())
-			{
-				ProductoEstadistico elemento = Iterador.next();
-				
-				addCell(table, elemento.getProducto().getNombre());
-				addCell(table, elemento.getCantidad().toString());
-			}
-		
+    	if (producto.isEmpty()==true)
+    	{
+    		addCell(table, "-");
+        	addCell(table, "-");
+    	}
+    	else
+    	{
+			while(Iterador.hasNext())
+				{			
+					ProductoEstadistico elemento = Iterador.next();
+					
+					addCell(table, elemento.getProducto().getNombre());
+					addCell(table, elemento.getCantidad().toString());
+				}
+    	}
         document.add(table);
-
 }}

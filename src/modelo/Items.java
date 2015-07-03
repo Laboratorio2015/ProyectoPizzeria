@@ -78,19 +78,19 @@ public class Items
 		return listaId;
 	}
 	
-/*	public ItemDTO buscarItem(Integer iditem)
-	{
-		List<ItemDTO> items=this.obtenerItemsActuales();
-		Iterator<ItemDTO> Iterador = items.iterator();
-		while(Iterador.hasNext())
-		{
-			ItemDTO elemento = Iterador.next();
-			if(elemento.getIditem().equals(iditem))
-				return elemento;
-		}
-		return null;
-	}
-*/
+///*	public ItemDTO buscarItem(Integer iditem)
+//	{
+//		List<ItemDTO> items=this.obtenerItemsActuales();
+//		Iterator<ItemDTO> Iterador = items.iterator();
+//		while(Iterador.hasNext())
+//		{
+//			ItemDTO elemento = Iterador.next();
+//			if(elemento.getIditem().equals(iditem))
+//				return elemento;
+//		}
+//		return null;
+//	}
+//*/
 	public ItemDTO buscarItem(Integer iditem)
 	{
 		ItemDTO aux=this.obtenerItemBuscado(iditem);

@@ -36,7 +36,7 @@ public class ReporteContable
 	public void generarReporteContable()
 	{
 		try {
-			final String FILE = "C:/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + ".pdf";			
+			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + this.reporte.hashCode() + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteContable.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
@@ -111,21 +111,22 @@ public class ReporteContable
 //	        table.addCell(cell);
 	        
 			//Agregar Productos (PIZZAS) a la tabla
-			
-	        for (ProductoDTO p : reporte.getCantPizzaVendidas().keySet()) 
-	        {
-	        	if (reporte.getCantPizzaVendidas().isEmpty()==true)
-	        	{
-	        		addCell(table, "-");
-		        	addCell(table, "-");
-		        	addCell(table, "-");
-	        	}
-	        	else{
-		        	addCell(table, p.getNombre());
-		        	addCell(table, p.getPrecio().toString());
-		        	addCell(table, reporte.getCantPizzaVendidas().get(p).toString());
-		        	}
-				}
+	        
+        	if (reporte.getCantPizzaVendidas().keySet().isEmpty()==true)
+        	{
+        		addCell(table, "-");
+	        	addCell(table, "-");
+	        	addCell(table, "-");
+        	}
+        	else
+        	{
+		        for (ProductoDTO p : reporte.getCantPizzaVendidas().keySet()) 
+		        {
+			        	addCell(table, p.getNombre());
+			        	addCell(table, p.getPrecio().toString());
+			        	addCell(table, reporte.getCantPizzaVendidas().get(p).toString());
+			    }
+        	}
 	        System.out.println("Agregadas a la tabla las PIZZAS vendidas");
 	        return table;
 	    }
@@ -151,19 +152,22 @@ public class ReporteContable
 	        
 			//Agregar Productos (EMPANADAS) a la tabla
 			
-	        for (ProductoDTO p : reporte.getCantEmpVendidas().keySet()) 
-	        {
-	        	if (reporte.getCantEmpVendidas().isEmpty()==true)
-	        	{
-	        		addCell(table, "-");
-		        	addCell(table, "-");
-		        	addCell(table, "-");
-	        	}
-	        	else{
-	        	addCell(table, p.getNombre());
-	        	addCell(table, p.getPrecio().toString());
-	        	addCell(table, reporte.getCantEmpVendidas().get(p).toString());}
-			}
+        	if (reporte.getCantEmpVendidas().keySet().isEmpty()==true)
+        	{
+        		addCell(table, "-");
+	        	addCell(table, "-");
+	        	addCell(table, "-");
+        	}
+        	else
+        	{
+	        
+		        for (ProductoDTO p : reporte.getCantEmpVendidas().keySet()) 
+		        {
+		        	addCell(table, p.getNombre());
+		        	addCell(table, p.getPrecio().toString());
+		        	addCell(table, reporte.getCantEmpVendidas().get(p).toString());
+				}
+	 		}
 	        System.out.println("Agregadas a la tabla las EMPANADAS vendidas");
 	        return table;
 	    }
@@ -187,24 +191,26 @@ public class ReporteContable
 	        table.addCell(cell);
 	        
 			//Agregar Compras Hechas a la tabla
-			
-			Iterator<OrdenPedidoMatPrimaDTO> Iterador = reporte.getListadoCompras().iterator();
-			while(Iterador.hasNext())
-				{
-	        	if (reporte.getListadoCompras().isEmpty()==true)
-	        	{
-	        		addCell(table, "-");
-		        	addCell(table, "-");
-		        	addCell(table, "-");
-		        	addCell(table, "-");
-	        	}
-	        	else{
-					OrdenPedidoMatPrimaDTO elemento = Iterador.next();
-					
-					addCell(table, elemento.getFecha());
-					addCell(table, elemento.getProveedor().getNombre());
-					addCell(table, elemento.getCosto().toString());}
-				}
+	 
+        	if (reporte.getListadoCompras().size()==0)
+        	{
+        		addCell(table, "-");
+	        	addCell(table, "-");
+	        	addCell(table, "-");
+	        	addCell(table, "-");
+        	}
+        	else
+        	{
+				Iterator<OrdenPedidoMatPrimaDTO> Iterador = reporte.getListadoCompras().iterator();
+				while(Iterador.hasNext())
+					{
+						OrdenPedidoMatPrimaDTO elemento = Iterador.next();
+						
+						addCell(table, elemento.getFecha());
+						addCell(table, elemento.getProveedor().getNombre());
+						addCell(table, elemento.getCosto().toString());
+					}
+			}
 			System.out.println("Agregadas a la tabla las COMPRAS realizadas");
 	        return table;
 	    }
@@ -229,18 +235,20 @@ public class ReporteContable
 	        
 			//Agregar Productos (Otros) a la tabla
 			
-	        for (ProductoDTO p : reporte.getCantOtrosProdVendidos().keySet()) 
-	        {
-	        	if (reporte.getCantOtrosProdVendidos().isEmpty()==true)
-	        	{
-	        		addCell(table, "-");
-		        	addCell(table, "-");
-		        	addCell(table, "-");
-	        	}
-	        	else{
-	        	addCell(table, p.getNombre());
-	        	addCell(table, p.getPrecio().toString());
-	        	addCell(table, reporte.getCantOtrosProdVendidos().get(p).toString());}
+        	if (reporte.getCantOtrosProdVendidos().size()==0)
+        	{
+        		addCell(table, "-");
+	        	addCell(table, "-");
+	        	addCell(table, "-");
+        	}
+        	else
+        	{
+		        for (ProductoDTO p : reporte.getCantOtrosProdVendidos().keySet()) 
+		        {
+		        	addCell(table, p.getNombre());
+		        	addCell(table, p.getPrecio().toString());
+		        	addCell(table, reporte.getCantOtrosProdVendidos().get(p).toString());
+		        }
 			}
 	        System.out.println("Agregados a la table de Otros Productos vendidos");
 	        return table;
@@ -266,18 +274,20 @@ public class ReporteContable
 	        
 			//Agregar Productos (Otros) a la tabla
 			
-	        for (PromocionDTO p : reporte.getCantPromosVendidos().keySet()) 
-	        {
-	        	if (reporte.getCantPromosVendidos().isEmpty()==true)
-	        	{
-	        		addCell(table, "-");
-		        	addCell(table, "-");
-		        	addCell(table, "-");
-	        	}
-	        	else{
-	        	addCell(table, p.getNombre());
-	        	addCell(table, p.getPrecio().toString());
-	        	addCell(table, reporte.getCantPromosVendidos().get(p).toString());}
+        	if (reporte.getCantPromosVendidos().keySet().isEmpty()==true)
+        	{
+        		addCell(table, "-");
+	        	addCell(table, "-");
+	        	addCell(table, "-");
+        	}
+        	else
+        	{
+		        for (PromocionDTO p : reporte.getCantPromosVendidos().keySet()) 
+		        {
+		        	addCell(table, p.getNombre());
+		        	addCell(table, p.getPrecio().toString());
+		        	addCell(table, reporte.getCantPromosVendidos().get(p).toString());
+		        }
 			}
 	        System.out.println("Agregados a la table de Otros Productos vendidos");
 	        return table;

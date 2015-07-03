@@ -186,12 +186,12 @@ public class seleccionDeCliente extends JDialog {
 					else
 						pedido.setLlevaDelivery(false);
 					control.getPedido().agregarPedido(pedido);
-				try {
-						control.enviarPedidoMonitor(pedido);
-					} catch (IOException e) {
-						System.out.println("Fallo conexion con monitor (servidor)");
-						e.printStackTrace();
-					}
+//				try {
+//						control.enviarPedidoMonitor(pedido);
+//					} catch (IOException e) {
+//						System.out.println("Fallo conexion con monitor (servidor)");
+//						e.printStackTrace();
+//					}
 				
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getIdpedido());
 					//control.getMonitorCocina().nuevoPedido(pedido);

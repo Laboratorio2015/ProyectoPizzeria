@@ -33,7 +33,7 @@ public class ReportePromocionEstadistica {
 	public void generarReporteEstadistico()
 	{
 		try {
-			final String FILE = "C:/Reporte Estadístico " + '(' + fechaInicio + '-' + fechaFin + ')' + ".pdf";			
+			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte Estadístico " + '(' + fechaInicio + '-' + fechaFin + ')' + promocion.hashCode() + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReportePromocionEstadistica.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
@@ -76,6 +76,11 @@ public class ReportePromocionEstadistica {
 		addCell(table, "Cantidad");
 		
 		Iterator<PromocionEstadistica> Iterador = promocion.iterator();
+    	if (promocion.isEmpty()==true)
+    	{
+    		addCell(table, "-");
+        	addCell(table, "-");
+    	}
 		while(Iterador.hasNext())
 			{
 				PromocionEstadistica elemento = Iterador.next();
