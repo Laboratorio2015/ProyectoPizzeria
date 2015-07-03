@@ -46,14 +46,15 @@ public class ReporteContable
 	        table = createTable2();
 	        documento.add(table);
 	        documento.add(Chunk.NEWLINE);
-	        table = createTable3();
-	        documento.add(table);
-	        documento.add(Chunk.NEWLINE);
 	        table = createTable4();
 	        documento.add(table);
 	        documento.add(Chunk.NEWLINE);
 	        table = createTable5();
 	        documento.add(table);
+	        documento.add(Chunk.NEWLINE);
+	        table = createTable3();
+	        documento.add(table);
+	        documento.add(Chunk.NEWLINE);
 		    documento.close();
 		 } catch (Exception e) {
 	     e.printStackTrace();
