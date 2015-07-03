@@ -319,6 +319,8 @@ public class PedidoDAO
 				{
 					  if (y.charAt(i) != ' ')
 					    estadoPedido += y.charAt(i);
+					  if(y.charAt(i)==' ' && y.charAt(i+1)==' ')
+						  break;
 				}
 				if(resultSet.getBoolean("fueeliminado")==false)
 				{	

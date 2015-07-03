@@ -35,6 +35,7 @@ public class ItemsPromociones
 		return this.itempromo.readAll();
 	}
 
+
 	public String iditemsOferta(PedidoDTO pedido)
 	{
 		String listaId="";

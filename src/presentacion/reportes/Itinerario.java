@@ -1,6 +1,8 @@
 package presentacion.reportes;
 
 import java.io.FileOutputStream;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import com.itextpdf.text.BaseColor;
@@ -23,21 +25,22 @@ public class Itinerario
 {
 	
 	private HojaItinerarioDTO itinerario;
+	private final String fecha;
 	private static Document documento = new Document();
 	
 	public Itinerario (HojaItinerarioDTO itinerario)
 	{
 		this.itinerario = itinerario;
+		this.fecha=fechaActual();
 	}
 	
 	public void generarItinerario()
 	{
 		try {
-			//String FILE = "D:/Itinerario " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
 			String FILE = "C:/Itineratio " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
-		    addContentPage (documento,itinerario);
+		    addContentPage (documento,itinerario, fecha);
 		    documento.close();
 		 } catch (Exception e) {
 	     e.printStackTrace();
@@ -70,14 +73,15 @@ public class Itinerario
 	    table.addCell(c1);
 	}
 	 
-	private static void addContentPage(Document document, HojaItinerarioDTO itinerario) 
+	private static void addContentPage(Document document, HojaItinerarioDTO itinerario, String fecha) 
 	throws DocumentException {
 		
 		//Añade info de Intinerario
 		documento.add(new Paragraph("Itinerario n°: " + itinerario.getIdHojaItinerario().toString(), FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
-		
 		//Añade info de Repartidor
 		documento.add(new Paragraph("Repartidor: " + itinerario.getRepartidor().getDni().toString(), FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
+		//Añade info de la Fecha
+		documento.add(new Paragraph("Fecha: " + fecha, FontFactory.getFont("arial",11,Font.BOLD, BaseColor.BLACK)));
 		
 		addEmptyLine (document, 2);
 		//Añade Tabla de Pedido
@@ -104,7 +108,7 @@ public class Itinerario
 					
 					for (ItemDTO i : elemento.getItems())
 					{	
-						items= items + i.getProducto().getNombre() + "($" + i.getProducto().getPrecio().toString() + ")" + "; \n" ;
+						items= items + i.getProducto().getNombre() + "($" + (Integer.parseInt(i.getProducto().getPrecio().toString())*Integer.parseInt(i.getCantidad().toString()))+ ")" + "; \n" ;
 					}
 					
 					addCell(table, items);						
@@ -113,6 +117,11 @@ public class Itinerario
 				}
 		 document.add(table);
 	}
-
-
+	
+	public String fechaActual()
+	{
+		Calendar c1 = GregorianCalendar.getInstance();
+		String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
+		return fecha;
+	}
 }

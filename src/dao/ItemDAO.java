@@ -18,6 +18,7 @@ public class ItemDAO
 	private static final String insert = "INSERT INTO items(iditem, producto,cantidad,comentario,fueeliminado) VALUES(?,?, ?, ?,?)";
 	private static final String delete = "DELETE FROM items WHERE iditem = ?";
 	private static final String readall = "SELECT * FROM items ";
+	private static final String readActual = "SELECT * FROM items where fueeliminado=false";
 	private static final String obtenerlistaitems="select iditem,producto, cantidad, comentario from pedidos P join items I on p.item=i.iditem and p.idpedido= ?;";
 	private static final String obtenerItem="select * from items where iditem = ?";
 	
@@ -110,22 +111,24 @@ public class ItemDAO
 		}
 		return items;
 	}
-	/*
-	public ItemDTO buscarItem(Integer numItem)
+	public List<ItemDTO> readActual()
 	{
 		PreparedStatement statement;
 		ResultSet resultSet; //Guarda el resultado de la query
-		ItemDTO item;
+		ArrayList<ItemDTO> items = new ArrayList<>();
 		try 
 		{
-			statement = conexion.getSQLConexion().prepareStatement(obtenerItem);
-			statement.setInt(1, numItem);
+			statement = conexion.getSQLConexion().prepareStatement(readActual);
 			resultSet = statement.executeQuery();
-			ProductoDAO a =new ProductoDAO();
-			item=new ItemDTO(resultSet.getInt("iditem"),a.buscarProducto(resultSet.getInt("producto")), resultSet.getInt("cantidad"),
-						resultSet.getString("comentario"));
-			conexion.cerrarConexion();
-			return item;
+			
+			while(resultSet.next())
+			{
+				Productos a=new Productos();
+				ProductoDTO productoAux=a.buscarProductoPorId(resultSet.getInt("producto"));
+				items.add(new ItemDTO(resultSet.getInt("iditem"),productoAux, resultSet.getInt("cantidad"),
+						resultSet.getString("comentario"), resultSet.getBoolean("fueeliminado")));
+
+			}
 		} 
 		catch (SQLException e) 
 		{
@@ -135,9 +138,9 @@ public class ItemDAO
 		{
 			conexion.cerrarConexion();
 		}
-		return null;
+		return items;
 	}
-*/
+
 	public ArrayList<ItemDTO> obtenerListaItems(Integer numPedido)
 	{
 		PreparedStatement statement;

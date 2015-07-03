@@ -224,7 +224,7 @@ public class Controlador implements ActionListener
 		else if(e.getSource() == this.ventana.getBtnPedidosPendientes())
 		{
 			ventanaPedPendiente=new pedidosPendientes(ventana, this);
-			ventanaPedPendiente.llenarTabla();
+			llenarTablaPedPendientes();
 			this.ventanaPedPendiente.setVisible(true);
 		}
 		/////////////////////////////////////////CodigoJuliet/////////////////////////////////////////////////
@@ -3013,6 +3013,39 @@ public class Controlador implements ActionListener
 			this.ventanaModificacionCliente.getModel().addRow(fila);			
 		}
 	}
+	public void llenarTablaPedPendientes() 
+	{
+		Calendar c1 = GregorianCalendar.getInstance();
+		String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
+		ventanaPedPendiente.getModel().setRowCount(0); //Para vaciar la tabla
+		ventanaPedPendiente.getModel().setColumnCount(0);
+		ventanaPedPendiente.getModel().setColumnIdentifiers(ventanaPedPendiente.getNombreColumnas());
+		Iterator<PedidoDTO> Iterador = this.pedido.obtenerPedidosDeFecha(fecha).iterator();
+		while(Iterador.hasNext())
+		{
+			PedidoDTO elemento = Iterador.next();
+			if(elemento.getEstado().compareTo("rechazado")!=0 && elemento.getEstado().compareTo("cobrado")!=0)
+			{
+				if(elemento.getEstado().compareTo("endelivery")==0)
+				{
+					int itinerario=this.itinerario.buscarItinerarioPorPedido(elemento.getIdpedido());
+					ventanaPedPendiente.getModel().addRow(new String[] {elemento.getNumPedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),itinerario+""});
+				}
+				else
+					ventanaPedPendiente.getModel().addRow(new String[] {elemento.getNumPedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),""});
+			}
+		}
+		ventanaPedPendiente.getTable().setModel(ventanaPedPendiente.getModel());		
+	}
+	
+	private String Delivery(PedidoDTO aux)
+	{
+		if(aux.getLlevaDelivery())
+			return "true";
+		else
+			return  "-";
+	}
+	
 	private void llenarTablaProveedor()
 	{
 		this.ventanaEditarProveedor.getModel().setRowCount(0);

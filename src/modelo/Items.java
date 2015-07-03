@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dto.ItemDTO;
+import dto.ItemPromocionDTO;
 import dto.PromocionDTO;
 import dto.PedidoDTO;
 import dao.ItemDAO;
@@ -33,6 +34,14 @@ public class Items
 		return this.item.readAll();
 	}
 	
+	public ItemDTO obtenerItemBuscado()
+	{
+		return this.item.buscarItem();
+	}
+	public List<ItemDTO> obtenerItemsActuales()
+	{
+		return this.item.readActual();
+	}
 	public List<ItemDTO> obtenerItemsPedido(Integer idpedido)
 	{
 		return this.item.obtenerListaItems(idpedido);
@@ -69,9 +78,9 @@ public class Items
 		return listaId;
 	}
 	
-	public ItemDTO buscarItem(Integer iditem)
+/*	public ItemDTO buscarItem(Integer iditem)
 	{
-		List<ItemDTO> items=this.obtenerItems();
+		List<ItemDTO> items=this.obtenerItemsActuales();
 		Iterator<ItemDTO> Iterador = items.iterator();
 		while(Iterador.hasNext())
 		{
@@ -81,7 +90,12 @@ public class Items
 		}
 		return null;
 	}
-
+*/
+	public ItemDTO buscarItem(Integer iditem)
+	{
+		ItemDTO aux=this.obtenerItemBuscado();
+		return aux;
+	}
 	public int ultimoItem() 
 	{
 		Integer ultimo=0;

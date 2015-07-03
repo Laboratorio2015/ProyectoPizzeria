@@ -434,6 +434,14 @@ public class pedidosPendientes extends JDialog {
 	public JTable getTable() {
 		return table;
 	}
+	
+	public String[] getNombreColumnas() {
+		return nombreColumnas;
+	}
+
+	public void setNombreColumnas(String[] nombreColumnas) {
+		this.nombreColumnas = nombreColumnas;
+	}
 
 	public void setTable(JTable table) {
 		this.table = table;
