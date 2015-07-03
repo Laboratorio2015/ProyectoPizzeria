@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.awt.Component;
@@ -103,6 +104,7 @@ import presentacion.vista.selectorMatPrima;
 import presentacion.vista.selectorOpcionesOrdenMatPrima;
 import presentacion.vista.gestionarOrdenesMatPrima;
 import presentacion.vista.selectMenuReportes;
+import propiedades.propiedades;
 
 public class Controlador implements ActionListener
 {
@@ -3272,8 +3274,10 @@ public class Controlador implements ActionListener
 	}
 	
 	private void enviarPedidosMonitor() throws IOException{
-		this.socket = new Socket("localhost",5000);
+		
+		//this.socket = new Socket(InetAddress.getLocalHost(),5000);
 		//
+		this.socket = new Socket(new propiedades().getDirServidor(),5000);
 		sos = socket.getOutputStream(); 
 		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
