@@ -34,7 +34,7 @@ public class ReporteContable
 	public void generarReporteContable()
 	{
 		try {
-			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + ".pdf";			
+			final String FILE = "C:/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteContable.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
