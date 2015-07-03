@@ -18,6 +18,7 @@ public class ItemPromocionDAO
 	private static final String insert = "INSERT INTO itemPromocion(iditempromo, promocion,cantidad,comentario,fueeliminado) VALUES(?,?,?,?,?)";
 	private static final String delete = "DELETE FROM itemPromocion WHERE iditempromo = ?";
 	private static final String readall = "SELECT * FROM itemPromocion ";
+	private static final String buscarPromo = "SELECT * FROM itemPromocion where iditempromo=?";
 	private static final String obtenerlistaitems="select iditempromo,promocion,cantidad, comentario from pedidos P join itemPromocion I on p.oferta=i.iditempromo and p.idpedido= ?;";
 	
 	private static final Conexion conexion = Conexion.getConexion();
@@ -174,6 +175,36 @@ public class ItemPromocionDAO
 			conexion.cerrarConexion();
 		}
 		return items;
+	}
+
+	public ItemPromocionDTO buscarPromo(Integer iditem)
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ItemPromocionDTO item=new ItemPromocionDTO();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(buscarPromo);
+			statement.setInt(1,iditem);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				Promociones a =new Promociones();
+				PromocionDTO productoAux=PromocionDTO.buscarProducto(a.obtenerOfertas(),resultSet.getInt("promocion"));
+				item=new ItemPromocionDTO(resultSet.getInt("iditempromo"),productoAux, resultSet.getInt("cantidad"),
+				resultSet.getString("comentario"), resultSet.getBoolean("fueeliminado"));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return item;
 	}
 
 }

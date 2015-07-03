@@ -36,7 +36,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class registrarCobroManualmente extends JDialog{ //implements ItemListener{
+public class registrarCobroManualmente extends JDialog implements ItemListener{
 
 	private final JPanel contentPanel = new JPanel();
 	private pedidosPendientes _padre;
@@ -66,7 +66,7 @@ public class registrarCobroManualmente extends JDialog{ //implements ItemListene
 		comboBox= new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"(Filtrar busqueda por Itinerario o Pedido)", "Itinerario", "Pedido"}));
 		comboBox.setBounds(27, 61, 261, 20);
-		//comboBox.addItemListener(this);
+		comboBox.addItemListener(this);
 		contentPanel.add(comboBox);
 		
 		tfMuestraRepartidor = new JTextField();
@@ -92,7 +92,6 @@ public class registrarCobroManualmente extends JDialog{ //implements ItemListene
 				{
 					if(seleccionado.compareTo("Itinerario")==0)
 						{
-							AutoCompletar.addItems(buscarItinerarios());
 							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario));
 							if(hoja!= null)
 							{
@@ -106,7 +105,6 @@ public class registrarCobroManualmente extends JDialog{ //implements ItemListene
 						Integer aux=control.getItinerario().buscarItinerarioPorPedido(pedido.getIdpedido());
 						if(aux!=0)
 						{
-							AutoCompletar.addItems(buscarPedidos());
 							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(aux);
 							if(hoja!= null)
 							{
@@ -220,7 +218,7 @@ public class registrarCobroManualmente extends JDialog{ //implements ItemListene
 	}
 	
 	// evento asociado a seleccionar un combo box
-/*	@Override
+	@Override
 	public void itemStateChanged(ItemEvent e)
 	{
         if (e.getSource()==comboBox)
@@ -232,7 +230,7 @@ public class registrarCobroManualmente extends JDialog{ //implements ItemListene
             else if(seleccionado.compareTo("Pedido")==0)
             	AutoCompletar.addItems(buscarPedidos());
         }
-	}*/
+	}
 	
 	public String fechaActual()
 	{

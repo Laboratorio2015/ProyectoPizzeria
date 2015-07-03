@@ -21,6 +21,11 @@ public class ItemDTO implements Serializable{
 		this.fueeliminado=fueeliminado;
 	}
 	
+	public ItemDTO()
+	{
+		
+	}
+	
 	public ProductoDTO getProducto() {
 		return producto;
 	}

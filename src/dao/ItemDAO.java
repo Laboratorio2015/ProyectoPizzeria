@@ -171,6 +171,34 @@ public class ItemDAO
 		return items;
 	}
 
-
+	public ItemDTO buscarItem(Integer numItem)
+	{
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ItemDTO item=new ItemDTO();
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(obtenerItem);
+			statement.setInt(1,numItem);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				Productos a =new Productos();
+				ProductoDTO productoAux=ProductoDTO.buscarProducto(a.obtenerProducto(),resultSet.getInt("producto"));
+				item=new ItemDTO(resultSet.getInt("iditem"),productoAux, resultSet.getInt("cantidad"),
+						resultSet.getString("comentario"), resultSet.getBoolean("fueeliminado"));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return item;
+	}
 
 }

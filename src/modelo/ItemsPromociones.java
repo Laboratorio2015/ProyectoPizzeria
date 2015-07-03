@@ -79,7 +79,7 @@ public class ItemsPromociones
 
 	}
 
-	public ItemPromocionDTO buscarItemPromo(int iditem) 
+/*	public ItemPromocionDTO buscarItemPromo(int iditem) 
 	{
 		List<ItemPromocionDTO> items=this.obtenerItems();
 		Iterator<ItemPromocionDTO> Iterador = items.iterator();
@@ -91,7 +91,12 @@ public class ItemsPromociones
 		}
 		return null;
 	}
-
+*/
+	public ItemPromocionDTO buscarItemPromo(int iditem) 
+	{
+		return this.itempromo.buscarPromo(iditem);
+	}
+	
 	public int ultimaOferta() 
 	{
 		Integer ultimo=0;

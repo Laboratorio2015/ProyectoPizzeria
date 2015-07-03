@@ -34,9 +34,9 @@ public class Items
 		return this.item.readAll();
 	}
 	
-	public ItemDTO obtenerItemBuscado()
+	public ItemDTO obtenerItemBuscado(Integer iditem)
 	{
-		return this.item.buscarItem();
+		return this.item.buscarItem(iditem);
 	}
 	public List<ItemDTO> obtenerItemsActuales()
 	{
@@ -93,7 +93,7 @@ public class Items
 */
 	public ItemDTO buscarItem(Integer iditem)
 	{
-		ItemDTO aux=this.obtenerItemBuscado();
+		ItemDTO aux=this.obtenerItemBuscado(iditem);
 		return aux;
 	}
 	public int ultimoItem() 
