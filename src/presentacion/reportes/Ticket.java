@@ -29,7 +29,7 @@ public class Ticket {
 	public void generarTicket()
 	{
 		try {
-			final String FILE = "C:/Factura " + this.pedido.getIdpedido().toString() + ".pdf";
+			final String FILE = "C:/Pedido " + this.pedido.getNumPedido().toString()+" "+this.pedido.getFecha() + ".pdf";
 			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    image = Image.getInstance(Ticket.class.getResource("/prototipos/Diseño Factura_Ticket_2.png"));
             image.setAlignment(Element.ALIGN_BOTTOM); 	
