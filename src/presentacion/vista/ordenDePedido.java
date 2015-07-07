@@ -381,6 +381,8 @@ public class ordenDePedido extends JDialog {
 		{
 			scrollPane_1 = new JScrollPane();
 			scrollPane_1.setBounds(112, 472, 561, 109);
+			scrollPane_1.getViewport().setBackground(new Color(204, 204, 0));
+			scrollPane_1.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 			contentPanel.add(scrollPane_1);
 			tablaItems = new JTable()
 			{
@@ -404,7 +406,8 @@ public class ordenDePedido extends JDialog {
 			 
 			
 			tablaItems.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+			tablaItems.setBackground(new Color(204, 204, 0));		
+			tablaItems.setModel(model);
 			scrollPane_1.setViewportView(tablaItems);
 		}
 		

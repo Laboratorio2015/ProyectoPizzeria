@@ -405,7 +405,7 @@ public class Controlador implements ActionListener
 				ventanaReportesEstadistica.getTfFechaInicio().setText("");
 				ventanaReportesEstadistica.getTfFechaFin().setText("");
 			}
-			else if(tipoProducto.compareTo("Productos mas comprados")==0 || tipoProducto.compareTo("Productos menos comprados")==0 )
+			else if(tipoProducto.compareTo("Empanadas mas compradas")==0 || tipoProducto.compareTo("Empanadas menos compradas")==0 || tipoProducto.compareTo("Pizzas mas compradas")==0 || tipoProducto.compareTo("Pizzas menos compradas")==0 )
 			{
 				ventanaReportesEstadistica.getTfOcultaRangoFechas().setVisible(false);
 				ventanaReportesEstadistica.getTfOcultarTop().setVisible(false);
@@ -444,7 +444,7 @@ public class Controlador implements ActionListener
 				String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
 				switch (tipoProducto)
 				{
-				case "Productos mas comprados":
+				case "Empanadas mas compradas":
 				{
 					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
 					///Adaptacion///////////////
@@ -500,11 +500,13 @@ public class Controlador implements ActionListener
 						}
 					}
 					///////fin adaptacion///				
-					String tipoEstadistica = "Productos mas comprados";
+					String tipoEstadistica = "Empanadas mas compradas";
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(pedidosResultantes,1);
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					ArrayList<ProductoEstadistico>produc=obtenerTodasProductostodasPromocionesTodosPedidos(promocion);
 					producto=sumarProductos(produc, producto);
+					String tipo="empanada";
+					producto=filtrarProductoTipo(producto,tipo);
 					Collections.sort(producto,new Comparator<ProductoEstadistico>()
 							{
 								@Override
@@ -525,7 +527,7 @@ public class Controlador implements ActionListener
 				}
 				break;
 				
-				case "Productos menos comprados":
+				case "Empanadas menos compradas":
 				{
 					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
 					///Adaptacion///////////////
@@ -584,9 +586,11 @@ public class Controlador implements ActionListener
 					///////fin adaptacion///
 					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(pedidosResultantes,1);
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
-					String tipoEstadistica = "Productos menos comprados";
+					String tipoEstadistica = "Empanadas menos compradas";
 					ArrayList<ProductoEstadistico>produc=obtenerTodasProductostodasPromocionesTodosPedidos(promocion);
 					producto=sumarProductos(produc, producto);
+					String tipo="empanada";
+					producto=filtrarProductoTipo(producto,tipo);
 					Collections.sort(producto,new Comparator<ProductoEstadistico>() {
 						@Override
 						public int compare(ProductoEstadistico o1,
@@ -2306,6 +2310,20 @@ public class Controlador implements ActionListener
 
 
 	
+
+
+	private ArrayList<ProductoEstadistico> filtrarProductoTipo(ArrayList<ProductoEstadistico> productos, String tipo)
+	{
+		ArrayList<ProductoEstadistico> result= new ArrayList<ProductoEstadistico>();
+		Iterator<ProductoEstadistico> iterador= productos.iterator();
+		while(iterador.hasNext())
+		{
+			ProductoEstadistico elemento= iterador.next();
+			if(tipo.compareTo(elemento.getProducto().getTipo())==0)
+				result.add(elemento);
+		}
+		return result;
+	}
 
 
 	private void consultaReporteDiario() throws SQLException {

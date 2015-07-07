@@ -67,12 +67,14 @@ public class consultoEstadistica extends JDialog {
 		contentPanel.setLayout(null);
 		
 		cbEstadisticas= new JComboBox();
-		cbEstadisticas.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione una estadistica)", "Productos mas comprados", "Productos menos comprados", "Ofertas mas compradas", "Ofertas menos compradas"}));
+		cbEstadisticas.setModel(new DefaultComboBoxModel(new String[] {"(Seleccione una estadistica)", "Empanadas mas compradas", "Empanadas menos compradas","Pizzas mas compradas", "Pizzas menos compradas", "Ofertas mas compradas", "Ofertas menos compradas"}));
 		cbEstadisticas.setBounds(76, 131, 250, 22);
 		contentPanel.add(cbEstadisticas);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(398, 134, 244, 240);
+		scrollPane.getViewport().setBackground(new Color(153, 153, 0));
+		scrollPane.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		contentPanel.add(scrollPane);
 		
 		model = new DefaultTableModel(null,nombreColumnas);

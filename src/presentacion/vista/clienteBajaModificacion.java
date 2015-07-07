@@ -154,6 +154,9 @@ public class clienteBajaModificacion extends JDialog {
 					}
 				});
 				scrollPane.setViewportView(table);
+				scrollPane.getViewport().setBackground(new Color(204, 204, 0));
+				scrollPane.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+				table.setBackground(new Color(204, 204, 0));
 			}
 		}
 		{

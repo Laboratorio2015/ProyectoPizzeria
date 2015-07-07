@@ -1,11 +1,14 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Dimension;
 import javax.swing.JLabel;
@@ -62,7 +65,7 @@ public class pedidosPendientes extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(24, 113, 295, 377);
+		scrollPane.setBounds(23, 113, 297, 379);
 		contentPanel.add(scrollPane);
 
 		model = new DefaultTableModel(null,nombreColumnas);
@@ -143,6 +146,9 @@ public class pedidosPendientes extends JDialog {
 		});
 		scrollPane.setRowHeaderView(table);
 		scrollPane.setViewportView(table);
+		scrollPane.getViewport().setBackground(new Color(204, 204, 0));
+		scrollPane.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		table.setBackground(new Color(204, 204, 0));
 		
 		lMarcarComoPreparado= new JLabel("");
 		lMarcarComoPreparado.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/Botones/btnMarcarPreparadoHab.png")));
