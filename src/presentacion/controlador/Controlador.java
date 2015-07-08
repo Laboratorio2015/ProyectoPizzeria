@@ -517,7 +517,7 @@ public class Controlador implements ActionListener
 								}
 							});
 					
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, fInicio, fFin);
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
@@ -598,7 +598,7 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, fInicio, fFin);
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
@@ -607,6 +607,169 @@ public class Controlador implements ActionListener
 					System.out.println("termino");
 				}
 				break;
+				case "Pizzas mas compradas":
+				{
+					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
+					///Adaptacion///////////////
+					Integer diaCero = 1;
+					Integer mesCero = 1;
+					Integer mes12 = 12;
+					Integer diaIndiceFin = 31;
+				
+					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
+					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
+					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					String fInicio= añoInicio.toString() + mesInicio.toString() + diaInicio.toString(); 
+					
+					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
+					Integer mesFin = ventanaReportesEstadistica.getMesFin();
+					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+					String fFin= añoFin.toString() + mesFin.toString() + diaFin.toString(); 
+					
+					if (mesInicio==12){
+						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
+					}
+					else{
+						for (int j=añoInicio; j<= añoFin ;j++){
+							if (j == añoInicio)
+								mesCero = mesInicio;
+							else
+								mesCero = 1;
+							
+							if (j == añoFin)
+								mes12 = mesFin;
+							else
+								mes12 = 12;
+
+							for (int i=mesCero; i<= mes12;i++){
+								if (i == mesInicio)
+									diaCero = diaInicio;
+									else
+										diaCero = 1;
+								if (i == mesFin)
+									diaIndiceFin = diaFin;
+								else{
+									diaIndiceFin=31;
+								}
+								for (int x=diaCero; x<= diaIndiceFin ;x++){
+									try {
+										pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));							
+									} catch (SQLException e1) {
+										JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+										e1.printStackTrace();								
+									}
+								}
+							}
+						}
+					}
+					///////fin adaptacion///				
+					String tipoEstadistica = "Pizzas mas compradas";
+					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(pedidosResultantes,1);
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
+					ArrayList<ProductoEstadistico>produc=obtenerTodasProductostodasPromocionesTodosPedidos(promocion);
+					producto=sumarProductos(produc, producto);
+					String tipo="pizza";
+					producto=filtrarProductoTipo(producto,tipo);
+					Collections.sort(producto,new Comparator<ProductoEstadistico>()
+							{
+								@Override
+								public int compare(ProductoEstadistico o1,
+										ProductoEstadistico o2) 
+								{
+									return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
+								}
+							});
+					
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
+					reporte.generarReporteEstadistico();
+					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
+						llenarTablaEstadisticas("producto", null, producto);
+					else
+						llenarTablaEstadisticasTop5("producto", null, producto);
+					System.out.println("termino");
+				}
+				break;
+				case "Pizzas menos compradas":
+				{
+					ArrayList<PedidoDTO> pedidosResultantes= new ArrayList<PedidoDTO>();
+					///Adaptacion///////////////
+					Integer diaCero = 1;
+					Integer mesCero = 1;
+					Integer mes12 = 12;
+					Integer diaIndiceFin = 31;
+				
+					Integer diaInicio = ventanaReportesEstadistica.getDiaInicio();
+					Integer mesInicio = ventanaReportesEstadistica.getMesInicio();
+					Integer añoInicio = ventanaReportesEstadistica.getAñoInicio();
+					String fInicio= añoInicio.toString() + mesInicio.toString() + diaInicio.toString(); 
+					
+					Integer diaFin = ventanaReportesEstadistica.getDiaFin();
+					Integer mesFin = ventanaReportesEstadistica.getMesFin();
+					Integer añoFin = ventanaReportesEstadistica.getAñoFin();
+					String fFin= añoFin.toString() + mesFin.toString() + diaFin.toString(); 
+					
+					if (mesInicio==12){
+						//elaborar pattern a mano -- (mesInicio==mesFin && añoInicio==añoFin)
+					}
+					else{
+						for (int j=añoInicio; j<= añoFin ;j++){
+							if (j == añoInicio)
+								mesCero = mesInicio;
+							else
+								mesCero = 1;
+							
+							if (j == añoFin)
+								mes12 = mesFin;
+							else
+								mes12 = 12;
+
+							for (int i=mesCero; i<= mes12;i++){
+								if (i == mesInicio)
+									diaCero = diaInicio;
+									else
+										diaCero = 1;
+								if (i == mesFin)
+									diaIndiceFin = diaFin;
+								else{
+									diaIndiceFin=31;
+								}
+								for (int x=diaCero; x<= diaIndiceFin ;x++){
+									try {
+										pedidosResultantes.addAll(pedido.reporteDiario(String.valueOf(x), String.valueOf(i),String.valueOf(j)	));							
+									} catch (SQLException e1) {
+										JOptionPane.showMessageDialog(null, "No se puedo realizar la consulta.", "Confirmación",JOptionPane.WARNING_MESSAGE);
+										e1.printStackTrace();								
+									}
+								}
+							}
+						}
+					}
+					///////fin adaptacion///				
+					String tipoEstadistica = "Pizzas menos compradas";
+					ArrayList<ProductoEstadistico> producto=obtenerTodosProdusctosTodosPedidos(pedidosResultantes,1);
+					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
+					ArrayList<ProductoEstadistico>produc=obtenerTodasProductostodasPromocionesTodosPedidos(promocion);
+					producto=sumarProductos(produc, producto);
+					String tipo="pizza";
+					producto=filtrarProductoTipo(producto,tipo);
+					Collections.sort(producto,new Comparator<ProductoEstadistico>() {
+						@Override
+						public int compare(ProductoEstadistico o1,
+								ProductoEstadistico o2) {
+							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
+						}
+					});
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
+					reporte.generarReporteEstadistico();
+					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
+						llenarTablaEstadisticas("producto", null, producto);
+					else
+						llenarTablaEstadisticasTop5("producto", null, producto);
+					System.out.println("termino");
+				}
+				break;
+
+				
 				case "Ofertas mas compradas":
 				{
 					///Adaptacion///////////////
