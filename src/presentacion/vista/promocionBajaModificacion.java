@@ -14,6 +14,8 @@ import javax.swing.JTable;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
@@ -74,6 +76,11 @@ public class promocionBajaModificacion extends JDialog {
 		table.setForeground(new Color(255,255,255));
 		table.setBackground(new Color(66,66,66));
 		scrollPane.getViewport().setBackground(new Color(66,66,66));
+		//encabezado
+		JTableHeader headerPedidos = table.getTableHeader();
+		headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+		headerPedidos.setForeground(new Color(66,66,66));
+		headerPedidos.setBackground(new Color(0).GRAY);
 		
 		tfNombre = new JTextField();
 		tfNombre.setBounds(457, 198, 177, 23);

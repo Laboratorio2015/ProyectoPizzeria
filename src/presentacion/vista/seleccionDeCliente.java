@@ -19,6 +19,7 @@ import dto.ClienteDTO;
 import dto.PedidoDTO;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import presentacion.controlador.Controlador;
 import presentacion.reportes.Ticket;
@@ -158,6 +159,11 @@ public class seleccionDeCliente extends JDialog {
 		table.setForeground(new Color(255, 255, 255));
 		table.setBackground(new Color(153, 153, 0));
 		scrollPane.getViewport().setBackground(new Color(153, 153, 0));	
+		//encabezado
+		JTableHeader headerPedidos = table.getTableHeader();
+		headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+		headerPedidos.setForeground(new Color(153, 153, 0));
+		headerPedidos.setBackground(new Color(0).GRAY);
 		llenarTablaCliente();
 		{
 			JLabel label = new JLabel("");

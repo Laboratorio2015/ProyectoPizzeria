@@ -1,12 +1,16 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -86,6 +90,11 @@ public class pedidoMenu extends JDialog {
 		table.setForeground(new Color(255, 255, 255));
 		table.setBackground(new Color(153, 153, 0));
 		scrollPane.getViewport().setBackground(new Color(153, 153, 0));
+		//encabezado
+		JTableHeader headerPedidos = table.getTableHeader();
+		headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+		headerPedidos.setForeground(new Color(153, 153, 0));
+		headerPedidos.setBackground(new Color(0).GRAY);
 		
 		
 		
@@ -100,6 +109,11 @@ public class pedidoMenu extends JDialog {
 		table_1.setForeground(new Color(255, 255, 255));
 		table_1.setBackground(new Color(153, 153, 0));
 		scrollPane_1.getViewport().setBackground(new Color(153, 153, 0));
+		//encabezado
+		JTableHeader headerPedidos1 = table_1.getTableHeader();
+		headerPedidos1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		headerPedidos1.setForeground(new Color(153, 153, 0));
+		headerPedidos1.setBackground(new Color(0).GRAY);
 		
 		label = new JLabel("");
 		label.setIcon(new ImageIcon(pedidoMenu.class.getResource("/prototipos/verMenu1.png")));

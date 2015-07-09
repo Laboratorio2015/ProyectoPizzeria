@@ -29,6 +29,8 @@ import javax.swing.JTable;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JScrollPane;
@@ -412,6 +414,11 @@ public class ordenDePedido extends JDialog {
 			tablaItems.setForeground(new Color(255, 255, 255));
 			tablaItems.setBackground(new Color(153, 153, 0));
 			scrollPane_1.getViewport().setBackground(new Color(153, 153, 0));
+			//encabezado
+			JTableHeader headerPedidos = tablaItems.getTableHeader();
+			headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+			headerPedidos.setForeground(new Color(153, 153, 0));
+			headerPedidos.setBackground(new Color(0).GRAY);
 		}
 		
 		textField = new JTextField();
@@ -944,6 +951,11 @@ public class ordenDePedido extends JDialog {
 			tablaItems.setForeground(new Color(255, 255, 255));
 			tablaItems.setBackground(new Color(153, 153, 0));
 			scrollPane_1.getViewport().setBackground(new Color(153, 153, 0));
+			//encabezado
+			JTableHeader headerPedidos = tablaItems.getTableHeader();
+			headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+			headerPedidos.setForeground(new Color(153, 153, 0));
+			headerPedidos.setBackground(new Color(0).GRAY);
 			
 		}
 		

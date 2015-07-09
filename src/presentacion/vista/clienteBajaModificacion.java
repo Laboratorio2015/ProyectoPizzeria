@@ -2,12 +2,14 @@ package presentacion.vista;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -157,6 +159,11 @@ public class clienteBajaModificacion extends JDialog {
 				table.setForeground(new Color(255, 255, 255));
 				table.setBackground(new Color(153, 153, 0));
 				scrollPane.getViewport().setBackground(new Color(153, 153, 0));
+				//encabezado
+				JTableHeader headerPedidos = table.getTableHeader();
+				headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+				headerPedidos.setForeground(new Color(153, 153, 0));
+				headerPedidos.setBackground(new Color(0).GRAY);
 			}
 		}
 		{
