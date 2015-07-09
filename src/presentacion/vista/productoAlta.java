@@ -1,10 +1,13 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -56,6 +59,10 @@ public class productoAlta extends JDialog {
 		
 		tableProductos = new JTable(model);
 		scrollPane.setViewportView(tableProductos);
+		tableProductos.setForeground(new Color(255,255,255));
+		tableProductos.setBackground(new Color(66,66,66));
+		scrollPane.getViewport().setBackground(new Color(66,66,66));
+		
 		{
 			JLabel label = new JLabel("");
 			label.setIcon(new ImageIcon(productoAlta.class.getResource("/prototipos/Alta de Producto.png")));

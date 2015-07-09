@@ -71,6 +71,9 @@ public class promocionBajaModificacion extends JDialog {
 		    }
 		};
 		scrollPane.setViewportView(table);
+		table.setForeground(new Color(255,255,255));
+		table.setBackground(new Color(66,66,66));
+		scrollPane.getViewport().setBackground(new Color(66,66,66));
 		
 		tfNombre = new JTextField();
 		tfNombre.setBounds(457, 198, 177, 23);

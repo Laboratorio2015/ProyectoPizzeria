@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -24,6 +25,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.SystemColor;
 
 public class productoBajaModificacion extends JDialog {
 
@@ -40,7 +42,7 @@ public class productoBajaModificacion extends JDialog {
 	private Controlador control;
 
 	public productoBajaModificacion(final Controlador control) {
-		setBounds(100, 100, 347, 586);
+		setBounds(100, 100, 745, 586);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -78,6 +80,9 @@ public class productoBajaModificacion extends JDialog {
 		});
 
 		scrollPane.setViewportView(table);
+		table.setForeground(new Color(255,255,255));
+		table.setBackground(new Color(66,66,66));
+		scrollPane.getViewport().setBackground(new Color(66,66,66));
 		
 		cbTipoTabla= new JComboBox();
 		cbTipoTabla.setModel(new DefaultComboBoxModel(new String[] {"(Todos los tipos de Productos)", "empanada", "pizza", "otros"}));

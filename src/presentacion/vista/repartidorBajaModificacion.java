@@ -1,10 +1,13 @@
 package presentacion.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -20,6 +23,8 @@ import dto.RepartidorDTO;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.SystemColor;
+import javax.swing.UIManager;
 
 public class repartidorBajaModificacion extends JDialog {
 
@@ -62,6 +67,9 @@ public class repartidorBajaModificacion extends JDialog {
 				}
 			});
 			scrollPane.setViewportView(table);
+			table.setForeground(new Color(255,255,255));
+			table.setBackground(new Color(66,66,66));
+			scrollPane.getViewport().setBackground(new Color(66,66,66));
 		}
 		}
 		
@@ -110,6 +118,8 @@ public class repartidorBajaModificacion extends JDialog {
 		tfDescripcion.setColumns(10);
 		tfDescripcion.setBounds(462, 466, 182, 22);
 		contentPanel.add(tfDescripcion);
+	
+		
 		{
 			JLabel label = new JLabel("");
 			label.setBounds(0, 0, 680, 699);

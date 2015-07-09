@@ -12,7 +12,8 @@ public class Conexion {
 		try
 		{
 			Class.forName(driver).newInstance();
-			conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Sistema de Pizzeria", "postgres","postgres");
+			//conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Sistema de Pizzeria", "postgres","postgres");
+			conexion = DriverManager.getConnection("jdbc:postgresql://192.168.1.33/Sistema de Pizzeria", "postgres","postgres");
 			System.out.println("Conexion exitosa");
 		}
 		catch(Exception e)
