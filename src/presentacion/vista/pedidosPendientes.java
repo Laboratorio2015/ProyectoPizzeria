@@ -146,9 +146,9 @@ public class pedidosPendientes extends JDialog {
 		});
 		scrollPane.setRowHeaderView(table);
 		scrollPane.setViewportView(table);
-		scrollPane.getViewport().setBackground(new Color(204, 204, 0));
-		scrollPane.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
-		table.setBackground(new Color(204, 204, 0));
+		table.setForeground(new Color(255, 255, 255));
+		table.setBackground(new Color(153, 153, 0));
+		scrollPane.getViewport().setBackground(new Color(153, 153, 0));
 		
 		lMarcarComoPreparado= new JLabel("");
 		lMarcarComoPreparado.setIcon(new ImageIcon(pedidosPendientes.class.getResource("/Botones/btnMarcarPreparadoHab.png")));
@@ -306,7 +306,7 @@ public class pedidosPendientes extends JDialog {
 					numFilaSeleccionada=table.getSelectedRow();
 					if(model.getValueAt(numFilaSeleccionada, 2).toString().compareTo("preparado")==0)
 					{
-						PedidoDTO cobrado=control.getPedido().buscarPedidoId(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)));
+						PedidoDTO cobrado=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)),fechaActual());
 						registrarCobroDePedido cobroPedido= new registrarCobroDePedido(_pedPendiente,cobrado,control,numFilaSeleccionada);
 						cobroPedido.setVisible(true);
 					}

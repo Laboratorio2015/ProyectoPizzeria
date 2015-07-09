@@ -153,10 +153,10 @@ public class clienteBajaModificacion extends JDialog {
 						agregarDatos(auxi);
 					}
 				});
-				scrollPane.setViewportView(table);
-				scrollPane.getViewport().setBackground(new Color(204, 204, 0));
-				scrollPane.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
-				table.setBackground(new Color(204, 204, 0));
+				scrollPane.setViewportView(table);				
+				table.setForeground(new Color(255, 255, 255));
+				table.setBackground(new Color(153, 153, 0));
+				scrollPane.getViewport().setBackground(new Color(153, 153, 0));
 			}
 		}
 		{
@@ -307,6 +307,7 @@ public class clienteBajaModificacion extends JDialog {
 			tfEntreCalle2.setBounds(483, 373, 136, 22);
 			contentPanel.add(tfEntreCalle2);
 		}
+
 		{
 			tfEmail = new JTextField();
 			tfEmail.setColumns(10);

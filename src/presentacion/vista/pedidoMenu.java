@@ -83,6 +83,9 @@ public class pedidoMenu extends JDialog {
 			}
 		});
 		scrollPane.setViewportView(table);
+		table.setForeground(new Color(255, 255, 255));
+		table.setBackground(new Color(153, 153, 0));
+		scrollPane.getViewport().setBackground(new Color(153, 153, 0));
 		
 		
 		
@@ -94,6 +97,9 @@ public class pedidoMenu extends JDialog {
 		    }
 		};
 		scrollPane_1.setViewportView(table_1);
+		table_1.setForeground(new Color(255, 255, 255));
+		table_1.setBackground(new Color(153, 153, 0));
+		scrollPane_1.getViewport().setBackground(new Color(153, 153, 0));
 		
 		label = new JLabel("");
 		label.setIcon(new ImageIcon(pedidoMenu.class.getResource("/prototipos/verMenu1.png")));
