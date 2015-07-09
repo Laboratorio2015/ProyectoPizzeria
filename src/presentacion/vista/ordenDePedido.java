@@ -409,6 +409,9 @@ public class ordenDePedido extends JDialog {
 			tablaItems.setBackground(new Color(204, 204, 0));		
 			tablaItems.setModel(model);
 			scrollPane_1.setViewportView(tablaItems);
+			tablaItems.setForeground(new Color(255, 255, 255));
+			tablaItems.setBackground(new Color(153, 153, 0));
+			scrollPane_1.getViewport().setBackground(new Color(153, 153, 0));
 		}
 		
 		textField = new JTextField();
@@ -938,6 +941,9 @@ public class ordenDePedido extends JDialog {
 				}
 			});
 			scrollPane_1.setViewportView(tablaItems);
+			tablaItems.setForeground(new Color(255, 255, 255));
+			tablaItems.setBackground(new Color(153, 153, 0));
+			scrollPane_1.getViewport().setBackground(new Color(153, 153, 0));
 			
 		}
 		
