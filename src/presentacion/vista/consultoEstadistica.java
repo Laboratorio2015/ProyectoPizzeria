@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import presentacion.controlador.Controlador;
 import javax.swing.DefaultComboBoxModel;
@@ -85,6 +86,14 @@ public class consultoEstadistica extends JDialog {
 		    }
 		};
 		scrollPane.setViewportView(table);
+		table.setForeground(new Color(255, 255, 255));
+		table.setBackground(new Color(153, 153, 0));
+		scrollPane.getViewport().setBackground(new Color(153, 153, 0));
+		//encabezado
+		JTableHeader headerPedidos = table.getTableHeader();
+		headerPedidos.setFont(new Font("Tahoma", Font.BOLD, 13));
+		headerPedidos.setForeground(new Color(153, 153, 0));
+		headerPedidos.setBackground(new Color(0).GRAY);
 		
 		tfFechaInicio = new JTextField();
 		tfFechaInicio.setHorizontalAlignment(SwingConstants.CENTER);
