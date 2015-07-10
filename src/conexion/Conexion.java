@@ -1,7 +1,7 @@
 package conexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
-
+import javax.swing.JOptionPane;
 import propiedades.propiedades;
 
 public class Conexion {
@@ -18,10 +18,12 @@ public class Conexion {
 			//conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Sistema de Pizzeria", "postgres","postgres");
 			String Direccion="jdbc:postgresql:/"+aux.getDirServidorBase()+"/"+aux.getNombreBase();
 			conexion = DriverManager.getConnection(Direccion,aux.getUsuarioBase(),aux.getContraseñaBase());
+			JOptionPane.showMessageDialog(null, "Coneccion Exitosa a la Base de Datos.", "Informacion",JOptionPane.WARNING_MESSAGE);
 			System.out.println("Conexion exitosa");
 		}
 		catch(Exception e)
 		{
+			JOptionPane.showMessageDialog(null, "No se pudo concectar a la Base, verifique los datos y vuelva a iniciar.", "Informacion",JOptionPane.WARNING_MESSAGE);
 			System.out.println("Conexion fallida");
 		}
 	}

@@ -29,6 +29,11 @@ public class propiedades {
 			}
 		}
 	}
+	
+	public void actualizarValores()
+	{
+		
+	}
 
 	public InetAddress getDirServidor() throws UnknownHostException
 	{

@@ -1,6 +1,7 @@
 package main;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import modelo.Categorias;
 import modelo.Clientes;
@@ -18,6 +19,8 @@ import modelo.Proveedores;
 import modelo.Repartidores;
 import presentacion.controlador.Controlador;
 import presentacion.vista.VentanaPrincipal;
+import presentacion.vista.establecerConeccion;
+import propiedades.propiedades;
 
 public class Main 
 {
@@ -39,14 +42,15 @@ public class Main
 		ItemsPromociones itempromocion= new ItemsPromociones();
 		ProductoEstadistico prodEstadistico=new ProductoEstadistico();
 		VentanaPrincipal ventanaPrincial=new VentanaPrincipal();
-
-		
+						
 		///agrego entidades de ORDENES DE MAT PRIMA Y MATERIAS PRIMAS, por lo cual uso este constructor
-		Controlador controlador=new Controlador(ventanaPrincial,pedido,cliente,producto,item, proveedor, repartidor,oferta,categoria,ordenesMatPrima,materiasPrimas,itemsMateriaPrima,itinerario,promocion, itempromocion, prodEstadistico);
-		try {
+		Controlador controlador=new Controlador(ventanaPrincial,pedido,cliente,producto,item, proveedor, 
+				repartidor,oferta,categoria,ordenesMatPrima,materiasPrimas,itemsMateriaPrima,
+				itinerario,promocion, itempromocion, prodEstadistico);
+		try
+		{
 			controlador.inicializar();
 			
-
 		} catch (IOException e) {
 			System.out.println("Problema de conexion con monitor (servidor)");
 			e.printStackTrace();

@@ -78,6 +78,7 @@ import presentacion.vista.calendarioSelectFecha;
 import presentacion.vista.clienteBajaModificacion;
 import presentacion.vista.consultoEstadistica;
 import presentacion.vista.consultorContabilidad;
+import presentacion.vista.establecerConeccion;
 import presentacion.vista.gestionCategoria;
 import presentacion.vista.matPrimaAlta;
 import presentacion.vista.matPrimaBajaModificacion;
@@ -118,6 +119,7 @@ public class Controlador implements ActionListener
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
 	private gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
+	private establecerConeccion conectar;
 	//moficiaciones
 	private calendarioSelectFecha selectorFecha;
 	private selectMenuReportes ventanaMenuReportes;
@@ -165,6 +167,7 @@ public class Controlador implements ActionListener
 	private ReporteContableDTO reporteContable;
 	private ProductoEstadistico prodEstadistico;
 	private OutputStream sos;
+	private propiedades propConecciones;
 
 
 	//ESTE CONSTRUCTOR RECIBE DOS PARAMETROS MAS QUE EL OTRO> ORDENES DE PEDIDO Y MATERIAS PRIMAS
@@ -194,25 +197,31 @@ public class Controlador implements ActionListener
 		this.ventana.getBtnConfiguraciones().addActionListener(this);
 		this.ventana.getBtnPedMatPrima().addActionListener(this);
 		this.ventana.getBtnReportes().addActionListener(this);
+		//inicio con configuracion de las direcciones del monitor y la base de datos
+		this.propConecciones= new propiedades();
 	}
 
 
 	public void inicializar() throws IOException
 	{
-		this.ventana.show();
-		System.out.println(getFechaActual());	
+		this.ventana.show();	
 		try {
 			enviarPedidosMonitor();
-		} catch (Exception e) {
+		} catch (Exception e2) {
 			System.out.println("Problema surgido al conectarse con monitor.");
-			e.printStackTrace();
+			e2.printStackTrace();
 		}
+		
 	}
+
+
+
 
 	@SuppressWarnings({ "serial", "deprecation" })
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
+		
 		if(e.getSource() == this.ventana.getBtnIngresarPedido())
 		{
 			ventanaPedido=new ordenDePedido(ventana,this);
@@ -3713,6 +3722,17 @@ public class Controlador implements ActionListener
 	  {
 		  return this.reporteContable;
 	  }
+	  
+		private void valoresPredetarminados() throws UnknownHostException 
+		{
+			
+			conectar.getTfIpMonitor().setText(propConecciones.getDirServidor().getHostAddress());
+			conectar.getTfIPBaseDeDatos().setText(propConecciones.getDirServidorBase().getHostAddress());
+			conectar.getTfNombreBase().setText(propConecciones.getNombreBase());
+			conectar.getTfPuertoMonitor().setText("5000");
+			conectar.getTfUsusarioBase().setText(propConecciones.getUsuarioBase());
+			conectar.getpContraseñaBase().setText(propConecciones.getContraseñaBase());
+		}
 }
 	
 
