@@ -30,10 +30,29 @@ public class propiedades {
 		}
 	}
 
-	public InetAddress getDirServidor() throws UnknownHostException{
+	public InetAddress getDirServidor() throws UnknownHostException
+	{
 		return InetAddress.getByName(propiedades.getProperty("ipServidor"));
 	}
-
+	
+	public InetAddress getDirServidorBase() throws UnknownHostException
+	{
+		return InetAddress.getByName(propiedades.getProperty("ipServidorBase"));
+	}
+	
+	public  String getNombreBase()
+	{
+		return propiedades.getProperty("nombreBase");
+	}
+	public  String getUsuarioBase()
+	{
+		return propiedades.getProperty("usuarioBase");
+	}
+	public  String getContraseñaBase()
+	{
+		return propiedades.getProperty("contraseñaBase");
+	}
+	
 	//	public static void main(String[] args) {
 	//
 	//		System.out.println("Ejecutando...");

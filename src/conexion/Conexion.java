@@ -2,6 +2,8 @@ package conexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import propiedades.propiedades;
+
 public class Conexion {
 	public static Conexion instancia;
 	private final static String driver = "org.postgresql.Driver";
@@ -11,9 +13,11 @@ public class Conexion {
 	{
 		try
 		{
+			propiedades aux=new propiedades();
 			Class.forName(driver).newInstance();
 			//conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Sistema de Pizzeria", "postgres","postgres");
-			conexion = DriverManager.getConnection("jdbc:postgresql://192.168.1.33/Sistema de Pizzeria", "postgres","postgres");
+			String Direccion="jdbc:postgresql:/"+aux.getDirServidorBase()+"/"+aux.getNombreBase();
+			conexion = DriverManager.getConnection(Direccion,aux.getUsuarioBase(),aux.getContraseñaBase());
 			System.out.println("Conexion exitosa");
 		}
 		catch(Exception e)
