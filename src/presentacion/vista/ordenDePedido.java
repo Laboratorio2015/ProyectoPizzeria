@@ -41,6 +41,7 @@ import java.io.IOException;
 
 import javax.swing.SwingConstants;
 import presentacion.controlador.Controlador;
+import presentacion.reportes.Ticket;
 
 @SuppressWarnings("serial")
 public class ordenDePedido extends JDialog {
@@ -196,15 +197,16 @@ public class ordenDePedido extends JDialog {
 				{
 					validarNumeros(evt,tfUnidadEmpanada);
 				}
-			});
-			tfUnidadEmpanada.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				cantidad=Integer.parseInt(tfUnidadEmpanada.getText());
-				precio=Integer.parseInt(tfPrecioUniEmpanada.getText());
-				tfSubTotalEmpanada.setText(Integer.toString(precio*cantidad));
-			}
+				@Override
+				public void keyReleased(KeyEvent arg0)
+				{
+					if(tfUnidadEmpanada.getText().compareTo("")!=0 && tfUnidadEmpanada.getText().compareTo(" ")!=0)
+					{
+						cantidad=Integer.parseInt(tfUnidadEmpanada.getText());
+						precio=Integer.parseInt(tfPrecioUniEmpanada.getText());
+						tfSubTotalEmpanada.setText(Integer.toString(precio*cantidad));
+					}
+				}
 			});
 			tfUnidadEmpanada.setColumns(10);
 			tfUnidadEmpanada.setBounds(296, 170, 49, 25);
@@ -237,15 +239,15 @@ public class ordenDePedido extends JDialog {
 				{
 					validarNumeros(evt, tfUnidadPizza);
 				}
-			});
-			tfUnidadPizza.addActionListener(new ActionListener()
-			{
 				@Override
-				public void actionPerformed(ActionEvent e) 
+				public void keyReleased(KeyEvent arg0) 
 				{
-					cantidad=Integer.parseInt(tfUnidadPizza.getText());
-					precio=Integer.parseInt(tfPrecioUniPizza.getText());
-					tfSubTotalPizza.setText(Integer.toString(precio*cantidad));
+					if(tfUnidadPizza.getText().compareTo("")!=0 && tfUnidadPizza.getText().compareTo(" ")!=0)
+					{
+						cantidad=Integer.parseInt(tfUnidadPizza.getText());
+						precio=Integer.parseInt(tfPrecioUniPizza.getText());
+						tfSubTotalPizza.setText(Integer.toString(precio*cantidad));
+					}
 				}
 			});
 			tfUnidadPizza.setColumns(10);
@@ -279,8 +281,18 @@ public class ordenDePedido extends JDialog {
 				{
 					validarNumeros(evt,tfUnidadOtro);
 				}
+				@Override
+				public void keyReleased(KeyEvent arg0)
+				{
+					if(tfUnidadOtro.getText().compareTo(" ")!=0 && tfUnidadOtro.getText().compareTo("")!=0)
+					{
+						cantidad=Integer.parseInt(tfUnidadOtro.getText());
+						precio=Integer.parseInt(tfPrecioUniOtro.getText());
+						tfSubTotalOtro.setText(Integer.toString(precio*cantidad));
+					}
+				}
 			});
-			tfUnidadOtro.addActionListener(new ActionListener()
+			/*tfUnidadOtro.addActionListener(new ActionListener()
 			{
 				@Override
 				public void actionPerformed(ActionEvent e)
@@ -289,7 +301,7 @@ public class ordenDePedido extends JDialog {
 					precio=Integer.parseInt(tfPrecioUniOtro.getText());
 					tfSubTotalOtro.setText(Integer.toString(precio*cantidad));
 				}
-			});
+			});*/
 			tfUnidadOtro.setColumns(10);
 			tfUnidadOtro.setBounds(296, 333, 48, 25);
 			contentPanel.add(tfUnidadOtro);
@@ -746,13 +758,14 @@ public class ordenDePedido extends JDialog {
 				{
 					validarNumeros(evt, tfUnidadEmpanada);
 				}
-			});
-			tfUnidadEmpanada.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e)
+				public void keyReleased(KeyEvent arg0)
 				{
-					cantidad=Integer.parseInt(tfUnidadEmpanada.getText());
-					tfSubTotalEmpanada.setText(Integer.toString(producto.getPrecio()*cantidad));
+					if(tfUnidadEmpanada.getText().compareTo("")!=0 && tfUnidadEmpanada.getText().compareTo(" ")!=0)
+					{
+						cantidad=Integer.parseInt(tfUnidadEmpanada.getText());
+						tfSubTotalEmpanada.setText(Integer.toString(producto.getPrecio()*cantidad));
+					}
 				}
 			});
 			tfUnidadEmpanada.setColumns(10);
@@ -786,15 +799,15 @@ public class ordenDePedido extends JDialog {
 				{
 					validarNumeros(evt,tfUnidadPizza);
 				}
-			});
-			tfUnidadPizza.addActionListener(new ActionListener()
-			{
 				@Override
-				public void actionPerformed(ActionEvent e) 
+				public void keyReleased(KeyEvent arg0) 
 				{
-					cantidad=Integer.parseInt(tfUnidadPizza.getText());
-					precio=Integer.parseInt(tfPrecioUniPizza.getText());
-					tfSubTotalPizza.setText(Integer.toString(precio*cantidad));
+					if(tfUnidadPizza.getText().compareTo("")!=0 && tfUnidadPizza.getText().compareTo(" ")!=0)
+					{
+						cantidad=Integer.parseInt(tfUnidadPizza.getText());
+						precio=Integer.parseInt(tfPrecioUniPizza.getText());
+						tfSubTotalPizza.setText(Integer.toString(precio*cantidad));
+					}
 				}
 			});
 			tfUnidadPizza.setColumns(10);
@@ -828,8 +841,15 @@ public class ordenDePedido extends JDialog {
 				{
 					validarNumeros(evt, tfUnidadOtro);
 				}
+				@Override
+				public void keyReleased(KeyEvent arg0)
+				{
+					cantidad=Integer.parseInt(tfUnidadOtro.getText());
+					precio=Integer.parseInt(tfPrecioUniOtro.getText());
+					tfSubTotalOtro.setText(Integer.toString(precio*cantidad));
+				}
 			});
-			tfUnidadOtro.addActionListener(new ActionListener()
+			/*tfUnidadOtro.addActionListener(new ActionListener()
 			{
 				@Override
 				public void actionPerformed(ActionEvent e)
@@ -838,7 +858,7 @@ public class ordenDePedido extends JDialog {
 					precio=Integer.parseInt(tfPrecioUniOtro.getText());
 					tfSubTotalOtro.setText(Integer.toString(precio*cantidad));
 				}
-			});
+			});*/
 			tfUnidadOtro.setColumns(10);
 			tfUnidadOtro.setBounds(296, 333, 48, 25);
 			contentPanel.add(tfUnidadOtro);
@@ -1019,6 +1039,8 @@ public class ordenDePedido extends JDialog {
 						nuevoPedido.setLlevaDelivery(false);
 					control.getPedido().quitarPedido(pedidoCambiar);
 					control.getPedido().agregarPedido(nuevoPedido);
+					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+nuevoPedido.getNumPedido());
+					new Ticket(nuevoPedido).generarTicket();
 					
 					try {
 						control.enviarPedidoMonitor(nuevoPedido);

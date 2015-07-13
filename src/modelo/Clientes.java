@@ -1,11 +1,13 @@
 package modelo;
 
+import java.awt.Component;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import dao.ClienteDAO;
 import dto.ClienteDTO;
+import dto.ItemDTO;
 
 
 public class Clientes 
@@ -142,6 +144,20 @@ public class Clientes
 			aux.add(elemento.getNombre());
 		}
 		return aux;
+	}
+
+	public int obtenerUltimoIdCliente()
+	{
+		Integer ultimo=0;
+		List<ClienteDTO> items=this.cliente.readAll();
+		Iterator<ClienteDTO> Iterador = items.iterator();
+		while(Iterador.hasNext())
+		{
+			ClienteDTO elemento = Iterador.next();
+			if(elemento.getIdcliente()>ultimo)
+				ultimo=elemento.getIdcliente();
+		}
+		return ultimo;
 	}
 
 

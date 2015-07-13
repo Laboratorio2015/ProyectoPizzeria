@@ -2395,7 +2395,7 @@ public class Controlador implements ActionListener
 		else if (this.ventanaRegistrarCliente!= null && e.getSource()==this.ventanaRegistrarCliente.getBtnRegistrar())
 		{
 			ClienteDTO nuevo= new ClienteDTO();
-			nuevo.setIdcliente(this.cliente.obtenerTodoClientes().size()+1);
+			nuevo.setIdcliente(this.cliente.obtenerUltimoIdCliente()+1);
 			nuevo.setDni(Integer.parseInt(ventanaRegistrarCliente.getTfdni().getText().toString()));
 			nuevo.setApellido(ventanaRegistrarCliente.getTfApellido().getText().toString());
 			nuevo.setNombre(ventanaRegistrarCliente.getTfNombre().getText().toString());
@@ -3467,7 +3467,7 @@ public class Controlador implements ActionListener
 		
 		//this.socket = new Socket(InetAddress.getLocalHost(),5000);
 		//
-		this.socket = new Socket(new propiedades().getDirServidor(),5000);
+		this.socket = new Socket(new propiedades().getDirServidor(),139);
 		sos = socket.getOutputStream(); 
 		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
