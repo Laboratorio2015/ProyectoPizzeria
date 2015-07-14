@@ -526,8 +526,7 @@ public class Controlador implements ActionListener
 								}
 							});
 					
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
-					reporte.generarReporteEstadistico();
+					new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
 					else
@@ -607,8 +606,7 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
-					reporte.generarReporteEstadistico();
+					new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
 					else
@@ -689,8 +687,7 @@ public class Controlador implements ActionListener
 								}
 							});
 					
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
-					reporte.generarReporteEstadistico();
+					new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
 					else
@@ -768,8 +765,7 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
-					reporte.generarReporteEstadistico();
+					new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
 					else
@@ -844,8 +840,7 @@ public class Controlador implements ActionListener
 							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
 						}
 					});
-					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion, fInicio, fFin);
-					reporte.generarReporteEstadistico();
+					new ReportePromocionEstadistica (tipoEstadistica, promocion, fInicio, fFin).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("promocion",promocion,null);
 					else
@@ -913,8 +908,7 @@ public class Controlador implements ActionListener
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					Collections.sort(promocion);
-					ReportePromocionEstadistica reporte = new ReportePromocionEstadistica (tipoEstadistica, promocion, fInicio, fFin);
-					reporte.generarReporteEstadistico();
+					new ReportePromocionEstadistica (tipoEstadistica, promocion, fInicio, fFin).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("promocion",promocion,null);
 					else
