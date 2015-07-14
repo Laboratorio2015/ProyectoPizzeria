@@ -264,8 +264,7 @@ public class Controlador implements ActionListener
 		//VENTANA DE REPORTES CONTABLES: IMPRIMIR RESULTADO DE CONSULTA. GENERA PDF
 		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnImprimircons())
 		{
-			ReporteContable resultados = new ReporteContable(reporteContable, ventanaReportesContables.getFechaInicio(), ventanaReportesContables.getFechaFin());
-			resultados.generarReporteContable();
+			new ReporteContable(reporteContable, ventanaReportesContables.getFechaInicio(), ventanaReportesContables.getFechaFin()).generarReporteContable();
 			
 			JOptionPane.showMessageDialog(null, "Se generó y envió a imprimir  la consulta en formato .pdf", "Confirmación",JOptionPane.WARNING_MESSAGE);
 
