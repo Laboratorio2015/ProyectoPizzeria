@@ -117,6 +117,8 @@ public class ReporteContable
 	        
 			//Agregar Productos (PIZZAS) a la tabla
 	        
+	        Integer subTotal = 0;
+	        
         	if (reporte.getCantPizzaVendidas().keySet().isEmpty()==true)
         	{
         		addCell(table, "-");
@@ -133,9 +135,13 @@ public class ReporteContable
 			        	addCell(table, p.getPrecio().toString());
 			        	addCell(table, reporte.getCantPizzaVendidas().get(p).toString());
 			        	Integer total= p.getPrecio()*reporte.getCantPizzaVendidas().get(p);
+			        	subTotal = subTotal + total;
 			        	addCell(table, (total.toString()));
 			    }
         	}
+        	documento.add(Chunk.NEWLINE);
+        	documento.add(new Paragraph ("Subtotal de Pizzas Vendidas: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	
 	        System.out.println("Agregadas a la tabla las PIZZAS vendidas");
 	        return table;
 	    }
@@ -163,7 +169,8 @@ public class ReporteContable
 	        table.addCell(cell);
 	        
 			//Agregar Productos (EMPANADAS) a la tabla
-			
+	        Integer subTotal = 0;
+	        
         	if (reporte.getCantEmpVendidas().keySet().isEmpty()==true)
         	{
         		addCell(table, "-");
@@ -180,9 +187,13 @@ public class ReporteContable
 		        	addCell(table, p.getPrecio().toString());
 		        	addCell(table, reporte.getCantEmpVendidas().get(p).toString());
 		        	Integer total= p.getPrecio()*reporte.getCantEmpVendidas().get(p);
+		        	subTotal = subTotal + total;
 		        	addCell(table, (total.toString()));
 				}
 	 		}
+        	documento.add(Chunk.NEWLINE);
+        	documento.add(new Paragraph ("Subtotal de Empanadas Vendidas: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	
 	        System.out.println("Agregadas a la tabla las EMPANADAS vendidas");
 	        return table;
 	    }
@@ -206,6 +217,7 @@ public class ReporteContable
 	        table.addCell(cell);
 	        
 			//Agregar Compras Hechas a la tabla
+	        Integer subTotal = 0;
 	 
         	if (reporte.getListadoCompras().size()==0)
         	{
@@ -224,8 +236,12 @@ public class ReporteContable
 						addCell(table, elemento.getFecha());
 						addCell(table, elemento.getProveedor().getNombre());
 						addCell(table, elemento.getCosto().toString());
+						subTotal = subTotal + elemento.getCosto();
 					}
 			}
+        	documento.add(Chunk.NEWLINE);
+        	documento.add(new Paragraph ("Subtotal de Compras Realizadas: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	
 			System.out.println("Agregadas a la tabla las COMPRAS realizadas");
 	        return table;
 	    }
@@ -252,6 +268,7 @@ public class ReporteContable
 	        table.addCell(cell);
 	        
 			//Agregar Productos (Otros) a la tabla
+	        Integer subTotal = 0;
 			
         	if (reporte.getCantOtrosProdVendidos().size()==0)
         	{
@@ -268,9 +285,13 @@ public class ReporteContable
 		        	addCell(table, p.getPrecio().toString());
 		        	addCell(table, reporte.getCantOtrosProdVendidos().get(p).toString());
 		        	Integer total= p.getPrecio()*reporte.getCantOtrosProdVendidos().get(p);
+		        	subTotal = subTotal + total;
 		        	addCell(table, (total.toString()));
 		        }
 			}
+        	documento.add(Chunk.NEWLINE);
+        	documento.add(new Paragraph ("Subtotal de Otros Productos Vendidos: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	
 	        System.out.println("Agregados a la table de Otros Productos vendidos");
 	        return table;
 	    }
@@ -297,6 +318,7 @@ public class ReporteContable
 	        table.addCell(cell);
 	        
 			//Agregar Productos (Otros) a la tabla
+	        Integer subTotal = 0;
 			
         	if (reporte.getCantPromosVendidos().keySet().isEmpty()==true)
         	{
@@ -313,9 +335,13 @@ public class ReporteContable
 		        	addCell(table, p.getPrecio().toString());
 		        	addCell(table, reporte.getCantPromosVendidos().get(p).toString());
 		        	Integer total= p.getPrecio()*reporte.getCantPromosVendidos().get(p);
+		        	subTotal = subTotal + total;
 		        	addCell(table, (total.toString()));
 		        }
 			}
+        	documento.add(Chunk.NEWLINE);
+        	documento.add(new Paragraph ("Subtotal de Promociones Vendidas: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	
 	        System.out.println("Agregados a la table de Otros Productos vendidos");
 	        return table;
 	    }
