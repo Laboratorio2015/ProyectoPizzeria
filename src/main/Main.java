@@ -19,7 +19,7 @@ import modelo.Proveedores;
 import modelo.Repartidores;
 import presentacion.controlador.Controlador;
 import presentacion.vista.VentanaPrincipal;
-import presentacion.vista.establecerConeccion;
+//import presentacion.vista.establecerConeccion;
 import propiedades.propiedades;
 
 public class Main 

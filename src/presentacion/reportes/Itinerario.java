@@ -37,7 +37,7 @@ public class Itinerario
 	public void generarItinerario()
 	{
 		try {
-			String FILE = "C:/Itineratio " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
+			String FILE = "C:/Itinerario " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
 		    addContentPage (documento,itinerario, fecha);
@@ -79,19 +79,23 @@ public class Itinerario
 		//Añade info de Intinerario
 		documento.add(new Paragraph("Itinerario n°: " + itinerario.getIdHojaItinerario().toString(), FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
 		//Añade info de Repartidor
-		documento.add(new Paragraph("Repartidor: " + itinerario.getRepartidor().getDni().toString(), FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
+		documento.add(new Paragraph("Repartidor: " + itinerario.getRepartidor().getNombre() + itinerario.getRepartidor().getApellido(), FontFactory.getFont("arial",20,Font.BOLD, BaseColor.BLACK)));
+		
 		//Añade info de la Fecha
 		documento.add(new Paragraph("Fecha: " + fecha, FontFactory.getFont("arial",11,Font.BOLD, BaseColor.BLACK)));
 		
 		addEmptyLine (document, 2);
 		//Añade Tabla de Pedido
-		 PdfPTable table = new PdfPTable(5);
+		 PdfPTable table = new PdfPTable(7);
 		 
 		 addHeaderCell(table, "Cliente");
 		 addHeaderCell(table, "Dirección");
 		 addHeaderCell(table, "Entre Calles");
+		 addHeaderCell(table, "Observaciones");
+		 addHeaderCell(table, "N° de Pedido");
 		 addHeaderCell(table, "Pedido");
 		 addHeaderCell(table, "Total");
+//		 addHeaderCell(table, "Detalle");
 		 
 		 table.setHeaderRows(1);
 		
@@ -104,11 +108,13 @@ public class Itinerario
 					addCell(table, elemento.getCliente().getApellido()+" "+elemento.getCliente().getNombre());
 					addCell(table, elemento.getCliente().getCalle()+" "+elemento.getCliente().getNumeracion());
 					addCell(table, elemento.getCliente().getEntrecalle1()+" - "+elemento.getCliente().getEntrecalle2());
+					addCell(table, elemento.getCliente().getComentario());
+					addCell(table, elemento.getIdpedido().toString());
 					String items = "";
 					
 					for (ItemDTO i : elemento.getItems())
 					{	
-						items= items + i.getProducto().getNombre() + "($" + (Integer.parseInt(i.getProducto().getPrecio().toString())*Integer.parseInt(i.getCantidad().toString()))+ ")" + "; \n" ;
+						items= items + i.getProducto().getNombre() + "(" + i.getCantidad() + ")" + "; \n" ;
 					}
 					
 					addCell(table, items);						

@@ -87,12 +87,12 @@ public class ReporteContable
 	
 	 ///TABLA DE PIZZAS VENDIDAS
 	 public static PdfPTable createTable1() throws DocumentException {
-	        PdfPTable table = new PdfPTable(3);
+	        PdfPTable table = new PdfPTable(4);
 //	        table.setWidthPercentage(288 / 5.23f);
 //	        table.setWidths(new int[]{2, 2});
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Pizzas Vendidas"));
-	        cell.setColspan(3);
+	        cell.setColspan(4);
 	        table.addCell(cell);
 	        cell = new PdfPCell(new Phrase("Producto"));
 	        cell.setRowspan(1);
@@ -101,6 +101,9 @@ public class ReporteContable
 	        cell.setRowspan(1);
 	        table.addCell(cell);
 	        cell = new PdfPCell(new Phrase("Cantidad"));
+	        cell.setRowspan(1);
+	        table.addCell(cell);
+	        cell = new PdfPCell(new Phrase("Total"));
 	        cell.setRowspan(1);
 	        table.addCell(cell);
 //	        cell = new PdfPCell(new Phrase("No. Pedido"));
@@ -117,14 +120,18 @@ public class ReporteContable
         		addCell(table, "-");
 	        	addCell(table, "-");
 	        	addCell(table, "-");
+	        	addCell(table, "-");
         	}
         	else
         	{
 		        for (ProductoDTO p : reporte.getCantPizzaVendidas().keySet()) 
 		        {
+//		        		addCell(table, (reporte.getListadoPedidos().);
 			        	addCell(table, p.getNombre());
 			        	addCell(table, p.getPrecio().toString());
 			        	addCell(table, reporte.getCantPizzaVendidas().get(p).toString());
+			        	Integer total= p.getPrecio()*reporte.getCantPizzaVendidas().get(p);
+			        	addCell(table, (total.toString()));
 			    }
         	}
 	        System.out.println("Agregadas a la tabla las PIZZAS vendidas");
@@ -133,12 +140,12 @@ public class ReporteContable
 	 
 	 ///TABLA DE EMPANADAS VENDIDAS
 	 public static PdfPTable createTable2() throws DocumentException {
-	        PdfPTable table = new PdfPTable(3);
+	        PdfPTable table = new PdfPTable(4);
 //	        table.setWidthPercentage(288 / 5.23f);
 //	        table.setWidths(new int[]{2, 2});
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Empanadas Vendidas"));
-	        cell.setColspan(3);
+	        cell.setColspan(4);
 	        table.addCell(cell);
 	        cell = new PdfPCell(new Phrase("Producto"));
 	        cell.setRowspan(1);
@@ -149,12 +156,16 @@ public class ReporteContable
 	        cell = new PdfPCell(new Phrase("Cantidad"));
 	        cell.setRowspan(1);
 	        table.addCell(cell);
+	        cell = new PdfPCell(new Phrase("Total"));
+	        cell.setRowspan(1);
+	        table.addCell(cell);
 	        
 			//Agregar Productos (EMPANADAS) a la tabla
 			
         	if (reporte.getCantEmpVendidas().keySet().isEmpty()==true)
         	{
         		addCell(table, "-");
+	        	addCell(table, "-");
 	        	addCell(table, "-");
 	        	addCell(table, "-");
         	}
@@ -166,6 +177,8 @@ public class ReporteContable
 		        	addCell(table, p.getNombre());
 		        	addCell(table, p.getPrecio().toString());
 		        	addCell(table, reporte.getCantEmpVendidas().get(p).toString());
+		        	Integer total= p.getPrecio()*reporte.getCantEmpVendidas().get(p);
+		        	addCell(table, (total.toString()));
 				}
 	 		}
 	        System.out.println("Agregadas a la tabla las EMPANADAS vendidas");
@@ -217,11 +230,11 @@ public class ReporteContable
 	 
 	///TABLA DE OTROS PRODUCTOS VENDIDOS
 	 public static PdfPTable createTable4() throws DocumentException {
-	        PdfPTable table = new PdfPTable(3);
+	        PdfPTable table = new PdfPTable(4);
 //	        table.setWidthPercentage(288 / 5.23f);
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Otros Productos Vendidos"));
-	        cell.setColspan(3);
+	        cell.setColspan(4);
 	        table.addCell(cell);
 	        cell = new PdfPCell(new Phrase("Producto"));
 	        cell.setRowspan(1);
@@ -232,12 +245,16 @@ public class ReporteContable
 	        cell = new PdfPCell(new Phrase("Cantidad"));
 	        cell.setRowspan(1);
 	        table.addCell(cell);
+	        cell = new PdfPCell(new Phrase("Total"));
+	        cell.setRowspan(1);
+	        table.addCell(cell);
 	        
 			//Agregar Productos (Otros) a la tabla
 			
         	if (reporte.getCantOtrosProdVendidos().size()==0)
         	{
         		addCell(table, "-");
+	        	addCell(table, "-");
 	        	addCell(table, "-");
 	        	addCell(table, "-");
         	}
@@ -248,6 +265,8 @@ public class ReporteContable
 		        	addCell(table, p.getNombre());
 		        	addCell(table, p.getPrecio().toString());
 		        	addCell(table, reporte.getCantOtrosProdVendidos().get(p).toString());
+		        	Integer total= p.getPrecio()*reporte.getCantOtrosProdVendidos().get(p);
+		        	addCell(table, (total.toString()));
 		        }
 			}
 	        System.out.println("Agregados a la table de Otros Productos vendidos");
@@ -256,11 +275,11 @@ public class ReporteContable
 	 
 	 ///TABLA DE PROMOCIONES VENDIDAS
 	 public static PdfPTable createTable5() throws DocumentException {
-	        PdfPTable table = new PdfPTable(3);
+	        PdfPTable table = new PdfPTable(4);
 //	        table.setWidthPercentage(288 / 5.23f);
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Promociones Vendidas"));
-	        cell.setColspan(3);
+	        cell.setColspan(4);
 	        table.addCell(cell);
 	        cell = new PdfPCell(new Phrase("Promoción"));
 	        cell.setRowspan(1);
@@ -271,12 +290,16 @@ public class ReporteContable
 	        cell = new PdfPCell(new Phrase("Cantidad"));
 	        cell.setRowspan(1);
 	        table.addCell(cell);
+	        cell = new PdfPCell(new Phrase("Total"));
+	        cell.setRowspan(1);
+	        table.addCell(cell);
 	        
 			//Agregar Productos (Otros) a la tabla
 			
         	if (reporte.getCantPromosVendidos().keySet().isEmpty()==true)
         	{
         		addCell(table, "-");
+	        	addCell(table, "-");
 	        	addCell(table, "-");
 	        	addCell(table, "-");
         	}
@@ -287,6 +310,8 @@ public class ReporteContable
 		        	addCell(table, p.getNombre());
 		        	addCell(table, p.getPrecio().toString());
 		        	addCell(table, reporte.getCantPromosVendidos().get(p).toString());
+		        	Integer total= p.getPrecio()*reporte.getCantPromosVendidos().get(p);
+		        	addCell(table, (total.toString()));
 		        }
 			}
 	        System.out.println("Agregados a la table de Otros Productos vendidos");

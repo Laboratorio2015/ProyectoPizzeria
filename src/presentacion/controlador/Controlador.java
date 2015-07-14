@@ -78,7 +78,7 @@ import presentacion.vista.calendarioSelectFecha;
 import presentacion.vista.clienteBajaModificacion;
 import presentacion.vista.consultoEstadistica;
 import presentacion.vista.consultorContabilidad;
-import presentacion.vista.establecerConeccion;
+//import presentacion.vista.establecerConeccion;
 import presentacion.vista.gestionCategoria;
 import presentacion.vista.matPrimaAlta;
 import presentacion.vista.matPrimaBajaModificacion;
@@ -119,7 +119,7 @@ public class Controlador implements ActionListener
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
 	private gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
-	private establecerConeccion conectar;
+	//private establecerConeccion conectar;
 	//moficiaciones
 	private calendarioSelectFecha selectorFecha;
 	private selectMenuReportes ventanaMenuReportes;
@@ -526,7 +526,7 @@ public class Controlador implements ActionListener
 								}
 							});
 					
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
@@ -607,7 +607,7 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
@@ -689,7 +689,7 @@ public class Controlador implements ActionListener
 								}
 							});
 					
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
@@ -768,7 +768,7 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
-					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
+					ReporteProductoEstadistico reporte = new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText());
 					reporte.generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
@@ -3723,16 +3723,16 @@ public class Controlador implements ActionListener
 		  return this.reporteContable;
 	  }
 	  
-		private void valoresPredetarminados() throws UnknownHostException 
-		{
-			
-			conectar.getTfIpMonitor().setText(propConecciones.getDirServidor().getHostAddress());
-			conectar.getTfIPBaseDeDatos().setText(propConecciones.getDirServidorBase().getHostAddress());
-			conectar.getTfNombreBase().setText(propConecciones.getNombreBase());
-			conectar.getTfPuertoMonitor().setText("5000");
-			conectar.getTfUsusarioBase().setText(propConecciones.getUsuarioBase());
-			conectar.getpContraseñaBase().setText(propConecciones.getContraseñaBase());
-		}
+//		private void valoresPredetarminados() throws UnknownHostException 
+//		{
+//			
+//			conectar.getTfIpMonitor().setText(propConecciones.getDirServidor().getHostAddress());
+//			conectar.getTfIPBaseDeDatos().setText(propConecciones.getDirServidorBase().getHostAddress());
+//			conectar.getTfNombreBase().setText(propConecciones.getNombreBase());
+//			conectar.getTfPuertoMonitor().setText("5000");
+//			conectar.getTfUsusarioBase().setText(propConecciones.getUsuarioBase());
+//			conectar.getpContraseñaBase().setText(propConecciones.getContraseñaBase());
+//		}
 }
 	
 

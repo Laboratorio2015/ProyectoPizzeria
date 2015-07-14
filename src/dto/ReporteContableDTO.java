@@ -31,6 +31,19 @@ public class ReporteContableDTO {
 		totalPedidos = 0;
 		totalCompras = 0;
 	}
+	
+//	public PedidoDTO getPedido (ProductoDTO producto)
+//	{
+//		PedidoDTO pedido = new PedidoDTO();
+//		Iterator<PedidoDTO> iterador = this.getListadoPedidos().iterator();
+//		while (iterador.hasNext())
+//		{
+//			PedidoDTO elementoPedido = iterador.next();
+//			ArrayList<ItemDTO> todos = elementoPedido.getProductos();
+//			if (elementoPedido.)
+//		}
+//		return pedido;
+//	}
 
 	public ArrayList<PedidoDTO> getListadoPedidos() {
 		return listadoPedidos;

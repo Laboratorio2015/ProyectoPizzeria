@@ -33,7 +33,7 @@ public class ReportePromocionEstadistica {
 	public void generarReporteEstadistico()
 	{
 		try {
-			final String FILE = "C:/Reporte Estadístico " + '(' + fechaInicio + '-' + fechaFin + ')' + promocion.hashCode() + ".pdf";			
+			final String FILE = "C:/Reporte Estadístico_Oferta " + '(' + fechaInicio + '-' + fechaFin + ')' + promocion.hashCode() + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReportePromocionEstadistica.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
