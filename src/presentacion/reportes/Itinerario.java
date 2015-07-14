@@ -19,7 +19,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import dto.HojaItinerarioDTO;
 import dto.ItemDTO;
+import dto.ItemPromocionDTO;
 import dto.PedidoDTO;
+import dto.PromocionDTO;
 
 public class Itinerario 
 {
@@ -47,9 +49,7 @@ public class Itinerario
 	    }
 		
 	}
-	
-	
-	
+		
 	
 	private static void addEmptyLine (Document document, int n) throws DocumentException
 	{
@@ -110,14 +110,20 @@ public class Itinerario
 					addCell(table, elemento.getCliente().getEntrecalle1()+" - "+elemento.getCliente().getEntrecalle2());
 					addCell(table, elemento.getCliente().getComentario());
 					addCell(table, elemento.getIdpedido().toString());
-					String items = "";
+					String itemProductos = "";
+					String itemOfertas = "";
 					
 					for (ItemDTO i : elemento.getItems())
 					{	
-						items= items + i.getProducto().getNombre() + "(" + i.getCantidad() + ")" + "; \n" ;
+						itemProductos= itemProductos + i.getProducto().getNombre() + "(" + i.getCantidad() + ")" + "; \n" ;
 					}
 					
-					addCell(table, items);						
+					for (ItemPromocionDTO p : elemento.getOfertas())
+					{	
+						itemOfertas= itemOfertas + p.getPromocion().getNombre() + "(" + p.getCantidad() + ")" + "; \n" ;
+					}
+					
+					addCell(table, itemProductos+itemOfertas);						
 					addCell(table,"$" + elemento.getTotal()+"");
 					
 				}
