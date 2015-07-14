@@ -35,6 +35,8 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.text.Document;
 import com.itextpdf.text.log.SysoCounter;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import Cocina.PadreMonitor;
@@ -523,7 +525,7 @@ public class Controlador implements ActionListener
 								}
 							});
 					
-					new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
+					new ReporteProductoEstadistico (new Document(), tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
 					else
@@ -603,7 +605,8 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
-					new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
+					
+					new ReporteProductoEstadistico (new Document(), tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
 					else
@@ -684,7 +687,7 @@ public class Controlador implements ActionListener
 								}
 							});
 					
-					new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
+					new ReporteProductoEstadistico (new Document(), tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
 					else
@@ -762,7 +765,7 @@ public class Controlador implements ActionListener
 							return new Integer(o1.getCantidad()).compareTo(new Integer(o2.getCantidad()));
 						}
 					});
-					new ReporteProductoEstadistico (tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
+					new ReporteProductoEstadistico (new Document(), tipoEstadistica, tipo, producto, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("producto", null, producto);
 					else

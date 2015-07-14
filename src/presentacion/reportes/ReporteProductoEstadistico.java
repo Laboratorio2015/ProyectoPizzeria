@@ -33,9 +33,7 @@ public class ReporteProductoEstadistico {
 	public void generarReporteEstadistico()
 	{
 		try {
-			documento = new Document();
-			final String FILE = "C:/Reporte Estadístico_" + tipoDeProducto + " (" + fechaInicio + '-' + fechaFin + ')' + producto.hashCode() + ".pdf";
-			
+			final String FILE = "C:/Reporte Estadístico_" + tipoDeProducto + " (" + fechaInicio + '-' + fechaFin + ')' + producto.hashCode() + ".pdf";	
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteProductoEstadistico.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();
@@ -53,8 +51,9 @@ public class ReporteProductoEstadistico {
 	    c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	    table.addCell(c1);}
 	
-	public ReporteProductoEstadistico(String tipo, String tipoProducto, ArrayList<ProductoEstadistico> producto, String fechaInicio, String fechaFin)
+	public ReporteProductoEstadistico(Document documento, String tipo, String tipoProducto, ArrayList<ProductoEstadistico> producto, String fechaInicio, String fechaFin)
 	{	
+		this.documento = documento;
 		this.producto=producto;
 		tipoDeEstadistica = tipo;
 		tipoDeProducto = tipoProducto;
