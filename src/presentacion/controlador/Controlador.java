@@ -215,8 +215,6 @@ public class Controlador implements ActionListener
 	}
 
 
-
-
 	@SuppressWarnings({ "serial", "deprecation" })
 	@Override
 	public void actionPerformed(ActionEvent e) 

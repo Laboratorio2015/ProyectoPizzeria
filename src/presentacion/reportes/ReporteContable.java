@@ -27,7 +27,7 @@ import dto.ReporteContableDTO;
 public class ReporteContable 
 {
 	static ReporteContableDTO reporte;
-	private static Document documento = new Document();
+	private static Document documento;
 	private final String fechaInicio;
 //	private final String fechaInicioAlReves;
 	private final String fechaFin;
@@ -36,6 +36,7 @@ public class ReporteContable
 	public void generarReporteContable()
 	{
 		try {
+			documento = new Document();
 			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + this.reporte.hashCode() + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteContable.class.getResource("/prototipos/Reporte_Contable_Header.png"));

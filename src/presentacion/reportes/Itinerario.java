@@ -28,7 +28,7 @@ public class Itinerario
 	
 	private HojaItinerarioDTO itinerario;
 	private final String fecha;
-	private static Document documento = new Document();
+	private static Document documento;
 	
 	public Itinerario (HojaItinerarioDTO itinerario)
 	{
@@ -39,6 +39,7 @@ public class Itinerario
 	public void generarItinerario()
 	{
 		try {
+			documento = new Document();
 			String FILE = "C:/Itinerario " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();

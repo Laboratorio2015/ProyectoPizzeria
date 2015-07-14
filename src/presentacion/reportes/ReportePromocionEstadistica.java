@@ -24,7 +24,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class ReportePromocionEstadistica {
 
-	private static Document documento = new Document();
+	private static Document documento;
 	private static ArrayList<PromocionEstadistica> promocion;
 	private static String tipoDeEstadistica;
 	private final String fechaInicio;
@@ -33,6 +33,7 @@ public class ReportePromocionEstadistica {
 	public void generarReporteEstadistico()
 	{
 		try {
+			documento = new Document();
 			final String FILE = "C:/Reporte Estadístico_Oferta " + '(' + fechaInicio + '-' + fechaFin + ')' + promocion.hashCode() + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReportePromocionEstadistica.class.getResource("/prototipos/Reporte_Contable_Header.png"));

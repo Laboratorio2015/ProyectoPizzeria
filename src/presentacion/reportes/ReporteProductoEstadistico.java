@@ -23,7 +23,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class ReporteProductoEstadistico {
 
-	private static Document documento = new Document();
+	private static Document documento;
 	private static ArrayList<ProductoEstadistico> producto;
 	private static String tipoDeEstadistica;
 	private static String tipoDeProducto;
@@ -33,6 +33,7 @@ public class ReporteProductoEstadistico {
 	public void generarReporteEstadistico()
 	{
 		try {
+			documento = new Document();
 			final String FILE = "C:/Reporte Estadístico_" + tipoDeProducto + " (" + fechaInicio + '-' + fechaFin + ')' + producto.hashCode() + ".pdf";
 			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
