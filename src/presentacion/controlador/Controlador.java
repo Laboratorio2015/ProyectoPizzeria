@@ -264,7 +264,7 @@ public class Controlador implements ActionListener
 		//VENTANA DE REPORTES CONTABLES: IMPRIMIR RESULTADO DE CONSULTA. GENERA PDF
 		else if(this.ventanaReportesContables!= null && e.getSource()==this.ventanaReportesContables.getBtnImprimircons())
 		{
-			new ReporteContable(reporteContable, ventanaReportesContables.getFechaInicio(), ventanaReportesContables.getFechaFin()).generarReporteContable();
+			new ReporteContable(new Document(),reporteContable, ventanaReportesContables.getFechaInicio(), ventanaReportesContables.getFechaFin()).generarReporteContable();
 			
 			JOptionPane.showMessageDialog(null, "Se generó y envió a imprimir  la consulta en formato .pdf", "Confirmación",JOptionPane.WARNING_MESSAGE);
 
@@ -840,7 +840,7 @@ public class Controlador implements ActionListener
 							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
 						}
 					});
-					new ReportePromocionEstadistica (tipoEstadistica, promocion, fInicio, fFin).generarReporteEstadistico();
+					new ReportePromocionEstadistica (new Document(), tipoEstadistica, promocion, fInicio, fFin).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("promocion",promocion,null);
 					else
@@ -908,7 +908,7 @@ public class Controlador implements ActionListener
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					Collections.sort(promocion);
-					new ReportePromocionEstadistica (tipoEstadistica, promocion, fInicio, fFin).generarReporteEstadistico();
+					new ReportePromocionEstadistica (new Document(), tipoEstadistica, promocion, fInicio, fFin).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("promocion",promocion,null);
 					else

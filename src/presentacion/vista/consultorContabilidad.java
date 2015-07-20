@@ -15,6 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 
+import com.itextpdf.text.Document;
+
 import dto.ReporteContableDTO;
 import presentacion.reportes.Impresora;
 
@@ -158,7 +160,7 @@ public class consultorContabilidad extends JDialog {
 			Impresora impresora = new Impresora();
 			
 			public void mouseClicked(MouseEvent arg0) {
-				ReporteContable reporte = new ReporteContable(reporteDTO, getFechaInicio(), getFechaFin());
+				ReporteContable reporte = new ReporteContable(new Document(),reporteDTO, getFechaInicio(), getFechaFin());
 				reporte.generarReporteContable();
 				impresora.imprimir(reporte.getReporte());
 			}

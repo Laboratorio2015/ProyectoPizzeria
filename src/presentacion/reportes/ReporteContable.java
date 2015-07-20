@@ -36,7 +36,6 @@ public class ReporteContable
 	public void generarReporteContable()
 	{
 		try {
-			documento = new Document();
 			//final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + this.reporte.hashCode() + ".pdf";			
 			final String FILE = "C:/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + this.reporte.hashCode() + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
@@ -65,8 +64,9 @@ public class ReporteContable
 	    }
 	}
 	
-	public ReporteContable(ReporteContableDTO reporte, String fechaInicio, String fechaFin)
+	public ReporteContable(Document documento, ReporteContableDTO reporte, String fechaInicio, String fechaFin)
 	{	
+		this.documento = documento;
 		ReporteContable.reporte = reporte;
 		if(fechaInicio!=null && fechaFin!=null)
 		{

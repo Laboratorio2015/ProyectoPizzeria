@@ -23,6 +23,8 @@ import java.util.Iterator;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import com.itextpdf.text.Document;
+
 import modelo.Itinerarios;
 
 import presentacion.controlador.Controlador;
@@ -97,7 +99,7 @@ public class seleccionarRepartidor extends JDialog {
 					hojaItinerario.setFueeliminado(false);
 					hojaItinerario.setRepartidor(control.getRepartidor().buscarRepartidorPorDni(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString())));
 					hojaItinerario.setPedidos(pedidos);
-					iti=new Itinerario(hojaItinerario);
+					iti=new Itinerario(new Document(), hojaItinerario);
 					iti.generarItinerario();
 					control.getItinerario().agregarItinerario(hojaItinerario);
 					for(int i=0; i<numfila.length;i++)

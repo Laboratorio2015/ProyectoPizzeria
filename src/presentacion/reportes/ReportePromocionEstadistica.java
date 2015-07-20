@@ -33,7 +33,6 @@ public class ReportePromocionEstadistica {
 	public void generarReporteEstadistico()
 	{
 		try {
-			documento = new Document();
 			final String FILE = "C:/Reporte Estadístico_Oferta " + '(' + fechaInicio + '-' + fechaFin + ')' + promocion.hashCode() + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReportePromocionEstadistica.class.getResource("/prototipos/Reporte_Contable_Header.png"));
@@ -52,8 +51,9 @@ public class ReportePromocionEstadistica {
 	    c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	    table.addCell(c1);}
 	
-	public ReportePromocionEstadistica(String tipo, ArrayList<PromocionEstadistica> promocion, String fechaInicio, String fechaFin)
+	public ReportePromocionEstadistica(Document documento, String tipo, ArrayList<PromocionEstadistica> promocion, String fechaInicio, String fechaFin)
 	{	
+		this.documento = documento;
 		ReportePromocionEstadistica.promocion=promocion;
 		tipoDeEstadistica = tipo;
 		this.fechaInicio = fechaInicio;
