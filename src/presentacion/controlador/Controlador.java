@@ -3461,7 +3461,7 @@ public class Controlador implements ActionListener
 		
 		//this.socket = new Socket(InetAddress.getLocalHost(),5000);
 		//
-		this.socket = new Socket(new propiedades().getDirServidor(),139);
+		this.socket = new Socket(new propiedades().getDirServidor(),5000);
 		sos = socket.getOutputStream(); 
 		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
