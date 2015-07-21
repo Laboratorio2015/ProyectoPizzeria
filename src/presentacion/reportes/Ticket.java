@@ -87,14 +87,17 @@ public class Ticket {
 		if(pedido.getProductos()!=null)
 		{
 			Integer tamaño = pedido.getProductos().size();
-			
-			writeTicket(canvas, bf_helv, tamaño);
+			Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
+			Integer y = 543;
+			canvas.setFontAndSize(bf_helv, 12);
+		
+			writeTicket(Iterador,canvas, bf_helv, tamaño, y);
 			while (tamaño>0)
 			{
 				Ticket.documento.newPage();
 				Ticket.documento.add(Chunk.NEXTPAGE);
 				documento.add(image);
-				writeTicket(canvas, bf_helv, tamaño);
+				writeTicket(Iterador, canvas, bf_helv, tamaño, y);
 			}
 		}
 		canvas.setFontAndSize(bf_helv, 14);
@@ -120,29 +123,26 @@ public class Ticket {
 		//Agregar Items del Pedido a Comanda
 		if(pedido.getProductos()!=null)
 		{
+		Integer tamaño = pedido.getProductos().size();
 		Iterator<ItemDTO> Iterador2 = pedido.getProductos().iterator();
 		Integer y2 = 143;
 		canvas.setFontAndSize(bf_helv, 12);
-		while(Iterador2.hasNext())
-			{
-				ItemDTO elemento = Iterador2.next();
-				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getCantidad().toString(), 50, y2, 0);
-				canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getProducto().getNombre(), 110, y2, 0);
-				if (elemento.getComentario()!= null)
-				canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getComentario(), 370, y2, 0);
-				else
-					canvas.showTextAligned(Element.ALIGN_LEFT, "", 370, y2, 0);
-				y2=y2-30;
-			}	
+		
+		writeComanda(Iterador2, canvas, bf_helv, tamaño, y2);
+		while (tamaño>0)
+		{
+			Ticket.documento.newPage();
+			Ticket.documento.add(Chunk.NEXTPAGE);
+			documento.add(image);
+			writeTicket(Iterador2, canvas, bf_helv, tamaño, y2);
+		}
+			
 		canvas.endText();
 		}
 	}
 	
-	private static void writeTicket(PdfContentByte canvas, BaseFont bf_helv, Integer size) throws DocumentException
+	private static void writeTicket(Iterator<ItemDTO> Iterador,PdfContentByte canvas, BaseFont bf_helv, Integer size, Integer y) throws DocumentException
 	{
-		Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
-		Integer y = 543;
-		canvas.setFontAndSize(bf_helv, 12);
 		while(Iterador.hasNext())
 			{
 				ItemDTO elemento = Iterador.next();
@@ -154,6 +154,22 @@ public class Ticket {
 				y=y-30;
 				size= size-1;
 			}
+	}
+	
+	private static void writeComanda(Iterator<ItemDTO> Iterador,PdfContentByte canvas, BaseFont bf_helv, Integer size, Integer y) throws DocumentException
+	{
+		while(Iterador.hasNext())
+		{
+			ItemDTO elemento = Iterador.next();
+			canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getCantidad().toString(), 50, y, 0);
+			canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getProducto().getNombre(), 110, y, 0);
+			if (elemento.getComentario()!= null)
+			canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getComentario(), 370, y, 0);
+			else
+				canvas.showTextAligned(Element.ALIGN_LEFT, "", 370, y, 0);
+			y=y-30;
+			size = size-1;
+		}
 	}
 }
 
