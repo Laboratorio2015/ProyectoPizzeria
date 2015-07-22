@@ -195,21 +195,20 @@ public class seleccionDeCliente extends JDialog {
 					else
 						pedido.setLlevaDelivery(false);
 					control.getPedido().agregarPedido(pedido);
-//				try {
-//						control.enviarPedidoMonitor(pedido);
-//					} catch (IOException e) {
-//						System.out.println("Fallo conexion con monitor (servidor)");
-//						e.printStackTrace();
-//					}
-				
+					////////ENVIA el NUEVO PEDIDO AL MONITOR//////
+					try {
+						control.enviarPedidoMonitor(pedido);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					/////////////////////////////////////////////
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getNumPedido());
 					//control.getMonitorCocina().nuevoPedido(pedido);
 					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
 					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					//control.getMonitorCocina().nuevoPedido(pedido);
-					//////////ENVIA el NUEVO PEDIDO AL MONITOR//////
-					//control.getMonitorCocina().nuevoPedido(pedido);  // no funciona, da null pointer exception
-					/////////////////////////////////////////////
+
 					new Ticket(seleccionDeCliente.this.pedido).generarTicket();
 					//new Comanda(seleccionDeCliente.this.pedido).generarComanda();
 					dispose();

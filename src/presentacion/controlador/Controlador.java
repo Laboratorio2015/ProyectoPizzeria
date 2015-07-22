@@ -3446,7 +3446,7 @@ public class Controlador implements ActionListener
 	
 //	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException{
 //
-//		this.socket = new Socket("localhost",5000);;
+//		this.socket = new Socket("localhost",5000);
 //
 //		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
 //		objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -3462,23 +3462,20 @@ public class Controlador implements ActionListener
 	public void enviarPedidoMonitor(PedidoDTO nuevoPedido) throws IOException
 	{
 		this.objectOutputStream.writeObject(nuevoPedido);
-		//this.objectOutputStream.writeObject(null);
 	}
 	
 	private void enviarPedidosMonitor() throws IOException{
 		
-		//this.socket = new Socket(InetAddress.getLocalHost(),5000);
-		//
-		this.socket = new Socket(new propiedades().getDirServidor(),5000);
+//		this.socket = new Socket("localhost",5000);
+		
+		this.socket = new Socket(new propiedades().getDirServidor(),5000); // linea par activar cuando se tenga monitor en otra pc.
 		sos = socket.getOutputStream(); 
 		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
 		//Levanta de la base todos los pedidos en estado solicitado, no eliminados y del dia de la fecha de hoy.
-		Iterator<PedidoDTO> pedidos = pedido.obtenerPedidosPendientes().iterator();
+		Iterator<PedidoDTO> pedidos = pedido.obtenerPedidosHoy(getFechaActual()).iterator();
 		while (pedidos.hasNext()){
-			PedidoDTO pedido = pedidos.next();
-			if (pedido.getEstado().trim().compareTo("solicitado")==0){
-			// && !pedido.getFueeliminado() && pedido.getFecha().trim().compareTo(getFechaActual())==0)
+			PedidoDTO pedido = pedidos.next();		
 				try {//
 					this.objectOutputStream.writeObject(pedido);
 					System.out.println("Pedido enviado a monitor.");
@@ -3490,10 +3487,7 @@ public class Controlador implements ActionListener
 		        } catch (Exception e) {//
 		            e.printStackTrace();//
 		        }//
-			}
 		}
-//		this.objectOutputStream.writeObject(null);
-//		socket.close();		
 	}
 
 

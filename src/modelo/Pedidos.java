@@ -158,5 +158,9 @@ public class Pedidos
 
 	public List<PedidoDTO> obtenerPedidosPendientes(){
 		return this.pedido.pedidosPendientes();
+	}
+
+	public  ArrayList<PedidoDTO> obtenerPedidosHoy(String fecha) {
+		return this.pedido.pedidosHoy(fecha);
 	}	
 }

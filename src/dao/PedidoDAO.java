@@ -411,4 +411,46 @@ public class PedidoDAO
 		}
 		return false;
 	}
+
+	public ArrayList<PedidoDTO> pedidosHoy(String fecha) {
+		PreparedStatement statement;
+		ResultSet resultSet; //Guarda el resultado de la query
+		ArrayList<PedidoDTO> pedidos = new ArrayList<>();
+		String obtenerPedidosHoy = "SELECT numpedido,item,total,oferta,fecha,estado FROM pedidos WHERE fueeliminado=false AND fecha LIKE '"+ fecha +"%';";
+		try 
+		{
+			statement = conexion.getSQLConexion().prepareStatement(obtenerPedidosHoy);
+			//statement.setString(1,fecha);
+			resultSet = statement.executeQuery();
+			ItemsPromociones itemPromos = new ItemsPromociones();
+			Items items = new Items();
+			while(resultSet.next())
+			{		
+				if(resultSet.getString("estado").trim().compareTo("solicitado")==0)
+				{	
+					// 
+					String arrayItems = String.valueOf(resultSet.getObject(2));
+					if (resultSet.getObject(2) == null)
+						arrayItems = "";				
+					String arrayIdPromo = String.valueOf(resultSet.getObject(4));
+					if (resultSet.getObject(4) == null)
+						arrayIdPromo = "";
+					//
+
+					pedidos.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray(arrayItems)
+							,(Integer)resultSet.getObject(3),itemPromos.pasarDeStringAArrayItPromo(arrayIdPromo),
+							(String)resultSet.getObject(5),(String)resultSet.getObject(6) ));
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return pedidos;
+	}
 }

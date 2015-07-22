@@ -289,6 +289,7 @@ public class pedidosPendientes extends JDialog {
 						control.getPedido().actualizarPedido(pedidoCambia, "rechazado");
 						//Quita el pedido del MONITOR ////////////////////////////////////////////
 						try {					
+							pedidoCambia.setEstado("rechazado");
 							control.enviarPedidoMonitor(pedidoCambia);
 						} catch (IOException e)
 						{
@@ -368,6 +369,7 @@ public class pedidosPendientes extends JDialog {
 						model.setValueAt("preparado", numFilaSeleccionada, 2);
 						table.setModel(model);
 						pedido=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 0)), fechaActual());
+						pedido.setEstado("preparado");
 						control.getPedido().actualizarPedido(pedido, "preparado");
 						//////////QUITA EL PEDIDO DEL MONITOR//////////
 						try {

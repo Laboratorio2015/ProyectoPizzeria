@@ -9,7 +9,7 @@ import dto.ItemDTO;
 
 public class PedidoDTO implements Serializable
 {
-	private static final long serialVersionUID = -796849469951998455L;
+	private static final long serialVersionUID = -58521324047351224L;
 	//public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
 	private Integer idpedido;
 	//este numero depedido depende de la fecha
@@ -58,8 +58,20 @@ public class PedidoDTO implements Serializable
 		this.items= items;
 		this.ofertas=promos;
 		this.fecha = fecha;
-		
 	}
+	
+	
+	//String obtenerPedidosHoy = "SELECT idpedido,item,total,oferta,fecha,estado FROM pedidos WHERE fueeliminado=false AND fecha LIKE '"+ fecha +"%';";
+	public PedidoDTO(Integer numpedido, ArrayList<ItemDTO> itemDTO,Integer total,ArrayList<ItemPromocionDTO> ItemPromocionDTO,
+			String fecha, String estado) {
+		this.numPedido = numpedido;
+		this.total = total;
+		this.items= itemDTO;
+		this.ofertas=ItemPromocionDTO;
+		this.fecha = fecha;
+		this.estado=estado;	
+	}
+
 	public ArrayList<ItemDTO> getProductos()
 	{
 		return items;
