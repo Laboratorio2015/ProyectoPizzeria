@@ -43,20 +43,15 @@ public class ReporteContable
 		    documento.open();
 		    documento.add(image);
 		    addContentPage (documento,reporte, this.fechaInicio, this.fechaFin);
-		    PdfPTable table = createTable1();
-	        documento.add(table);
+		    ReporteContable.createTable1(documento);
 	        documento.add(Chunk.NEWLINE);
-	        table = createTable2();
-	        documento.add(table);
+	        ReporteContable.createTable2(documento);
 	        documento.add(Chunk.NEWLINE);
-	        table = createTable4();
-	        documento.add(table);
+	        ReporteContable.createTable4(documento);
 	        documento.add(Chunk.NEWLINE);
-	        table = createTable5();
-	        documento.add(table);
+	        ReporteContable.createTable5(documento);
 	        documento.add(Chunk.NEWLINE);
-	        table = createTable3();
-	        documento.add(table);
+	        ReporteContable.createTable3(documento);
 	        documento.add(Chunk.NEWLINE);
 		    documento.close();
 		 } catch (Exception e) {
@@ -88,10 +83,8 @@ public class ReporteContable
 	
 	
 	 ///TABLA DE PIZZAS VENDIDAS
-	 public static PdfPTable createTable1() throws DocumentException {
+	 public static void createTable1(Document document) throws DocumentException {
 	        PdfPTable table = new PdfPTable(4);
-//	        table.setWidthPercentage(288 / 5.23f);
-//	        table.setWidths(new int[]{2, 2});
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Pizzas Vendidas"));
 	        cell.setColspan(4);
@@ -139,18 +132,19 @@ public class ReporteContable
 			        	addCell(table, (total.toString()));
 			    }
         	}
+        	document.add(table);
         	documento.add(Chunk.NEWLINE);
-        	documento.add(new Paragraph ("Subtotal de Pizzas Vendidas: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	Paragraph text = new Paragraph ("Subtotal de Pizzas Vendidas: " + subTotal, FontFactory.getFont("arial",12,Font.NORMAL, BaseColor.RED));
+        	text.setAlignment(Element.ALIGN_CENTER);
+        	documento.add(text);
+        	documento.add(Chunk.NEWLINE);
         	
 	        System.out.println("Agregadas a la tabla las PIZZAS vendidas");
-	        return table;
 	    }
 	 
 	 ///TABLA DE EMPANADAS VENDIDAS
-	 public static PdfPTable createTable2() throws DocumentException {
+	 public static void createTable2(Document document) throws DocumentException {
 	        PdfPTable table = new PdfPTable(4);
-//	        table.setWidthPercentage(288 / 5.23f);
-//	        table.setWidths(new int[]{2, 2});
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Empanadas Vendidas"));
 	        cell.setColspan(4);
@@ -191,17 +185,19 @@ public class ReporteContable
 		        	addCell(table, (total.toString()));
 				}
 	 		}
+        	document.add(table);
         	documento.add(Chunk.NEWLINE);
-        	documento.add(new Paragraph ("Subtotal de Empanadas Vendidas: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	Paragraph text = new Paragraph ("Subtotal de Empanadas Vendidas: " + subTotal, FontFactory.getFont("arial",12,Font.NORMAL, BaseColor.RED));
+        	text.setAlignment(Element.ALIGN_CENTER);
+        	documento.add(text);
+        	documento.add(Chunk.NEWLINE);
         	
 	        System.out.println("Agregadas a la tabla las EMPANADAS vendidas");
-	        return table;
 	    }
 	 
 	///TABLA DE COMPRAS REALIZADAS
-	 public static PdfPTable createTable3() throws DocumentException {
+	 public static void createTable3(Document document) throws DocumentException {
 	        PdfPTable table = new PdfPTable(3);
-//	        table.setWidthPercentage(288 / 5.23f);
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Compras Realizadas"));
 	        cell.setColspan(3);
@@ -239,17 +235,19 @@ public class ReporteContable
 						subTotal = subTotal + elemento.getCosto();
 					}
 			}
+        	document.add(table);
         	documento.add(Chunk.NEWLINE);
-        	documento.add(new Paragraph ("Subtotal de Compras Realizadas: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	Paragraph text = new Paragraph ("Subtotal de Compras Realizadas: " + subTotal, FontFactory.getFont("arial",12,Font.NORMAL, BaseColor.RED));
+        	text.setAlignment(Element.ALIGN_CENTER);
+        	documento.add(text);
+        	documento.add(Chunk.NEWLINE);
         	
 			System.out.println("Agregadas a la tabla las COMPRAS realizadas");
-	        return table;
 	    }
 	 
 	///TABLA DE OTROS PRODUCTOS VENDIDOS
-	 public static PdfPTable createTable4() throws DocumentException {
+	 public static void createTable4(Document document) throws DocumentException {
 	        PdfPTable table = new PdfPTable(4);
-//	        table.setWidthPercentage(288 / 5.23f);
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Otros Productos Vendidos"));
 	        cell.setColspan(4);
@@ -289,17 +287,19 @@ public class ReporteContable
 		        	addCell(table, (total.toString()));
 		        }
 			}
+        	document.add(table);
         	documento.add(Chunk.NEWLINE);
-        	documento.add(new Paragraph ("Subtotal de Otros Productos Vendidos: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	Paragraph text = new Paragraph ("Subtotal de Otros Productos Vendidos: " + subTotal, FontFactory.getFont("arial",12,Font.NORMAL, BaseColor.RED));
+        	text.setAlignment(Element.ALIGN_CENTER);
+        	documento.add(text);
+        	documento.add(Chunk.NEWLINE);
         	
 	        System.out.println("Agregados a la table de Otros Productos vendidos");
-	        return table;
 	    }
 	 
 	 ///TABLA DE PROMOCIONES VENDIDAS
-	 public static PdfPTable createTable5() throws DocumentException {
+	 public static void createTable5(Document document) throws DocumentException {
 	        PdfPTable table = new PdfPTable(4);
-//	        table.setWidthPercentage(288 / 5.23f);
 	        PdfPCell cell;
 	        cell = new PdfPCell(new Phrase("Promociones Vendidas"));
 	        cell.setColspan(4);
@@ -339,11 +339,13 @@ public class ReporteContable
 		        	addCell(table, (total.toString()));
 		        }
 			}
+        	document.add(table);
         	documento.add(Chunk.NEWLINE);
-        	documento.add(new Paragraph ("Subtotal de Promociones Vendidas: " + subTotal, FontFactory.getFont("arial",13,Font.NORMAL, BaseColor.RED)));
+        	Paragraph text = new Paragraph ("Subtotal de Promociones Vendidas: " + subTotal, FontFactory.getFont("arial",12,Font.NORMAL, BaseColor.RED));
+        	text.setAlignment(Element.ALIGN_CENTER);
+        	documento.add(text);
         	
 	        System.out.println("Agregados a la table de Otros Productos vendidos");
-	        return table;
 	    }
 	
 	private static void addContentPage(Document document, ReporteContableDTO reporte, String fechaInicio, String fechaFin) 

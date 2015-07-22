@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -13,6 +14,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -29,6 +31,7 @@ public class Itinerario
 	private HojaItinerarioDTO itinerario;
 	private final String fecha;
 	private static Document documento;
+	private static PdfWriter writer;
 	
 	public Itinerario (Document documento, HojaItinerarioDTO itinerario)
 	{
@@ -40,14 +43,13 @@ public class Itinerario
 	{
 		try {
 			String FILE = "C:/Itinerario " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
-			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
+			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
 		    addContentPage (documento,itinerario, fecha);
 		    documento.close();
 		 } catch (Exception e) {
 	     e.printStackTrace();
-	    }
-		
+	    }		
 	}
 		
 	
@@ -86,12 +88,13 @@ public class Itinerario
 		
 		addEmptyLine (document, 2);
 		//Añade Tabla de Pedido
-		 PdfPTable table = new PdfPTable(7);
+		 PdfPTable table = new PdfPTable(8);
 		 
 		 addHeaderCell(table, "Cliente");
 		 addHeaderCell(table, "Dirección");
 		 addHeaderCell(table, "Entre Calles");
 		 addHeaderCell(table, "Observaciones");
+		 addHeaderCell(table, "Hora de Pedido");
 		 addHeaderCell(table, "N° de Pedido");
 		 addHeaderCell(table, "Pedido");
 		 addHeaderCell(table, "Total");
@@ -109,6 +112,7 @@ public class Itinerario
 					addCell(table, elemento.getCliente().getCalle()+" "+elemento.getCliente().getNumeracion());
 					addCell(table, elemento.getCliente().getEntrecalle1()+" - "+elemento.getCliente().getEntrecalle2());
 					addCell(table, elemento.getCliente().getComentario());
+					addCell(table, elemento.getHora());
 					addCell(table, elemento.getIdpedido().toString());
 					String itemProductos = "";
 					String itemOfertas = "";
@@ -128,7 +132,22 @@ public class Itinerario
 					
 				}
 		 document.add(table);
+		 documento.add(Chunk.NEWLINE);
+		 documento.add(Chunk.NEWLINE);
+		 
+		 PdfContentByte canvas = writer.getDirectContent();
+		 canvas.beginText();
+		 drawLine(canvas, 300, 400, 120);
+		 canvas.showTextAligned(Element.ALIGN_CENTER, "Firma Repartidor", 300, 100, 0);
+		 drawLine(canvas, 450, 550, 120);
+		 canvas.showTextAligned(Element.ALIGN_CENTER, "Firma Cajero", 450, 100, 0);
 	}
+	
+    public static void drawLine(PdfContentByte cb, float x1, float x2, float y) {
+        cb.moveTo(x1, y);
+        cb.lineTo(x2, y);
+        cb.stroke();
+    }
 	
 	public String fechaActual()
 	{

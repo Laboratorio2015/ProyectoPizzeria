@@ -1,42 +1,39 @@
 package presentacion.reportes;
+
 import java.io.FileOutputStream;
 import java.util.Iterator;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.Image;
-
-
 
 import dto.ItemDTO;
 import dto.PedidoDTO;
 
-
 public class Ticket {
-	
-	private static PedidoDTO pedido;
-	private static Document documento = new Document();
+
+	private PedidoDTO pedido;
+	private static Document documento;
 	private static PdfWriter writer;
-	private static Image image;
 	
 	public void generarTicket()
 	{
 		try {
-			final String FILE = "C:/Pedido " + this.pedido.getNumPedido().toString()+" "+this.pedido.getFecha() + ".pdf";
+			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/TEST/NewTicket.pdf";
+			
 			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
-		    image = Image.getInstance(Ticket.class.getResource("/prototipos/Diseño Factura_Ticket_2.png"));
-            image.setAlignment(Element.ALIGN_BOTTOM); 	
-            image.setAbsolutePosition(0, 0);
 		    documento.open();
-		    documento.add(image);
-		    addContentPage (documento,pedido);
+		    addContentPage (documento, pedido);
 		    documento.close();
 		 } catch (Exception e) {
 	     e.printStackTrace();
@@ -44,132 +41,111 @@ public class Ticket {
 	}
 	
 	public Ticket(PedidoDTO pedido)
-	{	
+	{
 		this.pedido = pedido;
+		this.documento = new Document();
 	}
 		
+	
+	private static void addHeaderCell (PdfPTable table, String texto){
+		
+		PdfPCell c1 = new PdfPCell(new Phrase(new Paragraph(texto, FontFactory.getFont("helvetica",10,Font.BOLD, BaseColor.BLACK))));
+	    c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+	    table.addCell(c1);
+	}
+	
+	private static void addCell (PdfPTable table, String texto ){
+		
+		PdfPCell c1 = new PdfPCell(new Phrase(new Paragraph(texto, FontFactory.getFont("helvetica",9,Font.NORMAL, BaseColor.BLACK))));
+	    c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+	    table.addCell(c1);
+	}
 	
 	private static void addContentPage(Document document, PedidoDTO pedido) 
 	throws DocumentException 
-	{
-		Font helvetica = new Font(FontFamily.HELVETICA, 12);
-	    BaseFont bf_helv = helvetica.getCalculatedBaseFont(false);
-		PdfContentByte canvas = writer.getDirectContent();
-		canvas.beginText();
-		
+	{		
 		/////TICKET DE PEDIDO
 		//Agrego n° de Pedido
-        canvas.setFontAndSize(bf_helv, 17);
-		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getIdpedido().toString(), 350, 745, 0);
+		documento.add(new Paragraph("N° de Pedido: " + pedido.getIdpedido().toString(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
 		
-		//Fecha-Día
-		canvas.showTextAligned(Element.ALIGN_LEFT, "19", 360, 715, 0);
-		//Fecha-Mes
-		canvas.showTextAligned(Element.ALIGN_LEFT, "06", 435, 715, 0);
-		//Fecha-Año
-		canvas.showTextAligned(Element.ALIGN_LEFT, "2015", 505, 715, 0);
+		//Fecha-Día/Mes/Año
+		documento.add(new Paragraph("Fecha: " + pedido.getFecha(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
+		documento.add(Chunk.NEWLINE);
 		
-		//Agrego DNI de Cliente
-		canvas.setFontAndSize(bf_helv, 12);
-		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getCliente().getDni().toString(), 450, 641, 0);
-		
-		//Agrego Nombre y Apellido del Cliente
-		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), 100, 641, 0);
-		
-		//Agrego Dirección del Cliente
-		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getCliente().getDireccion() + pedido.getCliente().getNumeracion(), 100, 616, 0);
-		
-		//Agrego Teléfono del Cliente
-		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getCliente().getTelefono(), 470, 616, 0);
-
+		//Agrego Datos del Cliente
+		documento.add(new Paragraph("Datos del Cliente", FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
+		documento.add(new Paragraph("DNI: " + pedido.getCliente().getDni().toString(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+		documento.add(new Paragraph("Apellido y Nombre: " + pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+		documento.add(new Paragraph("Dirección: " + pedido.getCliente().getDireccion() + " " + pedido.getCliente().getNumeracion(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+		documento.add(new Paragraph("Teléfono: " + pedido.getCliente().getTelefono(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+		documento.add(Chunk.NEWLINE);
 		
 		//Agregar Items del Pedido a Ticket
+
+		PdfPTable table = new PdfPTable(4);
+		addHeaderCell(table, "Cantidad");
+		addHeaderCell(table, "Nombre");
+		addHeaderCell(table, "Precio Unitario");
+		addHeaderCell(table, "Subtotal");
+		table.setHeaderRows(1);
+		
 		if(pedido.getProductos()!=null)
 		{
-			Integer tamaño = pedido.getProductos().size();
 			Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
-			Integer y = 543;
-			canvas.setFontAndSize(bf_helv, 12);
-		
-			writeTicket(Iterador,canvas, bf_helv, tamaño, y);
-			while (tamaño>0)
+			while(Iterador.hasNext())
 			{
-				Ticket.documento.newPage();
-				Ticket.documento.add(Chunk.NEXTPAGE);
-				documento.add(image);
-				writeTicket(Iterador, canvas, bf_helv, tamaño, y);
+				ItemDTO elemento = Iterador.next();
+				addCell(table, elemento.getCantidad().toString());
+				addCell(table, elemento.getProducto().getNombre());
+				addCell(table, elemento.getProducto().getPrecio().toString());
+				Integer totalItem = elemento.getCantidad()*elemento.getProducto().getPrecio();
+				addCell(table, totalItem.toString());
 			}
 		}
-		canvas.setFontAndSize(bf_helv, 14);
-		canvas.showTextAligned(Element.ALIGN_LEFT, "$" + pedido.getTotal().toString(), 530, 400, 0);
 		
+		document.add(table);
+		documento.add(Chunk.NEWLINE);
+
+		documento.add(new Paragraph("$" + pedido.getTotal().toString(), FontFactory.getFont("helvetica",12,Font.BOLD, BaseColor.BLACK)));
+		documento.add(Chunk.NEWLINE);
 		
 		/////COMANDA DE PEDIDO
 		//Agrego n° de Pedido
-	    canvas.setFontAndSize(bf_helv, 17);
-		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getIdpedido().toString(), 350, 305, 0);
+	    documento.add(new Paragraph("N° de Pedido: " + pedido.getIdpedido().toString(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
 		
-		//Fecha-Día
-		canvas.showTextAligned(Element.ALIGN_LEFT, "19", 360, 275, 0);
-		//Fecha-Mes
-		canvas.showTextAligned(Element.ALIGN_LEFT, "06", 435, 275, 0);
-		//Fecha-Año
-		canvas.showTextAligned(Element.ALIGN_LEFT, "2015", 505, 275, 0);
+		//Fecha-Día/Mes/Año
+	    documento.add(new Paragraph("Fecha: " + pedido.getFecha(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
+	    documento.add(Chunk.NEWLINE);
 		
 		//Agrego Nombre y Apellido del Cliente
-		canvas.setFontAndSize(bf_helv, 12);
-		canvas.showTextAligned(Element.ALIGN_LEFT, pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), 100, 223, 0);
+	    documento.add(new Paragraph("Nombre del Cliente: " + pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+	    documento.add(Chunk.NEWLINE);
 		
 		//Agregar Items del Pedido a Comanda
+	    
+		PdfPTable table2 = new PdfPTable(3);
+		addHeaderCell(table2, "Cantidad");
+		addHeaderCell(table2, "Nombre");
+		addHeaderCell(table2, "Comentario");
+		table.setHeaderRows(1);
+		
 		if(pedido.getProductos()!=null)
 		{
-		Integer tamaño = pedido.getProductos().size();
-		Iterator<ItemDTO> Iterador2 = pedido.getProductos().iterator();
-		Integer y2 = 143;
-		canvas.setFontAndSize(bf_helv, 12);
-		
-		writeComanda(Iterador2, canvas, bf_helv, tamaño, y2);
-		while (tamaño>0)
-		{
-			Ticket.documento.newPage();
-			Ticket.documento.add(Chunk.NEXTPAGE);
-			documento.add(image);
-			writeTicket(Iterador2, canvas, bf_helv, tamaño, y2);
-		}
-			
-		canvas.endText();
-		}
-	}
-	
-	private static void writeTicket(Iterator<ItemDTO> Iterador,PdfContentByte canvas, BaseFont bf_helv, Integer size, Integer y) throws DocumentException
-	{
-		while(Iterador.hasNext())
+			Iterator<ItemDTO> Iterador2 = pedido.getProductos().iterator();
+			while(Iterador2.hasNext())
 			{
-				ItemDTO elemento = Iterador.next();
-				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getCantidad().toString(), 50, y, 0);
-				canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getProducto().getNombre(), 110, y, 0);
-				canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getProducto().getPrecio().toString(), 460, y, 0);
-				Integer totalItem = elemento.getCantidad()*elemento.getProducto().getPrecio();
-				canvas.showTextAligned(Element.ALIGN_CENTER, totalItem.toString(), 545, y, 0);
-				y=y-30;
-				size= size-1;
+				ItemDTO elemento = Iterador2.next();
+				addCell(table, elemento.getCantidad().toString());
+				addCell(table, elemento.getProducto().getNombre());
+				if (elemento.getComentario()!= null)
+					addCell(table, elemento.getComentario());
+				else
+					addCell(table, "");
 			}
-	}
-	
-	private static void writeComanda(Iterator<ItemDTO> Iterador,PdfContentByte canvas, BaseFont bf_helv, Integer size, Integer y) throws DocumentException
-	{
-		while(Iterador.hasNext())
-		{
-			ItemDTO elemento = Iterador.next();
-			canvas.showTextAligned(Element.ALIGN_CENTER, elemento.getCantidad().toString(), 50, y, 0);
-			canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getProducto().getNombre(), 110, y, 0);
-			if (elemento.getComentario()!= null)
-			canvas.showTextAligned(Element.ALIGN_LEFT, elemento.getComentario(), 370, y, 0);
-			else
-				canvas.showTextAligned(Element.ALIGN_LEFT, "", 370, y, 0);
-			y=y-30;
-			size = size-1;
 		}
+		document.add(table2);
 	}
 }
+
+
 
