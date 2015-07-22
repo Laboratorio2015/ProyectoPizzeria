@@ -840,7 +840,7 @@ public class Controlador implements ActionListener
 							return new Integer(o2.getCantidad()).compareTo(new Integer(o1.getCantidad()));
 						}
 					});
-					new ReportePromocionEstadistica (new Document(), tipoEstadistica, promocion, fInicio, fFin).generarReporteEstadistico();
+					new ReportePromocionEstadistica (new Document(), tipoEstadistica, promocion,ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("promocion",promocion,null);
 					else
@@ -908,7 +908,7 @@ public class Controlador implements ActionListener
 					List<ItemPromocionDTO> listaPormoPed=this.pedido.obtenerTodosPromos();
 					ArrayList<PromocionEstadistica> promocion=obtenerTodasPromocionesTodosPedidos(pedidosResultantes);
 					Collections.sort(promocion);
-					new ReportePromocionEstadistica (new Document(), tipoEstadistica, promocion, fInicio, fFin).generarReporteEstadistico();
+					new ReportePromocionEstadistica (new Document(), tipoEstadistica, promocion, ventanaReportesEstadistica.getTfFechaInicio().getText(), ventanaReportesEstadistica.getTfFechaFin().getText()).generarReporteEstadistico();
 					if(ventanaReportesEstadistica.getButtonGroup().isSelected(ventanaReportesEstadistica.getVerTodo().getModel()))
 						llenarTablaEstadisticas("promocion",promocion,null);
 					else
@@ -1727,6 +1727,11 @@ public class Controlador implements ActionListener
 			ventanaReportesEstadistica.setVisible(true);
 		}
 		//Seleccionar tipos de Estadisticas
+		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnEnviarPorEmail())
+		{
+			JOptionPane.showMessageDialog(null, "Se ha enviado por email", "Confirmación",JOptionPane.WARNING_MESSAGE);
+		}
+		
 		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getCbEstadisticas())
 		{
 			String tipoProducto = (String) ventanaReportesEstadistica.getCbEstadisticas().getSelectedItem().toString();
@@ -2024,7 +2029,10 @@ public class Controlador implements ActionListener
 				rep.setDni(Integer.parseInt(ventanaEditarRepartidor.getTfdni().getText().toString()));
 				rep.setApellido(ventanaEditarRepartidor.getTfApellido().getText().toString());
 				rep.setFechaDeNacimiento(ventanaEditarRepartidor.getTfFechaNacimiento().getText().toString());
+				rep.setComentario(ventanaEditarRepartidor.getTfComentario().getText());
 				rep.setTelefono(ventanaEditarRepartidor.getTfCelular().getText().toString());
+				rep.setPatente(ventanaEditarRepartidor.getTfPatente().getText());
+				rep.setVehiculo(ventanaEditarRepartidor.getTfDescripcion().getText());
 				rep.setEstado(null);
 				repartidor.actualizarRepartidor(rep);
 				llenarTablaRepartidor();

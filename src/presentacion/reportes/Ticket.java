@@ -29,7 +29,7 @@ public class Ticket {
 	public void generarTicket()
 	{
 		try {
-			final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/TEST/Factura " + pedido.getNumPedido() + ".pdf";
+			final String FILE = "C:/Factura " + pedido.getNumPedido() + ".pdf";
 			
 			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
