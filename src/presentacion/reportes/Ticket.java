@@ -135,12 +135,12 @@ public class Ticket {
 			while(Iterador2.hasNext())
 			{
 				ItemDTO elemento = Iterador2.next();
-				addCell(table, elemento.getCantidad().toString());
-				addCell(table, elemento.getProducto().getNombre());
+				addCell(table2, elemento.getCantidad().toString());
+				addCell(table2, elemento.getProducto().getNombre());
 				if (elemento.getComentario()!= null)
-					addCell(table, elemento.getComentario());
+					addCell(table2, elemento.getComentario());
 				else
-					addCell(table, "");
+					addCell(table2, "");
 			}
 		}
 		document.add(table2);
