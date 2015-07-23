@@ -106,7 +106,7 @@ public class Ticket {
 		document.add(table);
 		documento.add(Chunk.NEWLINE);
 
-		documento.add(new Paragraph("$" + pedido.getTotal().toString(), FontFactory.getFont("helvetica",12,Font.BOLD, BaseColor.BLACK)));
+		documento.add(new Paragraph("Total: $" + pedido.getTotal().toString(), FontFactory.getFont("helvetica",12,Font.BOLD, BaseColor.BLACK)));
 		documento.add(Chunk.NEWLINE);
 		
 		/////COMANDA DE PEDIDO

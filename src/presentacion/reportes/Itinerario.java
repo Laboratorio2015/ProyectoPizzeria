@@ -37,6 +37,7 @@ public class Itinerario
 	{
 		this.itinerario = itinerario;
 		this.fecha=fechaActual();
+		this.documento = documento;
 	}
 	
 	public void generarItinerario()
