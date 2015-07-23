@@ -31,7 +31,7 @@ public class Itinerario
 	private HojaItinerarioDTO itinerario;
 	private final String fecha;
 	private static Document documento;
-	private static PdfWriter writer;
+//	private static PdfWriter writer;
 	
 	public Itinerario (Document documento, HojaItinerarioDTO itinerario)
 	{
@@ -44,7 +44,8 @@ public class Itinerario
 	{
 		try {
 			String FILE = "C:/Itinerario " + this.itinerario.getIdHojaItinerario().toString() + ".pdf";
-			writer = PdfWriter.getInstance(documento, new FileOutputStream(FILE));
+//			writer = 
+			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    documento.open();
 		    addContentPage (documento,itinerario, fecha);
 		    documento.close();
@@ -137,12 +138,12 @@ public class Itinerario
 		 documento.add(Chunk.NEWLINE);
 		 documento.add(Chunk.NEWLINE);
 		 
-		 PdfContentByte canvas = writer.getDirectContent();
-		 canvas.beginText();
-		 drawLine(canvas, 300, 400, 120);
-		 canvas.showTextAligned(Element.ALIGN_CENTER, "Firma Repartidor", 300, 100, 0);
-		 drawLine(canvas, 450, 550, 120);
-		 canvas.showTextAligned(Element.ALIGN_CENTER, "Firma Cajero", 450, 100, 0);
+//		 PdfContentByte canvas = writer.getDirectContent();
+//		 canvas.beginText();
+//		 drawLine(canvas, 300, 400, 120);
+//		 canvas.showTextAligned(Element.ALIGN_CENTER, "Firma Repartidor", 300, 100, 0);
+//		 drawLine(canvas, 450, 550, 120);
+//		 canvas.showTextAligned(Element.ALIGN_CENTER, "Firma Cajero", 450, 100, 0);
 	}
 	
     public static void drawLine(PdfContentByte cb, float x1, float x2, float y) {
