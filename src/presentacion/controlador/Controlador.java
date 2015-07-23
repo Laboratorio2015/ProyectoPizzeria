@@ -1913,17 +1913,23 @@ public class Controlador implements ActionListener
 		//dar de alta a un producto
 		else if (this.ventanaAgregarProducto!= null && e.getSource()==this.ventanaAgregarProducto.getBtnAgregarProducto())
 		{
-			ProductoDTO nuevo=new ProductoDTO();
-			nuevo.setIdproducto(this.producto.ultimoProducto()+1);
-			nuevo.setNombre(ventanaAgregarProducto.getTfDenominacion().getText().toString());
-			nuevo.setPrecio(Integer.parseInt(ventanaAgregarProducto.getTfPrecio().getText().toString()));
-			nuevo.setFueeliminado(false);
-			nuevo.setTipo(ventanaAgregarProducto.getCbTipo().getSelectedItem().toString());
-			producto.agregarProducto(nuevo);
-			llenarTablaProductos();
-			ventanaAgregarProducto.getTfDenominacion().setText("");
-			ventanaAgregarProducto.getTfPrecio().setText("");
-			ventanaAgregarProducto.getCbTipo().setSelectedIndex(0);
+			if(!compararProducto(ventanaAgregarProducto.getTfDenominacion().getText().toString(),ventanaAgregarProducto.getCbTipo().getSelectedItem().toString()))
+			{
+				ProductoDTO nuevo=new ProductoDTO();
+				nuevo.setIdproducto(this.producto.ultimoProducto()+1);
+				nuevo.setNombre(ventanaAgregarProducto.getTfDenominacion().getText().toString());
+				nuevo.setPrecio(Integer.parseInt(ventanaAgregarProducto.getTfPrecio().getText().toString()));
+				nuevo.setFueeliminado(false);
+				nuevo.setTipo(ventanaAgregarProducto.getCbTipo().getSelectedItem().toString());
+				producto.agregarProducto(nuevo);
+				llenarTablaProductos();
+				ventanaAgregarProducto.getTfDenominacion().setText("");
+				ventanaAgregarProducto.getTfPrecio().setText("");
+				ventanaAgregarProducto.getCbTipo().setSelectedIndex(0);
+				JOptionPane.showMessageDialog(null, "Se ha agregado exitosamente un nuevo producto al final de la lista");
+			}
+			else
+				JOptionPane.showMessageDialog(null, "Error, ya exite este producto, para cambiarle el precio ingrese a la ventana de edicion de productos");
 		}
 
 		//acciones asocidas a editar productos
@@ -2243,13 +2249,14 @@ public class Controlador implements ActionListener
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnBorrarProducto())
 		{
 			int filaSeleccionada=(ventanaEditarPromocion.getTable().getSelectedRow());
-			ventanaEditarPromocion.getModel().removeRow(ventanaEditarPromocion.getTable().getSelectedRow());
+			
 			Integer precioReal=Integer.parseInt(ventanaEditarPromocion.getTfPrecioReal().getText().toString());
 			Object nombre=(ventanaEditarPromocion.getModel().getValueAt(filaSeleccionada, 0));
 			ProductoDTO aux=this.producto.buscarProductoPorNombre(nombre.toString());
 			Integer cantidad= Integer.parseInt(ventanaEditarPromocion.getModel().getValueAt(filaSeleccionada, 1).toString());
 			Integer costoActual=(precioReal-(aux.getPrecio()*cantidad));
 			ventanaEditarPromocion.getTfPrecioReal().setText(costoActual.toString());
+			ventanaEditarPromocion.getModel().removeRow(ventanaEditarPromocion.getTable().getSelectedRow());
 		}
 		//elimina una promocion
 		else if (this.ventanaEditarPromocion!= null && e.getSource()==this.ventanaEditarPromocion.getBtnEliminarPromocion())
@@ -3466,9 +3473,9 @@ public class Controlador implements ActionListener
 	
 	private void enviarPedidosMonitor() throws IOException{
 		
-//		this.socket = new Socket("localhost",5000);
+//		this.socket = new Socket("localhost",5000);new propiedades().getDirServidor()
 		
-		this.socket = new Socket(new propiedades().getDirServidor(),5000); // linea par activar cuando se tenga monitor en otra pc.
+		this.socket = new Socket("10.10.17.122",9000); // linea par activar cuando se tenga monitor en otra pc.
 		sos = socket.getOutputStream(); 
 		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
@@ -3713,7 +3720,19 @@ public class Controlador implements ActionListener
 		}
 		return fechaFinal;
 	}
-	  
+	
+		public boolean compararProducto(String nombre, String tipo)
+		{
+			Iterator<ProductoDTO> productos= producto.obtenerProducto().iterator();
+			while(productos.hasNext())
+			{
+				ProductoDTO actual=productos.next();
+				if(tipo.compareTo(actual.getTipo())==0 && nombre.compareTo(actual.getNombre())==0)
+					return true;
+			}
+			return false;
+		}
+	
 	  public ReporteContableDTO getReporteContable ()
 	  {
 		  return this.reporteContable;
