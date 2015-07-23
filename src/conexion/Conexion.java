@@ -15,9 +15,9 @@ public class Conexion {
 		{
 			propiedades aux=new propiedades();
 			Class.forName(driver).newInstance();
-			//conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Sistema de Pizzeria", "postgres","postgres");
-			String Direccion="jdbc:postgresql:/"+aux.getDirServidorBase()+"/"+aux.getNombreBase();
-			conexion = DriverManager.getConnection(Direccion,aux.getUsuarioBase(),aux.getContraseñaBase());
+			conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Sistema de Pizzeria", "postgres","postgres");
+			//String Direccion="jdbc:postgresql:/"+aux.getDirServidorBase()+"/"+aux.getNombreBase();
+			//conexion = DriverManager.getConnection(Direccion,aux.getUsuarioBase(),aux.getContraseñaBase());
 			JOptionPane.showMessageDialog(null, "Coneccion Exitosa a la Base de Datos.", "Informacion",JOptionPane.WARNING_MESSAGE);
 			System.out.println("Conexion exitosa");
 		}
