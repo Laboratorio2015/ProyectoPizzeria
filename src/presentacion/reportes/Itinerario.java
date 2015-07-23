@@ -48,7 +48,8 @@ public class Itinerario
 		    documento.open();
 		    addContentPage (documento,itinerario, fecha);
 		    documento.close();
-		 } catch (Exception e) {
+		 }
+		catch (Exception e) {
 	     e.printStackTrace();
 	    }		
 	}
