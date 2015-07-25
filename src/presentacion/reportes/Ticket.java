@@ -61,74 +61,166 @@ public class Ticket {
 	    table.addCell(c1);
 	}
 	
-	private static void addContentPage(Document document, PedidoDTO pedido) 
-	throws DocumentException 
-	{		
+	private static void addProductoTicket (PdfPTable table, Document documento, ItemDTO elemento)
+	{
+		addCell(table, elemento.getCantidad().toString());
+		addCell(table, elemento.getProducto().getNombre());
+		addCell(table, elemento.getProducto().getPrecio().toString());
+		Integer totalItem = elemento.getCantidad()*elemento.getProducto().getPrecio();
+		addCell(table, totalItem.toString());	
+	}
+	
+	private static void addProductoComanda (PdfPTable table2, Document documento, ItemDTO elemento)
+	{
+		addCell(table2, elemento.getCantidad().toString());
+		addCell(table2, elemento.getProducto().getNombre());
+		if (elemento.getComentario()!= null)
+			addCell(table2, elemento.getComentario());
+		else
+			addCell(table2, "");
+	}
+	
+    private static void addTicketHeader (Document document, PedidoDTO pedido) throws DocumentException
+    {
 		/////TICKET DE PEDIDO
 		//Agrego n° de Pedido
-		documento.add(new Paragraph("N° de Pedido: " + pedido.getIdpedido().toString(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
+		document.add(new Paragraph("N° de Pedido: " + pedido.getIdpedido().toString(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
 		
 		//Fecha-Día/Mes/Año
-		documento.add(new Paragraph("Fecha: " + pedido.getFecha(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
-		documento.add(Chunk.NEWLINE);
+		document.add(new Paragraph("Fecha: " + pedido.getFecha(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
+		document.add(Chunk.NEWLINE);
 		
 		//Agrego Datos del Cliente
-		documento.add(new Paragraph("Datos del Cliente", FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
-		documento.add(new Paragraph("DNI: " + pedido.getCliente().getDni().toString(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
-		documento.add(new Paragraph("Apellido y Nombre: " + pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
-		documento.add(new Paragraph("Dirección: " + pedido.getCliente().getDireccion() + " " + pedido.getCliente().getNumeracion(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
-		documento.add(new Paragraph("Teléfono: " + pedido.getCliente().getTelefono(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
-		documento.add(Chunk.NEWLINE);
+		document.add(new Paragraph("Datos del Cliente", FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
+		document.add(new Paragraph("DNI: " + pedido.getCliente().getDni().toString(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+		document.add(new Paragraph("Apellido y Nombre: " + pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+		document.add(new Paragraph("Dirección: " + pedido.getCliente().getDireccion() + " " + pedido.getCliente().getNumeracion(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+		document.add(new Paragraph("Teléfono: " + pedido.getCliente().getTelefono(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+		document.add(Chunk.NEWLINE);
+    }
+    
+    private static void addComandaHeader (Document document, PedidoDTO pedido) throws DocumentException
+    {
+		/////COMANDA DE PEDIDO
+		//Agrego n° de Pedido
+	    document.add(new Paragraph("N° de Pedido: " + pedido.getIdpedido().toString(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
 		
-		//Agregar Items del Pedido a Ticket
-
+		//Fecha-Día/Mes/Año
+	    document.add(new Paragraph("Fecha: " + pedido.getFecha(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
+	    document.add(Chunk.NEWLINE);
+		
+		//Agrego Nombre y Apellido del Cliente
+	    document.add(new Paragraph("Nombre del Cliente: " + pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
+	    document.add(Chunk.NEWLINE);
+    }
+	
+    private static PdfPTable newTicketTable ()
+    {
 		PdfPTable table = new PdfPTable(4);
 		addHeaderCell(table, "Cantidad");
 		addHeaderCell(table, "Nombre");
 		addHeaderCell(table, "Precio Unitario");
 		addHeaderCell(table, "Subtotal");
 		table.setHeaderRows(1);
-		
-		if(pedido.getProductos()!=null)
-		{
-			Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
-			while(Iterador.hasNext())
-			{
-				ItemDTO elemento = Iterador.next();
-				addCell(table, elemento.getCantidad().toString());
-				addCell(table, elemento.getProducto().getNombre());
-				addCell(table, elemento.getProducto().getPrecio().toString());
-				Integer totalItem = elemento.getCantidad()*elemento.getProducto().getPrecio();
-				addCell(table, totalItem.toString());
-			}
-		}
-		
-		document.add(table);
-		documento.add(Chunk.NEWLINE);
-
-		documento.add(new Paragraph("Total: $" + pedido.getTotal().toString(), FontFactory.getFont("helvetica",12,Font.BOLD, BaseColor.BLACK)));
-		documento.add(Chunk.NEWLINE);
-		
-		/////COMANDA DE PEDIDO
-		//Agrego n° de Pedido
-	    documento.add(new Paragraph("N° de Pedido: " + pedido.getIdpedido().toString(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
-		
-		//Fecha-Día/Mes/Año
-	    documento.add(new Paragraph("Fecha: " + pedido.getFecha(), FontFactory.getFont("helvetica",12,Font.NORMAL, BaseColor.BLACK)));
-	    documento.add(Chunk.NEWLINE);
-		
-		//Agrego Nombre y Apellido del Cliente
-	    documento.add(new Paragraph("Nombre del Cliente: " + pedido.getCliente().getApellido()+ "  " +pedido.getCliente().getNombre(), FontFactory.getFont("helvetica",10,Font.NORMAL, BaseColor.BLACK)));
-	    documento.add(Chunk.NEWLINE);
-		
-		//Agregar Items del Pedido a Comanda
-	    
+		return table;
+    }
+    
+    private static PdfPTable newComandaTable ()
+    {
 		PdfPTable table2 = new PdfPTable(3);
 		addHeaderCell(table2, "Cantidad");
 		addHeaderCell(table2, "Nombre");
 		addHeaderCell(table2, "Comentario");
-		table.setHeaderRows(1);
+		table2.setHeaderRows(1);
+		return table2;
+    }
+    
+    private static void addBlankRowTicket (PdfPTable table)
+    {
+		addHeaderCell(table, "-");
+		addHeaderCell(table, "-");
+		addHeaderCell(table, "-");
+		addHeaderCell(table, "-");
+    }
+    
+    private static void addBlankRowComanda (PdfPTable table)
+    {
+		addHeaderCell(table, "-");
+		addHeaderCell(table, "-");
+		addHeaderCell(table, "-");
+    }
+    
+    
+	private static void addContentPage(Document document, PedidoDTO pedido) 
+	throws DocumentException 
+	{				
+		//Tabla de Ticket
+		PdfPTable table = newTicketTable();
 		
+		//Tabla de Comanda
+		PdfPTable table2 = newComandaTable();
+		
+		Integer filas = 11;
+		
+		if(pedido.getProductos()!=null)
+		{
+			addTicketHeader(document, pedido);
+			Iterator<ItemDTO> Iterador = pedido.getProductos().iterator();
+			while(Iterador.hasNext())
+			{
+				ItemDTO elemento = Iterador.next();
+				if (filas>0)
+				{
+					addProductoTicket (table, document, elemento);
+					addProductoComanda (table2, document, elemento);
+					filas= filas-1;
+					
+					if (Iterador.hasNext()==false)
+					{
+						for (int i=filas; i>0; i--)
+						{
+							addBlankRowTicket (table);
+							addBlankRowComanda (table2);
+						}
+						
+						document.add(table);
+						document.add(Chunk.NEWLINE);
+
+						document.add(new Paragraph("Total: $" + pedido.getTotal().toString(), FontFactory.getFont("helvetica",12,Font.BOLD, BaseColor.BLACK)));
+						document.add(Chunk.NEWLINE);
+						
+						addComandaHeader (document, pedido);
+						document.add(table2);
+					}
+				}
+				else
+				{
+					document.add(table);
+					document.add(Chunk.NEWLINE);
+
+					document.add(new Paragraph("Total: $" + pedido.getTotal().toString(), FontFactory.getFont("helvetica",12,Font.BOLD, BaseColor.BLACK)));
+					document.add(Chunk.NEWLINE);
+					
+					addComandaHeader (document, pedido);
+					document.add(table2);
+					
+					//NUEVA PÁGINA
+					document.newPage();
+					filas=11;
+					table = newTicketTable();
+					table2 = newComandaTable();
+					//Agregar encabezado de TICKET
+					addTicketHeader(document, pedido);
+					addProductoTicket (table, document, elemento);
+					addProductoComanda (table2, document, elemento);
+					filas= filas-1;
+				}	
+			}
+		}
+		
+		
+		//Agregar Items del Pedido a Comanda
+	   		
 		if(pedido.getProductos()!=null)
 		{
 			Iterator<ItemDTO> Iterador2 = pedido.getProductos().iterator();
