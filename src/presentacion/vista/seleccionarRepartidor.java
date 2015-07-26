@@ -18,6 +18,8 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import javax.swing.JScrollPane;
@@ -97,6 +99,7 @@ public class seleccionarRepartidor extends JDialog {
 					hojaItinerario=new HojaItinerarioDTO();
 					hojaItinerario.setIdHojaItinerario(control.getItinerario().obtenerUltimoItinerario()+1);
 					hojaItinerario.setFueeliminado(false);
+					hojaItinerario.setFecha(fechaActual());
 					hojaItinerario.setRepartidor(control.getRepartidor().buscarRepartidorPorDni(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString())));
 					hojaItinerario.setPedidos(pedidos);
 					iti=new Itinerario(new Document(), hojaItinerario);
@@ -105,17 +108,15 @@ public class seleccionarRepartidor extends JDialog {
 					for(int i=0; i<numfila.length;i++)
 					{
 					//ingresar el nuevo estado en la tabla a los pedidos
-					padre.getTable().setValueAt(hojaItinerario.getIdHojaItinerario(), i, 4);
-					padre.getTable().setValueAt("en delivery", i, 2);
+					//padre.getTable().setValueAt(hojaItinerario.getIdHojaItinerario(), i, 4);
+					//padre.getTable().setValueAt("en delivery", i, 2);
 					}
 					Iterator<PedidoDTO> Iterador = pedidos.iterator();
 					//cambia el estado de los pedidos en la base
 					while(Iterador.hasNext())
 					{
 						PedidoDTO elemento = Iterador.next();
-						elemento.setEstado("en delivery");
-						control.getPedido().quitarPedido(elemento);
-						control.getPedido().agregarPedido(elemento);
+						control.getPedido().actualizarPedido(elemento, "en delivery");
 					}
 					JOptionPane.showMessageDialog(null, "Se genero Hoja de Itinerario con el número: "+hojaItinerario.getIdHojaItinerario());
 					dispose();
@@ -155,5 +156,12 @@ public class seleccionarRepartidor extends JDialog {
 			Object[] fila = {elemento.getDni(), elemento.getNombre(), elemento.getApellido()};
 			model.addRow(fila);			
 		}
+	}
+	
+	public String fechaActual()
+	{
+		Calendar c1 = GregorianCalendar.getInstance();
+		String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
+		return fecha;
 	}
 }

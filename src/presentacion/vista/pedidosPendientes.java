@@ -347,13 +347,9 @@ public class pedidosPendientes extends JDialog {
 					{
 						nuevo.add(control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt(model.getValueAt(numeros[i], 0).toString()), fechaActual()));
 					}
-					for(int j=0; j<numeros.length; j++)
-					{
-						model.removeRow(numeros[j]);
-					}
 					seleccionarRepartidor selecRepartidor=new seleccionarRepartidor(_pedPendiente,control,numeros,nuevo);
 					selecRepartidor.setVisible(true);
-					
+					llenarTabla();
 				}
 			});
 			btnAsignarRepartidor.setOpaque(false);

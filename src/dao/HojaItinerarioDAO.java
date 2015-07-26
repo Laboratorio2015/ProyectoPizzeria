@@ -17,7 +17,7 @@ import dto.RepartidorDTO;
 
 public class HojaItinerarioDAO 
 {
-	private static final String insert = "INSERT INTO hojaitinerarios(idhojaitinerario,repartidor, pedido,fueeliminado) VALUES(?,?,?,?)";
+	private static final String insert = "INSERT INTO hojaitinerarios(idhojaitinerario,repartidor, pedido,fecha,fueeliminado) VALUES(?,?,?,?,?)";
 	private static final String delete = "DELETE FROM hojaitinerarios WHERE idhojaitinerario = ?";
 	private static final String readall = "SELECT * FROM hojaitinerarios";
 	private static final String obtenerTodoUnaFecha = "SELECT * FROM hojaitinerarios where fecha =?";
@@ -36,7 +36,8 @@ public class HojaItinerarioDAO
 			statement.setInt(1, itinerario.getIdHojaItinerario());
 			statement.setInt(2, itinerario.getRepartidor().getIdRepartidor());
 			statement.setString(3,iditems);
-			statement.setBoolean(4, itinerario.getFueeliminado());
+			statement.setString(4, itinerario.getFecha());
+			statement.setBoolean(5, itinerario.getFueeliminado());
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
 			{
