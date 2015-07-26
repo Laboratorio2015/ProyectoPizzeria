@@ -102,7 +102,7 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 					else if(seleccionado.compareTo("Pedido")==0)
 					{
 						PedidoDTO pedido=control.getPedido().buscarPedidoNumeroFecha(Integer.parseInt(itinerario), fechaActual());
-						Integer aux=control.getItinerario().buscarItinerarioPorPedido(pedido.getIdpedido());
+						Integer aux=control.getItinerario().buscarItinerarioPorPedido(pedido.getIdpedido(), fechaActual());
 						if(aux!=0)
 						{
 							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario1(aux);

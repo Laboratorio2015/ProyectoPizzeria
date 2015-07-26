@@ -8,13 +8,15 @@ public class HojaItinerarioDTO
 	private RepartidorDTO repartidor;
 	private ArrayList<PedidoDTO> pedidos;
 	private Boolean fueeliminado;
+	private String fecha;
 	
-	public HojaItinerarioDTO (Integer idhojaitinerario, RepartidorDTO repartidor, ArrayList<PedidoDTO> pedidos, Boolean fueeliminado)
+	public HojaItinerarioDTO (Integer idhojaitinerario, RepartidorDTO repartidor, ArrayList<PedidoDTO> pedidos, Boolean fueeliminado, String fecha)
 	{
 		this.idHojaItinerario=idhojaitinerario;
 		this.repartidor=repartidor;
 		this.pedidos=pedidos;
 		this.fueeliminado=fueeliminado;
+		this.fecha=fecha;
 	}
 	//constructor vacio
 	public HojaItinerarioDTO ()
@@ -43,6 +45,12 @@ public class HojaItinerarioDTO
 	}
 	public void setFueeliminado(Boolean fueeliminado) {
 		this.fueeliminado = fueeliminado;
+	}
+	public String getFecha() {
+		return fecha;
+	}
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
 	}
 	
 }

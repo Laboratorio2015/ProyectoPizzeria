@@ -32,6 +32,12 @@ public class Itinerarios
 	{
 		return this.itinerario.readAll();
 	}
+	
+	public List<HojaItinerarioDTO> obtenerItinerariosFecha(String fecha)
+	{
+		return this.itinerario.readAll();
+	}
+	
 	public HojaItinerarioDTO buscarItinerario(Integer iditinerario)
 	{
 		List<HojaItinerarioDTO> items=this.obtenerItinerarios();
@@ -53,9 +59,9 @@ public class Itinerarios
 	}
 
 
-	public int buscarItinerarioPorPedido(Integer idpedido) 
+	public int buscarItinerarioPorPedido(Integer idpedido, String fecha) 
 	{
-		List<HojaItinerarioDTO> items=this.obtenerItinerarios();
+		List<HojaItinerarioDTO> items=this.obtenerItinerariosFecha(fecha);
 		Iterator<HojaItinerarioDTO> Iterador = items.iterator();
 		while(Iterador.hasNext())
 		{

@@ -20,6 +20,7 @@ public class HojaItinerarioDAO
 	private static final String insert = "INSERT INTO hojaitinerarios(idhojaitinerario,repartidor, pedido,fueeliminado) VALUES(?,?,?,?)";
 	private static final String delete = "DELETE FROM hojaitinerarios WHERE idhojaitinerario = ?";
 	private static final String readall = "SELECT * FROM hojaitinerarios";
+	private static final String obtenerTodoUnaFecha = "SELECT * FROM hojaitinerarios where fecha =?";
 	private static final String buscarItinerario = "SELECT * FROM hojaitinerarios where idhojaitinerario=?";
 	private static final String numItinerarios = "SELECT idhojaitinerario FROM hojaitinerarios";	
 	private static final Conexion conexion = Conexion.getConexion();
@@ -99,7 +100,7 @@ public class HojaItinerarioDAO
 				Repartidores rep=new Repartidores();
 				RepartidorDTO repartidor=rep.buscarRepartidor(resultSet.getInt("repartidor"));
 				categorias.add(new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"),
-								repartidor,listaPedidos,resultSet.getBoolean("fueeliminado")));
+								repartidor,listaPedidos,resultSet.getBoolean("fueeliminado"), resultSet.getString("fecha")));
 			}
 		} 
 		catch (SQLException e) 
@@ -159,7 +160,7 @@ public class HojaItinerarioDAO
 				Repartidores rep=new Repartidores();
 				RepartidorDTO repartidor=rep.buscarRepartidor(resultSet.getInt("repartidor"));
 				itinerario=new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"),
-								repartidor,listaPedidos,resultSet.getBoolean("fueeliminado"));
+								repartidor,listaPedidos,resultSet.getBoolean("fueeliminado"),resultSet.getString("fecha"));
 			}
 		} 
 		catch (SQLException e) 

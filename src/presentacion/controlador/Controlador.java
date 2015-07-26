@@ -3229,7 +3229,7 @@ public class Controlador implements ActionListener
 			{
 				if(elemento.getEstado().compareTo("endelivery")==0)
 				{
-					int itinerario=this.itinerario.buscarItinerarioPorPedido(elemento.getIdpedido());
+					int itinerario=this.itinerario.buscarItinerarioPorPedido(elemento.getIdpedido(), fechaActual());
 					ventanaPedPendiente.getModel().addRow(new String[] {elemento.getNumPedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),itinerario+""});
 				}
 				else
@@ -3475,7 +3475,7 @@ public class Controlador implements ActionListener
 		
 //		this.socket = new Socket("localhost",5000);new propiedades().getDirServidor()
 		
-		this.socket = new Socket("10.10.17.122",9000); // linea par activar cuando se tenga monitor en otra pc.
+		this.socket = new Socket(new propiedades().getDirServidor(),9000); // linea par activar cuando se tenga monitor en otra pc.
 		sos = socket.getOutputStream(); 
 		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
@@ -3737,6 +3737,13 @@ public class Controlador implements ActionListener
 	  {
 		  return this.reporteContable;
 	  }
+	  
+	  public String fechaActual()
+		{
+			Calendar c1 = GregorianCalendar.getInstance();
+			String fecha=(c1.getTime().getDate()+"-"+(c1.getTime().getMonth()+1)+"-"+(c1.getTime().getYear()+1900));
+			return fecha;
+		}
 	  
 //		private void valoresPredetarminados() throws UnknownHostException 
 //		{
