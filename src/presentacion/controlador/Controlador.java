@@ -3473,9 +3473,9 @@ public class Controlador implements ActionListener
 	
 	private void enviarPedidosMonitor() throws IOException{
 		
-//		this.socket = new Socket("localhost",5000);new propiedades().getDirServidor()
+		this.socket = new Socket("localhost",5000);new propiedades().getDirServidor();
 		
-		this.socket = new Socket(new propiedades().getDirServidor(),9000); // linea par activar cuando se tenga monitor en otra pc.
+//	this.socket = new Socket(new propiedades().getDirServidor(),9000); // linea par activar cuando se tenga monitor en otra pc.
 		sos = socket.getOutputStream(); 
 		//
 		objectOutputStream= new ObjectOutputStream(socket.getOutputStream());
