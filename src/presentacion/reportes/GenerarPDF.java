@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import dto.ItemDTO;
+import dto.ItemPromocionDTO;
 import dto.PedidoDTO;
+import dto.ProductoDTO;
 
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -22,13 +24,27 @@ public class GenerarPDF {
 	public static void GenerarTicket(PedidoDTO pedido)
 	{
 	PedidoDataSource datasource = new PedidoDataSource(); 
-	
+	//recorre todos los items
 	Iterator<ItemDTO> iterador=pedido.getItems().iterator();
 	while(iterador.hasNext())
 		{
 			datasource.addItems(iterador.next());
 		}
-	 
+	//recorre todos las promociones
+	ItemDTO aux_promo;
+	Iterator<ItemPromocionDTO> iterator2= pedido.getOfertas().iterator();
+	while(iterator2.hasNext())
+	{
+		ItemPromocionDTO auxiliar= iterator2.next();
+		String nombre= auxiliar.getPromocion().getNombre();
+		Integer cantidad= auxiliar.getCantidad();
+		Integer precio= auxiliar.getPromocion().getPrecio();
+		String tipo =" - ";
+		ProductoDTO aux= new ProductoDTO(1, nombre, precio, tipo, false);
+		String comentario= auxiliar.getComentario();
+		aux_promo=new ItemDTO(1, aux, cantidad, comentario, false);
+		datasource.addItems(aux_promo);
+	}
 	try
 	{
 		//obtiene el reporte desde el escritorio raiz
