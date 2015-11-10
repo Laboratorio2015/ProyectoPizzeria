@@ -14,7 +14,7 @@ public class PedidoDataSource implements JRDataSource
 	//valor para la implemntacion del dataSource
 	private int indiceItemActual = -1;
 	private ArrayList<ItemDTO> listaItems= new ArrayList<ItemDTO>();
-	private ArrayList<ItemPromocionDTO> listaItemPromo= new ArrayList<ItemPromocionDTO>();
+	
 	
 	//metodos implementados del dataSource
 	public Object getFieldValue(JRField jrField ) throws JRException {
