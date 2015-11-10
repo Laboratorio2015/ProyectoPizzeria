@@ -22,7 +22,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import presentacion.controlador.Controlador;
+import presentacion.reportes.GenerarPDF;
 import presentacion.reportes.Ticket;
+import presentacion.reportes.TicketCom;
 
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
@@ -196,20 +198,35 @@ public class seleccionDeCliente extends JDialog {
 						pedido.setLlevaDelivery(false);
 					control.getPedido().agregarPedido(pedido);
 					////////ENVIA el NUEVO PEDIDO AL MONITOR//////
-					try {
-						control.enviarPedidoMonitor(pedido);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					//try {
+					//	control.enviarPedidoMonitor(pedido);
+					//} catch (IOException e) {
+					//	// TODO Auto-generated catch block
+					//	e.printStackTrace();
+					//}
 					/////////////////////////////////////////////
+					GenerarPDF.GenerarTicket(pedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getNumPedido());
+					
+					//generar ticket
+					try
+					{
+					new TicketCom().generarPDF(pedido);
+					}
+					catch (Exception e)
+					{
+						System.out.println("error en la generacion de ticket");
+						e.getMessage();
+					}
+					
+					
+					
 					//control.getMonitorCocina().nuevoPedido(pedido);
 					//new Ticket().generarTicket(seleccionDeCliente.this.pedido);
 					//new Comanda().generarComanda(seleccionDeCliente.this.pedido);
 					//control.getMonitorCocina().nuevoPedido(pedido);
 
-					new Ticket(seleccionDeCliente.this.pedido).generarTicket();
+					//new Ticket(seleccionDeCliente.this.pedido).generarTicket();
 					//new Comanda(seleccionDeCliente.this.pedido).generarComanda();
 					dispose();
 				}
