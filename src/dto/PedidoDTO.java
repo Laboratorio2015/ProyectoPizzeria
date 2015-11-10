@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRField;
 import dto.ItemDTO;
 
 
-public class PedidoDTO implements Serializable
+public class PedidoDTO implements Serializable, JRDataSource
 {
 	private static final long serialVersionUID = -58521324047351224L;
 	//public enum estadosPedido{solicitado, preparado, endelivery,entregado, cancelado};
@@ -25,6 +29,8 @@ public class PedidoDTO implements Serializable
 	private ClienteDTO cliente;
 	private Boolean llevaDelivery;
 	private Boolean fueeliminado;
+	//valor para la implemntacion del dataSource
+	private int indiceItemActual = -1;
 	
 	
 	public PedidoDTO(Integer pedido,Integer numPedido,ArrayList<ItemDTO> items ,String fecha, String hora, String estado,
@@ -221,5 +227,63 @@ public class PedidoDTO implements Serializable
 	{
 		return (this.idpedido+"  "+ this.estado+"  "+ this.comanda+"  "+ 
 	this.cliente+"     total: "+ this.total+"  "+ this.ticket);
+	}
+	
+	
+	//metodos implementados del dataSource
+	@Override
+	public Object getFieldValue(JRField jrField) throws JRException {
+		Object valor = null;  
+		
+		if("pedido_numero".equals(jrField.getName()))
+		{
+			valor = getNumPedido();
+		}
+		else if("fecha".equals(jrField.getName())) 
+	    { 
+	        valor = getFecha(); 
+	    }
+		else if("nombre".equals(jrField.getName())) 
+	    { 
+	        valor = cliente.getNombre(); 
+	    }
+		else if("apellido".equals(jrField.getName())) 
+	    { 
+	        valor = cliente.getApellido(); 
+	    }
+		else if("direccion".equals(jrField.getName())) 
+	    { 
+	        valor = cliente.getDireccion(); 
+	    }
+		else if("telefono".equals(jrField.getName())) 
+	    { 
+	        valor = cliente.getTelefono(); 
+	    }
+		else if("nombreProducto".equals(jrField.getName())) 
+	    { 
+	        valor = items.get(indiceItemActual).getProducto().getNombre(); 
+	    } 
+	    else if("precio".equals(jrField.getName())) 
+	    { 
+	        valor = items.get(indiceItemActual).getProducto().getPrecio(); 
+	    } 
+	    else if("tipo".equals(jrField.getName())) 
+	    { 
+	        valor = items.get(indiceItemActual).getProducto().getTipo(); 
+	    } 
+	    else if("cantidad".equals(jrField.getName())) 
+	    { 
+	        valor = items.get(indiceItemActual).getCantidad(); 
+	    } 
+	    else if("comentarioProducto".equals(jrField.getName())) 
+	    { 
+	        valor = items.get(indiceItemActual).getComentario(); 
+	    }
+	 
+	    return valor;
+	}
+	@Override
+	public boolean next() throws JRException {
+		return ++indiceItemActual < items.size();
 	}
 }
