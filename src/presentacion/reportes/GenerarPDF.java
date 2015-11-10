@@ -48,7 +48,14 @@ public class GenerarPDF {
         //genera el reporte con la plantilla y la coneccion a base de datos
         JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parametros, datasource);
 
-       //exporta el reporte como pdf
+      //verifica que exista la carpeta de exportacion, sino la crea
+        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Facturas/");
+        if (!carpeta.exists())
+        {
+        	carpeta.mkdirs();
+        }
+        
+       //exporta el reporte como pdf 
         JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Facturas/pedido"+pedido.getNumPedido()+" - "+pedido.getFecha()+".pdf");
     
         System.out.println("llego");
