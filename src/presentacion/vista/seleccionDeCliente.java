@@ -20,11 +20,10 @@ import dto.PedidoDTO;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-
 import presentacion.controlador.Controlador;
 import presentacion.reportes.GenerarPDF;
 import presentacion.reportes.Ticket;
-import presentacion.reportes.TicketCom;
+
 
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
@@ -205,19 +204,14 @@ public class seleccionDeCliente extends JDialog {
 					//	e.printStackTrace();
 					//}
 					/////////////////////////////////////////////
+					
+					//generar Ticket
 					GenerarPDF.GenerarTicket(pedido);
+					//generar Comanda
+					
+					//Mensaje de finalizacion
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+seleccionDeCliente.this.pedido.getNumPedido());
 					
-					//generar ticket
-					try
-					{
-					new TicketCom().generarPDF(pedido);
-					}
-					catch (Exception e)
-					{
-						System.out.println("error en la generacion de ticket");
-						e.getMessage();
-					}
 					
 					
 					

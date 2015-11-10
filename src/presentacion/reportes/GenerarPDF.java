@@ -32,7 +32,7 @@ public class GenerarPDF {
 	try
 	{
 		//obtiene el reporte desde el escritorio raiz
-		JasperReport reporte = (JasperReport) JRLoader.loadObject(new File("C:/LaboratorioSoftwareTP/trunk/src/plantilla/ticket.jasper"));
+		JasperReport reporte = (JasperReport) JRLoader.loadObject(new File("C:/LaboratorioSoftwareTP/trunk/src/plantilla/ticketA6.jasper"));
         
 		//genera el map con los datos del ticket
 		Map<String, Object> parametros = new HashMap<String, Object>();
@@ -49,7 +49,7 @@ public class GenerarPDF {
         JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, parametros, datasource);
 
        //exporta el reporte como pdf
-        JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Facturas/pedido"+pedido.getNumPedido()+".pdf");
+        JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Facturas/pedido"+pedido.getNumPedido()+" - "+pedido.getFecha()+".pdf");
     
         System.out.println("llego");
 	}
