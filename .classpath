@@ -5,8 +5,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/AutoCompleter (1).jar"/>
 	<classpathentry kind="lib" path="lib/itextpdf-5.5.5.jar"/>
-	<classpathentry kind="lib" path="lib/jasperreports-5.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jcalendar.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-9.4-1201.jdbc4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-digester-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/itext-pdfa-5.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/jasperreports-6.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
