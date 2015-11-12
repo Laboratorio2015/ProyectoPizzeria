@@ -29,7 +29,10 @@ public class ComandaDataSource  implements JRDataSource
 			    } 
 			    else if("observaciones".equals(jrField.getName())) 
 			    { 
-			    	valor = listaItems.get(indiceItemActual).getComentario();
+			    	if(listaItems.get(indiceItemActual).getComentario()!= null)
+			    		valor = listaItems.get(indiceItemActual).getComentario();
+			    	else
+			    		valor = " - ";
 			    }		
 
 			 return valor;

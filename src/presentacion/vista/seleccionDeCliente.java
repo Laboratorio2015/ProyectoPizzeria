@@ -197,12 +197,12 @@ public class seleccionDeCliente extends JDialog {
 						pedido.setLlevaDelivery(false);
 					control.getPedido().agregarPedido(pedido);
 					////////ENVIA el NUEVO PEDIDO AL MONITOR//////
-					//try {
-					//	control.enviarPedidoMonitor(pedido);
-					//} catch (IOException e) {
-					//	// TODO Auto-generated catch block
-					//	e.printStackTrace();
-					//}
+					try {
+						control.enviarPedidoMonitor(pedido);
+					} catch (IOException e) {
+					//TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					/////////////////////////////////////////////
 					
 					//generar Ticket
@@ -420,6 +420,12 @@ public class seleccionDeCliente extends JDialog {
 					//control.getMonitorCocina().nuevoPedido(pedido);
 					//////////ENVIA el NUEVO PEDIDO AL MONITOR//////
 					//control.getMonitorCocina().nuevoPedido(pedido);  // no funciona, da null pointer exception
+					try {
+						control.enviarPedidoMonitor(pedido);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					/////////////////////////////////////////////
 					//new Ticket(seleccionDeCliente.this.pedido).generarTicket();
 					//new Comanda(seleccionDeCliente.this.pedido).generarComanda();

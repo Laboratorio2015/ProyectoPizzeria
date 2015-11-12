@@ -17,10 +17,15 @@ import dto.RepartidorDTO;
 
 public class HojaItinerarioDAO 
 {
-	private static final String insert = "INSERT INTO hojaitinerarios(idhojaitinerario,repartidor, pedido,fecha,fueeliminado) VALUES(?,?,?,?,?)";
+	private static final String insert = "INSERT INTO hojaitinerarios(idhojaitinerario,numhjaitinerario,repartidor, pedido,fecha,fueeliminado) VALUES(?,?,?,?,?,?)";
 	private static final String delete = "DELETE FROM hojaitinerarios WHERE idhojaitinerario = ?";
 	private static final String readall = "SELECT * FROM hojaitinerarios";
-	private static final String obtenerTodoUnaFecha = "SELECT * FROM hojaitinerarios where fecha =?";
+	private static final String crearTablaTemporal= "create temporary table auxiliar (id integer)";
+	private static final String crearTablaTemporal2= "create temporary table auxiliar2 (id integer)";
+	private static final String agregarFechaTablaTemporal= "insert into auxiliar(Select max(numhjaitinerario) from hojaitinerarios where fecha = ? )";
+	private static final String agregaTablaTemporal= "insert into auxiliar2(Select max(idhojaitinerario) from hojaitinerarios)";
+	private static final String ultimoedidoFecha= "select * from auxiliar";
+	private static final String ultimoedidoFecha2= "select * from auxiliar2";
 	private static final String buscarItinerario = "SELECT * FROM hojaitinerarios where idhojaitinerario=?";
 	private static final String numItinerarios = "SELECT idhojaitinerario FROM hojaitinerarios";	
 	private static final Conexion conexion = Conexion.getConexion();
@@ -34,10 +39,11 @@ public class HojaItinerarioDAO
 			String iditems= ped.iditemsPedido(itinerario);
 			statement = conexion.getSQLConexion().prepareStatement(insert);
 			statement.setInt(1, itinerario.getIdHojaItinerario());
-			statement.setInt(2, itinerario.getRepartidor().getIdRepartidor());
-			statement.setString(3,iditems);
-			statement.setString(4, itinerario.getFecha());
-			statement.setBoolean(5, itinerario.getFueeliminado());
+			statement.setInt(2, itinerario.getNumItinerario());
+			statement.setInt(3, itinerario.getRepartidor().getIdRepartidor());
+			statement.setString(4,iditems);
+			statement.setString(5, itinerario.getFecha());
+			statement.setBoolean(6, itinerario.getFueeliminado());
 			
 			if(statement.executeUpdate() > 0) //Si se ejecutó devuelvo true
 			{
@@ -100,7 +106,7 @@ public class HojaItinerarioDAO
 				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedido"));
 				Repartidores rep=new Repartidores();
 				RepartidorDTO repartidor=rep.buscarRepartidor(resultSet.getInt("repartidor"));
-				categorias.add(new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"),
+				categorias.add(new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"), resultSet.getInt("numhjaitinerario"),
 								repartidor,listaPedidos,resultSet.getBoolean("fueeliminado"), resultSet.getString("fecha")));
 			}
 		} 
@@ -160,7 +166,7 @@ public class HojaItinerarioDAO
 				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedido"));
 				Repartidores rep=new Repartidores();
 				RepartidorDTO repartidor=rep.buscarRepartidor(resultSet.getInt("repartidor"));
-				itinerario=new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"),
+				itinerario=new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"),resultSet.getInt("numhjaitinerario"),
 								repartidor,listaPedidos,resultSet.getBoolean("fueeliminado"),resultSet.getString("fecha"));
 			}
 		} 
@@ -173,5 +179,81 @@ public class HojaItinerarioDAO
 			conexion.cerrarConexion();
 		}
 		return itinerario;
+	}
+
+	
+	//obtiene el numero maximo de itinerario dado una fecha 
+	public int UltimoItinerarioDeLaFecha(String fecha) {
+		int ultimo=0;
+		PreparedStatement statement;
+		PreparedStatement statement1;
+		PreparedStatement statement2;
+		ResultSet resultSet; //Guarda el resultado de la query
+		try 
+		{
+			//crea tabla temporal
+			statement1= conexion.getSQLConexion().prepareStatement(crearTablaTemporal);
+			statement1.execute();
+			//guarda el valor en la tabla temporal
+			statement2 = conexion.getSQLConexion().prepareStatement(agregarFechaTablaTemporal);
+			statement2.setString(1, fecha);
+			statement2.execute();
+			//ejecuta la consulta
+			statement = conexion.getSQLConexion().prepareStatement(ultimoedidoFecha);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				ultimo= resultSet.getInt("id");
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		
+		return ultimo;
+		
+	}
+
+	public Integer UltimoItinerario() {
+		int ultimo=0;
+		PreparedStatement statement;
+		PreparedStatement statement1;
+		PreparedStatement statement2;
+		ResultSet resultSet; //Guarda el resultado de la query
+		try 
+		{
+			//crea tabla temporal
+			statement1= conexion.getSQLConexion().prepareStatement(crearTablaTemporal2);
+			statement1.execute();
+			//guarda el valor en la tabla temporal
+			statement2 = conexion.getSQLConexion().prepareStatement(agregaTablaTemporal);
+			statement2.execute();
+			//ejecuta la consulta
+			statement = conexion.getSQLConexion().prepareStatement(ultimoedidoFecha2);
+			resultSet = statement.executeQuery();
+			
+			while(resultSet.next())
+			{
+				ultimo= resultSet.getInt("id");
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		
+		return ultimo;
 	}
 }

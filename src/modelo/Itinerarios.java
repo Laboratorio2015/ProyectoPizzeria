@@ -72,24 +72,25 @@ public class Itinerarios
 				{
 					PedidoDTO element = Iterado.next();
 					if(element.getIdpedido().equals(idpedido))
-						return elemento.getIdHojaItinerario();
+						return elemento.getNumItinerario();
 				}	
 			}
 		}
 		return 0;
 	}
 
+	//obtener el numero del ultimo itinerario de una fecha
+	public Integer obtenerUltimoItinerario(String fecha) 
+	{
+		Integer ultimo=0;
+		ultimo = itinerario.UltimoItinerarioDeLaFecha(fecha);
+		return ultimo;
+	}
+	//obtiene el numero del ultimo itinerario del historial
 	public Integer obtenerUltimoItinerario() 
 	{
 		Integer ultimo=0;
-		List<Integer> items=this.itinerario.obtenerIdItinerarios();
-		Iterator<Integer> Iterador = items.iterator();
-		while(Iterador.hasNext())
-		{
-			Integer elemento = Iterador.next();
-			if(elemento>ultimo)
-				ultimo=elemento;
-		}
+		ultimo = itinerario.UltimoItinerario();
 		return ultimo;
 	}
 }

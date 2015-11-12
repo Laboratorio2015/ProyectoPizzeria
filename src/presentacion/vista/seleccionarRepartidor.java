@@ -30,6 +30,7 @@ import com.itextpdf.text.Document;
 import modelo.Itinerarios;
 
 import presentacion.controlador.Controlador;
+import presentacion.reportes.GenerarPDF;
 import presentacion.reportes.Itinerario;
 
 import dto.HojaItinerarioDTO;
@@ -98,12 +99,14 @@ public class seleccionarRepartidor extends JDialog {
 					//crea la hoja de itinerario con los pedidos seleccionados
 					hojaItinerario=new HojaItinerarioDTO();
 					hojaItinerario.setIdHojaItinerario(control.getItinerario().obtenerUltimoItinerario()+1);
+					hojaItinerario.setNumItinerario(control.getItinerario().obtenerUltimoItinerario(fechaActual())+1);
 					hojaItinerario.setFueeliminado(false);
 					hojaItinerario.setFecha(fechaActual());
 					hojaItinerario.setRepartidor(control.getRepartidor().buscarRepartidorPorDni(Integer.parseInt(model.getValueAt(table.getSelectedRow(), 0).toString())));
 					hojaItinerario.setPedidos(pedidos);
-					iti=new Itinerario(new Document(), hojaItinerario);
-					iti.generarItinerario();
+					//iti=new Itinerario(new Document(), hojaItinerario);
+					//iti.generarItinerario();
+					GenerarPDF.GenerarItinerario(hojaItinerario);
 					control.getItinerario().agregarItinerario(hojaItinerario);
 					for(int i=0; i<numfila.length;i++)
 					{
@@ -118,7 +121,7 @@ public class seleccionarRepartidor extends JDialog {
 						PedidoDTO elemento = Iterador.next();
 						control.getPedido().actualizarPedido(elemento, "en delivery");
 					}
-					JOptionPane.showMessageDialog(null, "Se genero Hoja de Itinerario con el número: "+hojaItinerario.getIdHojaItinerario());
+					JOptionPane.showMessageDialog(null, "Se genero Hoja de Itinerario con el número: "+hojaItinerario.getNumItinerario());
 					dispose();
 				}
 			});

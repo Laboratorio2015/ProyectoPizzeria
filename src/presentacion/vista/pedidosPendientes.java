@@ -230,12 +230,12 @@ public class pedidosPendientes extends JDialog {
 						
 						//Quita el pedido del MONITOR antes de modificarlo en la siguiente ventana.
 						pedidoCambia.setEstado("modificado");
-						try {
+						/*try {
 							control.enviarPedidoMonitor(pedidoCambia);
 						} catch (IOException e) {
 							System.out.println("Error para enviar pedido a monitor (servidor)");
 							e.printStackTrace();
-						}
+						}*/
 						//////////////////////////////////////////////////////////////////////////
 						
 						ordenDePedido pedidoCambiar=new ordenDePedido(_padre,pedidoCambia,control);

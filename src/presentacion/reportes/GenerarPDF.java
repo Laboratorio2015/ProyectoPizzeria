@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import dto.HojaItinerarioDTO;
 import dto.ItemDTO;
 import dto.ItemPromocionDTO;
 import dto.PedidoDTO;
@@ -117,4 +118,53 @@ public class GenerarPDF {
 	}
 	
 }
+
+	public static void GenerarItinerario(HojaItinerarioDTO hojaItinerario) 
+	{
+		ItinerarioDataSource datasource = new ItinerarioDataSource();
+
+		
+		//recorre todos los items para llenar el ticket
+		Iterator<PedidoDTO> iterador=hojaItinerario.getPedidos().iterator();
+		while(iterador.hasNext())
+			{
+				datasource.addItems(iterador.next());
+			}
+		
+		try
+		{
+			//obtiene el reporte desde el directorio raiz del itinerario
+			JasperReport itinerario = (JasperReport) JRLoader.loadObject(new File("C:/LaboratorioSoftwareTP/trunk/src/plantilla/itinerarioA5.jasper"));
+					        
+			//genera el map con los datos del itinerario
+			Map<String, Object> parametros = new HashMap<String, Object>();
+		    parametros.put("fecha", hojaItinerario.getFecha());
+		    parametros.put("repartidor_dni", hojaItinerario.getRepartidor().getDni().toString());
+		    parametros.put("repartidor_nombre", hojaItinerario.getRepartidor().getApellido() + hojaItinerario.getRepartidor().getNombre());
+		    parametros.put("repartidor_vehiculo", hojaItinerario.getRepartidor().getVehiculo());
+		    parametros.put("repartidor_patente", hojaItinerario.getRepartidor().getPatente());
+		    
+	        //genera el reporte con la plantilla y la coneccion 
+	        JasperPrint jasperPrint = JasperFillManager.fillReport(itinerario, parametros, datasource);
+	  
+
+	      //verifica que exista la carpeta de exportacion, sino la crea
+	        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Itinerarios/");
+	        if (!carpeta.exists())
+	        {
+	        	carpeta.mkdirs();
+	        }
+	       
+	       //exporta el itinerario como pdf 
+	        JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Itinerarios/itinerario"+hojaItinerario.getNumItinerario()+" - "+hojaItinerario.getFecha()+".pdf");
+	       
+	        System.out.println("termino exitosamente");
+		}
+
+		catch(Exception e)
+		{
+			System.out.println("Conexion fallida");
+		}
+
+	}
 }
