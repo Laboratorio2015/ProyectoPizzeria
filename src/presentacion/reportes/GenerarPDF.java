@@ -130,7 +130,6 @@ public class GenerarPDF {
 			{
 				datasource.addItems(iterador.next());
 			}
-		
 		try
 		{
 			//obtiene el reporte desde el directorio raiz del itinerario
@@ -142,7 +141,7 @@ public class GenerarPDF {
 		    parametros.put("repartidor_dni", hojaItinerario.getRepartidor().getDni().toString());
 		    parametros.put("repartidor_nombre", hojaItinerario.getRepartidor().getApellido() + hojaItinerario.getRepartidor().getNombre());
 		    parametros.put("repartidor_vehiculo", hojaItinerario.getRepartidor().getVehiculo());
-		    parametros.put("repartidor_patente", hojaItinerario.getRepartidor().getPatente());
+		    parametros.put("repartidor_patente", hojaItinerario.getRepartidor().getPatente().toString());
 		    
 	        //genera el reporte con la plantilla y la coneccion 
 	        JasperPrint jasperPrint = JasperFillManager.fillReport(itinerario, parametros, datasource);
@@ -158,12 +157,12 @@ public class GenerarPDF {
 	       //exporta el itinerario como pdf 
 	        JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Itinerarios/itinerario"+hojaItinerario.getNumItinerario()+" - "+hojaItinerario.getFecha()+".pdf");
 	       
-	        System.out.println("termino exitosamente");
+	        System.out.println("se genero exitosamente el itinerario");
 		}
 
 		catch(Exception e)
 		{
-			System.out.println("Conexion fallida");
+			System.out.println("ERROR!!!   no se genero el itinerario");
 		}
 
 	}

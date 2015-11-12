@@ -22,41 +22,49 @@ public class ItinerarioDataSource implements JRDataSource{
 			
 			 if("cliente".equals(jrField.getName())) 
 			    { 
-				 valor = listaPedidos.get(indiceItemActual).getCliente().getApellido()+" " + listaPedidos.get(indiceItemActual).getCliente().getNombre();
+				 //valor = listaPedidos.get(indiceItemActual).getCliente().getApellido()+" " + listaPedidos.get(indiceItemActual).getCliente().getNombre();
+				 valor= " - ";
 			    } 
 			    else if("direccion".equals(jrField.getName())) 
 			    { 
-			    	valor = listaPedidos.get(indiceItemActual).getCliente().getDireccion()+" " + listaPedidos.get(indiceItemActual).getCliente().getNumeracion();
+			    	//valor = listaPedidos.get(indiceItemActual).getCliente().getDireccion()+" " + listaPedidos.get(indiceItemActual).getCliente().getNumeracion();
+			    	valor= " - ";
 			    } 
 			    else if("entre Calles".equals(jrField.getName())) 
 			    { 
-			    	valor = listaPedidos.get(indiceItemActual).getCliente().getEntrecalle1()+" - " +listaPedidos.get(indiceItemActual).getCliente().getEntrecalle2();
+			    	//valor = listaPedidos.get(indiceItemActual).getCliente().getEntrecalle1()+" - " +listaPedidos.get(indiceItemActual).getCliente().getEntrecalle2();
+			    	valor= " - ";
 			    }
 			    else if("observaciones".equals(jrField.getName())) 
 			    { 
-			    		valor = listaPedidos.get(indiceItemActual).getCliente().getComentario();
+			    		//valor = listaPedidos.get(indiceItemActual).getCliente().getComentario();
+			    	valor= " - ";
 			    }
 			    else if("num_pedido".equals(jrField.getName())) 
 			    { 
-			    	valor = listaPedidos.get(indiceItemActual).getNumPedido().toString();
+			    	//valor = listaPedidos.get(indiceItemActual).getNumPedido().toString();
+			    	valor= " - ";
 			    }
 			    else if("hora_pedido".equals(jrField.getName())) 
 			    { 
-			    	valor = listaPedidos.get(indiceItemActual).getHora();
+			    	//valor = listaPedidos.get(indiceItemActual).getHora();
+			    	valor= " - ";
 			    }
 			    else if("detalle_pedido".equals(jrField.getName())) 
 			    { 
-			    	Iterator<ItemDTO> iterador= listaPedidos.get(indiceItemActual).getProductos().iterator();
+			    	/*Iterator<ItemDTO> iterador= listaPedidos.get(indiceItemActual).getProductos().iterator();
 			    	String listaProductos="";
 			    	while (iterador.hasNext())
 			    	{
 			    		ItemDTO auxiliar= iterador.next();
 			    		listaProductos= listaProductos + auxiliar.getProducto().getNombre() + auxiliar.getCantidad();
-			    	}
+			    	}*/
+			    	valor= " - ";
 			    }
 			    else if("total".equals(jrField.getName())) 
 			    { 
-			    	valor = listaPedidos.get(indiceItemActual).getTotal();
+			    	//valor = listaPedidos.get(indiceItemActual).getTotal();
+			    	valor= " - ";
 			    }
 			 
 			 return valor;

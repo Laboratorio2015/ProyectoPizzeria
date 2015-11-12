@@ -106,6 +106,8 @@ public class seleccionarRepartidor extends JDialog {
 					hojaItinerario.setPedidos(pedidos);
 					//iti=new Itinerario(new Document(), hojaItinerario);
 					//iti.generarItinerario();
+					
+					//genera el itinerario
 					GenerarPDF.GenerarItinerario(hojaItinerario);
 					control.getItinerario().agregarItinerario(hojaItinerario);
 					for(int i=0; i<numfila.length;i++)
