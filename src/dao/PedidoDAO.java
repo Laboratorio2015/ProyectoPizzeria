@@ -32,6 +32,9 @@ public class PedidoDAO
 	private static final String readPromo = "SELECT oferta FROM pedidos";
 	private static final String actualizarEstado="Update pedidos Set estado=? where idpedido=?";
 	private static final String pedidosPendientes="select * from pedidos where estado='solicitado'";
+	private static final String crearTablaTemporal= "CREATE Temporary  table IF NOT EXISTS ped (idped integer,num integer, valor integer, estado char(20), delivery boolean)";
+	private static final String llenarTablaTemporal= "insert into ped (select idpedido, numpedido, total, estado,llevadelivery from pedidos where fecha=? order by idpedido)";
+	private static final String consultarTablaTemporal= "select * from ped";
 	//SELECT idpedido,item,total,oferta FROM pedidos WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '%%-6-2015%';
 	private static String select = "SELECT idpedido,item,total,oferta FROM pedidos " +
 										"WHERE estado='entregado' AND fueeliminado=FALSE AND fecha LIKE '";
@@ -440,6 +443,60 @@ public class PedidoDAO
 					pedidos.add(new PedidoDTO( (Integer)resultSet.getObject(1),items.pasarDeStringAArray(arrayItems)
 							,(Integer)resultSet.getObject(3),itemPromos.pasarDeStringAArrayItPromo(arrayIdPromo),
 							(String)resultSet.getObject(5),(String)resultSet.getObject(6) ));
+				}
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return pedidos;
+	}
+
+	// es usa para llenar la tabla pedidos pendientes
+	public ArrayList<PedidoDTO> pedidoPendientesFecha(String fecha)
+	{
+		ArrayList<PedidoDTO> pedidos = new ArrayList<>();
+		PreparedStatement statement;
+		PreparedStatement statement1;
+		PreparedStatement statement2;
+		ResultSet resultSet; //Guarda el resultado de la query
+		try 
+		{
+			//crea tabla temporal
+			statement1= conexion.getSQLConexion().prepareStatement(crearTablaTemporal);
+			statement1.execute();
+			//bacia la tabla temporal
+			statement1= conexion.getSQLConexion().prepareStatement("delete from ped");
+			statement1.execute();
+			//guarda el valor en la tabla temporal
+			statement2 = conexion.getSQLConexion().prepareStatement(llenarTablaTemporal);
+			statement2.setString(1, fecha);
+			statement2.execute();
+			//ejecuta la consulta
+			statement = conexion.getSQLConexion().prepareStatement(consultarTablaTemporal);
+			resultSet = statement.executeQuery();
+			while(resultSet.next())
+			{
+				String palabra= resultSet.getString("estado");
+				String result="";
+				for (int i=0; i<palabra.length(); i++)
+				{
+					  if (palabra.charAt(i) != ' ' || (palabra.charAt(i)==' ' && palabra.charAt(i+1)!=' '))
+					    result += palabra.charAt(i);
+					  else if(palabra.charAt(i)==' ' && palabra.charAt(i+1)==' ')
+						  break;
+				}
+				
+				if(result.compareTo("rechazado")!=0 || result.compareTo("cobrado")!=0)
+				{
+					pedidos.add(new PedidoDTO( (Integer)resultSet.getInt("idped"),(Integer)resultSet.getInt("num"),null,
+							fecha,null,result,(Integer)resultSet.getInt("valor"),null,null,
+							null,resultSet.getBoolean("delivery"),null,null));
 				}
 			}
 		} 

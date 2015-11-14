@@ -35,17 +35,17 @@ public class Itinerarios
 	
 	public List<HojaItinerarioDTO> obtenerItinerariosFecha(String fecha)
 	{
-		return this.itinerario.readAll();
+		return this.itinerario.ItinerarioDeFecha(fecha);
 	}
 	
-	public HojaItinerarioDTO buscarItinerario(Integer iditinerario)
+	public HojaItinerarioDTO buscarItinerario(Integer iditinerario,String fecha)
 	{
-		List<HojaItinerarioDTO> items=this.obtenerItinerarios();
+		List<HojaItinerarioDTO> items=itinerario.obtenerItinerariosFechaCompleto(fecha);
 		Iterator<HojaItinerarioDTO> Iterador = items.iterator();
 		while(Iterador.hasNext())
 		{
 			HojaItinerarioDTO elemento = Iterador.next();
-			if(elemento.getIdHojaItinerario().equals(iditinerario))
+			if(elemento.getNumItinerario().equals(iditinerario))
 				return elemento;
 		}
 		return null;

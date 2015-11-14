@@ -1,5 +1,6 @@
 package presentacion.reportes;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -36,8 +37,13 @@ public class ReporteContable
 	public void generarReporteContable()
 	{
 		try {
-			//final String FILE = "C:/Users/Cele/Documents/UNGS/LAB 2015/Reportes/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + this.reporte.hashCode() + ".pdf";			
-			final String FILE = "C:/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')' + this.reporte.hashCode() + ".pdf";			
+			//verifica que exista la carpeta de exportacion, sino la crea
+	        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Reporte Contable/");
+	        if (!carpeta.exists())
+	        {
+	        	carpeta.mkdirs();
+	        }			
+			final String FILE = "C:/Users/Usuario/Documents/Pizzeria Wild/Reporte Contable/Reporte Contable " + '(' + fechaInicio + '_' + fechaFin + ')'+".pdf";// + this.reporte.hashCode() + ".pdf";			
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteContable.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();

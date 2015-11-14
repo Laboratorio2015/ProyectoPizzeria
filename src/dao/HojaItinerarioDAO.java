@@ -20,8 +20,8 @@ public class HojaItinerarioDAO
 	private static final String insert = "INSERT INTO hojaitinerarios(idhojaitinerario,numhjaitinerario,repartidor, pedido,fecha,fueeliminado) VALUES(?,?,?,?,?,?)";
 	private static final String delete = "DELETE FROM hojaitinerarios WHERE idhojaitinerario = ?";
 	private static final String readall = "SELECT * FROM hojaitinerarios";
-	private static final String crearTablaTemporal= "create temporary table auxiliar (id integer)";
-	private static final String crearTablaTemporal2= "create temporary table auxiliar2 (id integer)";
+	private static final String crearTablaTemporal= "CREATE Temporary  table IF NOT EXISTS auxiliar (id integer)";
+	private static final String crearTablaTemporal2= "CREATE Temporary table IF NOT EXISTS auxiliar2 (id integer)";
 	private static final String agregarFechaTablaTemporal= "insert into auxiliar(Select max(numhjaitinerario) from hojaitinerarios where fecha = ? )";
 	private static final String agregaTablaTemporal= "insert into auxiliar2(Select max(idhojaitinerario) from hojaitinerarios)";
 	private static final String ultimoedidoFecha= "select * from auxiliar";
@@ -103,7 +103,7 @@ public class HojaItinerarioDAO
 			while(resultSet.next())
 			{
 				Pedidos ite=new Pedidos();
-				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedido"));
+				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedido"),resultSet.getString("fecha"));
 				Repartidores rep=new Repartidores();
 				RepartidorDTO repartidor=rep.buscarRepartidor(resultSet.getInt("repartidor"));
 				categorias.add(new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"), resultSet.getInt("numhjaitinerario"),
@@ -150,7 +150,6 @@ public class HojaItinerarioDAO
 	public HojaItinerarioDTO buscarItinerario(Integer iditinerario)
 	{
 		PreparedStatement statement;
-		
 		ResultSet resultSet; //Guarda el resultado de la query
 		HojaItinerarioDTO itinerario = new HojaItinerarioDTO();
 		try 
@@ -163,7 +162,7 @@ public class HojaItinerarioDAO
 			while(resultSet.next())
 			{
 				Pedidos ite=new Pedidos();
-				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedido"));
+				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedido"),resultSet.getString("fecha"));
 				Repartidores rep=new Repartidores();
 				RepartidorDTO repartidor=rep.buscarRepartidor(resultSet.getInt("repartidor"));
 				itinerario=new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"),resultSet.getInt("numhjaitinerario"),
@@ -193,6 +192,8 @@ public class HojaItinerarioDAO
 		{
 			//crea tabla temporal
 			statement1= conexion.getSQLConexion().prepareStatement(crearTablaTemporal);
+			statement1.execute();
+			statement1= conexion.getSQLConexion().prepareStatement("delete from auxiliar;");
 			statement1.execute();
 			//guarda el valor en la tabla temporal
 			statement2 = conexion.getSQLConexion().prepareStatement(agregarFechaTablaTemporal);
@@ -232,6 +233,8 @@ public class HojaItinerarioDAO
 			//crea tabla temporal
 			statement1= conexion.getSQLConexion().prepareStatement(crearTablaTemporal2);
 			statement1.execute();
+			statement1= conexion.getSQLConexion().prepareStatement("delete from auxiliar2;");
+			statement1.execute();
 			//guarda el valor en la tabla temporal
 			statement2 = conexion.getSQLConexion().prepareStatement(agregaTablaTemporal);
 			statement2.execute();
@@ -255,5 +258,77 @@ public class HojaItinerarioDAO
 		}
 		
 		return ultimo;
+	}
+
+	public List<HojaItinerarioDTO> ItinerarioDeFecha(String fecha)
+	{
+		ArrayList<HojaItinerarioDTO> categorias = new ArrayList<>();		
+		PreparedStatement statement;
+		PreparedStatement statement1;
+		PreparedStatement statement2;
+		ResultSet resultSet; //Guarda el resultado de la query
+		try 
+		{
+			//crea tabla temporal
+			statement1= conexion.getSQLConexion().prepareStatement("CREATE Temporary  table IF NOT EXISTS iti (iditi integer,numiti integer, pedidos char(20))");
+			statement1.execute();
+			statement1= conexion.getSQLConexion().prepareStatement("delete from iti;");
+			statement1.execute();
+			//guarda el valor en la tabla temporal
+			statement2 = conexion.getSQLConexion().prepareStatement("insert into iti (select idhojaitinerario, numhjaitinerario, pedido from hojaitinerarios where fecha=? order by idhojaitinerario)");
+			statement2.setString(1, fecha);
+			statement2.execute();
+			//ejecuta la consulta
+			statement = conexion.getSQLConexion().prepareStatement("select * from iti");
+			resultSet = statement.executeQuery();	
+			while(resultSet.next())
+			{
+				Pedidos ite=new Pedidos();
+				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedidos"),fecha);
+				categorias.add(new HojaItinerarioDTO(resultSet.getInt("iditi"), resultSet.getInt("numiti"),
+								null,listaPedidos,null,fecha));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return categorias;
+	}
+
+	public List<HojaItinerarioDTO> obtenerItinerariosFechaCompleto(String fecha)
+	{
+		ArrayList<HojaItinerarioDTO> categorias = new ArrayList<>();		
+		PreparedStatement statement1;
+		ResultSet resultSet; //Guarda el resultado de la query
+		try 
+		{
+			//crea tabla temporal
+			statement1= conexion.getSQLConexion().prepareStatement("select * from hojaitinerarios where fecha=?");
+			statement1.setString(1, fecha);			
+			resultSet = statement1.executeQuery();	
+			while(resultSet.next())
+			{
+				Pedidos ite=new Pedidos();
+				ArrayList<PedidoDTO>listaPedidos= ite.pasarDeStringAArray(resultSet.getString("pedido"),fecha);
+				Repartidores rep=new Repartidores();
+				RepartidorDTO repartidor=rep.buscarRepartidor(resultSet.getInt("repartidor"));
+				categorias.add(new HojaItinerarioDTO(resultSet.getInt("idhojaitinerario"), resultSet.getInt("numhjaitinerario"),
+								repartidor,listaPedidos,resultSet.getBoolean("fueeliminado"), fecha));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		finally //Se ejecuta siempre
+		{
+			conexion.cerrarConexion();
+		}
+		return categorias;
 	}
 }

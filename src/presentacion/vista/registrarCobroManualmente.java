@@ -3,6 +3,7 @@ package presentacion.vista;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
@@ -92,7 +93,7 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 				{
 					if(seleccionado.compareTo("Itinerario")==0)
 						{
-							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario));
+							HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario),fechaActual());
 							if(hoja!= null)
 							{
 								tfMuestraRepartidor.setText(hoja.getRepartidor().getNombre()+" "+hoja.getRepartidor().getApellido());
@@ -141,14 +142,19 @@ public class registrarCobroManualmente extends JDialog implements ItemListener{
 					String seleccionado=(String)comboBox.getSelectedItem();
 					if(seleccionado.compareTo("Itinerario")==0)
 					{
-						HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario));
-						//recorro los pedidos y los paso de estado
-						Iterator<PedidoDTO> Iterador=hoja.getPedidos().iterator();
-						while(Iterador.hasNext())
-						{
-							PedidoDTO elemento = Iterador.next();
-							control.getPedido().actualizarPedido(elemento, "cobrado");
-						}				
+						HojaItinerarioDTO hoja=control.getItinerario().buscarItinerario(Integer.parseInt(itinerario),fechaActual());
+						if(hoja.getPedidos().get(0).getEstado().equals("endelivery"))
+						{	
+							//recorro los pedidos y los paso de estado
+							Iterator<PedidoDTO> Iterador=hoja.getPedidos().iterator();
+							while(Iterador.hasNext())
+							{
+								PedidoDTO elemento = Iterador.next();
+								control.getPedido().actualizarPedido(elemento, "cobrado");
+							}
+						}
+						else
+							JOptionPane.showMessageDialog(null, "¡¡ERROR!! el pedido seleccionado es incorrecto", "Confirmación",JOptionPane.WARNING_MESSAGE);
 					}
 					else if(seleccionado.compareTo("Pedido")==0)
 					{

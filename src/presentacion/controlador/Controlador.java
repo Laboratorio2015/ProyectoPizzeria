@@ -69,6 +69,7 @@ import dto.ProductoDTO;
 import dto.ProveedorDTO;
 import dto.RepartidorDTO;
 import dto.ReporteContableDTO;
+import presentacion.reportes.GenerarPDF;
 import presentacion.reportes.ReporteContable;
 import presentacion.reportes.ReporteProductoEstadistico;
 import presentacion.reportes.ReportePromocionEstadistica;
@@ -95,14 +96,11 @@ import presentacion.vista.promocionAlta;
 import presentacion.vista.promocionBajaModificacion;
 import presentacion.vista.proveedorAlta;
 import presentacion.vista.proveedorBajaModificacion;
-import presentacion.vista.registrarCobroDePedido;
-import presentacion.vista.registrarCobroManualmente;
 import presentacion.vista.registrarPagoOrdenMatPrima;
 import presentacion.vista.registroDeCliente;
 import presentacion.vista.repartidorAlta;
 import presentacion.vista.repartidorBajaModificacion;
 import presentacion.vista.seleccionDeCliente;
-import presentacion.vista.seleccionarRepartidor;
 import presentacion.vista.selectorMatPrima;
 import presentacion.vista.selectorOpcionesOrdenMatPrima;
 import presentacion.vista.gestionarOrdenesMatPrima;
@@ -1775,7 +1773,7 @@ public class Controlador implements ActionListener
 				ventanaCalendario.setVisible(true);
 			}	
 		}
-				//Generar el pdf  al presionar el boton imprimir
+		//Generar el pdf  al presionar el boton imprimir
 		else if(this.ventanaReportesEstadistica!= null && e.getSource()==this.ventanaReportesEstadistica.getBtnImprimir())
 		{
 			JOptionPane.showMessageDialog(null, "Se generó y envió a imprimir la consulta en formato .pdf");
@@ -2532,7 +2530,8 @@ public class Controlador implements ActionListener
 	}
 
 
-	private void prepararParaSobreescribirPDF(OrdenPedidoMatPrimaDTO ordenSeleccionada) {
+	private void prepararParaSobreescribirPDF(OrdenPedidoMatPrimaDTO ordenSeleccionada) 
+	{
 		//String rutaFile = "D:/OrdenDePedidoNro" + ordenSeleccionada.getIdCompra() + ".pdf";
 		File fichero = new File("D:/OrdenDePedidoNro" + ordenSeleccionada.getIdCompra() + ".pdf");
 		if (fichero.delete())
@@ -3221,13 +3220,13 @@ public class Controlador implements ActionListener
 		ventanaPedPendiente.getModel().setRowCount(0); //Para vaciar la tabla
 		ventanaPedPendiente.getModel().setColumnCount(0);
 		ventanaPedPendiente.getModel().setColumnIdentifiers(ventanaPedPendiente.getNombreColumnas());
-		Iterator<PedidoDTO> Iterador = this.pedido.obtenerPedidosDeFecha(fecha).iterator();
+		Iterator<PedidoDTO> Iterador = this.pedido.obtenerPedidoDeFecha(fecha).iterator();
 		while(Iterador.hasNext())
 		{
 			PedidoDTO elemento = Iterador.next();
 			if(elemento.getEstado().compareTo("rechazado")!=0 && elemento.getEstado().compareTo("cobrado")!=0)
 			{
-				if(elemento.getEstado().compareTo("endelivery")==0)
+				if(elemento.getEstado().compareTo("en delivery")==0)
 				{
 					int itinerario=this.itinerario.buscarItinerarioPorPedido(elemento.getIdpedido(), fechaActual());
 					ventanaPedPendiente.getModel().addRow(new String[] {elemento.getNumPedido().toString(),elemento.getTotal().toString(),elemento.get_estado(),Delivery(elemento),itinerario+""});

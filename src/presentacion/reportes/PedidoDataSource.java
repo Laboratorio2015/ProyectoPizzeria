@@ -30,7 +30,10 @@ public class PedidoDataSource implements JRDataSource
 		    } 
 		    else if("tipo".equals(jrField.getName())) 
 		    { 
-		    	valor = listaItems.get(indiceItemActual).getProducto().getTipo();
+		    	if(!listaItems.get(indiceItemActual).getProducto().getTipo().equals("otros"))
+		    		valor = listaItems.get(indiceItemActual).getProducto().getTipo();
+		    	else
+		    		valor=" - ";
 		    }
 		    else if("comentario".equals(jrField.getName())) 
 		    { 
@@ -59,5 +62,4 @@ public class PedidoDataSource implements JRDataSource
 	{
 	    this.listaItems.add(item);
 	}
-	
 }

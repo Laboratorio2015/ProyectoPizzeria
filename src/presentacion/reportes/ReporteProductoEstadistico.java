@@ -1,5 +1,6 @@
 package presentacion.reportes;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +34,13 @@ public class ReporteProductoEstadistico {
 	public void generarReporteEstadistico()
 	{
 		try {
-			final String FILE = "C:/Reporte Estadístico_" + tipoDeProducto + " (" + fechaInicio + '-' + fechaFin + ')' + producto.hashCode() + ".pdf";	
+			//verifica que exista la carpeta de exportacion, sino la crea
+	        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Reporte Estadistico/Productos/");
+	        if (!carpeta.exists())
+	        {
+	        	carpeta.mkdirs();
+	        }			
+			final String FILE = "C:/Users/Usuario/Documents/Pizzeria Wild/Reporte Estadistico/Productos/Reporte Estadístico_" + tipoDeProducto + " (" + fechaInicio + '-' + fechaFin + ')' + producto.hashCode() + ".pdf";	
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 		    Image image = Image.getInstance(ReporteProductoEstadistico.class.getResource("/prototipos/Reporte_Contable_Header.png"));
 		    documento.open();

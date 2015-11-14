@@ -84,9 +84,9 @@ public class Pedidos
 		return ultimo;
 	}
 	
-	public PedidoDTO buscarPedidoId(Integer idpedido)
+	public PedidoDTO buscarPedidoId(Integer idpedido, String fecha)
 	{
-		List<PedidoDTO> pedidos=this.obtenerPedidos();
+		List<PedidoDTO> pedidos=this.obtenerPedidosDeFecha(fecha);
 		Iterator<PedidoDTO> Iterador = pedidos.iterator();
 		while(Iterador.hasNext())
 		{
@@ -123,7 +123,7 @@ public class Pedidos
 	}
 
 	//crea el array de pedidos a partir del string 
-	public ArrayList<PedidoDTO> pasarDeStringAArray(String listado)
+	public ArrayList<PedidoDTO> pasarDeStringAArray(String listado, String fecha)
 	{
 		ArrayList<PedidoDTO> result=new ArrayList<PedidoDTO>();
 		String a="";
@@ -141,7 +141,7 @@ public class Pedidos
 			{
 				a=a+listado.charAt(i);
 				int elemento=Integer.parseInt(a);
-				PedidoDTO item=this.buscarPedidoId(elemento);
+				PedidoDTO item=this.buscarPedidoId(elemento,fecha);
 				result.add(item);
 				a="";
 			}
@@ -162,5 +162,9 @@ public class Pedidos
 
 	public  ArrayList<PedidoDTO> obtenerPedidosHoy(String fecha) {
 		return this.pedido.pedidosHoy(fecha);
+	}
+
+	public ArrayList<PedidoDTO> obtenerPedidoDeFecha(String fecha) {
+		return this.pedido.pedidoPendientesFecha(fecha);
 	}	
 }

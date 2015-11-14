@@ -25,7 +25,8 @@ public class ComandaDataSource  implements JRDataSource
 			    } 
 			    else if("producto".equals(jrField.getName())) 
 			    { 
-			    	valor = listaItems.get(indiceItemActual).getProducto().getTipo()+" de " + listaItems.get(indiceItemActual).getProducto().getNombre();
+			    	if(!listaItems.get(indiceItemActual).getProducto().getTipo().equals("otros"))
+			    		valor = listaItems.get(indiceItemActual).getProducto().getTipo()+" de " + listaItems.get(indiceItemActual).getProducto().getNombre();
 			    } 
 			    else if("observaciones".equals(jrField.getName())) 
 			    { 
@@ -34,8 +35,7 @@ public class ComandaDataSource  implements JRDataSource
 			    	else
 			    		valor = " - ";
 			    }		
-
-			 return valor;
+		 return valor;
 		}
 		
 		public boolean next() throws JRException {

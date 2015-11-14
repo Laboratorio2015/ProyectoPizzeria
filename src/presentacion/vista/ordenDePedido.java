@@ -41,6 +41,7 @@ import java.io.IOException;
 
 import javax.swing.SwingConstants;
 import presentacion.controlador.Controlador;
+import presentacion.reportes.GenerarPDF;
 import presentacion.reportes.Ticket;
 
 @SuppressWarnings("serial")
@@ -849,16 +850,7 @@ public class ordenDePedido extends JDialog {
 					tfSubTotalOtro.setText(Integer.toString(precio*cantidad));
 				}
 			});
-			/*tfUnidadOtro.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					cantidad=Integer.parseInt(tfUnidadOtro.getText());
-					precio=Integer.parseInt(tfPrecioUniOtro.getText());
-					tfSubTotalOtro.setText(Integer.toString(precio*cantidad));
-				}
-			});*/
+
 			tfUnidadOtro.setColumns(10);
 			tfUnidadOtro.setBounds(296, 333, 48, 25);
 			contentPanel.add(tfUnidadOtro);
@@ -1040,7 +1032,7 @@ public class ordenDePedido extends JDialog {
 					control.getPedido().quitarPedido(pedidoCambiar);
 					control.getPedido().agregarPedido(nuevoPedido);
 					JOptionPane.showMessageDialog(null, "Se genero ticket y comanda con el número de pedido: "+nuevoPedido.getNumPedido());
-					new Ticket(nuevoPedido).generarTicket();
+					GenerarPDF.GenerarTicket(nuevoPedido);
 					
 					try {
 						control.enviarPedidoMonitor(nuevoPedido);

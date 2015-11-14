@@ -1,5 +1,6 @@
 package presentacion.reportes;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,8 +32,13 @@ public class solicitudDeMateriaPrima {
 		this.ordenDePedido = nuevaOrden;
 
 		try {
-			//String FILE = "D:/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
-			String FILE = "C:/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
+			//verifica que exista la carpeta de exportacion, sino la crea
+	        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Solicitud Materias Primas/");
+	        if (!carpeta.exists())
+	        {
+	        	carpeta.mkdirs();
+	        }
+			String FILE = "C:/Users/Usuario/Documents/Pizzeria Wild/Solicitud Materias Primas/OrdenDePedidoNro" + nuevaOrden.getIdCompra() + ".pdf";
 			PdfWriter.getInstance(documento, new FileOutputStream(FILE));
 			documento.open();
 			addContentPage ();

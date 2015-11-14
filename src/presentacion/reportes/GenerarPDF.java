@@ -54,7 +54,9 @@ public class GenerarPDF {
 		Iterator<ItemDTO> iterador3=pedido.getItems().iterator();
 		while(iterador3.hasNext())
 			{
-				comanda.addItems(iterador3.next());
+				ItemDTO auxiliar = iterador3.next();
+				if(!auxiliar.getProducto().getTipo().equals("otros"))
+					comanda.addItems(auxiliar);
 			}
 		//recorre todos las promociones para llenar la comanda
 		Iterator<ItemPromocionDTO> iterator4= pedido.getOfertas().iterator();
@@ -83,8 +85,8 @@ public class GenerarPDF {
 	    parametros.put("pedido_fech", pedido.getFecha());
 	    parametros.put("cliente_nombre", pedido.getCliente().getApellido() + " "+pedido.getCliente().getNombre());
 	    parametros.put("cliente_direccion", pedido.getCliente().getDireccion() + " "+pedido.getCliente().getNumeracion());
-	    parametros.put("cliente_telefono", pedido.getCliente().getTelefono());
-	    parametros.put("cliente_entreCalles", pedido.getCliente().getEntrecalle1() +" - "+pedido.getCliente().getEntrecalle2());
+	    parametros.put("cliente_ telefono", pedido.getCliente().getTelefono());
+	    parametros.put("cliente_entreCalles", quitarEspacio(pedido.getCliente().getEntrecalle1()) +" - "+quitarEspacio(pedido.getCliente().getEntrecalle2()));
 	    parametros.put("cliente_comentario", pedido.getCliente().getComentario());
 	    parametros.put("pedido_total", pedido.getTotal().toString());
 		
@@ -94,21 +96,21 @@ public class GenerarPDF {
         JasperPrint jasper = JasperFillManager.fillReport(comanda1, parametros, comanda); 
 
       //verifica que exista la carpeta de exportacion, sino la crea
-        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Pedidos/");
+        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Pedidos/"+pedido.getFecha()+"/");
         if (!carpeta.exists())
         {
         	carpeta.mkdirs();
         }
         //verifica que exista la carpeta de exportacion, sino la crea
-        File carpeta1= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Comandas/");
+        File carpeta1= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Comandas/"+pedido.getFecha()+"/");
         if (!carpeta1.exists())
         {
         	carpeta1.mkdirs();
         }
         
        //exporta el reporte como pdf 
-        JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Pedidos/pedido"+pedido.getNumPedido()+" - "+pedido.getFecha()+".pdf");
-        JasperExportManager.exportReportToPdfFile( jasper, "C:/Users/Usuario/Documents/Pizzeria Wild/Comandas/comanda"+pedido.getNumPedido()+" - "+pedido.getFecha()+".pdf");
+        JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Pedidos/"+pedido.getFecha()+"/pedido"+pedido.getNumPedido()+" - "+pedido.getFecha()+".pdf");
+        JasperExportManager.exportReportToPdfFile( jasper, "C:/Users/Usuario/Documents/Pizzeria Wild/Comandas/"+pedido.getFecha()+"/comanda"+pedido.getNumPedido()+" - "+pedido.getFecha()+".pdf");
         System.out.println("termino exitosamente");
 	}
 
@@ -139,8 +141,8 @@ public class GenerarPDF {
 			Map<String, Object> parametros = new HashMap<String, Object>();
 		    parametros.put("fecha", hojaItinerario.getFecha());
 		    parametros.put("repartidor_dni", hojaItinerario.getRepartidor().getDni().toString());
-		    parametros.put("repartidor_nombre", hojaItinerario.getRepartidor().getApellido() + hojaItinerario.getRepartidor().getNombre());
-		    parametros.put("repartidor_vehiculo", hojaItinerario.getRepartidor().getVehiculo());
+		    parametros.put("repartidor_nombre", hojaItinerario.getRepartidor().getApellido() + " "+hojaItinerario.getRepartidor().getNombre());
+		    parametros.put("repartidor_vehiculo ", hojaItinerario.getRepartidor().getVehiculo());
 		    parametros.put("repartidor_patente", hojaItinerario.getRepartidor().getPatente().toString());
 		    
 	        //genera el reporte con la plantilla y la coneccion 
@@ -148,14 +150,14 @@ public class GenerarPDF {
 	  
 
 	      //verifica que exista la carpeta de exportacion, sino la crea
-	        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Itinerarios/");
+	        File carpeta= new File ("C:/Users/Usuario/Documents/Pizzeria Wild/Itinerarios/"+ hojaItinerario.getFecha()+"/");
 	        if (!carpeta.exists())
 	        {
 	        	carpeta.mkdirs();
 	        }
 	       
 	       //exporta el itinerario como pdf 
-	        JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Itinerarios/itinerario"+hojaItinerario.getNumItinerario()+" - "+hojaItinerario.getFecha()+".pdf");
+	        JasperExportManager.exportReportToPdfFile( jasperPrint, "C:/Users/Usuario/Documents/Pizzeria Wild/Itinerarios/"+hojaItinerario.getFecha()+"/Itinerario "+hojaItinerario.getNumItinerario()+" - "+hojaItinerario.getFecha()+".pdf");
 	       
 	        System.out.println("se genero exitosamente el itinerario");
 		}
@@ -165,5 +167,19 @@ public class GenerarPDF {
 			System.out.println("ERROR!!!   no se genero el itinerario");
 		}
 
+	}
+	
+	//quita los espacios de mas en los Strings largos
+	public static String quitarEspacio(String palabra)
+	{
+		String result="";
+		for (int i=0; i<palabra.length(); i++)
+		{
+			  if (palabra.charAt(i) != ' ' || (palabra.charAt(i)==' ' && palabra.charAt(i+1)!=' '))
+			    result += palabra.charAt(i);
+			  else if(palabra.charAt(i)==' ' && palabra.charAt(i+1)==' ')
+				  break;
+		}
+		return result;
 	}
 }
