@@ -26,21 +26,21 @@ public class establecerConeccion extends JDialog {
 
 	public establecerConeccion() {
 		setTitle("Selector de Servidores");
-		setBounds(100, 100, 450, 399);
+		setBounds(100, 100, 450, 166);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
 			btnAceptar= new JButton("Aceptar");
-			btnAceptar.setBounds(177, 330, 71, 23);
+			btnAceptar.setBounds(315, 91, 71, 23);
 			contentPanel.add(btnAceptar);
 			btnAceptar.setActionCommand("OK");
 			getRootPane().setDefaultButton(btnAceptar);
 		}
 		{
 			btnDefault = new JButton("Valores Predeterminados");
-			btnDefault.setBounds(273, 127, 151, 23);
+			btnDefault.setBounds(273, 57, 151, 23);
 			contentPanel.add(btnDefault);
 			btnDefault.setActionCommand("Cancel");
 		}

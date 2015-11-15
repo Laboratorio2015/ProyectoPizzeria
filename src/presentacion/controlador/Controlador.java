@@ -81,7 +81,7 @@ import presentacion.vista.calendarioSelectFecha;
 import presentacion.vista.clienteBajaModificacion;
 import presentacion.vista.consultoEstadistica;
 import presentacion.vista.consultorContabilidad;
-//import presentacion.vista.establecerConeccion;
+import presentacion.vista.establecerConeccion;
 import presentacion.vista.gestionCategoria;
 import presentacion.vista.matPrimaAlta;
 import presentacion.vista.matPrimaBajaModificacion;
@@ -119,7 +119,7 @@ public class Controlador implements ActionListener
 	private seleccionDeCliente ventanaCliente;
 	private ordenarMatPrima ventanaOrdenMatPrima;
 	private gestionarOrdenesMatPrima gestorOrdenesMateriasPrimas;
-	//private establecerConeccion conectar;
+	private establecerConeccion conectar;
 	//moficiaciones
 	private calendarioSelectFecha selectorFecha;
 	private selectMenuReportes ventanaMenuReportes;
@@ -204,14 +204,10 @@ public class Controlador implements ActionListener
 
 	public void inicializar() throws IOException
 	{
-		this.ventana.show();	
-		try {
-			enviarPedidosMonitor();
-		} catch (Exception e2) {
-			System.out.println("Problema surgido al conectarse con monitor.");
-			e2.printStackTrace();
-		}
-		
+		conectar= new establecerConeccion();
+		this.conectar.getBtnAceptar().addActionListener(this);
+		this.conectar.getBtnDefault().addActionListener(this);
+		conectar.setVisible(true);
 	}
 
 
@@ -235,6 +231,38 @@ public class Controlador implements ActionListener
 			ventanaPedPendiente=new pedidosPendientes(ventana, this);
 			llenarTablaPedPendientes();
 			this.ventanaPedPendiente.setVisible(true);
+		}
+		//acciones para establecer la coneccion al monitor de cocina
+		else if(this.conectar!= null && e.getSource()==this.conectar.getBtnAceptar())
+		{
+			
+			try {
+				String host= conectar.getTfIpMonitor().getText().toString();
+				String puerto=conectar.getTfPuertoMonitor().getText().toString();
+				this.conectar.dispose();
+				boolean envio=enviarPedidosMonitor(host, puerto);
+				if(envio)
+					this.ventana.show();
+				else
+					JOptionPane.showMessageDialog(null, "Problemas al conectarse a el Monitor de Cocina, Verifique que este correctamente ingresado la direccion IP, y el puerto", "Confirmación",JOptionPane.WARNING_MESSAGE);
+				
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, "Problemas al conectarse a el Monitor de Cocina, Verifique que este correctamente ingresado la direccion IP, y el puerto", "Confirmación",JOptionPane.WARNING_MESSAGE);
+				System.out.println("Problema surgido al conectarse con monitor.");
+				e2.printStackTrace();
+			}
+			
+		}
+		//establecer conceccion con valores por dafault
+		else if(this.conectar!= null && e.getSource()==this.conectar.getBtnDefault())
+		{
+			try {
+				valoresPredetarminados();
+			} catch (UnknownHostException e1) 
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		/////////////////////////////////////////CodigoJuliet/////////////////////////////////////////////////
 		//CONFIGURACIONES: ABRIR VENTANA DE MENU DE REPORTES
@@ -2487,10 +2515,6 @@ public class Controlador implements ActionListener
 				}
 	}
 
-
-	
-
-
 	private ArrayList<ProductoEstadistico> filtrarProductoTipo(ArrayList<ProductoEstadistico> productos, String tipo)
 	{
 		ArrayList<ProductoEstadistico> result= new ArrayList<ProductoEstadistico>();
@@ -3470,14 +3494,15 @@ public class Controlador implements ActionListener
 		this.objectOutputStream.writeObject(nuevoPedido);
 	}
 	
-	private void enviarPedidosMonitor() throws IOException{
-		final String HOST= "localhost";
-		final int PUERTO = 5000;
-		
+	private boolean enviarPedidosMonitor(String host, String puerto) throws IOException{
+		final String HOST= host;
+		final int PUERTO = Integer.parseInt(puerto);
 		this.socket = new Socket(HOST,PUERTO);
-		
+		if(this.socket.isConnected())
+		{
+			System.out.println("se conecto");
+		}
 		new propiedades().getDirServidor();
-		
 		//	this.socket = new Socket(new propiedades().getDirServidor(),9000); // linea par activar cuando se tenga monitor en otra pc.
 		sos = socket.getOutputStream(); 
 		//
@@ -3491,13 +3516,16 @@ public class Controlador implements ActionListener
 					System.out.println("Pedido enviado a monitor.");
 				} catch (IOException e) {//
 		            e.printStackTrace(System.err);//
+		            return false;
 				}//
 				try {//
 		            Thread.sleep(50);//
 		        } catch (Exception e) {//
 		            e.printStackTrace();//
+		            return false;
 		        }//
 		}
+		return true;
 	}
 
 
@@ -3748,16 +3776,17 @@ public class Controlador implements ActionListener
 			return fecha;
 		}
 	  
-//		private void valoresPredetarminados() throws UnknownHostException 
-//		{
+	  
+		private void valoresPredetarminados() throws UnknownHostException 
+		{
 //			
-//			conectar.getTfIpMonitor().setText(propConecciones.getDirServidor().getHostAddress());
+			conectar.getTfIpMonitor().setText(propConecciones.getDirServidor().getHostAddress());
 //			conectar.getTfIPBaseDeDatos().setText(propConecciones.getDirServidorBase().getHostAddress());
 //			conectar.getTfNombreBase().setText(propConecciones.getNombreBase());
-//			conectar.getTfPuertoMonitor().setText("5000");
+			conectar.getTfPuertoMonitor().setText("5000");
 //			conectar.getTfUsusarioBase().setText(propConecciones.getUsuarioBase());
 //			conectar.getpContraseñaBase().setText(propConecciones.getContraseñaBase());
-//		}
+		}
 }
 	
 
