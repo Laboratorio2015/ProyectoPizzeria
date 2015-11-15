@@ -24,6 +24,9 @@ public class ProductoDAO
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS productos( idproducto integer not null, nombre char(40), precio integer, tipo char(20), fueeliminado boolean, primary key (idproducto))");
+			statement.execute();
+			
 			statement = conexion.getSQLConexion().prepareStatement(insert);
 			statement.setInt(1, producto.getIdproducto());
 			statement.setString(2, producto.getNombre());

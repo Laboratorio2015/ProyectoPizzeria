@@ -49,6 +49,9 @@ public class PedidoDAO
 		PreparedStatement statement;
 		try 
 		{			
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS pedidos ( idpedido integer,numpedido integer,item char(200),fecha char(10),hora char(5), estado char(20),total integer,ticket integer,comanda integer,cliente integer,llevadelivery boolean,oferta char(200),fueeliminado boolean,primary key (idpedido),foreign key (cliente) references clientes(idcliente))");
+			statement.execute();
+			
 			Items ite=new Items();
 			String iditems= ite.iditemsPed(pedido);
 			ItemsPromociones ofe=new ItemsPromociones();
@@ -67,7 +70,7 @@ public class PedidoDAO
 				statement.setBoolean(11, pedido.getLlevaDelivery());
 				statement.setString(12, idofertas);
 				statement.setBoolean(13, pedido.getFueeliminado());
-				statement.executeUpdate();
+				statement.executeUpdate();				
 				System.out.println("inserccion exitosa de pedido");
 				return true;
 			

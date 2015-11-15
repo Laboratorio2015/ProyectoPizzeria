@@ -35,6 +35,9 @@ public class OrdenPedidoMatPrimaDAO
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS ordenpedidomatprima( idcompra integer, proveedor integer, itemmatprima char(300), estado char(30), fecha char(30), costo integer, enviado boolean, fueeliminado boolean, primary key (idcompra), foreign key (proveedor) references proveedores(idproveedor))");
+			statement.execute();
+			
 			ItemMateriasPrimas ite=new ItemMateriasPrimas();
 			String idordenes= ite.iditemMatPrima(orden);
 			statement = conexion.getSQLConexion().prepareStatement(insert);

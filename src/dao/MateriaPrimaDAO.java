@@ -29,6 +29,9 @@ public class MateriaPrimaDAO
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS matprimas( idmatprima integer not null, nombre char(30), categoria integer, precio integer, fueeliminado boolean, primary key (idmatprima), foreign key (categoria) references categorias(idcategoria))");
+			statement.execute();
+			
 			statement = conexion.getSQLConexion().prepareStatement(insert);
 			statement.setInt(1, materiaPrima.getIdMatPrima());
 			statement.setString(2, materiaPrima.getNombre());

@@ -35,6 +35,9 @@ public class HojaItinerarioDAO
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS hojaitinerarios( idhojaitinerario integer not null, numhjaitinerario integer not null,repartidor integer not null, pedido char(200), fecha char(10), fueeliminado boolean, primary key (idhojaitinerario), foreign key (repartidor) references repartidores(idrepartidor))");
+			statement.execute();
+			
 			Pedidos ped=new Pedidos();
 			String iditems= ped.iditemsPedido(itinerario);
 			statement = conexion.getSQLConexion().prepareStatement(insert);

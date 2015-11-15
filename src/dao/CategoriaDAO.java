@@ -23,6 +23,9 @@ public class CategoriaDAO
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS categorias ( idcategoria integer not null, nombre char(30), fueeliminado boolean, primary key (idcategoria))");
+			statement.execute();
+			
 			statement = conexion.getSQLConexion().prepareStatement(insert);
 			statement.setInt(1, categoria.getIdCategoria());
 			statement.setString(2, categoria.getDenominacion());

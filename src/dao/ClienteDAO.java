@@ -23,6 +23,9 @@ public class ClienteDAO
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS clientes ( idcliente integer, dni integer, nombre char(20), apellido char (20), calle char (30), numeracion char(20), telefono char(20), entrecalle1 char(30), entrecalle2 char(30), codpostal char(20), email char(30), comentario char(200), fueeliminado boolean, primary key (idcliente))");
+			statement.execute();
+			
 			statement = conexion.getSQLConexion().prepareStatement(insert);
 			statement.setInt(1, cliente.getIdcliente());
 			statement.setInt(2, cliente.getDni());

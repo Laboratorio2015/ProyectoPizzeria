@@ -29,6 +29,9 @@ public class ItemDAO
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS items( iditem integer, producto integer, cantidad integer, comentario char(200), fueeliminado boolean, primary key (iditem), foreign key (producto) references productos(idproducto))");
+			statement.execute();
+			
 			statement = conexion.getSQLConexion().prepareStatement(insert);
 			statement.setInt(1, item.getIditem());
 			statement.setInt(2, item.getProducto().getIdproducto());

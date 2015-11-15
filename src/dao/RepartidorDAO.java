@@ -22,6 +22,9 @@ public class RepartidorDAO
 			PreparedStatement statement;
 			try 
 			{
+				statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS repartidores( idrepartidor integer not null, dni integer, nombre char(20), apellido char(20), fechanacimiento char(20), vehiculo char(20), patente char(10), telefono char(20), estado char(20), comentario char(200), fueeliminado boolean, primary key(idrepartidor))");
+				statement.execute();
+				
 				statement = conexion.getSQLConexion().prepareStatement(insert);
 				statement.setInt(1, repartidor.getIdRepartidor());
 				statement.setInt(2, repartidor.getDni());

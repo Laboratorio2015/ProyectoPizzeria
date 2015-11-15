@@ -25,6 +25,9 @@ public class PromocionDAO {
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS ofertas ( idoferta integer not null, nombre char(30), precio integer, item char(200), fueeliminado boolean, primary key (idoferta))");
+			statement.execute();
+			
 			Items ite=new Items();
 			String iditems= ite.iditemsOfe(oferta);
 			statement = conexion.getSQLConexion().prepareStatement(insert);

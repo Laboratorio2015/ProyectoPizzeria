@@ -29,6 +29,9 @@ public class ProveedorDAO {
 		PreparedStatement statement;
 		try 
 		{
+			statement = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS proveedores( idproveedor integer not null, nombre char(30), nombreContacto char(30), categoria char(300), telefono char(20), direccion char(40), email char(30), comentario char(200), fueeliminado boolean, primary key (idproveedor))");
+			statement.execute();
+			
 			Categorias cat=new Categorias();
 			String idcategorias= cat.iditemsCategorias(proveedor);
 			statement = conexion.getSQLConexion().prepareStatement(insert);
