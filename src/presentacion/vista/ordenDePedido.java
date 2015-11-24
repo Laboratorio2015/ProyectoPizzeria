@@ -515,7 +515,10 @@ public class ordenDePedido extends JDialog {
 					public void mouseClicked(MouseEvent e) 
 					{											
 						int numFilaSeleccionada=tablaItems.getSelectedRow();
-						tfTotal.setText(Integer.toString((Integer.parseInt(tfTotal.getText())-Integer.parseInt((String)model.getValueAt(numFilaSeleccionada, 2)))));
+						Integer yototal= Integer.parseInt(tfTotal.getText());
+						String yotexto= model.getValueAt(numFilaSeleccionada, 2).toString();
+						Integer yocosto= Integer.parseInt(yotexto);
+						tfTotal.setText(Integer.toString((yototal-yocosto)));
 						getModel().removeRow(numFilaSeleccionada);	
 					}
 				});

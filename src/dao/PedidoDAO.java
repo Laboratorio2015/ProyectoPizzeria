@@ -451,6 +451,17 @@ public class PedidoDAO
 		} 
 		catch (SQLException e) 
 		{
+			PreparedStatement statement1;
+			try {
+				statement1 = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS clientes ( idcliente integer, dni integer, nombre char(20), apellido char (20), calle char (30), numeracion char(20), telefono char(20), entrecalle1 char(30), entrecalle2 char(30), codpostal char(20), email char(30), comentario char(200), fueeliminado boolean, primary key (idcliente))");
+				statement1.execute();
+				
+				statement1 = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS pedidos ( idpedido integer,numpedido integer,item char(200),fecha char(10),hora char(5), estado char(20),total integer,ticket integer,comanda integer,cliente integer,llevadelivery boolean,oferta char(200),fueeliminado boolean,primary key (idpedido),foreign key (cliente) references clientes(idcliente))");
+				statement1.execute();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}
 		finally //Se ejecuta siempre

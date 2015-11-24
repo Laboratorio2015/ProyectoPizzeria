@@ -115,6 +115,15 @@ public class ProductoDAO
 		} 
 		catch (SQLException e) 
 		{
+			PreparedStatement statement1;
+			try {
+				statement1 = conexion.getSQLConexion().prepareStatement("create table IF NOT EXISTS productos( idproducto integer not null, nombre char(40), precio integer, tipo char(20), fueeliminado boolean, primary key (idproducto))");
+				statement1.execute();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			e.printStackTrace();
 		}
 		finally //Se ejecuta siempre
